@@ -1,0 +1,14 @@
+[
+  {
+    "modid": "kayXEnchants",
+    "name": "§3DrZed's §9Extra Enchants§r",
+    "description": "Adds New/Better enchants to the game",
+    "version": "Alpha 1.1",
+    "credits": "Some code from §2TehPers§r and Ideas from others...",
+    "mcversion": "1.7.10",
+    "authors": ["§3DrZed §6(§9AKA§3Keldon§4Slayer§r§6) and §0S§4k§0i§4t§0Z§4P§0i§4K§r"],
+    "dependencies": [
+           "mod_MinecraftForge"
+    ]
+  }
+]
