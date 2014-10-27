@@ -1,0 +1,42 @@
+[13:59:48] [main/INFO]: Setting user: KeldonSlayer
+[13:59:51] [Client thread/INFO]: LWJGL Version: 2.9.1
+[14:00:04] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:DrZed's Extra Enchants
+[14:00:04] [Client thread/WARN]: ResourcePack: ignored non-lowercase namespace: %s in %s
+[14:00:04] [Client thread/WARN]: ResourcePack: ignored non-lowercase namespace: %s in %s
+[14:00:05] [Sound Library Loader/INFO]: Sound engine started
+[14:00:09] [Client thread/INFO]: Created: 512x256 textures/blocks-atlas
+[14:00:09] [Client thread/INFO]: Created: 256x256 textures/items-atlas
+[14:00:09] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:DrZed's Extra Enchants
+[14:00:09] [Client thread/WARN]: ResourcePack: ignored non-lowercase namespace: %s in %s
+[14:00:09] [Client thread/WARN]: ResourcePack: ignored non-lowercase namespace: %s in %s
+[14:00:10] [Client thread/INFO]: Created: 512x256 textures/blocks-atlas
+[14:00:10] [Client thread/INFO]: Created: 256x256 textures/items-atlas
+[14:00:10] [Sound Library Loader/INFO]: Sound engine started
+[14:00:22] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
+[14:00:22] [Server thread/INFO]: Generating keypair
+[14:00:22] [Server thread/INFO]: Preparing start region for level 0
+[14:00:24] [Server thread/INFO]: Preparing spawn area: 30%
+[14:00:24] [Server thread/INFO]: Changing view distance to 16, from 10
+[14:00:37] [Server thread/INFO]: Stopping server
+[14:00:37] [Server thread/INFO]: Saving players
+[14:00:37] [Server thread/INFO]: Saving worlds
+[14:00:37] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/Overworld
+[14:00:37] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/Nether
+[14:00:37] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/The End
+[14:00:38] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
+[14:00:38] [Server thread/INFO]: Generating keypair
+[14:00:38] [Server thread/INFO]: Preparing start region for level 0
+[14:00:39] [Server thread/INFO]: Changing view distance to 16, from 10
+[14:00:40] [Server thread/INFO]: KeldonSlayer[local:E:2217fc20] logged in with entity id 586 at (97.98382433872324, 4.0, -545.3127100441362)
+[14:00:40] [Server thread/INFO]: KeldonSlayer joined the game
+[14:00:40] [Server thread/INFO]: Saving and pausing game...
+[14:00:41] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/Overworld
+[14:00:41] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/Nether
+[14:00:41] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/The End
+[14:16:06] [Client thread/INFO]: Stopping!
+[14:16:06] [Server thread/INFO]: Stopping server
+[14:16:06] [Server thread/INFO]: Saving players
+[14:16:06] [Server thread/INFO]: Saving worlds
+[14:16:06] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/Overworld
+[14:16:06] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/Nether
+[14:16:06] [Server thread/INFO]: Saving chunks for level 'Dev World 1'/The End
