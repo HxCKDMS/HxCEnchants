@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -28,7 +29,7 @@ public class ToolEventHookContainer
 	Random random = new Random();
 
 	@SubscribeEvent
-	public void onEntityAttack(AttackEntityEvent event)
+	public void LivingAttackEvent(LivingAttackEvent event)
 	{
 		if(event.entityLiving instanceof EntityPlayer)
 		{

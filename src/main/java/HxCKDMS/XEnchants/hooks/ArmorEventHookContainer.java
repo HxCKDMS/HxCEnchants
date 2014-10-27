@@ -49,7 +49,7 @@ public class ArmorEventHookContainer
 			ItemStack stack_head = player.inventory.armorItemInSlot(3);
 			ItemStack[] stack_total = player.inventory.armorInventory;
 
-			jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_feet);
+			jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
 
 			if(jumpBoostAmount > 0)
 			{
@@ -77,7 +77,7 @@ public class ArmorEventHookContainer
 				isRegen = true;
 			}
 
-			speedAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, stack_feet);
+			speedAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, stack_legs);
 
 			if(speedAmount > 0)
 			{

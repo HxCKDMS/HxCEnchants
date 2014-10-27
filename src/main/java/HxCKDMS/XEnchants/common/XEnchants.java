@@ -56,76 +56,76 @@ public class XEnchants
         event.getModState();
 	    if(Config.enchAdrenalineBoostEnable)
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
-            FMLCommonHandler.instance().bus().register(AdrenalineBoost);
+            MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
 
         if(Config.enchArmorRegenEnable)
             ArmorRegen = new EnchantmentArmorRegen(Config.enchArmorRegenID, Config.enchArmorRegenWeight);
-            FMLCommonHandler.instance().bus().register(ArmorRegen);
+            MinecraftForge.EVENT_BUS.register(ArmorRegen);
 
         if(Config.enchArrowExplosiveEnable)
             ArrowExplosive = new EnchantmentArrowExplosive(Config.enchArrowExplosiveID, Config.enchArrowExplosiveWeight);
-            FMLCommonHandler.instance().bus().register(ArrowExplosive);
+            MinecraftForge.EVENT_BUS.register(ArrowExplosive);
 
         if(Config.enchArrowLightningEnable)
             ArrowLightning = new EnchantmentArrowLightning(Config.enchArrowLightningID, Config.enchArrowLightningWeight);
-            FMLCommonHandler.instance().bus().register(ArrowLightning);
+            MinecraftForge.EVENT_BUS.register(ArrowLightning);
 
         if(Config.enchArrowSeekingEnable)
             ArrowSeeking = new EnchantmentArrowSeeking(Config.enchArrowSeekingID, Config.enchArrowSeekingWeight);
-            FMLCommonHandler.instance().bus().register(ArrowSeeking);
+            MinecraftForge.EVENT_BUS.register(ArrowSeeking);
 
         if(Config.enchBattleHealingEnable)
             BattleHealing = new EnchantmentBattleHealing(Config.enchBattleHealingID, Config.enchBattleHealingWeight);
-            FMLCommonHandler.instance().bus().register(BattleHealing);
+            MinecraftForge.EVENT_BUS.register(BattleHealing);
 
         if(Config.enchBoundEnable)
             Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
-            FMLCommonHandler.instance().bus().register(Bound);
+            MinecraftForge.EVENT_BUS.register(Bound);
 
         if(Config.enchCriticalEnable)
             Critical = new EnchantmentCritical(Config.enchCriticalID, Config.enchCriticalWeight);
-            FMLCommonHandler.instance().bus().register(Critical);
+            MinecraftForge.EVENT_BUS.register(Critical);
 
         if(Config.enchFlameTouchEnable)
             FlameTouch = new EnchantmentFlameTouch(Config.enchFlameTouchID, Config.enchFlameTouchWeight);
-            FMLCommonHandler.instance().bus().register(FlameTouch);
+            MinecraftForge.EVENT_BUS.register(FlameTouch);
 
         if(Config.enchFlyEnable)
             Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
-            FMLCommonHandler.instance().bus().register(Fly);
+            MinecraftForge.EVENT_BUS.register(Fly);
 
         if(Config.enchJumpBoostEnable)
             JumpBoost = new EnchantmentJumpBoost(Config.enchJumpBoostID, Config.enchJumpBoostWeight);
-            FMLCommonHandler.instance().bus().register(JumpBoost);
+            MinecraftForge.EVENT_BUS.register(JumpBoost);
 
         if(Config.enchLeadFootedEnable)
             LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
-            FMLCommonHandler.instance().bus().register(LeadFooted);
+            MinecraftForge.EVENT_BUS.register(LeadFooted);
 
         if(Config.enchPoisonEnable)
             Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
-            FMLCommonHandler.instance().bus().register(Poison);
+            MinecraftForge.EVENT_BUS.register(Poison);
 
         if(Config.enchSwiftnessEnable)
             Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
-            FMLCommonHandler.instance().bus().register(Swiftness);
+            MinecraftForge.EVENT_BUS.register(Swiftness);
 
         if(Config.enchVampirismEnable)
             Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);
-            FMLCommonHandler.instance().bus().register(Vampirism);
+            MinecraftForge.EVENT_BUS.register(Vampirism);
 
         if(Config.enchVitalityEnable)
             Vitality = new EnchantmentVitality(Config.enchVitalityID, Config.enchVitalityWeight);
-            FMLCommonHandler.instance().bus().register(Vitality);
+            MinecraftForge.EVENT_BUS.register(Vitality);
 
         if(Config.enchWitherProtectionEnable)
             WitherProtection = new EnchantmentWitherProtection(Config.enchWitherProtectionID, Config.enchWitherProtectionWeight);
-            FMLCommonHandler.instance().bus().register(WitherProtection);
+            MinecraftForge.EVENT_BUS.register(WitherProtection);
 
 
-        FMLCommonHandler.instance().bus().register(new ArrowEventHookContainer());
-        FMLCommonHandler.instance().bus().register(new ArmorEventHookContainer());
-        FMLCommonHandler.instance().bus().register(new ToolEventHookContainer());
+        MinecraftForge.EVENT_BUS.register(new ArrowEventHookContainer());
+        MinecraftForge.EVENT_BUS.register(new ArmorEventHookContainer());
+        MinecraftForge.EVENT_BUS.register(new ToolEventHookContainer());
 
     }
     
