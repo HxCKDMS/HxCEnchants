@@ -17,7 +17,7 @@ public class EnchantmentArrowLightning extends Enchantment
     @Override
 	public String getTranslatedName(int i)
 	{
-		String enchantmentName = "Godly";
+		String enchantmentName = "Zeus";
 		return enchantmentName + " " + StatCollector.translateToLocal("enchantment.level." + i);
 	}
 
@@ -42,19 +42,7 @@ public class EnchantmentArrowLightning extends Enchantment
     @Override
     public boolean canApplyTogether(Enchantment enchantment)
     {
-        if(enchantment instanceof EnchantmentArrowFire)
-        {
-            return false;
-        }
-        if(enchantment instanceof EnchantmentArrowExplosive)
-        {
-            return false;
-        }
-        /*if(enchantment instanceof EnchantmentArrowCrippling)
-        {
-            return false;
-        }*/
-        if(enchantment instanceof EnchantmentArrowKnockback)
+        if(enchantment instanceof EnchantmentArrowFire || enchantment instanceof EnchantmentArrowExplosive || enchantment instanceof EnchantmentArrowKnockback)
         {
             return false;
         } else

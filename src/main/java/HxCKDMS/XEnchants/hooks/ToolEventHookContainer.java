@@ -69,13 +69,6 @@ public class ToolEventHookContainer
 		flameTouchAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
 		
 		if(heldItem != null && flameTouchAmount > 0)
-		{
-			isFlameTouched = true;
-		}else{
-            return;
-        }
-
-        if(isFlameTouched && heldItem != null)
         {
             int Level = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
             ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(new ItemStack(block));
@@ -83,8 +76,6 @@ public class ToolEventHookContainer
                 if(result != null)
                 event.drops.add(result);
                 event.drops.remove(block);
-            }else{
-                return;
             }
         }
 
