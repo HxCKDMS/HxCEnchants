@@ -50,7 +50,7 @@ public class EnchantmentArrowLightning extends Enchantment
         {
             return false;
         }
-        /*if(enchantment instanceof EnchantmentArrowCrippleing)
+        /*if(enchantment instanceof EnchantmentArrowCrippling)
         {
             return false;
         }*/

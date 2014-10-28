@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -85,34 +86,29 @@ public class ArrowEventHookContainer
 	@SubscribeEvent
 	public void entityAttacked(LivingAttackEvent event)
 	{
-		EntityLivingBase ent = event.entityLiving;
+		EntityPlayerMP ent = (EntityPlayerMP) event.entityLiving;
 
-		if(event.source.isProjectile() && isExplosive == true)
+		if(event.source.isProjectile() && isExplosive)
 		{
-			EntityArrow entArrow = null;
-			this.createExplosionOnEntityWithModifier(entArrow, ent.worldObj, explosiveAmount, ent);
-		} else if(event.source.isProjectile() && isPoison == true)
+			this.createExplosionOnEntityWithModifier(null, ent.worldObj, explosiveAmount, ent);
+		} else if(event.source.isProjectile() && isPoison)
 		{
 			int duration = poisonAmount * 20;
 			int amplifier = poisonAmount + 8;
 			float damage = poisonAmount + 4;
 			ent.addPotionEffect(new PotionEffect(Potion.poison.id, duration, amplifier));
 			ent.attackEntityFrom(DamageSource.generic, damage);
-		} else if(event.source.isProjectile() && isHoming == true)
+		} else if(event.source.isProjectile() && isHoming)
 		{
 			float damage = 6;
 			ent.attackEntityFrom(DamageSource.generic, damage);
-		} else if(event.source.isProjectile() && isCritical == true)
+		} else if(event.source.isProjectile() && isCritical)
 		{
 			float damage = criticalAmount + 4;
 			ent.attackEntityFrom(DamageSource.generic, damage);
-		} else if(event.source.isProjectile() && isGodly == true)
+		} else if(event.source.isProjectile() && isGodly)
 		{
-			EntityArrow entArrow = null;
-			this.spawnLightningOnEntityWithModifier(entArrow, ent.worldObj, godlyAmount, ent);
-		} else
-		{
-			return;
+			this.spawnLightningOnEntityWithModifier(null, ent.worldObj, godlyAmount, ent);
 		}
 	} 
 
@@ -124,7 +120,7 @@ public class ArrowEventHookContainer
 			EntityArrow arrow = (EntityArrow) event.entity;
 
 			// To whomever reads this, other than myself, I am terribly sorry for the mess of code below...ugh...
-			if(isHoming == true)// && (arrow.shootingEntity instanceof EntityPlayer) && arrow.getDistanceToEntitySq(arrow.shootingEntity) > (float) (7 - homingAmount)) 
+			if(isHoming)// && (arrow.shootingEntity instanceof EntityPlayer) && arrow.getDistanceToEntitySq(arrow.shootingEntity) > (float) (7 - homingAmount))
 			{	
 				if(target == null || target.velocityChanged || !target.canEntityBeSeen(arrow))
 				{
@@ -136,23 +132,20 @@ public class ArrowEventHookContainer
 					EntityLiving entityliving = null;
 					List list = arrow.worldObj.getEntitiesWithinAABB(net.minecraft.entity.EntityLiving.class, arrow.boundingBox.expand(size, size, size));
 
-					for(int id = 0; id < list.size(); id++)
-					{
-						EntityLiving tempEnt = (EntityLiving) list.get(id);
+                    for (Object aList : list) {
+                        EntityLiving tempEnt = (EntityLiving) aList;
 
-						if(tempEnt == arrow.shootingEntity)
-						{
-							continue;
-						}
+                        if (tempEnt == arrow.shootingEntity) {
+                            continue;
+                        }
 
-						double distance = tempEnt.getDistance(posX, posY, posZ);
+                        double distance = tempEnt.getDistance(posX, posY, posZ);
 
-						if((size < 0.0D || distance < size * size) && (d == -1D || distance < d) && tempEnt.canEntityBeSeen(arrow))
-						{
-							d = distance;
-							entityliving = tempEnt;
-						}
-					}
+                        if ((size < 0.0D || distance < size * size) && (d == -1D || distance < d) && tempEnt.canEntityBeSeen(arrow)) {
+                            d = distance;
+                            entityliving = tempEnt;
+                        }
+                    }
 
 					target = entityliving;
 				}
@@ -165,16 +158,14 @@ public class ArrowEventHookContainer
 		            double dirZ = target.posZ - arrow.posZ;
 					arrow.setThrowableHeading(dirX, dirY, dirZ, 1.5F, 0.0F);
 				}
-			} else if(isCritical == true)
+			} else if(isCritical)
 			{
 				arrow.setIsCritical(true);
-			} else if(isGodly == true || isExplosive == true)
-			{
-				//arrow = this.entArrow;
-			} 
+			}
 		}
 	}
 
+/*
 	@SubscribeEvent
 	// We declared the EntityLiving, but it was null, so every 
 	// living update, we set it equal to the EntityLivingBase class
@@ -183,21 +174,19 @@ public class ArrowEventHookContainer
 		EntityLivingBase living = event.entityLiving;
 		living = target;
 	}
+*/
 
-	public void createExplosionOnEntityWithModifier(EntityArrow arrow, World world, int modifierAmount, Entity entity)
+	public void createExplosionOnEntityWithModifier(EntityArrow arrow, World world, int modifierAmount, EntityPlayerMP player)
 	{
-		if((arrow.shootingEntity instanceof EntityPlayer) && arrow.getDistanceToEntity(arrow.shootingEntity) > 5F + (float) (modifierAmount * 2))
+		if((arrow.shootingEntity instanceof EntityPlayer))
 		{
-			world.createExplosion(arrow, arrow.posX, arrow.posY, arrow.posZ, 2.0F * (float) modifierAmount, true);
-			arrow.setDead();
-		} else if(entity.getDistance(arrow.posX, arrow.posY, arrow.posZ) > (double) (5F + (float) (modifierAmount * 2)))
-		{
-			world.createExplosion(arrow, arrow.posX, arrow.posY, arrow.posZ, 2.0F * (float) modifierAmount, true);
-			arrow.setDead();
+            ItemStack bow = player.getHeldItem();
+            int level = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, bow);
+			world.createExplosion(arrow, arrow.posX, arrow.posY, arrow.posZ, 2.0F * level, true);
 		}
 	}
 
-	public void spawnLightningOnEntityWithModifier(EntityArrow arrow, World world, int modifierAmount, Entity entity)
+	public void spawnLightningOnEntityWithModifier(EntityArrow arrow, World world, int modifierAmount, EntityPlayerMP entity)
 	{
 		if(!arrow.isInWater())
 		{

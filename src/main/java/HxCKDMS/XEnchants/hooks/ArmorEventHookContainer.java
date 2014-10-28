@@ -3,11 +3,13 @@ package HxCKDMS.XEnchants.hooks;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 import org.lwjgl.input.Keyboard;
@@ -17,6 +19,7 @@ import HxCKDMS.XEnchants.common.XEnchants;
 public class ArmorEventHookContainer 
 {
 	// Booleans, my boys
+    boolean isAdrenalineBoost = false;
 	boolean isJumpBoost = false;
 	boolean isHeavyFooted = false;
 	boolean isRegen = false;
@@ -25,7 +28,8 @@ public class ArmorEventHookContainer
 
 	// Itnegers, ya idiots
 	int heavyFootedAmount;
-	int jumpBoostAmount;
+    int jumpBoostAmount;
+    int AdrenalineBoostAmount;
     int Fly;
 	int regenAmount;
 	int speedAmount;
@@ -36,25 +40,53 @@ public class ArmorEventHookContainer
 	boolean respawned;
 	ItemStack inventory[];
 
-    @Mod.EventHandler
-	public void livingUpdateEvent(LivingEvent.LivingUpdateEvent event)
+    @SubscribeEvent
+	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event)
 	{
-        EntityPlayer player = (EntityPlayer) event.entityLiving;
-        Boolean canFly = player.capabilities.isCreativeMode;
 		if(event.entityLiving instanceof EntityPlayer)
 		{
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            Boolean canFly = player.capabilities.isCreativeMode;
 			ItemStack stack_feet = player.inventory.armorItemInSlot(0);
 			ItemStack stack_legs = player.inventory.armorItemInSlot(1);
 			ItemStack stack_torso = player.inventory.armorItemInSlot(2);
 			ItemStack stack_head = player.inventory.armorItemInSlot(3);
 			ItemStack[] stack_total = player.inventory.armorInventory;
 
-			jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
+            jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
 
-			if(jumpBoostAmount > 0)
-			{
-				isJumpBoost = true;
-			}
+            if(jumpBoostAmount > 0)
+            {
+                isJumpBoost = true;
+            }
+
+            AdrenalineBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, stack_head);
+
+            if(AdrenalineBoostAmount > 0)
+            {
+                isAdrenalineBoost = true;
+            }
+
+            jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
+
+            if(jumpBoostAmount > 0)
+            {
+                isJumpBoost = true;
+            }
+
+            jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
+
+            if(jumpBoostAmount > 0)
+            {
+                isJumpBoost = true;
+            }
+
+            jumpBoostAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
+
+            if(jumpBoostAmount > 0)
+            {
+                isJumpBoost = true;
+            }
 
             Fly = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, stack_feet);
 
@@ -90,9 +122,9 @@ public class ArmorEventHookContainer
 			{
 				isBound = true;
 			}
+            player.capabilities.allowFlying = canFly;
+            if (!canFly) player.capabilities.isFlying = false;
 		}
-        player.capabilities.allowFlying = canFly;
-        if (!canFly) player.capabilities.isFlying = false;
 	}
 
 	@SubscribeEvent
@@ -101,7 +133,7 @@ public class ArmorEventHookContainer
 		if(event.entityLiving instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
-			inventory = new ItemStack[player.inventory.getSizeInventory()];;
+			inventory = new ItemStack[player.inventory.getSizeInventory()];
 
 			for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 			{
@@ -126,7 +158,6 @@ public class ArmorEventHookContainer
 			}
 		}
 	}
-
 	@SubscribeEvent
 	public void applyEffects(LivingEvent.LivingUpdateEvent event)
 	{

@@ -28,7 +28,7 @@ public class Events implements EventListener {
             System.out.println("Morph doesn't exist");
         }
     }
-    @SubscribeEvent
+    @Mod.EventHandler
     public void Tick(EnumSet<TickEvent.Type> type, Object... tickData) {
         if (type.contains(TickEvent.Type.PLAYER)) {
             EntityPlayer player = (EntityPlayer) tickData[0];
