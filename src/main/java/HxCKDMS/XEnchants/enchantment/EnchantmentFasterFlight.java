@@ -1,5 +1,6 @@
 package HxCKDMS.XEnchants.enchantment;
 
+import HxCKDMS.XEnchants.common.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.util.StatCollector;
@@ -39,6 +40,6 @@ public class EnchantmentFasterFlight extends Enchantment
     @Override
     public int getMaxLevel()
     {
-        return 2;
+        return Config.enchAirStriderLVL;
     }
 }

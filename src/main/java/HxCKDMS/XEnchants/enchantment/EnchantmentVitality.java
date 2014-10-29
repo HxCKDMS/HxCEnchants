@@ -15,8 +15,6 @@ import net.minecraft.item.*;
 
 public class EnchantmentVitality extends Enchantment {
 
-	public static UUID VitalityUUID = UUID.fromString("edff168f-32d7-4adb-8d29-189e9405e032");
-
     public EnchantmentVitality(int id, int weight) {
         super(id, weight, EnumEnchantmentType.armor_torso);
         this.setName("Vitality");
@@ -39,21 +37,5 @@ public class EnchantmentVitality extends Enchantment {
     public int getMaxLevel()
     {
         return Config.enchVitalityLVL;
-    }
-
-    @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent Event) {
-        EntityPlayer player = Event.player;
-        IAttributeInstance Eentity = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
-        ItemStack chest = player.getCurrentArmor(2);
-        int level = EnchantmentHelper.getEnchantmentLevel(Config.enchVitalityID, chest);
-        boolean HPBoost = XEnchants.containsEnchant(chest, Config.enchVitalityID);
-
-        if (HPBoost) {
-            AttributeModifier exHP = new AttributeModifier(VitalityUUID, "chest", level * 0.5, 1);
-
-            Eentity.removeModifier(exHP);
-            Eentity.applyModifier(exHP);
-        }
     }
 }

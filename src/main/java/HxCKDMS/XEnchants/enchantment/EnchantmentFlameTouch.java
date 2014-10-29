@@ -1,5 +1,6 @@
 package HxCKDMS.XEnchants.enchantment;
 
+import HxCKDMS.XEnchants.common.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLootBonus;
 import net.minecraft.enchantment.EnchantmentUntouching;
@@ -14,15 +15,10 @@ public class EnchantmentFlameTouch extends Enchantment
 		this.setName("flameTouch");
 	}
 
-	public EnchantmentFlameTouch(int id, int rarity, EnumEnchantmentType type)
-	{
-		super(id, rarity, type);
-	}
-
 	@Override
 	public String getTranslatedName(int i)
 	{
-		String enchantmentName = "Flame Touch";
+		String enchantmentName = "Auto-Smelt";
 		return enchantmentName + " " + StatCollector.translateToLocal("enchantment.level." + i);
 	}
 
@@ -41,26 +37,7 @@ public class EnchantmentFlameTouch extends Enchantment
 	@Override
 	public int getMaxLevel()
 	{
-		return 2;
+		return Config.enchFlameTouchLVL;
 	}
 
-	@Override 
-	public boolean canApplyTogether(Enchantment enchantment)
-    {
-        if(enchantment instanceof EnchantmentLootBonus)
-        {
-            return false;
-        }
-        /*if(enchantment instanceof EnchantmentLumberjack)
-        {
-            return false;
-        }*/
-        if(enchantment instanceof EnchantmentUntouching)
-        {
-            return false;
-        } else
-        {
-            return super.canApplyTogether(enchantment);
-        }
-    }
 }

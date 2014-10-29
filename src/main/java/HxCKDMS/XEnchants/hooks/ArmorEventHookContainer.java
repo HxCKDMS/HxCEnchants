@@ -1,6 +1,7 @@
 package HxCKDMS.XEnchants.hooks;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import HxCKDMS.XEnchants.common.XEnchants;
 import HxCKDMS.XEnchants.common.Config;
@@ -22,6 +23,7 @@ public class ArmorEventHookContainer
     boolean isAdrenalineBoost = false;
     boolean JumpBoost = false;
     boolean isHeavyFooted = false;
+    boolean EnableFly;
     boolean isBound = false;
     boolean HealthBuffApplied = false;
     boolean morphExists = false;
@@ -62,7 +64,6 @@ public class ArmorEventHookContainer
 		if(event.entityLiving instanceof EntityPlayer)
 		{
             EntityPlayer player = (EntityPlayer) event.entityLiving;
-            Boolean canFly = player.capabilities.isCreativeMode;
 			ItemStack stack_feet = player.inventory.armorItemInSlot(0);
 			ItemStack stack_legs = player.inventory.armorItemInSlot(1);
 			ItemStack stack_torso = player.inventory.armorItemInSlot(2);
@@ -99,14 +100,9 @@ public class ArmorEventHookContainer
                 AttributeModifier HealthBuff = new AttributeModifier("HealthBuffedChestplate", Vitality, 1);
                 ph.applyModifier(HealthBuff);
             }
-
-            if(Fly > 0)
-            {
-                canFly = true;
-            }
             if(AirStriderLevel > 0)
             {
-                float FlightSpeedBuff = AirStriderLevel * 0.2F;
+                float FlightSpeedBuff = AirStriderLevel * 0.1F;
                 player.capabilities.setFlySpeed(FlightSpeedBuff);
             }
 
@@ -124,7 +120,6 @@ public class ArmorEventHookContainer
 
                 if (player.getHealth() < player.getMaxHealth() && lf > 0 || ll > 0|| lt > 0|| lh > 0)
                 {
-                    if (Config.DebugMode){System.out.println("Regen Triggered!");}
                     float HP = (lf + lt + ll + lh) * 2;
                     player.heal(HP);
                     player.addExhaustion(HP/2);
@@ -146,9 +141,32 @@ public class ArmorEventHookContainer
 			{
 				isBound = true;
 			}
-            player.capabilities.allowFlying = canFly;
-            if (!canFly) player.capabilities.isFlying = false;
-            if (player.worldObj.isRemote && player.capabilities.isFlying && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+            if (morphExists) {
+                try {
+                    Object e = getMorphEntity.invoke(null, player.getUniqueID(), player.worldObj.isRemote);
+                    if (e != null) {
+                        // Player is morphed
+                        ArrayList abilities = (ArrayList) getEntityAbilities.invoke(null, e.getClass());
+                        for (Object ability : abilities) {
+                            if (ability.getClass().getName().equals("morph.common.ability.AbilityFly")) {
+                                EnableFly = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Morph's flight is not compatible with the flight enchantment");
+                    morphExists = false;
+                    getMorphEntity = null;
+                    getEntityAbilities = null;
+                }
+            }if(XEnchants.containsEnchant(stack_feet, Fly)){
+                EnableFly = true;
+            }
+            player.capabilities.allowFlying = EnableFly;
+            if (!EnableFly) player.capabilities.isFlying = false;
+            if (player.worldObj.isRemote && player.capabilities.isFlying && XEnchants.containsEnchant(stack_feet, Fly) && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
         }
 	}
 

@@ -41,14 +41,10 @@ public class XEnchants
     public static Enchantment Vitality;
     public static Enchantment WitherProtection;
 
-    public static Events events;
-
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
-        events = new Events();
-        MinecraftForge.EVENT_BUS.register(new Events());
     }
     @EventHandler
     public void init(FMLInitializationEvent event)

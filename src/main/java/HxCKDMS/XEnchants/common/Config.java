@@ -4,107 +4,107 @@ import net.minecraftforge.common.config.*;
 
 public class Config
 {
-    public static boolean DebugMode;
+    public boolean DebugMode;
 
     private int defaultEnchantID = 120;
 
-    public static int enchAdrenalineBoostID;
-    public static boolean enchAdrenalineBoostEnable;
-    public static int enchAdrenalineBoostLVL;
-    public static int enchAdrenalineBoostWeight;
+    public int enchAdrenalineBoostID;
+    public boolean enchAdrenalineBoostEnable;
+    public int enchAdrenalineBoostLVL;
+    public int enchAdrenalineBoostWeight;
 
-    public static int enchAirStriderID;
-    public static boolean enchAirStriderEnable;
-    public static int enchAirStriderLVL;
-    public static int enchAirStriderWeight;
+    public int enchAirStriderID;
+    public boolean enchAirStriderEnable;
+    public int enchAirStriderLVL;
+    public int enchAirStriderWeight;
 
-    public static int enchArmorRegenID;
-    public static boolean enchArmorRegenEnable;
-    public static int enchArmorRegenLVL;
-    public static int enchArmorRegenWeight;
+    public int enchArmorRegenID;
+    public boolean enchArmorRegenEnable;
+    public int enchArmorRegenLVL;
+    public int enchArmorRegenWeight;
 
-    public static int enchArrowExplosiveID;
-    public static boolean enchArrowExplosiveEnable;
-    public static int enchArrowExplosiveLVL;
-    public static int enchArrowExplosiveWeight;
+    public int enchArrowExplosiveID;
+    public boolean enchArrowExplosiveEnable;
+    public int enchArrowExplosiveLVL;
+    public int enchArrowExplosiveWeight;
 
-    public static int enchArrowLightningID;
-    public static boolean enchArrowLightningEnable;
-    public static int enchArrowLightningLVL;
-    public static int enchArrowLightningWeight;
+    public int enchArrowLightningID;
+    public boolean enchArrowLightningEnable;
+    public int enchArrowLightningLVL;
+    public int enchArrowLightningWeight;
 
-    public static int enchArrowSeekingID;
-    public static boolean enchArrowSeekingEnable;
-    public static int enchArrowSeekingLVL;
-    public static int enchArrowSeekingWeight;
+    public int enchArrowSeekingID;
+    public boolean enchArrowSeekingEnable;
+    public int enchArrowSeekingLVL;
+    public int enchArrowSeekingWeight;
 
-    public static int enchBattleHealingID;
-    public static boolean enchBattleHealingEnable;
-    public static int enchBattleHealingLVL;
-    public static int enchBattleHealingWeight;
+    public int enchBattleHealingID;
+    public boolean enchBattleHealingEnable;
+    public int enchBattleHealingLVL;
+    public int enchBattleHealingWeight;
 
-    public static int enchBoundID;
-    public static boolean enchBoundEnable;
-    public static int enchBoundLVL;
-    public static int enchBoundWeight;
+    public int enchBoundID;
+    public boolean enchBoundEnable;
+    public int enchBoundLVL;
+    public int enchBoundWeight;
 
-    public static int enchCriticalID;
-    public static boolean enchCriticalEnable;
-    public static int enchCriticalLVL;
-    public static int enchCriticalWeight;
+    public int enchCriticalID;
+    public boolean enchCriticalEnable;
+    public int enchCriticalLVL;
+    public int enchCriticalWeight;
 
-    public static int enchFlameTouchID;
-    public static boolean enchFlameTouchEnable;
-    public static int enchFlameTouchLVL;
-    public static int enchFlameTouchWeight;
+    public int enchFlameTouchID;
+    public boolean enchFlameTouchEnable;
+    public int enchFlameTouchLVL;
+    public int enchFlameTouchWeight;
 
-    public static int enchFlyID;
-    public static boolean enchFlyEnable;
-    public static int enchFlyWeight;
+    public int enchFlyID;
+    public boolean enchFlyEnable;
+    public int enchFlyWeight;
 
-    public static int enchJumpBoostID;
-    public static boolean enchJumpBoostEnable;
-    public static int enchJumpBoostLVL;
-    public static int enchJumpBoostWeight;
+    public int enchJumpBoostID;
+    public boolean enchJumpBoostEnable;
+    public int enchJumpBoostLVL;
+    public int enchJumpBoostWeight;
 
-    public static int enchLeadFootedID;
-    public static boolean enchLeadFootedEnable;
-    public static int enchLeadFootedLVL;
-    public static int enchLeadFootedWeight;
+    public int enchLeadFootedID;
+    public boolean enchLeadFootedEnable;
+    public int enchLeadFootedLVL;
+    public int enchLeadFootedWeight;
 
-    public static int enchPoisonID;
-    public static boolean enchPoisonEnable;
-    public static int enchPoisonLVL;
-    public static int enchPoisonWeight;
+    public int enchPoisonID;
+    public boolean enchPoisonEnable;
+    public int enchPoisonLVL;
+    public int enchPoisonWeight;
 
-    public static int enchSwiftnessID;
-    public static boolean enchSwiftnessEnable;
-    public static int enchSwiftnessLVL;
-    public static int enchSwiftnessWeight;
+    public int enchSwiftnessID;
+    public boolean enchSwiftnessEnable;
+    public int enchSwiftnessLVL;
+    public int enchSwiftnessWeight;
 
-    public static int enchVampirismID;
-    public static boolean enchVampirismEnable;
-    public static int enchVampirismLVL;
-    public static int enchVampirismWeight;
+    public int enchVampirismID;
+    public boolean enchVampirismEnable;
+    public int enchVampirismLVL;
+    public int enchVampirismWeight;
 
-    public static int enchVitalityID;
-    public static boolean enchVitalityEnable;
-    public static int enchVitalityLVL;
-    public static int enchVitalityWeight;
+    public int enchVitalityID;
+    public boolean enchVitalityEnable;
+    public int enchVitalityLVL;
+    public int enchVitalityWeight;
 
-    public static int enchWitherProtectionID;
-    public static boolean enchWitherProtectionEnable;
-    public static int enchWitherProtectionLVL;
-    public static int enchWitherProtectionWeight;
+    public int enchWitherProtectionID;
+    public boolean enchWitherProtectionEnable;
+    public int enchWitherProtectionLVL;
+    public int enchWitherProtectionWeight;
 
-    public static boolean Tooltip;
+    public boolean Tooltip;
 
     public Config(Configuration config)
     {
         config.load();
 
 
-        DebugMode = config.get("DEBUG", "Debug Mode Enable?", true).getBoolean(true);
+        DebugMode = config.get("DEBUG", "Debug Mode Enable?", false).getBoolean(false);
 
         enchAdrenalineBoostID = config.get("Armor", "Adrenaline Boost ID", defaultEnchantID).getInt();
         enchAdrenalineBoostEnable = config.get("Armor", "Adrenaline Boost Enable", true).getBoolean(true);
@@ -118,7 +118,7 @@ public class Config
 
         enchArmorRegenID = config.get("Armor", "ArmorRegenID", defaultEnchantID+1).getInt();
         enchArmorRegenEnable = config.get("Armor", "ArmorRegenEnable", true).getBoolean(true);
-        enchArmorRegenLVL = config.get("Armor", "ArmorRegenMaxLevel", 4).getInt();
+        enchArmorRegenLVL = config.get("Armor", "ArmorRegenMaxLevel", 2).getInt();
         enchArmorRegenWeight = config.get("Armor", "ArmorRegenWeight", 2).getInt();
 
         enchArrowExplosiveID = config.get("Armor", "ArrowExplosiveID", defaultEnchantID+2).getInt();
@@ -128,12 +128,12 @@ public class Config
 
         enchArrowLightningID = config.get("Armor", "ArrowLightningID", defaultEnchantID+3).getInt();
         enchArrowLightningEnable = config.get("Armor", "ArrowLightningEnable", true).getBoolean(true);
-        enchArrowLightningLVL = config.get("Armor", "ArrowLightningMaxLevel", 4).getInt();
+        enchArrowLightningLVL = config.get("Armor", "ArrowLightningMaxLevel", 1).getInt();
         enchArrowLightningWeight = config.get("Armor", "ArrowLightningWeight", 2).getInt();
 
         enchArrowSeekingID = config.get("Armor", "ArrowSeekingID", defaultEnchantID+4).getInt();
         enchArrowSeekingEnable = config.get("Armor", "ArrowSeekingEnable", true).getBoolean(true);
-        enchArrowSeekingLVL = config.get("Armor", "ArrowSeekingMaxLevel", 4).getInt();
+        enchArrowSeekingLVL = config.get("Armor", "ArrowSeekingMaxLevel", 1).getInt();
         enchArrowSeekingWeight = config.get("Armor", "ArrowSeekingWeight", 2).getInt();
 
         enchBattleHealingID = config.get("Armor", "BattleHealingID", defaultEnchantID+5).getInt();
@@ -143,17 +143,17 @@ public class Config
 
         enchBoundID = config.get("Armor", "BoundID", defaultEnchantID+6).getInt();
         enchBoundEnable = config.get("Armor", "BoundEnable", true).getBoolean(true);
-        enchBoundLVL = config.get("Armor", "BoundMaxLevel", 4).getInt();
+        enchBoundLVL = config.get("Armor", "BoundMaxLevel", 1).getInt();
         enchBoundWeight = config.get("Armor", "BoundWeight", 2).getInt();
 
         enchCriticalID = config.get("Armor", "CriticalID", defaultEnchantID+7).getInt();
         enchCriticalEnable = config.get("Armor", "CriticalEnable", true).getBoolean(true);
-        enchCriticalLVL = config.get("Armor", "CriticalMaxLevel", 4).getInt();
+        enchCriticalLVL = config.get("Armor", "CriticalMaxLevel", 5).getInt();
         enchCriticalWeight = config.get("Armor", "CriticalWeight", 2).getInt();
 
         enchFlameTouchID = config.get("Armor", "FlameTouchID", defaultEnchantID+8).getInt();
         enchFlameTouchEnable = config.get("Armor", "FlameTouchEnable", true).getBoolean(true);
-        enchFlameTouchLVL = config.get("Armor", "FlameTouchMaxLevel", 4).getInt();
+        enchFlameTouchLVL = config.get("Armor", "FlameTouchMaxLevel", 1).getInt();
         enchFlameTouchWeight = config.get("Armor", "FlameTouchWeight", 2).getInt();
 
         enchFlyID = config.get("Armor", "FlyID", defaultEnchantID+9).getInt();
@@ -167,12 +167,12 @@ public class Config
 
         enchLeadFootedID = config.get("Armor", "LeadFootedID", defaultEnchantID+11).getInt();
         enchLeadFootedEnable = config.get("Armor", "LeadFootedEnable", true).getBoolean(true);
-        enchLeadFootedLVL = config.get("Armor", "LeadFootedMaxLevel", 4).getInt();
+        enchLeadFootedLVL = config.get("Armor", "LeadFootedMaxLevel", 1).getInt();
         enchLeadFootedWeight = config.get("Armor", "LeadFootedWeight", 2).getInt();
 
         enchPoisonID = config.get("Armor", "PoisonID", defaultEnchantID+12).getInt();
         enchPoisonEnable = config.get("Armor", "PoisonEnable", true).getBoolean(true);
-        enchPoisonLVL = config.get("Armor", "PoisonMaxLevel", 4).getInt();
+        enchPoisonLVL = config.get("Armor", "PoisonMaxLevel", 5).getInt();
         enchPoisonWeight = config.get("Armor", "PoisonWeight", 2).getInt();
 
         enchSwiftnessID = config.get("Armor", "SwiftnessID", defaultEnchantID+13).getInt();
@@ -182,7 +182,7 @@ public class Config
 
         enchVampirismID = config.get("Armor", "VampirismID", defaultEnchantID+14).getInt();
         enchVampirismEnable = config.get("Armor", "VampirismEnable", true).getBoolean(true);
-        enchVampirismLVL = config.get("Armor", "VampirismMaxLevel", 4).getInt();
+        enchVampirismLVL = config.get("Armor", "VampirismMaxLevel", 5).getInt();
         enchVampirismWeight = config.get("Armor", "VampirismWeight", 2).getInt();
 
         enchVitalityID = config.get("Armor", "VitalityID", defaultEnchantID+15).getInt();
