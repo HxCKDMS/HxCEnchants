@@ -4,6 +4,8 @@ import net.minecraftforge.common.config.*;
 
 public class Config
 {
+    public static boolean DebugMode;
+
     private int defaultEnchantID = 120;
 
     public static int enchAdrenalineBoostID;
@@ -95,6 +97,9 @@ public class Config
     public Config(Configuration config)
     {
         config.load();
+
+
+        DebugMode = config.get("DEBUG", "Debug Mode Enable?", true).getBoolean(true);
 
         enchAdrenalineBoostID = config.get("Armor", "AdrenalineBoostID", defaultEnchantID).getInt();
         enchAdrenalineBoostEnable = config.get("Armor", "AdrenalineBoostEnable", true).getBoolean(true);

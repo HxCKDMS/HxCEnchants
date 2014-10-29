@@ -15,7 +15,7 @@ import net.minecraft.item.*;
 
 public class EnchantmentVitality extends Enchantment {
 
-	public static UUID SwiftnessUUID = UUID.fromString("edff168f-32d7-438b-8d29-189e9405e032");
+	public static UUID VitalityUUID = UUID.fromString("edff168f-32d7-4adb-8d29-189e9405e032");
 
     public EnchantmentVitality(int id, int weight) {
         super(id, weight, EnumEnchantmentType.armor_torso);
@@ -47,10 +47,10 @@ public class EnchantmentVitality extends Enchantment {
         IAttributeInstance Eentity = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
         ItemStack chest = player.getCurrentArmor(2);
         int level = EnchantmentHelper.getEnchantmentLevel(Config.enchVitalityID, chest);
-        boolean HPBoost = XEnchants.containsEnchant(chest, Config.enchSwiftnessID);
+        boolean HPBoost = XEnchants.containsEnchant(chest, Config.enchVitalityID);
 
         if (HPBoost) {
-            AttributeModifier exHP = new AttributeModifier(SwiftnessUUID, "chest", level * 0.5, 1);
+            AttributeModifier exHP = new AttributeModifier(VitalityUUID, "chest", level * 0.5, 1);
 
             Eentity.removeModifier(exHP);
             Eentity.applyModifier(exHP);

@@ -75,7 +75,7 @@ public class ToolEventHookContainer
             if (flameTouchAmount > 0){
                 if(result != null)
                 event.drops.add(result);
-                event.drops.remove(block);
+                event.drops.remove(event.block);
             }
         }
 

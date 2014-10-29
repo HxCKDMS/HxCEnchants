@@ -81,6 +81,7 @@ public class ArrowEventHookContainer
 	@SubscribeEvent
 	public void arrowInAir(EntityEvent event)
 	{
+        if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
 
 			// To whomever reads this, other than myself, I am terribly sorry for the mess of code below...ugh...
@@ -125,5 +126,6 @@ public class ArrowEventHookContainer
 					arrow.setThrowableHeading(dirX, dirY, dirZ, 1.5F, 0.0F);
 				}
 			}
+        }
 	}
 }
