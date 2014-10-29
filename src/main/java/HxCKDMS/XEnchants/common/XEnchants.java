@@ -23,6 +23,7 @@ public class XEnchants
     public static Config Config;
 
 	public static Enchantment AdrenalineBoost;
+    public static Enchantment AirStrider;
 	public static Enchantment ArmorRegen;
 	public static Enchantment ArrowExplosive;
 	public static Enchantment ArrowLightning;
@@ -56,6 +57,10 @@ public class XEnchants
 	    if(Config.enchAdrenalineBoostEnable)
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
+
+        if(Config.enchAirStriderEnable)
+            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
+            MinecraftForge.EVENT_BUS.register(AirStrider);
 
         if(Config.enchArmorRegenEnable)
             ArmorRegen = new EnchantmentArmorRegen(Config.enchArmorRegenID, Config.enchArmorRegenWeight);

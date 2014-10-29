@@ -37,31 +37,4 @@ public class EnchantmentJumpBoost extends Enchantment {
     {
         return Config.enchJumpBoostLVL;
     }
-
-
-    public boolean canApply(ItemStack Item)
-    {
-    	if(Item.getItem() instanceof ItemArmor)
-    	{
-    		ItemArmor itemArmor = (ItemArmor)Item.getItem();
-    		if(itemArmor.armorType == 2)
-    		{
-    			return true;
-    		}
-    	}
-        return false;
-    }
-    @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent Event)
-	{
-        EntityPlayer player = Event.player;
-        ItemStack legs = player.getCurrentArmor(2);
-		boolean JumpBoost;
-        JumpBoost = XEnchants.containsEnchant(legs, Config.enchJumpBoostID);
-
-		int Level = EnchantmentHelper.getEnchantmentLevel(this.effectId, legs);
-		if (JumpBoost){
-    		player.addPotionEffect(new PotionEffect(Potion.jump.id, 5, Level));
-    	}
-	}
 }

@@ -13,6 +13,11 @@ public class Config
     public static int enchAdrenalineBoostLVL;
     public static int enchAdrenalineBoostWeight;
 
+    public static int enchAirStriderID;
+    public static boolean enchAirStriderEnable;
+    public static int enchAirStriderLVL;
+    public static int enchAirStriderWeight;
+
     public static int enchArmorRegenID;
     public static boolean enchArmorRegenEnable;
     public static int enchArmorRegenLVL;
@@ -101,10 +106,15 @@ public class Config
 
         DebugMode = config.get("DEBUG", "Debug Mode Enable?", true).getBoolean(true);
 
-        enchAdrenalineBoostID = config.get("Armor", "AdrenalineBoostID", defaultEnchantID).getInt();
-        enchAdrenalineBoostEnable = config.get("Armor", "AdrenalineBoostEnable", true).getBoolean(true);
-        enchAdrenalineBoostLVL = config.get("Armor", "AdrenalineBoostMaxLevel", 4).getInt();
-        enchAdrenalineBoostWeight = config.get("Armor", "AdrenalineBoostWeight", 2).getInt();
+        enchAdrenalineBoostID = config.get("Armor", "Adrenaline Boost ID", defaultEnchantID).getInt();
+        enchAdrenalineBoostEnable = config.get("Armor", "Adrenaline Boost Enable", true).getBoolean(true);
+        enchAdrenalineBoostLVL = config.get("Armor", "Adrenaline Boost Max Level", 4).getInt();
+        enchAdrenalineBoostWeight = config.get("Armor", "Adrenaline Boost Weight", 2).getInt();
+
+        enchAirStriderID = config.get("Armor", "AirStriderID", defaultEnchantID+17).getInt();
+        enchAirStriderEnable = config.get("Armor", "Air Strider Enable", true).getBoolean(true);
+        enchAirStriderLVL = config.get("Armor", "Air Strider MaxLevel", 4).getInt();
+        enchAirStriderWeight = config.get("Armor", "Air Strider Weight", 2).getInt();
 
         enchArmorRegenID = config.get("Armor", "ArmorRegenID", defaultEnchantID+1).getInt();
         enchArmorRegenEnable = config.get("Armor", "ArmorRegenEnable", true).getBoolean(true);

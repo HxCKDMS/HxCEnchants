@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1c433669-a532-4e93-8351-065f19bbcd5d" name="Default" comment="Fixed a few typo's and Fixed armor enchants and arrow enchants Recoded Explosive arrow and cleaning up sauce code">
+    <list default="true" id="1c433669-a532-4e93-8351-065f19bbcd5d" name="Default" comment="Cleaned up more">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFasterFlight.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eclipse/saves/Dev World/level.dat" afterPath="$PROJECT_DIR$/eclipse/saves/Dev World/level.dat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eclipse/saves/Dev World/region/r.-1.0.mca" afterPath="$PROJECT_DIR$/eclipse/saves/Dev World/region/r.-1.0.mca" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eclipse/saves/Dev World/session.lock" afterPath="$PROJECT_DIR$/eclipse/saves/Dev World/session.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArmorEventHookContainer.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArmorEventHookContainer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArrowEventHookContainer.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArrowEventHookContainer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/Config.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/Config.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentVitality.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentVitality.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ToolEventHookContainer.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ToolEventHookContainer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eclipse/config/XEnchants.cfg" afterPath="$PROJECT_DIR$/eclipse/config/XEnchants.cfg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentJumpBoost.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentJumpBoost.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/XEnchants.iws" afterPath="$PROJECT_DIR$/XEnchants.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/XEnchants.java" afterPath="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/XEnchants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eclipse/options.txt" afterPath="$PROJECT_DIR$/eclipse/options.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eclipse/usernamecache.json" afterPath="$PROJECT_DIR$/eclipse/usernamecache.json" />
     </list>
     <ignored path="XEnchants.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,7 +22,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
+    <option name="PATCH_PATH" value="C:\Users\KerudonSurreiya\Dev\XEnchants" />
   </component>
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
@@ -76,8 +72,18 @@
       <file leaf-file-name="XEnchants.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/XEnchants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="493" max-vertical-offset="2261">
-              <caret line="49" column="50" selection-start-line="49" selection-start-column="50" selection-end-line="49" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="732" max-vertical-offset="2346">
+              <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Config.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/Config.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1688" max-vertical-offset="3570">
+              <caret line="111" column="68" selection-start-line="111" selection-start-column="68" selection-end-line="111" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -113,14 +119,50 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ArmorEventHookContainer.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ArmorEventHookContainer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArmorEventHookContainer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1491228" vertical-offset="3587" max-vertical-offset="4930">
-              <caret line="214" column="13" selection-start-line="214" selection-start-column="13" selection-end-line="214" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1647" max-vertical-offset="4097">
+              <caret line="109" column="65" selection-start-line="109" selection-start-column="65" selection-end-line="109" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.43098593" vertical-offset="0" max-vertical-offset="355">
+              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EnchantmentFasterFlight.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFasterFlight.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
+              <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#807#808#0" expanded="true" />
+                <element signature="e#836#837#0" expanded="true" />
+                <element signature="e#900#901#0" expanded="true" />
+                <element signature="e#951#952#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EnchantmentFlameTouch.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFlameTouch.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="935">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -167,7 +209,6 @@
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentBattleHealing.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFlameTouch.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFly.java" />
-        <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentJumpBoost.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentSwiftness.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentWitherProtection.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/test.java" />
@@ -178,9 +219,11 @@
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentArrowLightning.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArrowEventHookContainer.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ToolEventHookContainer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentVitality.java" />
+        <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentJumpBoost.java" />
+        <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFasterFlight.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/XEnchants.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/Config.java" />
-        <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentVitality.java" />
         <option value="$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArmorEventHookContainer.java" />
       </list>
     </option>
@@ -399,20 +442,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XEnchants" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XEnchants" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eclipse" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -722,7 +751,7 @@
       <workItem from="1414441788332" duration="829000" />
       <workItem from="1414464563357" duration="1538000" />
       <workItem from="1414512454802" duration="4797000" />
-      <workItem from="1414519703957" duration="17097000" />
+      <workItem from="1414519703957" duration="20198000" />
     </task>
     <task id="LOCAL-00001" summary="Merged http://github.com/BrassGoggledArchivists/Enchants with XEnchants refactored and cleaned up some code as well as fixed Flame Touch">
       <created>1414439204199</created>
@@ -748,15 +777,19 @@
       <created>1414533189231</created>
       <updated>1414533189231</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixed some things cleaned up code and Somewhat fixed Speed and Vitality&#10;Jump Boost works completely tho">
+      <created>1414544599918</created>
+      <updated>1414544599918</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45806000" />
+    <option name="totallyTimeSpent" value="48907000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -778,7 +811,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25183016" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25183016" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32988167" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24963397" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -838,7 +871,8 @@
     <MESSAGE value="Fixed a few typo's and Fixed armor enchants and arrow enchants Recoded Explosive arrow and cleaning up sauce code" />
     <MESSAGE value="Fixed Derps (I HOPE)" />
     <MESSAGE value="Tweaked some things not much fixed =/ Homing works others don't =/" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tweaked some things not much fixed =/ Homing works others don't =/" />
+    <MESSAGE value="Fixed some things cleaned up code and Somewhat fixed Speed and Vitality&#10;Jump Boost works completely tho" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed some things cleaned up code and Somewhat fixed Speed and Vitality&#10;Jump Boost works completely tho" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -851,13 +885,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentVampirism.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="1054">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentArmorRegen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="833">
@@ -921,13 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFlameTouch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3148148" vertical-offset="51" max-vertical-offset="1003">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentLeadFooted.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.047839507" vertical-offset="3" max-vertical-offset="1020">
@@ -935,24 +955,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentSpeedBoost.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10493827" vertical-offset="0" max-vertical-offset="648">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentSwiftness.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7376543" vertical-offset="389" max-vertical-offset="1088">
           <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentJumpBoost.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6589506" vertical-offset="423" max-vertical-offset="1071">
-          <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -1104,14 +1110,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43098593" vertical-offset="0" max-vertical-offset="355">
-          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentArrowLightning.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.049707603" vertical-offset="85" max-vertical-offset="765">
@@ -1160,22 +1158,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/XEnchants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="493" max-vertical-offset="2261">
-          <caret line="49" column="50" selection-start-line="49" selection-start-column="50" selection-end-line="49" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09315068" vertical-offset="1683" max-vertical-offset="3400">
-          <caret line="101" column="59" selection-start-line="101" selection-start-column="59" selection-end-line="101" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.2.1230/forgeSrc-1.7.10-10.13.2.1230-sources.jar!/net/minecraft/potion/PotionHealthBoost.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3830986" vertical-offset="0" max-vertical-offset="476">
@@ -1216,13 +1198,75 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentSpeedBoost.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23380281" vertical-offset="189" max-vertical-offset="595">
+          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentJumpBoost.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0535212" vertical-offset="0" max-vertical-offset="476">
+          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFlameTouch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="935">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/XEnchants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="732" max-vertical-offset="2346">
+          <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/common/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1688" max-vertical-offset="3570">
+          <caret line="111" column="68" selection-start-line="111" selection-start-column="68" selection-end-line="111" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/enchantment/EnchantmentFasterFlight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
+          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#807#808#0" expanded="true" />
+            <element signature="e#836#837#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
+            <element signature="e#951#952#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HxCKDMS/XEnchants/hooks/ArmorEventHookContainer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1491228" vertical-offset="3587" max-vertical-offset="4930">
-          <caret line="214" column="13" selection-start-line="214" selection-start-column="13" selection-end-line="214" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1647" max-vertical-offset="4097">
+          <caret line="109" column="65" selection-start-line="109" selection-start-column="65" selection-end-line="109" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43098593" vertical-offset="0" max-vertical-offset="355">
+          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
