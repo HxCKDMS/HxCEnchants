@@ -3,8 +3,7 @@ package HxCKDMS.XEnchants.hooks;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import HxCKDMS.XEnchants.common.XEnchants;
-import HxCKDMS.XEnchants.common.Config;
+import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -141,7 +140,7 @@ public class ArmorEventHookContainer
 			{
 				isBound = true;
 			}
-            if (morphExists) {
+            /*if (morphExists) {
                 try {
                     Object e = getMorphEntity.invoke(null, player.getUniqueID(), player.worldObj.isRemote);
                     if (e != null) {
@@ -161,12 +160,15 @@ public class ArmorEventHookContainer
                     getMorphEntity = null;
                     getEntityAbilities = null;
                 }
-            }if(XEnchants.containsEnchant(stack_feet, Fly)){
+            }*/
+            if(Fly > 0 || player.capabilities.isCreativeMode){
                 EnableFly = true;
+            }else if(Fly <= 0 && !player.capabilities.isCreativeMode){
+                EnableFly = false;
             }
             player.capabilities.allowFlying = EnableFly;
             if (!EnableFly) player.capabilities.isFlying = false;
-            if (player.worldObj.isRemote && player.capabilities.isFlying && XEnchants.containsEnchant(stack_feet, Fly) && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+            if (player.worldObj.isRemote && player.capabilities.isFlying && Fly > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
         }
 	}
 

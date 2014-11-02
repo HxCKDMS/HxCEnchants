@@ -1,16 +1,8 @@
 package HxCKDMS.XEnchants.enchantment;
 
-
-import HxCKDMS.XEnchants.common.Config;
-import HxCKDMS.XEnchants.common.XEnchants;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.enchantment.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.*;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-
+import HxCKDMS.XEnchants.Config;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 
 public class EnchantmentJumpBoost extends Enchantment {
 	

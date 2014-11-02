@@ -1,9 +1,8 @@
 package HxCKDMS.XEnchants.enchantment;
 
+import HxCKDMS.XEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.util.StatCollector;
 
 public class EnchantmentLeadFooted extends Enchantment
 {
@@ -11,18 +10,6 @@ public class EnchantmentLeadFooted extends Enchantment
 	{
 		super(id, rarity, EnumEnchantmentType.armor_feet);
 		this.setName("Lead Footed");
-	}
-	
-	public EnchantmentLeadFooted(int id, int rarity, EnumEnchantmentType type)
-	{
-		super(id, rarity, type);
-	}
-	
-	@Override
-	public String getTranslatedName(int i)
-	{
-		String enchantmentName = "Lead Footed";
-		return enchantmentName + " " + StatCollector.translateToLocal("enchantment.level." + i);
 	}
 
 	@Override
@@ -40,28 +27,7 @@ public class EnchantmentLeadFooted extends Enchantment
 	@Override
 	public int getMaxLevel()
 	{
-		return 4;
+		return Config.enchLeadFootedLVL;
 	}
 
-	@Override
-	public boolean canApplyTogether(Enchantment enchantment)
-	{
-		if(enchantment instanceof EnchantmentProtection)
-		{
-			if(((EnchantmentProtection)enchantment).protectionType == 2)
-			{
-				return false;
-			} else
-			{
-				return super.canApplyTogether(enchantment);
-			}
-		}
-		if(enchantment instanceof EnchantmentJumpBoost)
-		{
-			return false;
-		} else
-		{
-			return super.canApplyTogether(enchantment);
-		}
-	}
 }

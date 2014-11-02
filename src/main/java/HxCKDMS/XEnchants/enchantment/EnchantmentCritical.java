@@ -1,5 +1,6 @@
 package HxCKDMS.XEnchants.enchantment;
 
+import HxCKDMS.XEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.util.StatCollector;
@@ -34,6 +35,6 @@ public class EnchantmentCritical extends Enchantment
     @Override
     public int getMaxLevel()
     {
-        return 5;
+        return Config.enchCriticalLVL;
     }
 }

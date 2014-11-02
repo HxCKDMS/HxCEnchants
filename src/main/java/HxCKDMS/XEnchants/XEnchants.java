@@ -1,4 +1,4 @@
-package HxCKDMS.XEnchants.common;
+package HxCKDMS.XEnchants;
 
 import HxCKDMS.XEnchants.enchantment.*;
 import HxCKDMS.XEnchants.hooks.*;
@@ -135,8 +135,4 @@ public class XEnchants
         event.getModState();
     }
 
-    public static boolean containsEnchant(ItemStack stack, int id)
-    {
-        return (stack != null) && EnchantmentHelper.getEnchantments(stack).containsKey(id);
-    }
 }

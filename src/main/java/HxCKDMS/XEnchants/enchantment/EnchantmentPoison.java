@@ -1,8 +1,8 @@
 package HxCKDMS.XEnchants.enchantment;
 
+import HxCKDMS.XEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.util.StatCollector;
 
 public class EnchantmentPoison extends Enchantment
 {
@@ -11,14 +11,6 @@ public class EnchantmentPoison extends Enchantment
 		super(id, weight, EnumEnchantmentType.weapon);
 		setName("poison");
 	}
-	
-	@Override
-	public String getTranslatedName(int i)
-	{
-		String enchantmentName = "Poison";
-		return enchantmentName + " " + StatCollector.translateToLocal("enchantment.level." + i);
-	}
-
 	@Override
 	public int getMinEnchantability(int i)
 	{
@@ -34,6 +26,6 @@ public class EnchantmentPoison extends Enchantment
 	@Override
 	public int getMaxLevel()
 	{
-		return 5;
+		return Config.enchPoisonLVL;
 	}
 }

@@ -1,10 +1,8 @@
 package HxCKDMS.XEnchants.enchantment;
 
+import HxCKDMS.XEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentArrowFire;
-import net.minecraft.enchantment.EnchantmentArrowKnockback;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.util.StatCollector;
 
 public class EnchantmentArrowLightning extends Enchantment
 {
@@ -13,13 +11,6 @@ public class EnchantmentArrowLightning extends Enchantment
         super(id, rarity, EnumEnchantmentType.bow);
         this.setName("godly");
     }
-    
-    @Override
-	public String getTranslatedName(int i)
-	{
-		String enchantmentName = "Zeus";
-		return enchantmentName + " " + StatCollector.translateToLocal("enchantment.level." + i);
-	}
 
     @Override
     public int getMinEnchantability(int i)
@@ -36,18 +27,6 @@ public class EnchantmentArrowLightning extends Enchantment
     @Override
     public int getMaxLevel()
     {
-        return 3;
-    }
-    
-    @Override
-    public boolean canApplyTogether(Enchantment enchantment)
-    {
-        if(enchantment instanceof EnchantmentArrowFire || enchantment instanceof EnchantmentArrowExplosive || enchantment instanceof EnchantmentArrowKnockback)
-        {
-            return false;
-        } else
-        {
-            return super.canApplyTogether(enchantment);
-        }
+        return Config.enchArrowLightningLVL;
     }
 }

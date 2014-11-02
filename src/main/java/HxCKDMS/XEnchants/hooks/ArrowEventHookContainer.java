@@ -2,7 +2,7 @@ package HxCKDMS.XEnchants.hooks;
 
 import java.util.List;
 
-import HxCKDMS.XEnchants.common.XEnchants;
+import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;

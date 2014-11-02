@@ -2,8 +2,7 @@ package HxCKDMS.XEnchants.hooks;
 
 import java.util.Random;
 
-import HxCKDMS.XEnchants.common.XEnchants;
-import com.sun.istack.internal.NotNull;
+import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -11,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 public class ToolEventHookContainer 
