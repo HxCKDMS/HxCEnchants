@@ -9,7 +9,7 @@ public class EnchantmentArrowExplosive extends Enchantment
 	public EnchantmentArrowExplosive(int id, int rarity)
 	{
 		super(id, rarity, EnumEnchantmentType.bow);
-		this.setName("arrowSeeking");
+		this.setName("arrowExplosive");
 	}
 
 	@Override

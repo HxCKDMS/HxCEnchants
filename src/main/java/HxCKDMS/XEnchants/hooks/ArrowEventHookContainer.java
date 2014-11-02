@@ -8,12 +8,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 
@@ -55,16 +52,18 @@ public class ArrowEventHookContainer
             }
         }
 	}
+/*
 
 	@SubscribeEvent
 	public void entityAttacked(LivingAttackEvent event)
 	{
-        if(event.entityLiving instanceof EntityPlayerMP)
+        if(event.entityLiving instanceof EntityPlayerMP && event.entity instanceof EntityArrow)
         {
 		    EntityPlayerMP ent = (EntityPlayerMP) event.entityLiving;
+            EntityArrow arrow = (EntityArrow) event.entity;
             if(event.source.isProjectile() && isExplosive)
             {
-                ent.worldObj.createExplosion(target, target.posX, target.posY, target.posZ, 2.0F, true);
+                target.worldObj.createExplosion(target, target.posX, target.posY, target.posZ, 2.0F, true);
             }
             else if(event.source.isProjectile() && isHoming)
             {
@@ -77,16 +76,15 @@ public class ArrowEventHookContainer
             }
         }
 	} 
+*/
 
 	@SubscribeEvent
 	public void arrowInAir(EntityEvent event)
 	{
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
-
 			// To whomever reads this, other than myself, I am terribly sorry for the mess of code below...ugh...
 			// && (arrow.shootingEntity instanceof EntityPlayer) && arrow.getDistanceToEntitySq(arrow.shootingEntity) > (float) (7 - homingAmount))
-
             if(isHoming)
             {
 				if(target == null || target.velocityChanged || !target.canEntityBeSeen(arrow))
@@ -125,7 +123,11 @@ public class ArrowEventHookContainer
 		            double dirZ = target.posZ - arrow.posZ;
 					arrow.setThrowableHeading(dirX, dirY, dirZ, 1.5F, 0.0F);
 				}
-			}
+			}if (isExplosive && arrow.isCollided){
+                target.worldObj.createExplosion(arrow, arrow.posX, arrow.posY, arrow.posZ, 2.0F, true);
+            }if (isGodly && arrow.isCollided){
+                target.worldObj.spawnEntityInWorld(new EntityLightningBolt(arrow.worldObj, arrow.posX, arrow.posY, arrow.posZ));
+            }
         }
 	}
 }
