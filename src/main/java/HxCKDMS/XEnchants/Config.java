@@ -133,7 +133,7 @@ public class Config
 
         enchArrowSeekingID = config.get("Armor", "Arrow Seeking ID", defaultEnchantID+4).getInt();
         enchArrowSeekingEnable = config.get("Armor", "Arrow Seeking Enable", true).getBoolean(true);
-        enchArrowSeekingLVL = config.get("Armor", "Arrow Seeking Max Level", 1).getInt();
+        enchArrowSeekingLVL = config.get("Armor", "Arrow Seeking Max Level", 4).getInt();
         enchArrowSeekingWeight = config.get("Armor", "Arrow Seeking Weight", 2).getInt();
 
         enchBattleHealingID = config.get("Armor", "Battle Healing ID", defaultEnchantID+5).getInt();
