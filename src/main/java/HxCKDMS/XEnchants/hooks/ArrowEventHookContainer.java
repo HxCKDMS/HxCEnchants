@@ -33,6 +33,10 @@ public class ArrowEventHookContainer
 	public void ArrowLooseEvent(ArrowLooseEvent event){
         ItemStack stack = event.bow;
 
+        isExplosive = false;
+        isHoming = false;
+        isGodly = false;
+
         godlyAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowLightning.effectId, stack);
         homingAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowSeeking.effectId, stack);
         explosiveAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, stack);
