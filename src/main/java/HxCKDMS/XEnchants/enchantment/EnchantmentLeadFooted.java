@@ -9,7 +9,7 @@ public class EnchantmentLeadFooted extends Enchantment
 	public EnchantmentLeadFooted(int id, int rarity)
 	{
 		super(id, rarity, EnumEnchantmentType.armor_feet);
-		this.setName("Lead Footed");
+		this.setName("LeadFooted");
 	}
 
 	@Override
