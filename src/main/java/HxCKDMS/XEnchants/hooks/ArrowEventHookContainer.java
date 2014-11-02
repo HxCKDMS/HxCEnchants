@@ -56,7 +56,7 @@ public class ArrowEventHookContainer
         if(event.entityLiving instanceof EntityLiving){
             EntityLiving ent = (EntityLiving) event.entityLiving;
             if (event.source.isProjectile() && isExplosive) {
-                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F, true);
+                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * explosiveAmount, true);
             } else if (event.source.isProjectile() && isHoming) {
                 float damage = 6;
                 ent.attackEntityFrom(DamageSource.generic, damage);
