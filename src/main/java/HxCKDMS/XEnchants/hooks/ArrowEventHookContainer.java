@@ -8,9 +8,12 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 
@@ -27,64 +30,44 @@ public class ArrowEventHookContainer
 	EntityLiving target;
 
 	@SubscribeEvent
-	public void ArrowLooseEvent(ArrowLooseEvent event)
-	{
-        if (event.entity instanceof EntityArrow)
-        {
-            EntityPlayer player = event.entityPlayer;
-            ItemStack stack = player.inventory.getCurrentItem();
+	public void ArrowLooseEvent(ArrowLooseEvent event){
+        ItemStack stack = event.bow;
 
-            godlyAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowLightning.effectId, stack);
-            homingAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowSeeking.effectId, stack);
-            explosiveAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, stack);
-
-            if(explosiveAmount > 0)
-            {
-                isExplosive = true;
-            }
-            if(homingAmount > 0)
-            {
-                isHoming = true;
-            }
-            if(godlyAmount > 0)
-            {
-                isGodly = true;
-            }
+        godlyAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowLightning.effectId, stack);
+        homingAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowSeeking.effectId, stack);
+        explosiveAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, stack);
+        if(explosiveAmount > 0){
+            isExplosive = true;
+        }if(homingAmount > 0){
+            isHoming = true;
+        }if(godlyAmount > 0){
+            isGodly = true;
         }
-	}
-/*
+    }
+
 
 	@SubscribeEvent
 	public void entityAttacked(LivingAttackEvent event)
 	{
-        if(event.entityLiving instanceof EntityPlayerMP && event.entity instanceof EntityArrow)
-        {
-		    EntityPlayerMP ent = (EntityPlayerMP) event.entityLiving;
-            EntityArrow arrow = (EntityArrow) event.entity;
-            if(event.source.isProjectile() && isExplosive)
-            {
-                target.worldObj.createExplosion(target, target.posX, target.posY, target.posZ, 2.0F, true);
-            }
-            else if(event.source.isProjectile() && isHoming)
-            {
+        if(event.entityLiving instanceof EntityLiving){
+            EntityLiving ent = (EntityLiving) event.entityLiving;
+            if (event.source.isProjectile() && isExplosive) {
+                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F, true);
+            } else if (event.source.isProjectile() && isHoming) {
                 float damage = 6;
                 ent.attackEntityFrom(DamageSource.generic, damage);
-            }
-            else if(event.source.isProjectile() && isGodly)
-            {
-                target.worldObj.spawnEntityInWorld(new EntityLightningBolt(target.worldObj, target.posX, target.posY, target.posZ));
+            } else if (event.source.isProjectile() && isGodly) {
+                ent.worldObj.spawnEntityInWorld(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY, ent.posZ));
             }
         }
 	} 
-*/
+
 
 	@SubscribeEvent
 	public void arrowInAir(EntityEvent event)
 	{
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
-			// To whomever reads this, other than myself, I am terribly sorry for the mess of code below...ugh...
-			// && (arrow.shootingEntity instanceof EntityPlayer) && arrow.getDistanceToEntitySq(arrow.shootingEntity) > (float) (7 - homingAmount))
             if(isHoming)
             {
 				if(target == null || target.velocityChanged || !target.canEntityBeSeen(arrow))
@@ -117,17 +100,15 @@ public class ArrowEventHookContainer
 
 				if(target != null)
 				{
-					// All these fancy calculations guarantee that it will hit an entity dead on
-					double dirX = target.posX - arrow.posX;
-					double dirY = target.boundingBox.minY + (double) (target.height / 2.0F) - (arrow.posY + (double) (arrow.height / 2.0F));
-		            double dirZ = target.posZ - arrow.posZ;
-					arrow.setThrowableHeading(dirX, dirY, dirZ, 1.5F, 0.0F);
+                    if(target instanceof EntityLiving) {
+                        // All these fancy calculations guarantee that it will hit an entity dead on
+                        double dirX = target.posX - arrow.posX;
+                        double dirY = target.boundingBox.minY + (double) (target.height / 2.0F) - (arrow.posY + (double) (arrow.height / 2.0F));
+                        double dirZ = target.posZ - arrow.posZ;
+                        arrow.setThrowableHeading(dirX, dirY, dirZ, 1.5F, 0.0F);
+                    }
 				}
-			}if (isExplosive && arrow.isCollided){
-                target.worldObj.createExplosion(arrow, arrow.posX, arrow.posY, arrow.posZ, 2.0F, true);
-            }if (isGodly && arrow.isCollided){
-                target.worldObj.spawnEntityInWorld(new EntityLightningBolt(arrow.worldObj, arrow.posX, arrow.posY, arrow.posZ));
-            }
+			}
         }
 	}
 }
