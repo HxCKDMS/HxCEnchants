@@ -14,13 +14,9 @@ import net.minecraftforge.event.world.BlockEvent;
 
 public class ToolEventHookContainer 
 {
-	// Booleans, my boys
-	boolean isVampire = false;
-	boolean isFlameTouched = false;
-
 	// Integers, ya idiot
-	int vampireAmount;
-	int flameTouchAmount;
+	int VampireLevel;
+	int AutoSmeltLevel;
 
 	// Misc. variables
 	int i;
@@ -33,47 +29,28 @@ public class ToolEventHookContainer
 		{
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
 			ItemStack stack = player.inventory.getCurrentItem();
-			vampireAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, stack);
+			VampireLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, stack);
 
-			if(vampireAmount > 0)
-			{
-				isVampire = true;
-				
-				if(random.nextInt(3) == 0)
-				{
-					if(((EntityPlayer) event.entityLiving).getFoodStats().getFoodLevel() <= 19)
-					{
-						((EntityPlayer) event.entityLiving).getFoodStats().setFoodLevel(((EntityPlayer) event.entityLiving).getFoodStats().getFoodLevel() + 1);
-					} else
-					{
-						((EntityPlayer) event.entityLiving).heal(1);
-					}
-					
-					i++;
-				}
-			}
 		}
 	}
 	@SubscribeEvent
 	public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event)
 	{
-        if (!(event.harvester instanceof EntityPlayer)){
-            return;
-        }else{
+        if (event.harvester != null){
 		EntityPlayer player = event.harvester;
 		Block block = event.block;
+        ItemStack DroppedBlock = new ItemStack(block);
         ItemStack heldItem = player.getHeldItem();
 
-		flameTouchAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
+		AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
 		
-		if(heldItem != null && flameTouchAmount > 0)
+		if(AutoSmeltLevel > 0)
         {
-            int Level = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
             ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(new ItemStack(block));
-            if (flameTouchAmount > 0){
-                if(result != null)
+            if(result != null)
+            {
+                event.drops.remove(DroppedBlock);
                 event.drops.add(result);
-                event.drops.remove(event.block);
             }
         }
 

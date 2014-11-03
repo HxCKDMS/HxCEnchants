@@ -21,7 +21,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 public class ArmorEventHookContainer
 {
     // Booleans
-    boolean morphExists = false;
     boolean EnableFly = false;
 
     //UUIDs for Attributes
@@ -42,6 +41,10 @@ public class ArmorEventHookContainer
     int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
+    int H;
+    int C;
+    int L;
+    int B;
 //    int BoundLevel;
 
     //doubles
@@ -60,7 +63,6 @@ public class ArmorEventHookContainer
     @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event)
 	{
-        if (ShouldRepair <= 0) ShouldRepair = (Config.enchRepairRate * 20);
         ShouldRepair--;
 		if(event.entityLiving instanceof EntityPlayerMP)
 		{
@@ -74,40 +76,63 @@ public class ArmorEventHookContainer
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
-            for(int k = 0; k < 3; k++){Armour = player.inventory.armorItemInSlot(k);}
-            for(int j = 0; j < 35; j++){Inv = player.inventory.armorItemInSlot(j);}
-            ArmourHelm = player.inventory.armorItemInSlot(0);
-            ArmourChest = player.inventory.armorItemInSlot(1);
-            ArmourLegs = player.inventory.armorItemInSlot(2);
-            ArmourBoots = player.inventory.armorItemInSlot(3);
+
+            if (ShouldRepair <= 0){
+                for(int k = 0; k < 3; k++)
+                {
+                    Armour = player.inventory.armorItemInSlot(k);
+                    if (Armour != null && Armour.isItemStackDamageable())
+                    {
+                        ArmourRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armour);
+                        if (ArmourRepairLevel > 0)
+                        {
+                            Armour.setItemDamage(Armour.getItemDamage() - ArmourRepairLevel);
+                        }
+                    }
+                }
+                for(int j = 0; j < 35; j++)
+                {
+                    Inv = player.inventory.getStackInSlot(j);
+                    if (Inv != null && Inv.isItemStackDamageable())
+                    {
+                        ItemRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Inv);
+                        if (ItemRepairLevel > 0)
+                        {
+                            Inv.setItemDamage(Inv.getItemDamage() - ItemRepairLevel);
+                        }
+                    }
+                }
+                ShouldRepair = (Config.enchRepairRate * 20);
+            }
+
+            ArmourHelm = player.inventory.armorItemInSlot(3);
+            ArmourChest = player.inventory.armorItemInSlot(2);
+            ArmourLegs = player.inventory.armorItemInSlot(1);
+            ArmourBoots = player.inventory.armorItemInSlot(0);
 
             //Helmet Enchants
             AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, ArmourHelm);
             WitherProt = EnchantmentHelper.getEnchantmentLevel(XEnchants.WitherProtection.effectId, ArmourHelm);
+            H = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourHelm);
 
             //Chestplate Enchants
             VitalityLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vitality.effectId, ArmourChest);
+            C = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourChest);
 
             //Legging Enchants
             SpeedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, ArmourLegs);
             JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, ArmourLegs);
+            L = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourLegs);
 
             //Boot Enchants
             FlyLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, ArmourBoots);
             HeavyFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
             AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
+            B = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourBoots);
 
             //Other Enchants
 //                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Bound.effectId, Armour);
-            if (Armour != null && Armour.isItemStackDamageable())
-            {
-                RegenLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, Armour);
-                ArmourRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armour);
-            }
-            if (Inv != null && Inv.isItemStackDamageable())
-            {
-                ItemRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Inv);
-            }
+            RegenLevel = (H + C + L + B);
 
             Vitality = VitalityLevel * 0.5F;
             SpeedBoost = SpeedLevel * 0.2;
@@ -116,24 +141,20 @@ public class ArmorEventHookContainer
             //Indented for Beyond here stuff is actually done
 
                 player.capabilities.setFlySpeed(FlightSpeedBuff);
-                if (FlyLevel > 0 && !player.capabilities.allowFlying){EnableFly = true;}
-                if (FlyLevel <= 0 && EnableFly){player.capabilities.allowFlying = false;}
-                player.capabilities.allowFlying = EnableFly;
-                if (!EnableFly) player.capabilities.isFlying = false;
+
+                if (FlyLevel > 0)
+                {
+                    player.capabilities.allowFlying = true;
+                }
+                if(FlyLevel < 1 && !player.capabilities.isCreativeMode)
+                {
+                    player.capabilities.allowFlying = false;
+                    player.capabilities.isFlying = false;
+                }
 
                 if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
-                }
-
-                if (ShouldRepair <= 0 && ArmourRepairLevel > 0)
-                {
-                    Armour.setItemDamage(Armour.getItemDamage() - ArmourRepairLevel);
-                }
-
-                if (ShouldRepair <= 0 && ItemRepairLevel > 0)
-                {
-                    Inv.setItemDamage(Inv.getItemDamage() - ItemRepairLevel);
                 }
 
                 if(VitalityLevel > 0)
