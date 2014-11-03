@@ -3,6 +3,7 @@ package HxCKDMS.XEnchants.hooks;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
+import HxCKDMS.XEnchants.Config;
 import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,22 +19,17 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ArmorEventHookContainer 
+public class ArmorEventHookContainer
 {
-    // Booleans, my boys
-    boolean isAdrenalineBoost = false;
-    boolean isHeavyFooted = false;
-    boolean EnableFly;
-//    boolean isBound = false;
-    boolean HealthBuffApplied = false;
+    // Booleans
     boolean morphExists = false;
-    boolean witherprot = false;
+    boolean EnableFly = false;
 
     //UUIDs for Attributes
-    public static UUID HPUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
-    public static UUID SPEEDUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
+    public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
+    public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
 
-    // Integers, ya idiots
+    // Integers
     int HeavyFootedLevel;
     int JumpBoostLevel;
     int AirStriderLevel;
@@ -41,13 +37,13 @@ public class ArmorEventHookContainer
     int AdrenalineBoostLevel;
     int Repair;
     int WitherProt;
-    int ShouldRepair = 1;
-    int Fly;
+    int ShouldRepair = (Config.enchRepairRate * 20);
+    int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
 //    int BoundLevel;
 
-
+    //doubles
     double SpeedBoost;
     double Vitality;
 
@@ -65,125 +61,119 @@ public class ArmorEventHookContainer
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @SubscribeEvent
+    @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event)
 	{
+        ShouldRepair--;
 		if(event.entityLiving instanceof EntityPlayerMP)
 		{
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
-			ItemStack stack_feet = player.inventory.armorItemInSlot(0);
-			ItemStack stack_legs = player.inventory.armorItemInSlot(1);
-			ItemStack stack_torso = player.inventory.armorItemInSlot(2);
-			ItemStack stack_head = player.inventory.armorItemInSlot(3);
-			ItemStack[] stack_total = player.inventory.armorInventory;
 
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
             IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 
-//            BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Bound.effectId, stack_total);
-            JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, stack_legs);
-            AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, stack_head);
-            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vitality.effectId, stack_torso);
-            Fly = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, stack_feet);
-            HeavyFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, stack_feet);
-            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, stack_feet);
-            WitherProt = EnchantmentHelper.getEnchantmentLevel(XEnchants.WitherProtection.effectId, stack_head);
-            RegenLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.ArmorRegen.effectId, stack_total);
-            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, stack_legs);
-            Repair = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Repair.effectId, stack_total);
-
-            AttributeModifier SpeedBuff = new AttributeModifier(SPEEDUUID, "SpeedBuffedPants", SpeedBoost, 1);
-            AttributeModifier HealthBuff = new AttributeModifier(HPUUID, "HealthBuffedChestplate", Vitality, 1);
+            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
+            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
-            ShouldRepair--;
 
+            ItemStack Armour = null;
+            ItemStack ArmourHelm = player.inventory.armorItemInSlot(0);
+            ItemStack ArmourChest = player.inventory.armorItemInSlot(1);
+            ItemStack ArmourLegs = player.inventory.armorItemInSlot(2);
+            ItemStack ArmourBoots = player.inventory.armorItemInSlot(3);
+
+            if (ShouldRepair <= 0) ShouldRepair = (Config.enchRepairRate * 20);
+
+            for(int k = 0; k < 3; k++)
+            {
+                Armour = player.inventory.armorItemInSlot(k);
+            }
+            //Helmet Enchants
+            AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, ArmourHelm);
+            WitherProt = EnchantmentHelper.getEnchantmentLevel(XEnchants.WitherProtection.effectId, ArmourHelm);
+
+            //Chestplate Enchants
+            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vitality.effectId, ArmourChest);
+
+            //Legging Enchants
+            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, ArmourLegs);
+            JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, ArmourLegs);
+
+            //Boot Enchants
+            FlyLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, ArmourBoots);
+            HeavyFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
+            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
+
+            //Other Enchants
+//                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Bound.effectId, Armour);
+            if (Armour != null && Armour.isItemStackDamageable())
+            {
+                RegenLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, Armour);
+                Repair = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armour);
+            }
+
+            Vitality = VitalityLevel * 0.5F;
+            SpeedBoost = SpeedLevel * 0.2;
             float FlightSpeedBuff = AirStriderLevel * 0.05F;
-            player.capabilities.setFlySpeed(FlightSpeedBuff);
 
-            if(AdrenalineBoostLevel > 0)
-            {
-                isAdrenalineBoost = true;
-            }
+            //Indented for Beyond here stuff is actually done
 
-            if(VitalityLevel > 0 && !HealthBuffApplied)
-            {
-                int level = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vitality.effectId, stack_torso);
-                Vitality = level * 0.5F;
-                ph.applyModifier(HealthBuff);
-            }
+                player.capabilities.setFlySpeed(FlightSpeedBuff);
+                if (FlyLevel > 0 && !player.capabilities.allowFlying){EnableFly = true;}
+                if (FlyLevel <= 0 && EnableFly){player.capabilities.allowFlying = false;}
+                player.capabilities.allowFlying = EnableFly;
+                if (!EnableFly) player.capabilities.isFlying = false;
 
-			if(HeavyFootedLevel > 0)
-			{
-				isHeavyFooted = true;
-			}
-
-            if (WitherProt > 0)
-            {
-                witherprot = true;
-            }
-
-			if(RegenLevel > 0)
-			{
-                int lf = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, stack_feet);
-                int ll = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, stack_legs);
-                int lt = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, stack_torso);
-                int lh = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, stack_head);
-                float HP = (lf + lt + ll + lh) * 2;
-                if (player.getHealth() < player.getMaxHealth() && lf > 0 || ll > 0|| lt > 0|| lh > 0)
+                if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
-                    player.heal(HP);
+                    player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 }
-			}
-            if (ShouldRepair <= 0){
-                ShouldRepair = 20;
-                RepairItems(player);
-            }
 
-            if(SpeedLevel > 0 && !player.isSneaking() && player.onGround && !player.isRiding())
-            {
-                SpeedBoost = SpeedLevel * 0.3;
-                ps.applyModifier(SpeedBuff);
-            }
+                if (ShouldRepair <= 0 && Repair > 0)
+                {
+                    int ArmourD = Armour.getItemDamage() - Repair;
+                    Armour.setItemDamage(ArmourD);
+                }
 
-            player.capabilities.allowFlying = (Fly > 0);
-            if (Fly <= 0 && !player.capabilities.isCreativeMode) player.capabilities.isFlying = false;
-            if (player.worldObj.isRemote && player.capabilities.isFlying && Fly > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+                if(VitalityLevel > 0)
+                {
+                    ph.applyModifier(HealthBuff);
+                }
+
+                if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0)
+                {
+                    player.heal(RegenLevel * 2);
+                }
+                if(SpeedLevel > 0 && !player.isSneaking() && player.onGround && !player.isRiding())
+                {
+                    ps.applyModifier(SpeedBuff);
+                }
         }
 	}
-    public void RepairItems(EntityPlayerMP player){
-        ItemStack abc = null;
-        for(int j = 0; j < 36; j++){
-            abc = player.inventory.getStackInSlot(j);
-            if (abc != null && abc.isItemStackDamageable()){
-                int a = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, abc);
-                int b = abc.getItemDamage() - a;
-                if (abc.getItemDamage() > abc.getMaxDamage())
-                {
-                    abc.setItemDamage(b);
-                }
-            }
-        }
-    }
 
     @SubscribeEvent
-    public void LivingHurtEvent(LivingHurtEvent event){
-        if (event.entity instanceof EntityPlayerMP){
+    public void LivingHurtEvent(LivingHurtEvent event)
+    {
+        if (event.entity instanceof EntityPlayerMP)
+        {
             EntityPlayerMP player = (EntityPlayerMP) event.entity;
-            System.out.println(event.source.damageType);
             boolean allowABEffect = true;
-            if (event.source.damageType.equalsIgnoreCase("wither") || event.source.damageType.equalsIgnoreCase("starve") ||event.source.damageType.equalsIgnoreCase("fall") ||event.source.damageType.equalsIgnoreCase("explosion.player") ||event.source.damageType.equalsIgnoreCase("explosion") || event.source.damageType.equalsIgnoreCase("inWall")){
+
+            if (event.source.damageType.equalsIgnoreCase("wither") || event.source.damageType.equalsIgnoreCase("starve") ||event.source.damageType.equalsIgnoreCase("fall") ||event.source.damageType.equalsIgnoreCase("explosion.player") ||event.source.damageType.equalsIgnoreCase("explosion") || event.source.damageType.equalsIgnoreCase("inWall"))
+            {
                 allowABEffect = false;
             }
-            if(isAdrenalineBoost && allowABEffect){
+            if(AdrenalineBoostLevel > 0 && allowABEffect)
+            {
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 5, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 5, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 5, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 5, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 5, AdrenalineBoostLevel));
-            }if(witherprot && event.source.damageType.equalsIgnoreCase("wither")){
+            }if(WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither")){
                 event.setCanceled(true);
             }
         }

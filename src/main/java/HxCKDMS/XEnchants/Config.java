@@ -77,7 +77,7 @@ public class Config
     public boolean enchRepairEnable;
     public static int enchRepairLVL;
     public int enchRepairWeight;
-
+    public static int enchRepairRate;
 
     public int enchSwiftnessID;
     public boolean enchSwiftnessEnable;
@@ -176,6 +176,7 @@ public class Config
         enchRepairEnable = config.get("All", "Repair Enable", true).getBoolean(true);
         enchRepairLVL = config.get("All", "Repair Max Level", 5).getInt();
         enchRepairWeight = config.get("All", "Repair Weight", 1).getInt();
+        enchRepairRate = config.get("All", "Repair Speed Default = 1 Max = 999999 DON'T EXCEED THE MAX (Java will crash)", 1).getInt();
 
         enchSwiftnessID = config.get("Armor", "SwiftnessID", defaultEnchantID+13).getInt();
         enchSwiftnessEnable = config.get("Armor", "SwiftnessEnable", true).getBoolean(true);
