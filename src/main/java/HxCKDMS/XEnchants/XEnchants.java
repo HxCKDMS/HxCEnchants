@@ -29,13 +29,12 @@ public class XEnchants
 	public static Enchantment ArrowLightning;
 	public static Enchantment ArrowSeeking;
 	public static Enchantment BattleHealing;
-    public static Enchantment Bound;
-    public static Enchantment Critical;
     public static Enchantment FlameTouch;
     public static Enchantment Fly;
     public static Enchantment JumpBoost;
     public static Enchantment LeadFooted;
     public static Enchantment Poison;
+    public static Enchantment Repair;
     public static Enchantment Swiftness;
     public static Enchantment Vampirism;
     public static Enchantment Vitality;
@@ -78,13 +77,9 @@ public class XEnchants
             BattleHealing = new EnchantmentBattleHealing(Config.enchBattleHealingID, Config.enchBattleHealingWeight);
             MinecraftForge.EVENT_BUS.register(BattleHealing);
 
-        if(Config.enchBoundEnable)
-            Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
-            MinecraftForge.EVENT_BUS.register(Bound);
-
-        if(Config.enchCriticalEnable)
-            Critical = new EnchantmentCritical(Config.enchCriticalID, Config.enchCriticalWeight);
-            MinecraftForge.EVENT_BUS.register(Critical);
+//        if(Config.enchBoundEnable)
+//            Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
+//            MinecraftForge.EVENT_BUS.register(Bound);
 
         if(Config.enchFlameTouchEnable)
             FlameTouch = new EnchantmentFlameTouch(Config.enchFlameTouchID, Config.enchFlameTouchWeight);
@@ -106,6 +101,10 @@ public class XEnchants
             Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
             MinecraftForge.EVENT_BUS.register(Poison);
 
+        if(Config.enchRepairEnable)
+            Repair = new EnchantmentRepair(Config.enchRepairID, Config.enchRepairWeight);
+        MinecraftForge.EVENT_BUS.register(Repair);
+
         if(Config.enchSwiftnessEnable)
             Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
             MinecraftForge.EVENT_BUS.register(Swiftness);
@@ -121,7 +120,6 @@ public class XEnchants
         if(Config.enchWitherProtectionEnable)
             WitherProtection = new EnchantmentWitherProtection(Config.enchWitherProtectionID, Config.enchWitherProtectionWeight);
             MinecraftForge.EVENT_BUS.register(WitherProtection);
-
 
         MinecraftForge.EVENT_BUS.register(new ArrowEventHookContainer());
         MinecraftForge.EVENT_BUS.register(new ArmorEventHookContainer());

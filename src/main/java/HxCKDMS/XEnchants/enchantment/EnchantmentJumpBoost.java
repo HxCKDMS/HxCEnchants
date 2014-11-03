@@ -9,7 +9,6 @@ public class EnchantmentJumpBoost extends Enchantment {
     public EnchantmentJumpBoost(int id, int weight) {
         super(id, weight, EnumEnchantmentType.armor_legs);
         this.setName("JumpBoost");
-        addToBookList(this);
     }
     
     @Override

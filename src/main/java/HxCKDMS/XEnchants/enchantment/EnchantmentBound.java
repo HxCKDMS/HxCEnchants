@@ -26,6 +26,6 @@ public class EnchantmentBound extends Enchantment
 	@Override
 	public int getMaxLevel()
 	{
-		return Config.enchBoundLVL;
+		return 1;
 	}
 }

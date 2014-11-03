@@ -43,15 +43,11 @@ public class Config
     public static int enchBattleHealingLVL;
     public int enchBattleHealingWeight;
 
-    public int enchBoundID;
-    public boolean enchBoundEnable;
-    public static int enchBoundLVL;
-    public int enchBoundWeight;
+//    public int enchBoundID;
+//    public boolean enchBoundEnable;
+//    public static int enchBoundLVL;
+//    public int enchBoundWeight;
 
-    public int enchCriticalID;
-    public boolean enchCriticalEnable;
-    public static int enchCriticalLVL;
-    public int enchCriticalWeight;
 
     public int enchFlameTouchID;
     public boolean enchFlameTouchEnable;
@@ -76,6 +72,12 @@ public class Config
     public boolean enchPoisonEnable;
     public static int enchPoisonLVL;
     public int enchPoisonWeight;
+
+    public int enchRepairID;
+    public boolean enchRepairEnable;
+    public static int enchRepairLVL;
+    public int enchRepairWeight;
+
 
     public int enchSwiftnessID;
     public boolean enchSwiftnessEnable;
@@ -141,15 +143,10 @@ public class Config
         enchBattleHealingLVL = config.get("Armor", "Battle Healing Max Level", 4).getInt();
         enchBattleHealingWeight = config.get("Armor", "Battle Healing Weight", 2).getInt();
 
-        enchBoundID = config.get("Armor", "Bound ID", defaultEnchantID+6).getInt();
-        enchBoundEnable = config.get("Armor", "Bound Enable", true).getBoolean(true);
-        enchBoundLVL = config.get("Armor", "Bound Max Level", 1).getInt();
-        enchBoundWeight = config.get("Armor", "Bound Weight", 2).getInt();
-
-        enchCriticalID = config.get("Armor", "Critical ID", defaultEnchantID+7).getInt();
-        enchCriticalEnable = config.get("Armor", "Critical Enable", true).getBoolean(true);
-        enchCriticalLVL = config.get("Armor", "Critical MaxLevel", 5).getInt();
-        enchCriticalWeight = config.get("Armor", "Critical Weight", 2).getInt();
+//        enchBoundID = config.get("Armor", "Bound ID", defaultEnchantID+6).getInt();
+//        enchBoundEnable = config.get("Armor", "Bound Enable", true).getBoolean(true);
+//        enchBoundLVL = config.get("Armor", "Bound Max Level", 1).getInt();
+//        enchBoundWeight = config.get("Armor", "Bound Weight", 2).getInt();
 
         enchFlameTouchID = config.get("Armor", "Flame Touch ID", defaultEnchantID+8).getInt();
         enchFlameTouchEnable = config.get("Armor", "Flame Touch Enable", true).getBoolean(true);
@@ -174,6 +171,11 @@ public class Config
         enchPoisonEnable = config.get("Armor", "PoisonEnable", true).getBoolean(true);
         enchPoisonLVL = config.get("Armor", "PoisonMaxLevel", 5).getInt();
         enchPoisonWeight = config.get("Armor", "PoisonWeight", 2).getInt();
+
+        enchRepairID = config.get("All", "Repair ID", defaultEnchantID+7).getInt();
+        enchRepairEnable = config.get("All", "Repair Enable", true).getBoolean(true);
+        enchRepairLVL = config.get("All", "Repair Max Level", 5).getInt();
+        enchRepairWeight = config.get("All", "Repair Weight", 1).getInt();
 
         enchSwiftnessID = config.get("Armor", "SwiftnessID", defaultEnchantID+13).getInt();
         enchSwiftnessEnable = config.get("Armor", "SwiftnessEnable", true).getBoolean(true);
