@@ -20,9 +20,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ArmorEventHookContainer
 {
-    // Booleans
-    boolean EnableFly = false;
-
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
@@ -167,7 +164,7 @@ public class ArmorEventHookContainer
                     player.heal(RegenLevel * 2);
                 }
 
-                if(SpeedLevel > 0 && !player.isSneaking() && player.onGround && !player.isRiding())
+                if(SpeedLevel > 0 && !player.isSneaking() && !player.isRiding())
                 {
                     ps.applyModifier(SpeedBuff);
                 }
