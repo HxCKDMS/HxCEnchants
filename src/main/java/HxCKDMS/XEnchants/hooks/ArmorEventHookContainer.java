@@ -48,8 +48,6 @@ public class ArmorEventHookContainer
     double Vitality;
 
     //ItemStacks
-    ItemStack Armour = null;
-    ItemStack Inv = null;
     ItemStack ArmourHelm = null;
     ItemStack ArmourChest = null;
     ItemStack ArmourLegs = null;
@@ -73,10 +71,10 @@ public class ArmorEventHookContainer
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
 
-            ArmourHelm = player.inventory.armorItemInSlot(3);
-            ArmourChest = player.inventory.armorItemInSlot(2);
-            ArmourLegs = player.inventory.armorItemInSlot(1);
-            ArmourBoots = player.inventory.armorItemInSlot(0);
+            ArmourHelm = player.getCurrentArmor(3);
+            ArmourChest = player.getCurrentArmor(2);
+            ArmourLegs = player.getCurrentArmor(1);
+            ArmourBoots = player.getCurrentArmor(0);
 
             //Helmet Enchants
             AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, ArmourHelm);
@@ -110,15 +108,8 @@ public class ArmorEventHookContainer
 
                 player.capabilities.setFlySpeed(FlightSpeedBuff);
 
-                if (FlyLevel > 0)
-                {
-                    player.capabilities.allowFlying = true;
-                }
-                if(FlyLevel < 1 && !player.capabilities.isCreativeMode)
-                {
-                    player.capabilities.allowFlying = false;
-                    player.capabilities.isFlying = false;
-                }
+                player.capabilities.allowFlying = (FlyLevel > 0);
+
 
                 if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
