@@ -74,34 +74,6 @@ public class ArmorEventHookContainer
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
 
-            if (ShouldRepair <= 0){
-                for(int k = 0; k < 3; k++)
-                {
-                    Armour = player.inventory.armorItemInSlot(k);
-                    if (Armour != null && Armour.isItemStackDamageable())
-                    {
-                        ArmourRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armour);
-                        if (ArmourRepairLevel > 0)
-                        {
-                            Armour.setItemDamage(Armour.getItemDamage() - ArmourRepairLevel);
-                        }
-                    }
-                }
-                for(int j = 0; j < 35; j++)
-                {
-                    Inv = player.inventory.getStackInSlot(j);
-                    if (Inv != null && Inv.isItemStackDamageable())
-                    {
-                        ItemRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Inv);
-                        if (ItemRepairLevel > 0)
-                        {
-                            Inv.setItemDamage(Inv.getItemDamage() - ItemRepairLevel);
-                        }
-                    }
-                }
-                ShouldRepair = (Config.enchRepairRate * 20);
-            }
-
             ArmourHelm = player.inventory.armorItemInSlot(3);
             ArmourChest = player.inventory.armorItemInSlot(2);
             ArmourLegs = player.inventory.armorItemInSlot(1);
@@ -170,6 +142,32 @@ public class ArmorEventHookContainer
                 }
         }
 	}
+    public void RepairItems(EntityPlayerMP player){
+        ItemStack Inv = null;
+        ItemStack Armor = null;
+        for(int j = 0; j < 36; j++){
+            Inv = player.inventory.getStackInSlot(j);
+            if (Inv != null && Inv.isItemStackDamageable()){
+                int a = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Inv);
+                int b = Inv.getItemDamage() - a;
+                if (Inv.getItemDamage() > Inv.getMaxDamage())
+                {
+                    Inv.setItemDamage(b);
+                }
+            }
+        }
+        for(int j = 0; j < 36; j++){
+            Armor = player.inventory.getStackInSlot(j);
+            if (Armor != null && Armor.isItemStackDamageable()){
+                int a = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armor);
+                int b = Armor.getItemDamage() - a;
+                if (Armor.getItemDamage() > Armor.getMaxDamage())
+                {
+                    Armor.setItemDamage(b);
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public void LivingHurtEvent(LivingHurtEvent event)
