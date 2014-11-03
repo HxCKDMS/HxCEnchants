@@ -49,6 +49,7 @@ public class XEnchants
     public void init(FMLInitializationEvent event)
     {
         event.getModState();
+        System.out.println("Slayer deserves a massive Facepalm");
 	    if(Config.enchAdrenalineBoostEnable)
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);

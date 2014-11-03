@@ -32,8 +32,6 @@ public class ArmorEventHookContainer
     int AirStriderLevel;
     int VitalityLevel;
     int AdrenalineBoostLevel;
-    int ArmourRepairLevel;
-    int ItemRepairLevel;
     int WitherProt;
     int FlyLevel;
     int RegenLevel;
@@ -44,6 +42,7 @@ public class ArmorEventHookContainer
     int B;
 //    int BoundLevel;
 
+    float FlightSpeedBuff;
     //doubles
     double SpeedBoost;
     double Vitality;
@@ -105,7 +104,7 @@ public class ArmorEventHookContainer
 
             Vitality = VitalityLevel * 0.5F;
             SpeedBoost = SpeedLevel * 0.2;
-            float FlightSpeedBuff = AirStriderLevel * 0.05F;
+            if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.05F;}
 
             //Indented for Beyond here stuff is actually done
 
@@ -139,6 +138,11 @@ public class ArmorEventHookContainer
                 if(SpeedLevel > 0 && !player.isSneaking() && !player.isRiding())
                 {
                     ps.applyModifier(SpeedBuff);
+                }
+
+                if(ShouldRepair <= 0){
+                    RepairItems(player);
+                    ShouldRepair = (Config.enchRepairRate * 20);
                 }
         }
 	}
