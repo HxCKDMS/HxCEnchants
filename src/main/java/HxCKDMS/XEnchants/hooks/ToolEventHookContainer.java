@@ -21,7 +21,7 @@ public class ToolEventHookContainer
 	// Integers, ya idiot
 	int vampireAmount;
 	int flameTouchAmount;
-	
+
 	// Misc. variables
 	int i;
 	Random random = new Random();
@@ -33,7 +33,7 @@ public class ToolEventHookContainer
 		{
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
 			ItemStack stack = player.inventory.getCurrentItem();
-			this.vampireAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, stack);
+			vampireAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, stack);
 
 			if(vampireAmount > 0)
 			{

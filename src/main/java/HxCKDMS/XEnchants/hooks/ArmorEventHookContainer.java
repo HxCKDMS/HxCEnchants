@@ -1,6 +1,5 @@
 package HxCKDMS.XEnchants.hooks;
 
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import HxCKDMS.XEnchants.Config;
@@ -30,14 +29,16 @@ public class ArmorEventHookContainer
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
 
     // Integers
+    int ShouldRepair = (Config.enchRepairRate * 20);
+    
     int HeavyFootedLevel;
     int JumpBoostLevel;
     int AirStriderLevel;
     int VitalityLevel;
     int AdrenalineBoostLevel;
-    int Repair;
+    int ArmourRepairLevel;
+    int ItemRepairLevel;
     int WitherProt;
-    int ShouldRepair = (Config.enchRepairRate * 20);
     int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
@@ -47,24 +48,19 @@ public class ArmorEventHookContainer
     double SpeedBoost;
     double Vitality;
 
-    // Misc.
-    public Method getMorphEntity;
-    public Method getEntityAbilities;
-
-    public ArmorEventHookContainer() {
-        try {
-            getMorphEntity = Class.forName("morph.api.Api").getDeclaredMethod("getMorphEntity", String.class, boolean.class);
-            getEntityAbilities = Class.forName("morph.common.ability.AbilityHandler").getDeclaredMethod("getEntityAbilities", Class.class);
-            morphExists = true;
-        } catch (Exception e) {
-            System.out.println("Morph doesn't exist");
-        }
-    }
+    //ItemStacks
+    ItemStack Armour = null;
+    ItemStack Inv = null;
+    ItemStack ArmourHelm = null;
+    ItemStack ArmourChest = null;
+    ItemStack ArmourLegs = null;
+    ItemStack ArmourBoots = null;
 
     @SubscribeEvent
     @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event)
 	{
+        if (ShouldRepair <= 0) ShouldRepair = (Config.enchRepairRate * 20);
         ShouldRepair--;
 		if(event.entityLiving instanceof EntityPlayerMP)
 		{
@@ -78,19 +74,13 @@ public class ArmorEventHookContainer
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
+            for(int k = 0; k < 3; k++){Armour = player.inventory.armorItemInSlot(k);}
+            for(int j = 0; j < 35; j++){Inv = player.inventory.armorItemInSlot(j);}
+            ArmourHelm = player.inventory.armorItemInSlot(0);
+            ArmourChest = player.inventory.armorItemInSlot(1);
+            ArmourLegs = player.inventory.armorItemInSlot(2);
+            ArmourBoots = player.inventory.armorItemInSlot(3);
 
-            ItemStack Armour = null;
-            ItemStack ArmourHelm = player.inventory.armorItemInSlot(0);
-            ItemStack ArmourChest = player.inventory.armorItemInSlot(1);
-            ItemStack ArmourLegs = player.inventory.armorItemInSlot(2);
-            ItemStack ArmourBoots = player.inventory.armorItemInSlot(3);
-
-            if (ShouldRepair <= 0) ShouldRepair = (Config.enchRepairRate * 20);
-
-            for(int k = 0; k < 3; k++)
-            {
-                Armour = player.inventory.armorItemInSlot(k);
-            }
             //Helmet Enchants
             AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, ArmourHelm);
             WitherProt = EnchantmentHelper.getEnchantmentLevel(XEnchants.WitherProtection.effectId, ArmourHelm);
@@ -112,7 +102,11 @@ public class ArmorEventHookContainer
             if (Armour != null && Armour.isItemStackDamageable())
             {
                 RegenLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, Armour);
-                Repair = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armour);
+                ArmourRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armour);
+            }
+            if (Inv != null && Inv.isItemStackDamageable())
+            {
+                ItemRepairLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Inv);
             }
 
             Vitality = VitalityLevel * 0.5F;
@@ -132,10 +126,14 @@ public class ArmorEventHookContainer
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 }
 
-                if (ShouldRepair <= 0 && Repair > 0)
+                if (ShouldRepair <= 0 && ArmourRepairLevel > 0)
                 {
-                    int ArmourD = Armour.getItemDamage() - Repair;
-                    Armour.setItemDamage(ArmourD);
+                    Armour.setItemDamage(Armour.getItemDamage() - ArmourRepairLevel);
+                }
+
+                if (ShouldRepair <= 0 && ItemRepairLevel > 0)
+                {
+                    Inv.setItemDamage(Inv.getItemDamage() - ItemRepairLevel);
                 }
 
                 if(VitalityLevel > 0)
@@ -147,6 +145,7 @@ public class ArmorEventHookContainer
                 {
                     player.heal(RegenLevel * 2);
                 }
+
                 if(SpeedLevel > 0 && !player.isSneaking() && player.onGround && !player.isRiding())
                 {
                     ps.applyModifier(SpeedBuff);
@@ -173,7 +172,9 @@ public class ArmorEventHookContainer
                 player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 5, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 5, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 5, AdrenalineBoostLevel));
-            }if(WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither")){
+            }
+            if(WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither"))
+            {
                 event.setCanceled(true);
             }
         }
