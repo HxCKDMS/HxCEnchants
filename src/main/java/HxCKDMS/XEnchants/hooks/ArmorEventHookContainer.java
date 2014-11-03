@@ -178,11 +178,11 @@ public class ArmorEventHookContainer
             }
             if(AdrenalineBoostLevel > 0 && allowABEffect)
             {
-                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 5, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 5, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 5, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 5, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 5, AdrenalineBoostLevel));
+                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, AdrenalineBoostLevel));
+                player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, AdrenalineBoostLevel));
+                player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, AdrenalineBoostLevel));
+                player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, AdrenalineBoostLevel));
+                player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, AdrenalineBoostLevel));
             }
             if(WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither"))
             {
