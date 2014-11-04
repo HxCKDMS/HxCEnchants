@@ -107,8 +107,8 @@ public class ArmorEventHookContainer
             //Indented for Beyond here stuff is actually done
 
                 player.capabilities.setFlySpeed(FlightSpeedBuff);
-
                 player.capabilities.allowFlying = (FlyLevel > 0);
+                player.sendPlayerAbilities();
 
 
                 if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)

@@ -1,9 +1,6 @@
 # Created by .gitignore support plugin (hsz.mobi)
 eclipse
 gradle
-gradlew
-XEnchants.ipr
-XEnchants.iml
-gradlew.bat
-XEnchants.iws
-src/main/java/morph/api
+HxCCore.ipr
+HxCCore.iws
+HxCCore.iml
