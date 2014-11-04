@@ -23,19 +23,26 @@ public class ArmorEventHookContainer
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
+    public static UUID ShroudUUID = UUID.fromString("1e4a1a12-ab1e-4987-b527-e0adeefc904a");
 
     // Integers
     int ShouldRepair = (Config.enchRepairRate * 20);
+    int CanRegen = (Config.enchRegenRate * 20);
     
     int HeavyFootedLevel;
     int JumpBoostLevel;
     int AirStriderLevel;
     int VitalityLevel;
     int AdrenalineBoostLevel;
+    int BattleHealingLevel;
     int WitherProt;
     int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
+    int ShroudLevel;
+    int ShroudLevel1;
+    int ShroudLevel2;
+    int ShroudLevel3;
     int H;
     int C;
     int L;
@@ -46,6 +53,7 @@ public class ArmorEventHookContainer
     //doubles
     double SpeedBoost;
     double Vitality;
+    double Shroud;
 
     //ItemStacks
     ItemStack ArmourHelm = null;
@@ -58,18 +66,22 @@ public class ArmorEventHookContainer
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event)
 	{
         ShouldRepair--;
+        CanRegen--;
 		if(event.entityLiving instanceof EntityPlayerMP)
 		{
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
 
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
             IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+            IAttributeInstance fr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange);
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
+            //AttributeModifier ShroudBuff = new AttributeModifier(ShroudUUID, "ShroudBuff", Shroud, 1);
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
+            //fr.removeModifier(ShroudBuff);
 
             ArmourHelm = player.getCurrentArmor(3);
             ArmourChest = player.getCurrentArmor(2);
@@ -79,21 +91,26 @@ public class ArmorEventHookContainer
             //Helmet Enchants
             AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, ArmourHelm);
             WitherProt = EnchantmentHelper.getEnchantmentLevel(XEnchants.WitherProtection.effectId, ArmourHelm);
+            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourHelm);
             H = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourHelm);
 
             //Chestplate Enchants
             VitalityLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vitality.effectId, ArmourChest);
+            BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.BattleHealing.effectId, ArmourChest);
+            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourChest);
             C = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourChest);
 
             //Legging Enchants
             SpeedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, ArmourLegs);
             JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, ArmourLegs);
+            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourLegs);
             L = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourLegs);
 
             //Boot Enchants
             FlyLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, ArmourBoots);
             HeavyFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
             AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
+            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourBoots);
             B = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourBoots);
 
             //Other Enchants
@@ -102,6 +119,7 @@ public class ArmorEventHookContainer
 
             Vitality = VitalityLevel * 0.5F;
             SpeedBoost = SpeedLevel * 0.2;
+
             if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.05F;}
 
             //Indented for Beyond here stuff is actually done
@@ -121,9 +139,26 @@ public class ArmorEventHookContainer
                     ph.applyModifier(HealthBuff);
                 }
 
-                if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0)
+               /* if(ShroudLevel > 0)
+                {
+
+                }
+                if(ShroudLevel1 > 0)
+                {
+                    ph.applyModifier(HealthBuff);
+                }
+                if(ShroudLevel2 > 0)
+                {
+                    ph.applyModifier(HealthBuff);
+                }
+                if(ShroudLevel3 > 0)
+                {
+                    ph.applyModifier(HealthBuff);
+                }*/
+                if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0)
                 {
                     player.heal(RegenLevel * 2);
+                    CanRegen = Config.enchRegenRate * 20;
                 }
 
                 if(SpeedLevel > 0 && !player.isSneaking() && !player.isRiding())
@@ -151,8 +186,8 @@ public class ArmorEventHookContainer
                 }
             }
         }
-        for(int j = 0; j < 36; j++){
-            Armor = player.inventory.getStackInSlot(j);
+        for(int j = 0; j < 3; j++){
+            Armor = player.getCurrentArmor(j);
             if (Armor != null && Armor.isItemStackDamageable()){
                 int a = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armor);
                 int b = Armor.getItemDamage() - a;
@@ -187,6 +222,11 @@ public class ArmorEventHookContainer
             if(WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither"))
             {
                 event.setCanceled(true);
+            }
+            if(BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic"))
+            {
+                System.out.println(event.source.damageType);
+                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
             }
         }
     }

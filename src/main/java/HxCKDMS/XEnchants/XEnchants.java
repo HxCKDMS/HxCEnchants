@@ -36,6 +36,7 @@ public class XEnchants
     public static Enchantment Poison;
     public static Enchantment Repair;
     public static Enchantment Swiftness;
+    public static Enchantment Shroud;
     public static Enchantment Vampirism;
     public static Enchantment Vitality;
     public static Enchantment WitherProtection;
@@ -58,8 +59,8 @@ public class XEnchants
             AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
             MinecraftForge.EVENT_BUS.register(AirStrider);
 
-        if(Config.enchArmorRegenEnable)
-            ArmorRegen = new EnchantmentArmorRegen(Config.enchArmorRegenID, Config.enchArmorRegenWeight);
+        if(Config.enchRegenEnable)
+            ArmorRegen = new EnchantmentRegen(Config.enchRegenID, Config.enchRegenWeight);
             MinecraftForge.EVENT_BUS.register(ArmorRegen);
 
         if(Config.enchArrowExplosiveEnable)
@@ -109,6 +110,10 @@ public class XEnchants
         if(Config.enchSwiftnessEnable)
             Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
             MinecraftForge.EVENT_BUS.register(Swiftness);
+
+        if(Config.enchShroudEnable)
+            Shroud = new EnchantmentShroud(Config.enchShroudID, Config.enchShroudWeight);
+        MinecraftForge.EVENT_BUS.register(Shroud);
 
         if(Config.enchVampirismEnable)
             Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);

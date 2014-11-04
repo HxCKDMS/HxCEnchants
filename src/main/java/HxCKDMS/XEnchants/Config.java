@@ -18,11 +18,6 @@ public class Config
     public static int enchAirStriderLVL;
     public int enchAirStriderWeight;
 
-    public int enchArmorRegenID;
-    public boolean enchArmorRegenEnable;
-    public static int enchArmorRegenLVL;
-    public int enchArmorRegenWeight;
-
     public int enchArrowExplosiveID;
     public boolean enchArrowExplosiveEnable;
     public static int enchArrowExplosiveLVL;
@@ -73,11 +68,22 @@ public class Config
     public static int enchPoisonLVL;
     public int enchPoisonWeight;
 
+    public int enchRegenID;
+    public boolean enchRegenEnable;
+    public static int enchRegenLVL;
+    public int enchRegenWeight;
+    public static int enchRegenRate;
+
     public int enchRepairID;
     public boolean enchRepairEnable;
     public static int enchRepairLVL;
     public int enchRepairWeight;
     public static int enchRepairRate;
+
+    public int enchShroudID;
+    public boolean enchShroudEnable;
+    public static int enchShroudLVL;
+    public int enchShroudWeight;
 
     public int enchSwiftnessID;
     public boolean enchSwiftnessEnable;
@@ -117,11 +123,6 @@ public class Config
         enchAirStriderEnable = config.get("Armor", "Air Strider Enable", true).getBoolean(true);
         enchAirStriderLVL = config.get("Armor", "Air Strider MaxLevel", 4).getInt();
         enchAirStriderWeight = config.get("Armor", "Air Strider Weight", 2).getInt();
-
-        enchArmorRegenID = config.get("Armor", "Armor Regen ID", defaultEnchantID+1).getInt();
-        enchArmorRegenEnable = config.get("Armor", "Armor Regen Enable", true).getBoolean(true);
-        enchArmorRegenLVL = config.get("Armor", "Armor Regen Max Level", 2).getInt();
-        enchArmorRegenWeight = config.get("Armor", "Armor Regen Weight", 2).getInt();
 
         enchArrowExplosiveID = config.get("Armor", "Arrow Explosive ID", defaultEnchantID+2).getInt();
         enchArrowExplosiveEnable = config.get("Armor", "Arrow Explosive Enable", true).getBoolean(true);
@@ -172,6 +173,12 @@ public class Config
         enchPoisonLVL = config.get("Armor", "PoisonMaxLevel", 5).getInt();
         enchPoisonWeight = config.get("Armor", "PoisonWeight", 2).getInt();
 
+        enchRegenID = config.get("Armor", "Regen ID", defaultEnchantID+1).getInt();
+        enchRegenEnable = config.get("Armor", "Regen Enable", true).getBoolean(true);
+        enchRegenLVL = config.get("Armor", "Regen Max Level", 2).getInt();
+        enchRegenWeight = config.get("Armor", "Regen Weight", 2).getInt();
+        enchRegenRate = config.get("Armor", "Regen Rate", 3).getInt();
+
         enchRepairID = config.get("All", "Repair ID", defaultEnchantID+7).getInt();
         enchRepairEnable = config.get("All", "Repair Enable", true).getBoolean(true);
         enchRepairLVL = config.get("All", "Repair Max Level", 5).getInt();
@@ -182,6 +189,11 @@ public class Config
         enchSwiftnessEnable = config.get("Armor", "SwiftnessEnable", true).getBoolean(true);
         enchSwiftnessLVL = config.get("Armor", "SwiftnessMaxLevel", 4).getInt();
         enchSwiftnessWeight = config.get("Armor", "SwiftnessWeight", 2).getInt();
+
+        enchShroudID = config.get("Armor", "Shroud ID", defaultEnchantID+18).getInt();
+        enchShroudEnable = config.get("Armor", "Shroud Enable", true).getBoolean(true);
+        enchShroudLVL = config.get("Armor", "Shroud Max Level", 4).getInt();
+        enchShroudWeight = config.get("Armor", "Shroud Weight", 2).getInt();
 
         enchVampirismID = config.get("Armor", "VampirismID", defaultEnchantID+14).getInt();
         enchVampirismEnable = config.get("Armor", "VampirismEnable", true).getBoolean(true);

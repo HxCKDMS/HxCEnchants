@@ -1,6 +1,5 @@
 package HxCKDMS.XEnchants.hooks;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import HxCKDMS.XEnchants.XEnchants;
@@ -8,11 +7,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -21,13 +19,15 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 public class ArrowEventHookContainer 
 {
-	boolean isExplosive = false;
-	boolean isHoming = false;
-	boolean isGodly = false;
+	boolean isExplosive;
+	boolean isHoming;
+	boolean isZeus;
+    boolean isPoison;
 
-	int explosiveAmount;
-	int homingAmount;
-	int godlyAmount;
+	int ExplosionLevel;
+    int PoisonLevel;
+	int HomingLevel;
+	int ZeusLevel;
 
 	EntityLiving target;
 
@@ -37,17 +37,21 @@ public class ArrowEventHookContainer
 
         isExplosive = false;
         isHoming = false;
-        isGodly = false;
+        isZeus = false;
+        isPoison = false;
 
-        godlyAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowLightning.effectId, stack);
-        homingAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowSeeking.effectId, stack);
-        explosiveAmount = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, stack);
-        if(explosiveAmount > 0){
+        ZeusLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowLightning.effectId, stack);
+        HomingLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowSeeking.effectId, stack);
+        ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, stack);
+        PoisonLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Poison.effectId, stack);
+        if(ExplosionLevel > 0){
             isExplosive = true;
-        }if(homingAmount > 0){
+        }if(HomingLevel > 0){
             isHoming = true;
-        }if(godlyAmount > 0){
-            isGodly = true;
+        }if(ZeusLevel > 0){
+            isZeus = true;
+        }if(PoisonLevel > 0){
+            isPoison = true;
         }
     }
 
@@ -58,12 +62,14 @@ public class ArrowEventHookContainer
         if(event.entityLiving instanceof EntityLiving){
             EntityLiving ent = (EntityLiving) event.entityLiving;
             if (event.source.isProjectile() && isExplosive) {
-                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * explosiveAmount, false);
+                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, true);
             } else if (event.source.isProjectile() && isHoming) {
                 float damage = 6;
                 ent.attackEntityFrom(DamageSource.generic, damage);
-            } else if (event.source.isProjectile() && isGodly) {
+            } else if (event.source.isProjectile() && isZeus) {
                 ent.worldObj.spawnEntityInWorld(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY, ent.posZ));
+            } else if (event.source.isProjectile() && isPoison) {
+                ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
             }
         }
 	} 
@@ -79,7 +85,7 @@ public class ArrowEventHookContainer
                     double posX = arrow.posX;
                     double posY = arrow.posY;
                     double posZ = arrow.posZ;
-                    double size = 6 * homingAmount;
+                    double size = 6 * HomingLevel;
                     double d = -1D;
                     EntityLiving entityliving = null;
                     List list = arrow.worldObj.getEntitiesWithinAABB(net.minecraft.entity.EntityLiving.class, arrow.boundingBox.expand(size, size, size));
