@@ -39,6 +39,8 @@ public class ArmorEventHookContainer
     int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
+    int LeadFootedLevel;
+    int StealthLevel;
     int ShroudLevel;
     int ShroudLevel1;
     int ShroudLevel2;
@@ -73,14 +75,17 @@ public class ArmorEventHookContainer
 
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
             IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+            IAttributeInstance kr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.knockbackResistance);
             IAttributeInstance fr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange);
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
+            AttributeModifier LeadFoot = new AttributeModifier(SpeedUUID, "LeadFoot", LeadFootedLevel, 1);
             //AttributeModifier ShroudBuff = new AttributeModifier(ShroudUUID, "ShroudBuff", Shroud, 1);
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
+            ps.removeModifier(LeadFoot);
             //fr.removeModifier(ShroudBuff);
 
             ArmourHelm = player.getCurrentArmor(3);
@@ -111,6 +116,8 @@ public class ArmorEventHookContainer
             HeavyFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
             AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
             ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourBoots);
+            LeadFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
+            StealthLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Stealth.effectId, ArmourBoots);
             B = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourBoots);
 
             //Other Enchants
@@ -120,15 +127,14 @@ public class ArmorEventHookContainer
             Vitality = VitalityLevel * 0.5F;
             SpeedBoost = SpeedLevel * 0.2;
 
-            if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.05F;}
-
             //Indented for Beyond here stuff is actually done
 
                 player.capabilities.setFlySpeed(FlightSpeedBuff);
                 player.capabilities.allowFlying = (FlyLevel > 0);
+
+                if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.05F;}
                 player.sendPlayerAbilities();
-
-
+            
                 if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
@@ -138,7 +144,10 @@ public class ArmorEventHookContainer
                 {
                     ph.applyModifier(HealthBuff);
                 }
-
+                if(LeadFootedLevel > 0)
+                {
+                    kr.applyModifier(LeadFoot);
+                }
                /* if(ShroudLevel > 0)
                 {
 

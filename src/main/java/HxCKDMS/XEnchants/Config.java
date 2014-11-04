@@ -90,6 +90,11 @@ public class Config
     public static int enchSwiftnessLVL;
     public int enchSwiftnessWeight;
 
+    public int enchStealthID;
+    public boolean enchStealthEnable;
+    public static int enchStealthLVL;
+    public int enchStealthWeight;
+
     public int enchVampirismID;
     public boolean enchVampirismEnable;
     public static int enchVampirismLVL;
@@ -119,7 +124,7 @@ public class Config
         enchAdrenalineBoostLVL = config.get("Armor", "Adrenaline Boost Max Level", 4).getInt();
         enchAdrenalineBoostWeight = config.get("Armor", "Adrenaline Boost Weight", 2).getInt();
 
-        enchAirStriderID = config.get("Armor", "AirStriderID", defaultEnchantID+17).getInt();
+        enchAirStriderID = config.get("Armor", "AirStriderID", defaultEnchantID+1).getInt();
         enchAirStriderEnable = config.get("Armor", "Air Strider Enable", true).getBoolean(true);
         enchAirStriderLVL = config.get("Armor", "Air Strider MaxLevel", 4).getInt();
         enchAirStriderWeight = config.get("Armor", "Air Strider Weight", 2).getInt();
@@ -149,68 +154,73 @@ public class Config
 //        enchBoundLVL = config.get("Armor", "Bound Max Level", 1).getInt();
 //        enchBoundWeight = config.get("Armor", "Bound Weight", 2).getInt();
 
-        enchFlameTouchID = config.get("Armor", "Flame Touch ID", defaultEnchantID+8).getInt();
+        enchFlameTouchID = config.get("Armor", "Flame Touch ID", defaultEnchantID+7).getInt();
         enchFlameTouchEnable = config.get("Armor", "Flame Touch Enable", true).getBoolean(true);
         enchFlameTouchLVL = config.get("Armor", "Flame Touch Max Level", 1).getInt();
         enchFlameTouchWeight = config.get("Armor", "Flame Touch Weight", 2).getInt();
 
-        enchFlyID = config.get("Armor", "Fly ID", defaultEnchantID+9).getInt();
+        enchFlyID = config.get("Armor", "Fly ID", defaultEnchantID+8).getInt();
         enchFlyEnable = config.get("Armor", "Fly Enable", true).getBoolean(true);
         enchFlyWeight = config.get("Armor", "Fly Weight", 2).getInt();
 
-        enchJumpBoostID = config.get("Armor", "Jump Boost ID", defaultEnchantID+10).getInt();
+        enchJumpBoostID = config.get("Armor", "Jump Boost ID", defaultEnchantID+9).getInt();
         enchJumpBoostEnable = config.get("Armor", "Jump Boost Enable", true).getBoolean(true);
         enchJumpBoostLVL = config.get("Armor", "Jump Boost Max Level", 4).getInt();
         enchJumpBoostWeight = config.get("Armor", "Jump Boost eWeight", 2).getInt();
 
-        enchLeadFootedID = config.get("Armor", "LeadFootedID", defaultEnchantID+11).getInt();
+        enchLeadFootedID = config.get("Armor", "LeadFootedID", defaultEnchantID+10).getInt();
         enchLeadFootedEnable = config.get("Armor", "LeadFootedEnable", true).getBoolean(true);
         enchLeadFootedLVL = config.get("Armor", "LeadFootedMaxLevel", 1).getInt();
         enchLeadFootedWeight = config.get("Armor", "LeadFootedWeight", 2).getInt();
 
-        enchPoisonID = config.get("Armor", "PoisonID", defaultEnchantID+12).getInt();
+        enchPoisonID = config.get("Armor", "PoisonID", defaultEnchantID+11).getInt();
         enchPoisonEnable = config.get("Armor", "PoisonEnable", true).getBoolean(true);
         enchPoisonLVL = config.get("Armor", "PoisonMaxLevel", 5).getInt();
         enchPoisonWeight = config.get("Armor", "PoisonWeight", 2).getInt();
 
-        enchRegenID = config.get("Armor", "Regen ID", defaultEnchantID+1).getInt();
+        enchRegenID = config.get("Armor", "Regen ID", defaultEnchantID+12).getInt();
         enchRegenEnable = config.get("Armor", "Regen Enable", true).getBoolean(true);
         enchRegenLVL = config.get("Armor", "Regen Max Level", 2).getInt();
         enchRegenWeight = config.get("Armor", "Regen Weight", 2).getInt();
         enchRegenRate = config.get("Armor", "Regen Rate", 3).getInt();
 
-        enchRepairID = config.get("All", "Repair ID", defaultEnchantID+7).getInt();
+        enchRepairID = config.get("All", "Repair ID", defaultEnchantID+13).getInt();
         enchRepairEnable = config.get("All", "Repair Enable", true).getBoolean(true);
         enchRepairLVL = config.get("All", "Repair Max Level", 5).getInt();
         enchRepairWeight = config.get("All", "Repair Weight", 1).getInt();
         enchRepairRate = config.get("All", "Repair Speed Default = 1 Max = 999999 DON'T EXCEED THE MAX (Java will crash)", 1).getInt();
 
-        enchSwiftnessID = config.get("Armor", "SwiftnessID", defaultEnchantID+13).getInt();
-        enchSwiftnessEnable = config.get("Armor", "SwiftnessEnable", true).getBoolean(true);
-        enchSwiftnessLVL = config.get("Armor", "SwiftnessMaxLevel", 4).getInt();
-        enchSwiftnessWeight = config.get("Armor", "SwiftnessWeight", 2).getInt();
-
-        enchShroudID = config.get("Armor", "Shroud ID", defaultEnchantID+18).getInt();
+        enchShroudID = config.get("Armor", "Shroud ID", defaultEnchantID+14).getInt();
         enchShroudEnable = config.get("Armor", "Shroud Enable", true).getBoolean(true);
         enchShroudLVL = config.get("Armor", "Shroud Max Level", 4).getInt();
         enchShroudWeight = config.get("Armor", "Shroud Weight", 2).getInt();
 
-        enchVampirismID = config.get("Armor", "VampirismID", defaultEnchantID+14).getInt();
-        enchVampirismEnable = config.get("Armor", "VampirismEnable", true).getBoolean(true);
-        enchVampirismLVL = config.get("Armor", "VampirismMaxLevel", 5).getInt();
-        enchVampirismWeight = config.get("Armor", "VampirismWeight", 2).getInt();
+        enchSwiftnessID = config.get("Armor", "Swiftness ID", defaultEnchantID+15).getInt();
+        enchSwiftnessEnable = config.get("Armor", "Swiftness Enable", true).getBoolean(true);
+        enchSwiftnessLVL = config.get("Armor", "Swiftness Max Level", 4).getInt();
+        enchSwiftnessWeight = config.get("Armor", "Swiftness Weight", 2).getInt();
 
-        enchVitalityID = config.get("Armor", "VitalityID", defaultEnchantID+15).getInt();
-        enchVitalityEnable = config.get("Armor", "VitalityEnable", true).getBoolean(true);
-        enchVitalityLVL = config.get("Armor", "VitalityMaxLevel", 4).getInt();
-        enchVitalityWeight = config.get("Armor", "VitalityWeight", 2).getInt();
+        enchStealthID = config.get("Armor", "Stealth ID", defaultEnchantID+16).getInt();
+        enchStealthEnable = config.get("Armor", "Stealth Enable", true).getBoolean(true);
+        enchStealthLVL = config.get("Armor", "Stealth Max Level", 4).getInt();
+        enchStealthWeight = config.get("Armor", "Stealth Weight", 2).getInt();
 
-        enchWitherProtectionID = config.get("Armor", "WitherProtectionID", defaultEnchantID+16).getInt();
-        enchWitherProtectionEnable = config.get("Armor", "WitherProtectionEnable", true).getBoolean(true);
-        enchWitherProtectionLVL = config.get("Armor", "WitherProtectionMaxLevel", 4).getInt();
-        enchWitherProtectionWeight = config.get("Armor", "WitherProtectionWeight", 2).getInt();
+        enchVampirismID = config.get("Armor", "Vampirism ID", defaultEnchantID+17).getInt();
+        enchVampirismEnable = config.get("Armor", "Vampirism Enable", true).getBoolean(true);
+        enchVampirismLVL = config.get("Armor", "Vampirism Max Level", 5).getInt();
+        enchVampirismWeight = config.get("Armor", "Vampirism Weight", 2).getInt();
 
-        Tooltip = config.get("Other", "Show info tooltips on enchanted armor. (Does get annoying sometimes.)", true).getBoolean(true);
+        enchVitalityID = config.get("Armor", "Vitality ID", defaultEnchantID+18).getInt();
+        enchVitalityEnable = config.get("Armor", "Vitality Enable", true).getBoolean(true);
+        enchVitalityLVL = config.get("Armor", "Vitality Max Level", 4).getInt();
+        enchVitalityWeight = config.get("Armor", "Vitality Weight", 2).getInt();
+
+        enchWitherProtectionID = config.get("Armor", "WitherProtection ID", defaultEnchantID+19).getInt();
+        enchWitherProtectionEnable = config.get("Armor", "Wither Protection Enable", true).getBoolean(true);
+        enchWitherProtectionLVL = config.get("Armor", "Wither Protection Max Level", 4).getInt();
+        enchWitherProtectionWeight = config.get("Armor", "Wither Protection Weight", 2).getInt();
+
+        //Tooltip = config.get("Other", "Show info tooltips on enchanted armor. (Does get annoying sometimes.)", true).getBoolean(true);
         
         if(config.hasChanged())
         {

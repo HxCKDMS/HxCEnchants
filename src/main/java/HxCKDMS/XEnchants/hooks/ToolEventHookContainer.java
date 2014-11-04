@@ -25,12 +25,11 @@ public class ToolEventHookContainer
 	@SubscribeEvent
 	public void LivingAttackEvent(LivingAttackEvent event)
 	{
-		if(event.entityLiving instanceof EntityPlayer)
+		if(event.entity instanceof EntityPlayer)
 		{
-			EntityPlayer player = (EntityPlayer) event.entityLiving;
+			EntityPlayer player = (EntityPlayer) event.entity;
 			ItemStack stack = player.inventory.getCurrentItem();
 			VampireLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, stack);
-
 		}
 	}
 	@SubscribeEvent
@@ -44,15 +43,14 @@ public class ToolEventHookContainer
 
 		AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
 		
-		if(AutoSmeltLevel > 0)
+/*		if(AutoSmeltLevel > 0)
         {
             ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(new ItemStack(block));
             if(result != null)
             {
-                event.drops.remove(DroppedBlock);
                 event.drops.add(result);
             }
-        }
+        }*/
 
 
 
