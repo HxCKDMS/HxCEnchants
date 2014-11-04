@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -38,19 +39,25 @@ public class ToolEventHookContainer
         if (event.harvester != null){
 		EntityPlayer player = event.harvester;
 		Block block = event.block;
-        ItemStack DroppedBlock = new ItemStack(block);
+        ItemStack itemStackBlock = new ItemStack(Item.getItemFromBlock(block), 1);
         ItemStack heldItem = player.getHeldItem();
+        ItemStack result;
 
 		AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
-		
-/*		if(AutoSmeltLevel > 0)
+
+		if(AutoSmeltLevel > 0)
         {
-            ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(new ItemStack(block));
+            result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
+
             if(result != null)
             {
+                result.stackSize = AutoSmeltLevel;
+                for(int i = 0; i < event.drops.size(); i++){
+                    event.drops.remove(i);
+                }
                 event.drops.add(result);
             }
-        }*/
+        }
 
 
 

@@ -156,7 +156,7 @@ public class Config
 
         enchFlameTouchID = config.get("Armor", "Flame Touch ID", defaultEnchantID+7).getInt();
         enchFlameTouchEnable = config.get("Armor", "Flame Touch Enable", true).getBoolean(true);
-        enchFlameTouchLVL = config.get("Armor", "Flame Touch Max Level", 1).getInt();
+        enchFlameTouchLVL = config.get("Armor", "Flame Touch Max Level", 4).getInt();
         enchFlameTouchWeight = config.get("Armor", "Flame Touch Weight", 2).getInt();
 
         enchFlyID = config.get("Armor", "Fly ID", defaultEnchantID+8).getInt();
