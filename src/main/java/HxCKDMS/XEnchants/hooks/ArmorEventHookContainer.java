@@ -129,10 +129,10 @@ public class ArmorEventHookContainer
 
             //Indented for Beyond here stuff is actually done
 
-                player.capabilities.setFlySpeed(FlightSpeedBuff);
-                player.capabilities.allowFlying = (FlyLevel > 0);
-
                 if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.05F;}
+                player.capabilities.setFlySpeed(FlightSpeedBuff);
+                if (!player.capabilities.isCreativeMode)player.capabilities.allowFlying = (FlyLevel > 0);
+
                 player.sendPlayerAbilities();
             
                 if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
@@ -189,20 +189,20 @@ public class ArmorEventHookContainer
             if (Inv != null && Inv.isItemStackDamageable()){
                 int a = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Inv);
                 int b = Inv.getItemDamage() - a;
-                if (Inv.getItemDamage() > Inv.getMaxDamage())
+                if (Inv.getItemDamage() < Inv.getMaxDamage())
                 {
                     Inv.setItemDamage(b);
                 }
             }
         }
-        for(int j = 0; j < 3; j++){
+        for(int j = 0; j < 4; j++){
             Armor = player.getCurrentArmor(j);
             if (Armor != null && Armor.isItemStackDamageable()){
-                int a = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armor);
-                int b = Armor.getItemDamage() - a;
-                if (Armor.getItemDamage() > Armor.getMaxDamage())
+                int c = EnchantmentHelper.getEnchantmentLevel(XEnchants.Repair.effectId, Armor);
+                int d = Armor.getItemDamage() - c;
+                if (Armor.getItemDamage() < Armor.getMaxDamage())
                 {
-                    Armor.setItemDamage(b);
+                    Armor.setItemDamage(d);
                 }
             }
         }
