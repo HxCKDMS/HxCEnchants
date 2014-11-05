@@ -69,11 +69,8 @@ public class ArmorEventHookContainer
 	{
         ShouldRepair--;
         CanRegen--;
-		if(event.entityLiving instanceof EntityPlayerMP)
-		{
-            CanFly = false;
+		if(event.entityLiving instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
-            ModifyFlySpeed(player);
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
             IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 //            IAttributeInstance kr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.knockbackResistance);
@@ -114,7 +111,7 @@ public class ArmorEventHookContainer
 
             //Boot Enchants
             FlyLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, ArmourBoots);
-            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
+//            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
 //            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourBoots);
 //            LeadFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
 //            StealthLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Stealth.effectId, ArmourBoots);
@@ -123,25 +120,36 @@ public class ArmorEventHookContainer
             //Other Enchants
 //                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Bound.effectId, Armour);
             RegenLevel = (H + C + L + B);
-
             Vitality = VitalityLevel * 0.5F;
             SpeedBoost = SpeedLevel * 0.2;
 
             //Indented for Beyond here stuff is actually done
-                if (!player.capabilities.allowFlying && FlyLevel > 0 || player.capabilities.isCreativeMode) CanFly = true;
-                player.capabilities.allowFlying = CanFly;
-                if (!CanFly)player.capabilities.isFlying = false;
-
-                player.sendPlayerAbilities();
+                if(Config.enchFlyEnable){
+                    if (FlyLevel > 0 || player.capabilities.isCreativeMode) CanFly = true;
+                    player.capabilities.allowFlying = CanFly;
+                    if (!CanFly) player.capabilities.isFlying = false;
+                    player.sendPlayerAbilities();
+                }
 
                 if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 }
-/*                if (player.getDisplayName().equals("KeldonSlayer"))
-                {
-                    player.worldObj.spawnParticle("aura", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, -0.1d, 0.0d);
-                }*/
+//                if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.1F;}
+//                if (player.capabilities.isFlying && AirStriderLevel > 0){
+//                    if(player.motionX > 0)
+//                    {
+//                        player.motionX += FlightSpeedBuff;
+//                    }
+//                    if(player.motionY > 0)
+//                    {
+//                        player.motionY += FlightSpeedBuff;
+//                    }
+//                    if(player.motionZ > 0)
+//                    {
+//                        player.motionZ += FlightSpeedBuff;
+//                    }
+//                }
                 if(VitalityLevel > 0)
                 {
                     ph.applyModifier(HealthBuff);
@@ -149,22 +157,6 @@ public class ArmorEventHookContainer
                 /*if(LeadFootedLevel > 0)
                 {
                     kr.applyModifier(LeadFoot);
-                }*/
-               /* if(ShroudLevel > 0)
-                {
-
-                }
-                if(ShroudLevel1 > 0)
-                {
-                    ph.applyModifier(HealthBuff);
-                }
-                if(ShroudLevel2 > 0)
-                {
-                    ph.applyModifier(HealthBuff);
-                }
-                if(ShroudLevel3 > 0)
-                {
-                    ph.applyModifier(HealthBuff);
                 }*/
                 if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0)
                 {
@@ -251,21 +243,4 @@ public class ArmorEventHookContainer
             player.motionY += JumpBuff;
 		}
 	}
-    private void ModifyFlySpeed(EntityPlayerMP player){
-        if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.1F;}
-            if (player.capabilities.isFlying && AirStriderLevel > 0 && player.motionY > 0 || player.motionX > 0 || player.motionZ > 0){
-                if(player.motionX > 0)
-                {
-                    player.motionX += FlightSpeedBuff;
-                }
-                if(player.motionY > 0)
-                {
-                    player.motionY += FlightSpeedBuff;
-                }
-                if(player.motionZ > 0)
-                {
-                    player.motionZ += FlightSpeedBuff;
-                }
-            }
-    }
 }

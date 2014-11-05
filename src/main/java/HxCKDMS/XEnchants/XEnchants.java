@@ -24,7 +24,7 @@ public class XEnchants
     @Instance(Reference.MOD_ID)
     public static XEnchants instance;
 
-    boolean DevMode = false;
+    boolean DevMode = true;
 
     public static Config Config;
 
@@ -75,10 +75,10 @@ public class XEnchants
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
 
-        if(Config.enchAirStriderEnable)
-            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
-            MinecraftForge.EVENT_BUS.register(AirStrider);
-            Enchs++;
+//        if(Config.enchAirStriderEnable)
+//            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
+//            MinecraftForge.EVENT_BUS.register(AirStrider);
+//            Enchs++;
 
         if(Config.enchRegenEnable)
             ArmorRegen = new EnchantmentRegen(Config.enchRegenID, Config.enchRegenWeight);
@@ -116,7 +116,7 @@ public class XEnchants
             MinecraftForge.EVENT_BUS.register(FlameTouch);
             Enchs++;
 
-        if(Config.enchFlyEnable)
+        if(HxCKDMS.XEnchants.Config.enchFlyEnable)
             Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
             MinecraftForge.EVENT_BUS.register(Fly);
             Enchs++;

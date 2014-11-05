@@ -49,7 +49,7 @@ public class Config
     public int enchFlameTouchWeight;
 
     public int enchFlyID;
-    public boolean enchFlyEnable;
+    public static boolean enchFlyEnable;
     public int enchFlyWeight;
 
     public int enchJumpBoostID;
@@ -134,20 +134,20 @@ public class Config
         enchAirStriderLVL = config.get("Armor", "Air Strider MaxLevel", 4).getInt();
         enchAirStriderWeight = config.get("Armor", "Air Strider Weight", 2).getInt();
 
-        enchArrowExplosiveID = config.get("Armor", "Arrow Explosive ID", defaultEnchantID +2).getInt();
-        enchArrowExplosiveEnable = config.get("Armor", "Arrow Explosive Enable", true).getBoolean();
-        enchArrowExplosiveLVL = config.get("Armor", "Arrow ExplosiveMax Level", 4).getInt();
-        enchArrowExplosiveWeight = config.get("Armor", "Arrow Explosive Weight", 2).getInt();
+        enchArrowExplosiveID = config.get("Bow", "Arrow Explosive ID", defaultEnchantID +2).getInt();
+        enchArrowExplosiveEnable = config.get("Bow", "Arrow Explosive Enable", true).getBoolean();
+        enchArrowExplosiveLVL = config.get("Bow", "Arrow ExplosiveMax Level", 4).getInt();
+        enchArrowExplosiveWeight = config.get("Bow", "Arrow Explosive Weight", 2).getInt();
 
-        enchArrowLightningID = config.get("Armor", "Arrow Lightning ID", defaultEnchantID +3).getInt();
-        enchArrowLightningEnable = config.get("Armor", "Arrow Lightning Enable", true).getBoolean();
-        enchArrowLightningLVL = config.get("Armor", "Arrow Lightning Max Level", 1).getInt();
-        enchArrowLightningWeight = config.get("Armor", "Arrow Lightning Weight", 2).getInt();
+        enchArrowLightningID = config.get("Bow", "Zeus ID", defaultEnchantID +3).getInt();
+        enchArrowLightningEnable = config.get("Bow", "Zeus Enable", true).getBoolean();
+        enchArrowLightningLVL = config.get("Bow", "Zeus Max Level", 1).getInt();
+        enchArrowLightningWeight = config.get("Bow", "Zeus Weight", 2).getInt();
 
-        enchArrowSeekingID = config.get("Armor", "Arrow Seeking ID", defaultEnchantID +4).getInt();
-        enchArrowSeekingEnable = config.get("Armor", "Arrow Seeking Enable", true).getBoolean();
-        enchArrowSeekingLVL = config.get("Armor", "Arrow Seeking Max Level", 4).getInt();
-        enchArrowSeekingWeight = config.get("Armor", "Arrow Seeking Weight", 2).getInt();
+        enchArrowSeekingID = config.get("Bow", "Homing ID", defaultEnchantID +4).getInt();
+        enchArrowSeekingEnable = config.get("Bow", "Homing Enable", true).getBoolean();
+        enchArrowSeekingLVL = config.get("Bow", "Homing Max Level", 4).getInt();
+        enchArrowSeekingWeight = config.get("Bow", "Homing Weight", 2).getInt();
 
         enchBattleHealingID = config.get("Armor", "Battle Healing ID", defaultEnchantID +5).getInt();
         enchBattleHealingEnable = config.get("Armor", "Battle Healing Enable", true).getBoolean();
@@ -159,10 +159,10 @@ public class Config
 //        enchBoundLVL = config.get("Armor", "Bound Max Level", 1).getInt();
 //        enchBoundWeight = config.get("Armor", "Bound Weight", 2).getInt();
 
-        enchFlameTouchID = config.get("Armor", "Flame Touch ID", defaultEnchantID +7).getInt();
-        enchFlameTouchEnable = config.get("Armor", "Flame Touch Enable", true).getBoolean();
-        enchFlameTouchLVL = config.get("Armor", "Flame Touch Max Level", 4).getInt();
-        enchFlameTouchWeight = config.get("Armor", "Flame Touch Weight", 2).getInt();
+        enchFlameTouchID = config.get("Tools", "Flame Touch ID", defaultEnchantID +7).getInt();
+        enchFlameTouchEnable = config.get("Tools", "Flame Touch Enable", true).getBoolean();
+        enchFlameTouchLVL = config.get("Tools", "Flame Touch Max Level", 4).getInt();
+        enchFlameTouchWeight = config.get("Tools", "Flame Touch Weight", 2).getInt();
 
         enchFlyID = config.get("Armor", "Fly ID", defaultEnchantID +8).getInt();
         enchFlyEnable = config.get("Armor", "Fly Enable", true).getBoolean();
@@ -178,15 +178,15 @@ public class Config
         enchLeadFootedLVL = config.get("Armor", "Lead Footed Max Level", 1).getInt();
         enchLeadFootedWeight = config.get("Armor", "Lead Footed Weight", 2).getInt();
 
-        enchLifeStealID = config.get("Armor", "Life Steal ID", defaultEnchantID +20).getInt();
-        enchLifeStealEnable = config.get("Armor", "Life Steal Enable", true).getBoolean();
-        enchLifeStealLVL = config.get("Armor", "Life Steal Max Level", 1).getInt();
-        enchLifeStealWeight = config.get("Armor", "Life Steal Weight", 2).getInt();
+        enchLifeStealID = config.get("Sword", "Life Steal ID", defaultEnchantID +20).getInt();
+        enchLifeStealEnable = config.get("Sword", "Life Steal Enable", true).getBoolean();
+        enchLifeStealLVL = config.get("Sword", "Life Steal Max Level", 1).getInt();
+        enchLifeStealWeight = config.get("Sword", "Life Steal Weight", 2).getInt();
 
-        enchPoisonID = config.get("Armor", "Poison ID", defaultEnchantID +11).getInt();
-        enchPoisonEnable = config.get("Armor", "Poison Enable", true).getBoolean();
-        enchPoisonLVL = config.get("Armor", "Poison Max Level", 5).getInt();
-        enchPoisonWeight = config.get("Armor", "Poison Weight", 2).getInt();
+        enchPoisonID = config.get("Bow", "Poison ID", defaultEnchantID +11).getInt();
+        enchPoisonEnable = config.get("Bow", "Poison Enable", true).getBoolean();
+        enchPoisonLVL = config.get("Bow", "Poison Max Level", 5).getInt();
+        enchPoisonWeight = config.get("Bow", "Poison Weight", 2).getInt();
 
         enchRegenID = config.get("Armor", "Regen ID", defaultEnchantID +12).getInt();
         enchRegenEnable = config.get("Armor", "Regen Enable", true).getBoolean();
@@ -215,10 +215,10 @@ public class Config
         enchStealthLVL = config.get("Armor", "Stealth Max Level", 4).getInt();
         enchStealthWeight = config.get("Armor", "Stealth Weight", 2).getInt();
 
-        enchVampirismID = config.get("Armor", "Vampirism ID", defaultEnchantID +17).getInt();
-        enchVampirismEnable = config.get("Armor", "Vampirism Enable", true).getBoolean();
-        enchVampirismLVL = config.get("Armor", "Vampirism Max Level", 5).getInt();
-        enchVampirismWeight = config.get("Armor", "Vampirism Weight", 2).getInt();
+        enchVampirismID = config.get("Sword", "Vampirism ID", defaultEnchantID +17).getInt();
+        enchVampirismEnable = config.get("Sword", "Vampirism Enable", true).getBoolean();
+        enchVampirismLVL = config.get("Sword", "Vampirism Max Level", 5).getInt();
+        enchVampirismWeight = config.get("Sword", "Vampirism Weight", 2).getInt();
 
         enchVitalityID = config.get("Armor", "Vitality ID", defaultEnchantID +18).getInt();
         enchVitalityEnable = config.get("Armor", "Vitality Enable", true).getBoolean();
