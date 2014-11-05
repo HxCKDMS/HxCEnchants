@@ -21,6 +21,8 @@ public class XEnchants
     @Instance(Reference.MOD_ID)
     public static XEnchants instance;
 
+    boolean DevMode = true;
+
     public static Config Config;
 
     private int Enchs = 0;
@@ -49,14 +51,22 @@ public class XEnchants
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {
-        Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
+        Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));try {
+        Class.forName( "HxCKDMS.HxCCore.HxCCore" );
+        } catch( ClassNotFoundException e ) {
+            if (HxCKDMS.XEnchants.Config.DebugMode || DevMode){
+                FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "[XEnchants] HxCCore not found! Please Grab it from our site!");
+            }else{
+                throw new NullPointerException("HxCCore Not Found!!! Please Download it from our site! or Enable DebugMode and set all IDs to < 256 =/");
+            }
+        }
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         event.getModState();
-        System.out.println("Slayer deserves a massive Facepalm");
+        FMLCommonHandler.instance().getFMLLogger().log(Level.INFO, "[XEnchants] " + Enchs + "Enchantments Have Been Registered");
 	    if(Config.enchAdrenalineBoostEnable)
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
