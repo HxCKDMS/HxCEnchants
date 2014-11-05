@@ -6,6 +6,7 @@ import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.*;
@@ -32,10 +33,11 @@ public class ToolEventHookContainer
 	// Misc. variables
     @SubscribeEvent
     public void LivingAttackEvent(LivingAttackEvent event){
-        EntityLivingBase entity = event.entityLiving.getLastAttacker();
-        if (entity instanceof EntityPlayerMP){
-            EntityPlayerMP Attacker = (EntityPlayerMP) entity;
-            EntityLiving Victim = (EntityLiving) event.entityLiving;
+        EntityLivingBase entity = event.entityLiving;
+        Entity ent = event.source.getSourceOfDamage();
+        if (ent instanceof EntityPlayerMP){
+            EntityPlayerMP Attacker = (EntityPlayerMP) ent;
+            EntityLiving Victim = (EntityLiving) entity;
             ItemStack item = Attacker.getHeldItem();
             LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LifeSteal.effectId, item);
             if (LifeStealLevel > 0){
@@ -50,23 +52,25 @@ public class ToolEventHookContainer
 	@SubscribeEvent
 	public void LivingDeathEvent(LivingDeathEvent event)
 	{
-        EntityLivingBase entity = event.entityLiving.getLastAttacker();
-        if (entity instanceof EntityPlayerMP){
-            EntityPlayerMP attacker = (EntityPlayerMP) entity;
-            ItemStack item = attacker.getHeldItem();
+        EntityLivingBase entity = event.entityLiving;
+        Entity ent = event.source.getSourceOfDamage();
+        if (ent instanceof EntityPlayerMP){
+            EntityLiving Victim = (EntityLiving) entity;
+            EntityPlayerMP Attacker = (EntityPlayerMP) ent;
+            ItemStack item = Attacker.getHeldItem();
             VampireLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, item);
             if (VampireLevel > 0){
                 if (event.entityLiving instanceof EntityAnimal){
                     VBRV = 3;
                 }else if (event.entityLiving instanceof EntityPlayerMP){
                     VBRV = 15;
-                    attacker.addChatMessage(new ChatComponentText("\u00A74You have just tasted victorious blood"));
+                    Attacker.addChatMessage(new ChatComponentText("\u00A74You have just tasted victorious blood"));
                 }else if (event.entityLiving instanceof EntityVillager){
                     VBRV = 12;
-                    attacker.addChatMessage(new ChatComponentText("\u00A74You have just tasted some rich blood"));
+                    Attacker.addChatMessage(new ChatComponentText("\u00A74You have just tasted some rich blood"));
                 }else if (event.entityLiving instanceof EntityZombie || event.entityLiving instanceof EntitySkeleton){
                     VBRV = -1;
-                    attacker.addChatMessage(new ChatComponentText("\u00A74You have just tasted some horrible blood"));
+                    Attacker.addChatMessage(new ChatComponentText("\u00A74You have just tasted some horrible blood"));
                 }else if (event.entityLiving instanceof EntitySlime){
                     VBRV = 2;
                 }else if (event.entityLiving instanceof EntityEnderman){
@@ -76,9 +80,9 @@ public class ToolEventHookContainer
                 }else{
                     VBRV = 3;
                 }
-                int curFood = attacker.getFoodStats().getFoodLevel();
+                int curFood = Attacker.getFoodStats().getFoodLevel();
                 int newFud = (VBRV * VampireLevel) + curFood;
-                attacker.getFoodStats().setFoodLevel(newFud);
+                Attacker.getFoodStats().setFoodLevel(newFud);
             }
         }
 	}
