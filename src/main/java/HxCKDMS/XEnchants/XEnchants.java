@@ -173,9 +173,8 @@ public class XEnchants
         MinecraftForge.EVENT_BUS.register(new ArmorEventHookContainer());
         MinecraftForge.EVENT_BUS.register(new ToolEventHookContainer());
 
-        if (Config.DebugMode)
-            System.out.print(Enchs);
-            System.out.println("Enchants have been Registered");
+        if (HxCKDMS.XEnchants.Config.DebugMode)
+            FMLCommonHandler.instance().getFMLLogger().log(Level.DEBUG, "[XEnchants] " + Enchs + "Enchantments Have Been Registered");
     }
     
     @EventHandler

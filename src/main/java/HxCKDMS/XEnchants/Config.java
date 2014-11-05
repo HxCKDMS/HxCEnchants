@@ -4,7 +4,8 @@ import net.minecraftforge.common.config.*;
 
 public class Config
 {
-    public boolean DebugMode;
+    public static boolean DebugMode;
+    public static boolean Feedback;
 
     private int defaultEnchantID = 320;
 
@@ -121,8 +122,9 @@ public class Config
     {
         config.load();
 
-
         DebugMode = config.get("DEBUG", "Debug Mode Enable?", false).getBoolean(false);
+
+        DebugMode = config.get("Preferences", "Enable Feedback (ChatMessages and such from enchants)", false).getBoolean(false);
 
         enchAdrenalineBoostID = config.get("Armor", "Adrenaline Boost ID", defaultEnchantID).getInt();
         enchAdrenalineBoostEnable = config.get("Armor", "Adrenaline Boost Enable", true).getBoolean(true);
