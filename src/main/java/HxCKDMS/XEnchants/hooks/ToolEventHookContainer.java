@@ -45,39 +45,19 @@ public class ToolEventHookContainer
 
 		AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
 
-		if(AutoSmeltLevel > 0)
-        {
-            result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
-
-            if(result != null)
+            if(AutoSmeltLevel > 0)
             {
-                result.stackSize = AutoSmeltLevel;
-                for(int i = 0; i < event.drops.size(); i++){
-                    event.drops.remove(i);
+                result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
+
+                if(result != null)
+                {
+                    result.stackSize = AutoSmeltLevel;
+                    for(int i = 0; i < event.drops.size(); i++){
+                        event.drops.remove(i);
+                    }
+                    event.drops.add(result);
                 }
-                event.drops.add(result);
             }
-        }
-
-
-
-		/*if(isFlameTouched = true)
-		{
-			if(player.worldObj.rand.nextInt(2) == 0)
-			{
-				// So I was going to use FurnaceRecipes, but then I decided against it because this way gives me more flexibility
-				if(block == Block.oreIron)
-				{
-					event.drops.add(new ItemStack(Item.ingotIron, 1));
-					event.drops.remove(15);
-				}
-				if(block == Block.oreGold)
-				{
-					event.drops.add(new ItemStack(Item.ingotGold, 1));
-					event.drops.remove(Block.oreGold);
-				}
-			}
-		}*/
-	}
+    	}
     }
 }

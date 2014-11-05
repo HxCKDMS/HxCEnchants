@@ -8,7 +8,7 @@ public class EnchantmentPoison extends Enchantment
 {
 	public EnchantmentPoison(int id, int weight)
 	{
-		super(id, weight, EnumEnchantmentType.weapon);
+		super(id, weight, EnumEnchantmentType.bow);
 		setName("poison");
 	}
 	@Override

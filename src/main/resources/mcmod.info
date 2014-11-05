@@ -1,7 +1,7 @@
 [
   {
     "modid": "XEnchants",
-    "name": "§3DrZed's §9Extra Enchants§r",
+    "name": "DrZed's Extra Enchants",
     "description": "Adds New/Better enchants to the game",
     "version": "Alpha 0.1.1",
     "credits": "Merged old Enchants mod from BrassGoggledArchivists and got some help from friends",
@@ -9,7 +9,6 @@
     "authors": ["§4HxCK§3D§eM§0S§r"],
     "dependencies": [
            "mod_MinecraftForge"
-           "mod_HxCCore"
     ]
   }
 ]

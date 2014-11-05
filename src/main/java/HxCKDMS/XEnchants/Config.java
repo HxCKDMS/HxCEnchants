@@ -6,7 +6,7 @@ public class Config
 {
     public boolean DebugMode;
 
-    private int defaultEnchantID = 120;
+    private int defaultEnchantID = 320;
 
     public int enchAdrenalineBoostID;
     public boolean enchAdrenalineBoostEnable;

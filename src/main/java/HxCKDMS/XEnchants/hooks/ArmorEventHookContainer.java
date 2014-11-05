@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ArmorEventHookContainer
 {
+    boolean CanFly;
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
@@ -71,6 +72,7 @@ public class ArmorEventHookContainer
         CanRegen--;
 		if(event.entityLiving instanceof EntityPlayerMP)
 		{
+            CanFly = false;
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
 
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
@@ -80,12 +82,12 @@ public class ArmorEventHookContainer
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
-            AttributeModifier LeadFoot = new AttributeModifier(SpeedUUID, "LeadFoot", LeadFootedLevel, 1);
+            AttributeModifier LeadFoot = new AttributeModifier(SpeedUUID, "LeadFoot", LeadFootedLevel*10, 1);
             //AttributeModifier ShroudBuff = new AttributeModifier(ShroudUUID, "ShroudBuff", Shroud, 1);
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
-            ps.removeModifier(LeadFoot);
+            kr.removeModifier(LeadFoot);
             //fr.removeModifier(ShroudBuff);
 
             ArmourHelm = player.getCurrentArmor(3);
@@ -120,6 +122,9 @@ public class ArmorEventHookContainer
             StealthLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Stealth.effectId, ArmourBoots);
             B = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourBoots);
 
+            if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.075F;}
+            if(AirStriderLevel < 1){FlightSpeedBuff = 0.5F;}
+            player.capabilities.setFlySpeed(FlightSpeedBuff);
             //Other Enchants
 //                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Bound.effectId, Armour);
             RegenLevel = (H + C + L + B);
@@ -128,26 +133,28 @@ public class ArmorEventHookContainer
             SpeedBoost = SpeedLevel * 0.2;
 
             //Indented for Beyond here stuff is actually done
-
-                if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.05F;}
-                player.capabilities.setFlySpeed(FlightSpeedBuff);
-                if (!player.capabilities.isCreativeMode)player.capabilities.allowFlying = (FlyLevel > 0);
+                if (!player.capabilities.allowFlying && FlyLevel > 0 || player.capabilities.isCreativeMode) CanFly = true;
+                player.capabilities.allowFlying = CanFly;
+                if (!CanFly)player.capabilities.isFlying = false;
 
                 player.sendPlayerAbilities();
             
-                if (player.worldObj.isRemote && player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
+                if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 }
-
+/*                if (player.getDisplayName().equals("KeldonSlayer"))
+                {
+                    player.worldObj.spawnParticle("aura", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, -0.1d, 0.0d);
+                }*/
                 if(VitalityLevel > 0)
                 {
                     ph.applyModifier(HealthBuff);
                 }
-                if(LeadFootedLevel > 0)
+                /*if(LeadFootedLevel > 0)
                 {
                     kr.applyModifier(LeadFoot);
-                }
+                }*/
                /* if(ShroudLevel > 0)
                 {
 
@@ -234,7 +241,6 @@ public class ArmorEventHookContainer
             }
             if(BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic"))
             {
-                System.out.println(event.source.damageType);
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
             }
         }

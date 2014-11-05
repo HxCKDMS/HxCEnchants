@@ -3,14 +3,18 @@ package HxCKDMS.XEnchants;
 import HxCKDMS.XEnchants.enchantment.*;
 import HxCKDMS.XEnchants.hooks.*;
 import HxCKDMS.XEnchants.lib.Reference;
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.enchantment.*;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.*;
+import net.minecraft.potion.Potion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Level;
+
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 
@@ -20,6 +24,7 @@ public class XEnchants
     public static XEnchants instance;
 
     public static Config Config;
+    private static int enchantsOffset;
 
     private int Enchs = 0;
 
@@ -47,6 +52,7 @@ public class XEnchants
     public void preinit(FMLPreInitializationEvent event)
     {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
+        extendEnchantsArray();
     }
 
     @EventHandler
@@ -109,11 +115,13 @@ public class XEnchants
             JumpBoost = new EnchantmentJumpBoost(Config.enchJumpBoostID, Config.enchJumpBoostWeight);
             MinecraftForge.EVENT_BUS.register(JumpBoost);
             Enchs++;
+/*
 
         if(Config.enchLeadFootedEnable)
             LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
+*/
 
         if(Config.enchPoisonEnable)
             Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
@@ -124,16 +132,19 @@ public class XEnchants
             Repair = new EnchantmentRepair(Config.enchRepairID, Config.enchRepairWeight);
         MinecraftForge.EVENT_BUS.register(Repair);
             Enchs++;
+/*
 
         if(Config.enchShroudEnable)
             Shroud = new EnchantmentShroud(Config.enchShroudID, Config.enchShroudWeight);
         MinecraftForge.EVENT_BUS.register(Shroud);
             Enchs++;
+*/
 
         if(Config.enchSwiftnessEnable)
             Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
             MinecraftForge.EVENT_BUS.register(Swiftness);
             Enchs++;
+/*
 
         if(Config.enchStealthEnable)
             Stealth = new EnchantmentStealth(Config.enchStealthID, Config.enchStealthWeight);
@@ -144,6 +155,7 @@ public class XEnchants
             Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);
             MinecraftForge.EVENT_BUS.register(Vampirism);
             Enchs++;
+*/
 
         if(Config.enchVitalityEnable)
             Vitality = new EnchantmentVitality(Config.enchVitalityID, Config.enchVitalityWeight);
@@ -168,6 +180,16 @@ public class XEnchants
     public void postInit(FMLPostInitializationEvent event)
     {
         event.getModState();
+    }	
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
+    private static void extendEnchantsArray()
+    {
+        FMLCommonHandler.instance().getFMLLogger().log(Level.INFO, "[XEnchants] Extending Enchantment Array.");
+        enchantsOffset = Enchantment.enchantmentsList.length;
+        Enchantment[] enchantmentsList = new Enchantment[enchantsOffset + 256];
+        System.arraycopy(Enchantment.enchantmentsList, 0, enchantmentsList, 0, enchantsOffset);
+        HxCReflectionHelper.setPrivateFinalValue(Enchantment.class, null, enchantmentsList, "enchantmentsList", "field_76425_a");
     }
+
 
 }
