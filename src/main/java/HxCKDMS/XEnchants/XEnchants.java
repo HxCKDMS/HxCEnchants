@@ -10,7 +10,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.*;
-import net.minecraft.potion.Potion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
@@ -39,6 +38,7 @@ public class XEnchants
     public static Enchantment Fly;
     public static Enchantment JumpBoost;
     public static Enchantment LeadFooted;
+    public static Enchantment LifeSteal;
     public static Enchantment Poison;
     public static Enchantment Repair;
     public static Enchantment Shroud;
@@ -121,7 +121,10 @@ public class XEnchants
             LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
-*/
+*/      if(Config.enchLifeStealEnable)
+            LifeSteal = new EnchantmentLifeSteal(Config.enchLifeStealID, Config.enchLifeStealWeight);
+            MinecraftForge.EVENT_BUS.register(LifeSteal);
+            Enchs++;
 
         if(Config.enchPoisonEnable)
             Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
@@ -150,12 +153,11 @@ public class XEnchants
             Stealth = new EnchantmentStealth(Config.enchStealthID, Config.enchStealthWeight);
             MinecraftForge.EVENT_BUS.register(Stealth);
             Enchs++;
-
+*/
         if(Config.enchVampirismEnable)
             Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);
             MinecraftForge.EVENT_BUS.register(Vampirism);
             Enchs++;
-*/
 
         if(Config.enchVitalityEnable)
             Vitality = new EnchantmentVitality(Config.enchVitalityID, Config.enchVitalityWeight);

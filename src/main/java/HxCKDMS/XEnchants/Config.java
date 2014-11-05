@@ -63,6 +63,11 @@ public class Config
     public static int enchLeadFootedLVL;
     public int enchLeadFootedWeight;
 
+    public int enchLifeStealID;
+    public boolean enchLifeStealEnable;
+    public static int enchLifeStealLVL;
+    public int enchLifeStealWeight;
+
     public int enchPoisonID;
     public boolean enchPoisonEnable;
     public static int enchPoisonLVL;
@@ -168,15 +173,20 @@ public class Config
         enchJumpBoostLVL = config.get("Armor", "Jump Boost Max Level", 4).getInt();
         enchJumpBoostWeight = config.get("Armor", "Jump Boost eWeight", 2).getInt();
 
-        enchLeadFootedID = config.get("Armor", "LeadFootedID", defaultEnchantID+10).getInt();
-        enchLeadFootedEnable = config.get("Armor", "LeadFootedEnable", true).getBoolean(true);
-        enchLeadFootedLVL = config.get("Armor", "LeadFootedMaxLevel", 1).getInt();
-        enchLeadFootedWeight = config.get("Armor", "LeadFootedWeight", 2).getInt();
+        enchLeadFootedID = config.get("Armor", "Lead Footed ID", defaultEnchantID+10).getInt();
+        enchLeadFootedEnable = config.get("Armor", "Lead Footed Enable", true).getBoolean(true);
+        enchLeadFootedLVL = config.get("Armor", "Lead Footed Max Level", 1).getInt();
+        enchLeadFootedWeight = config.get("Armor", "Lead Footed Weight", 2).getInt();
 
-        enchPoisonID = config.get("Armor", "PoisonID", defaultEnchantID+11).getInt();
-        enchPoisonEnable = config.get("Armor", "PoisonEnable", true).getBoolean(true);
-        enchPoisonLVL = config.get("Armor", "PoisonMaxLevel", 5).getInt();
-        enchPoisonWeight = config.get("Armor", "PoisonWeight", 2).getInt();
+        enchLifeStealID = config.get("Armor", "Life Steal ID", defaultEnchantID+20).getInt();
+        enchLifeStealEnable = config.get("Armor", "Life Steal Enable", true).getBoolean(true);
+        enchLifeStealLVL = config.get("Armor", "Life Steal Max Level", 1).getInt();
+        enchLifeStealWeight = config.get("Armor", "Life Steal Weight", 2).getInt();
+
+        enchPoisonID = config.get("Armor", "Poison ID", defaultEnchantID+11).getInt();
+        enchPoisonEnable = config.get("Armor", "Poison Enable", true).getBoolean(true);
+        enchPoisonLVL = config.get("Armor", "Poison Max Level", 5).getInt();
+        enchPoisonWeight = config.get("Armor", "Poison Weight", 2).getInt();
 
         enchRegenID = config.get("Armor", "Regen ID", defaultEnchantID+12).getInt();
         enchRegenEnable = config.get("Armor", "Regen Enable", true).getBoolean(true);
@@ -215,7 +225,7 @@ public class Config
         enchVitalityLVL = config.get("Armor", "Vitality Max Level", 4).getInt();
         enchVitalityWeight = config.get("Armor", "Vitality Weight", 2).getInt();
 
-        enchWitherProtectionID = config.get("Armor", "WitherProtection ID", defaultEnchantID+19).getInt();
+        enchWitherProtectionID = config.get("Armor", "Wither Protection ID", defaultEnchantID+19).getInt();
         enchWitherProtectionEnable = config.get("Armor", "Wither Protection Enable", true).getBoolean(true);
         enchWitherProtectionLVL = config.get("Armor", "Wither Protection Max Level", 4).getInt();
         enchWitherProtectionWeight = config.get("Armor", "Wither Protection Weight", 2).getInt();

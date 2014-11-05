@@ -5,12 +5,15 @@ import java.util.UUID;
 import HxCKDMS.XEnchants.Config;
 import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -24,13 +27,12 @@ public class ArmorEventHookContainer
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
-    public static UUID ShroudUUID = UUID.fromString("1e4a1a12-ab1e-4987-b527-e0adeefc904a");
+//    public static UUID ShroudUUID = UUID.fromString("1e4a1a12-ab1e-4987-b527-e0adeefc904a");
 
     // Integers
     int ShouldRepair = (Config.enchRepairRate * 20);
     int CanRegen = (Config.enchRegenRate * 20);
-    
-    int HeavyFootedLevel;
+
     int JumpBoostLevel;
     int AirStriderLevel;
     int VitalityLevel;
@@ -40,12 +42,12 @@ public class ArmorEventHookContainer
     int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
-    int LeadFootedLevel;
-    int StealthLevel;
-    int ShroudLevel;
-    int ShroudLevel1;
-    int ShroudLevel2;
-    int ShroudLevel3;
+//    int LeadFootedLevel;
+//    int StealthLevel;
+//    int ShroudLevel;
+//    int ShroudLevel1;
+//    int ShroudLevel2;
+//    int ShroudLevel3;
     int H;
     int C;
     int L;
@@ -56,7 +58,7 @@ public class ArmorEventHookContainer
     //doubles
     double SpeedBoost;
     double Vitality;
-    double Shroud;
+//    double Shroud;
 
     //ItemStacks
     ItemStack ArmourHelm = null;
@@ -74,20 +76,20 @@ public class ArmorEventHookContainer
 		{
             CanFly = false;
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
-
+            ModifyFlySpeed(player);
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
             IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
-            IAttributeInstance kr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.knockbackResistance);
-            IAttributeInstance fr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange);
+//            IAttributeInstance kr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.knockbackResistance);
+//            IAttributeInstance fr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange);
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
-            AttributeModifier LeadFoot = new AttributeModifier(SpeedUUID, "LeadFoot", LeadFootedLevel*10, 1);
+//            AttributeModifier LeadFoot = new AttributeModifier(SpeedUUID, "LeadFoot", LeadFootedLevel*10, 1);
             //AttributeModifier ShroudBuff = new AttributeModifier(ShroudUUID, "ShroudBuff", Shroud, 1);
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
-            kr.removeModifier(LeadFoot);
+//            kr.removeModifier(LeadFoot);
             //fr.removeModifier(ShroudBuff);
 
             ArmourHelm = player.getCurrentArmor(3);
@@ -98,33 +100,29 @@ public class ArmorEventHookContainer
             //Helmet Enchants
             AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AdrenalineBoost.effectId, ArmourHelm);
             WitherProt = EnchantmentHelper.getEnchantmentLevel(XEnchants.WitherProtection.effectId, ArmourHelm);
-            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourHelm);
+//            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourHelm);
             H = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourHelm);
 
             //Chestplate Enchants
             VitalityLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vitality.effectId, ArmourChest);
             BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.BattleHealing.effectId, ArmourChest);
-            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourChest);
+//            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourChest);
             C = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourChest);
 
             //Legging Enchants
             SpeedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Swiftness.effectId, ArmourLegs);
             JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.JumpBoost.effectId, ArmourLegs);
-            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourLegs);
+//            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourLegs);
             L = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourLegs);
 
             //Boot Enchants
             FlyLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, ArmourBoots);
-            HeavyFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
             AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
-            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourBoots);
-            LeadFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
-            StealthLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Stealth.effectId, ArmourBoots);
+//            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourBoots);
+//            LeadFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
+//            StealthLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Stealth.effectId, ArmourBoots);
             B = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArmorRegen.effectId, ArmourBoots);
 
-            if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.075F;}
-            if(AirStriderLevel < 1){FlightSpeedBuff = 0.5F;}
-            player.capabilities.setFlySpeed(FlightSpeedBuff);
             //Other Enchants
 //                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(XEnchants.Bound.effectId, Armour);
             RegenLevel = (H + C + L + B);
@@ -138,7 +136,7 @@ public class ArmorEventHookContainer
                 if (!CanFly)player.capabilities.isFlying = false;
 
                 player.sendPlayerAbilities();
-            
+
                 if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
@@ -189,8 +187,8 @@ public class ArmorEventHookContainer
         }
 	}
     public void RepairItems(EntityPlayerMP player){
-        ItemStack Inv = null;
-        ItemStack Armor = null;
+        ItemStack Inv;
+        ItemStack Armor;
         for(int j = 0; j < 36; j++){
             Inv = player.inventory.getStackInSlot(j);
             if (Inv != null && Inv.isItemStackDamageable()){
@@ -256,4 +254,21 @@ public class ArmorEventHookContainer
             player.motionY += JumpBuff;
 		}
 	}
+    private void ModifyFlySpeed(EntityPlayerMP player){
+        if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.1F;}
+            if (player.capabilities.isFlying && AirStriderLevel > 0 && player.motionY > 0 || player.motionX > 0 || player.motionZ > 0){
+                if(player.motionX > 0)
+                {
+                    player.motionX += FlightSpeedBuff;
+                }
+                if(player.motionY > 0)
+                {
+                    player.motionY += FlightSpeedBuff;
+                }
+                if(player.motionZ > 0)
+                {
+                    player.motionZ += FlightSpeedBuff;
+                }
+            }
+    }
 }
