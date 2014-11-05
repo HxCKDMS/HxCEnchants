@@ -17,8 +17,8 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.1.1"
-group= "com.HxCKDMS.XEnchants" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "Beta-1.1"
+group= "HxCKDMS.XEnchants" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "XEnchants"
 
 minecraft {
