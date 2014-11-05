@@ -111,7 +111,7 @@ public class ArmorEventHookContainer
 
             //Boot Enchants
             FlyLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Fly.effectId, ArmourBoots);
-//            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
+            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.AirStrider.effectId, ArmourBoots);
 //            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(XEnchants.Shroud.effectId, ArmourBoots);
 //            LeadFootedLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LeadFooted.effectId, ArmourBoots);
 //            StealthLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Stealth.effectId, ArmourBoots);
@@ -135,21 +135,21 @@ public class ArmorEventHookContainer
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 }
-//                if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.1F;}
-//                if (player.capabilities.isFlying && AirStriderLevel > 0){
-//                    if(player.motionX > 0)
-//                    {
-//                        player.motionX += FlightSpeedBuff;
-//                    }
-//                    if(player.motionY > 0)
-//                    {
-//                        player.motionY += FlightSpeedBuff;
-//                    }
-//                    if(player.motionZ > 0)
-//                    {
-//                        player.motionZ += FlightSpeedBuff;
-//                    }
-//                }
+/*                if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.1F;}
+                if (player.capabilities.isFlying && AirStriderLevel > 0){
+                    if(player.motionX > 0)
+                    {
+                        player.motionX += FlightSpeedBuff;
+                    }
+                    if(player.motionY > 0)
+                    {
+                        player.motionY += FlightSpeedBuff;
+                    }
+                    if(player.motionZ > 0)
+                    {
+                        player.motionZ += FlightSpeedBuff;
+                    }
+                }*/
                 if(VitalityLevel > 0)
                 {
                     ph.applyModifier(HealthBuff);

@@ -4,6 +4,7 @@ import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,7 @@ public class ArrowEventHookContainer
         HomingLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowSeeking.effectId, stack);
         ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.ArrowExplosive.effectId, stack);
         PoisonLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Poison.effectId, stack);
+
         if(ExplosionLevel > 0){
             isExplosive = true;
         }if(HomingLevel > 0){
@@ -60,7 +62,7 @@ public class ArrowEventHookContainer
 	public void entityAttacked(LivingAttackEvent event)
 	{
         if(event.entityLiving instanceof EntityLiving){
-            EntityLiving ent = (EntityLiving) event.entityLiving;
+            EntityLivingBase ent = event.entityLiving;
             if (event.source.isProjectile() && isExplosive) {
                 ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, true);
             } else if (event.source.isProjectile() && isHoming) {

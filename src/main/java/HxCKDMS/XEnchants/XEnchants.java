@@ -66,119 +66,124 @@ public class XEnchants
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         event.getModState();
         FMLCommonHandler.instance().getFMLLogger().log(Level.INFO, "[XEnchants] " + Enchs + "Enchantments Have Been Registered");
-	    if(Config.enchAdrenalineBoostEnable)
+        if (Config.enchAdrenalineBoostEnable) {
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
-
-//        if(Config.enchAirStriderEnable)
+        }
+//        if(Config.enchAirStriderEnable){
 //            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
 //            MinecraftForge.EVENT_BUS.register(AirStrider);
 //            Enchs++;
+//}
 
-        if(Config.enchRegenEnable)
+        if (Config.enchRegenEnable) {
             ArmorRegen = new EnchantmentRegen(Config.enchRegenID, Config.enchRegenWeight);
             MinecraftForge.EVENT_BUS.register(ArmorRegen);
             Enchs++;
-
-        if(Config.enchArrowExplosiveEnable)
+        }
+        if (Config.enchArrowExplosiveEnable) {
             ArrowExplosive = new EnchantmentArrowExplosive(Config.enchArrowExplosiveID, Config.enchArrowExplosiveWeight);
             MinecraftForge.EVENT_BUS.register(ArrowExplosive);
             Enchs++;
-
-        if(Config.enchArrowLightningEnable)
+        }
+        if (Config.enchArrowLightningEnable) {
             ArrowLightning = new EnchantmentArrowLightning(Config.enchArrowLightningID, Config.enchArrowLightningWeight);
             MinecraftForge.EVENT_BUS.register(ArrowLightning);
             Enchs++;
-
-        if(Config.enchArrowSeekingEnable)
+        }
+        if (Config.enchArrowSeekingEnable) {
             ArrowSeeking = new EnchantmentArrowSeeking(Config.enchArrowSeekingID, Config.enchArrowSeekingWeight);
             MinecraftForge.EVENT_BUS.register(ArrowSeeking);
             Enchs++;
-
-        if(Config.enchBattleHealingEnable)
+        }
+        if (Config.enchBattleHealingEnable) {
             BattleHealing = new EnchantmentBattleHealing(Config.enchBattleHealingID, Config.enchBattleHealingWeight);
             MinecraftForge.EVENT_BUS.register(BattleHealing);
             Enchs++;
-/*
-        if(Config.enchBoundEnable)
+        }/*
+        if(Config.enchBoundEnable){
             Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
             MinecraftForge.EVENT_BUS.register(Bound);
             Enchs++;
-*/
+}*/
 
-        if(Config.enchFlameTouchEnable)
+        if (Config.enchFlameTouchEnable) {
             FlameTouch = new EnchantmentFlameTouch(Config.enchFlameTouchID, Config.enchFlameTouchWeight);
             MinecraftForge.EVENT_BUS.register(FlameTouch);
             Enchs++;
-
-        if(HxCKDMS.XEnchants.Config.enchFlyEnable)
-            Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
-            MinecraftForge.EVENT_BUS.register(Fly);
-            Enchs++;
-
-        if(Config.enchJumpBoostEnable)
+        }
+//        if(HxCKDMS.XEnchants.Config.enchFlyEnable){
+//            Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
+//            MinecraftForge.EVENT_BUS.register(Fly);
+//            Enchs++;
+//    }
+        if(Config.enchJumpBoostEnable) {
             JumpBoost = new EnchantmentJumpBoost(Config.enchJumpBoostID, Config.enchJumpBoostWeight);
             MinecraftForge.EVENT_BUS.register(JumpBoost);
             Enchs++;
-/*
+        }/*
 
-        if(Config.enchLeadFootedEnable)
+        if(Config.enchLeadFootedEnable){
             LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
-*/      if(Config.enchLifeStealEnable)
+            }
+*/      if(Config.enchLifeStealEnable) {
             LifeSteal = new EnchantmentLifeSteal(Config.enchLifeStealID, Config.enchLifeStealWeight);
             MinecraftForge.EVENT_BUS.register(LifeSteal);
             Enchs++;
-
-        if(Config.enchPoisonEnable)
+        }
+        if(Config.enchPoisonEnable) {
             Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
             MinecraftForge.EVENT_BUS.register(Poison);
             Enchs++;
-
-        if(Config.enchRepairEnable)
+        }
+        if(Config.enchRepairEnable){
             Repair = new EnchantmentRepair(Config.enchRepairID, Config.enchRepairWeight);
         MinecraftForge.EVENT_BUS.register(Repair);
             Enchs++;
+        }
 /*
 
-        if(Config.enchShroudEnable)
+        if(Config.enchShroudEnable){
             Shroud = new EnchantmentShroud(Config.enchShroudID, Config.enchShroudWeight);
         MinecraftForge.EVENT_BUS.register(Shroud);
             Enchs++;
+        }
 */
 
-        if(Config.enchSwiftnessEnable)
+        if(Config.enchSwiftnessEnable){
             Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
             MinecraftForge.EVENT_BUS.register(Swiftness);
             Enchs++;
+        }
 /*
 
-        if(Config.enchStealthEnable)
+        if(Config.enchStealthEnable){
             Stealth = new EnchantmentStealth(Config.enchStealthID, Config.enchStealthWeight);
             MinecraftForge.EVENT_BUS.register(Stealth);
             Enchs++;
+            }
 */
-        if(Config.enchVampirismEnable)
+        if(Config.enchVampirismEnable) {
             Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);
             MinecraftForge.EVENT_BUS.register(Vampirism);
             Enchs++;
-
-        if(Config.enchVitalityEnable)
+        }
+        if(Config.enchVitalityEnable) {
             Vitality = new EnchantmentVitality(Config.enchVitalityID, Config.enchVitalityWeight);
             MinecraftForge.EVENT_BUS.register(Vitality);
             Enchs++;
-
-        if(Config.enchWitherProtectionEnable)
+        }
+        if(Config.enchWitherProtectionEnable) {
             WitherProtection = new EnchantmentWitherProtection(Config.enchWitherProtectionID, Config.enchWitherProtectionWeight);
             MinecraftForge.EVENT_BUS.register(WitherProtection);
             Enchs++;
-
+        }
         MinecraftForge.EVENT_BUS.register(new ArrowEventHookContainer());
         MinecraftForge.EVENT_BUS.register(new ArmorEventHookContainer());
         MinecraftForge.EVENT_BUS.register(new ToolEventHookContainer());
