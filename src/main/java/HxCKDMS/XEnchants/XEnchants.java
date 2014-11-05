@@ -14,7 +14,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
 
-
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 
 public class XEnchants
@@ -23,7 +22,6 @@ public class XEnchants
     public static XEnchants instance;
 
     public static Config Config;
-    private static int enchantsOffset;
 
     private int Enchs = 0;
 
@@ -37,13 +35,13 @@ public class XEnchants
     public static Enchantment FlameTouch;
     public static Enchantment Fly;
     public static Enchantment JumpBoost;
-    public static Enchantment LeadFooted;
+//    public static Enchantment LeadFooted;
     public static Enchantment LifeSteal;
     public static Enchantment Poison;
     public static Enchantment Repair;
-    public static Enchantment Shroud;
+//    public static Enchantment Shroud;
     public static Enchantment Swiftness;
-    public static Enchantment Stealth;
+//    public static Enchantment Stealth;
     public static Enchantment Vampirism;
     public static Enchantment Vitality;
     public static Enchantment WitherProtection;
@@ -52,7 +50,6 @@ public class XEnchants
     public void preinit(FMLPreInitializationEvent event)
     {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
-        extendEnchantsArray();
     }
 
     @EventHandler
@@ -182,15 +179,4 @@ public class XEnchants
     {
         event.getModState();
     }	
-    @SuppressWarnings("MismatchedReadAndWriteOfArray")
-    private static void extendEnchantsArray()
-    {
-        FMLCommonHandler.instance().getFMLLogger().log(Level.INFO, "[XEnchants] Extending Enchantment Array.");
-        enchantsOffset = Enchantment.enchantmentsList.length;
-        Enchantment[] enchantmentsList = new Enchantment[enchantsOffset + 256];
-        System.arraycopy(Enchantment.enchantmentsList, 0, enchantmentsList, 0, enchantsOffset);
-        HxCReflectionHelper.setPrivateFinalValue(Enchantment.class, null, enchantmentsList, "enchantmentsList", "field_76425_a");
-    }
-
-
 }
