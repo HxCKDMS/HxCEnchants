@@ -1,7 +1,5 @@
 package HxCKDMS.XEnchants.hooks;
 
-import java.util.List;
-
 import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,6 +13,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+
+import java.util.List;
 
 
 public class ArrowEventHookContainer 

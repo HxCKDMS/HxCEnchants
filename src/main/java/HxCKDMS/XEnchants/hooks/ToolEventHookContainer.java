@@ -1,7 +1,5 @@
 package HxCKDMS.XEnchants.hooks;
 
-import java.util.Random;
-
 import HxCKDMS.XEnchants.Config;
 import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -11,7 +9,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +24,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.Level;
+
+import java.util.Random;
 
 public class ToolEventHookContainer 
 {

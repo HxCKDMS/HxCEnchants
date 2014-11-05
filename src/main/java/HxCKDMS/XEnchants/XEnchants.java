@@ -1,15 +1,18 @@
 package HxCKDMS.XEnchants;
 
 import HxCKDMS.XEnchants.enchantment.*;
-import HxCKDMS.XEnchants.hooks.*;
+import HxCKDMS.XEnchants.hooks.ArmorEventHookContainer;
+import HxCKDMS.XEnchants.hooks.ArrowEventHookContainer;
+import HxCKDMS.XEnchants.hooks.ToolEventHookContainer;
 import HxCKDMS.XEnchants.lib.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
-import net.minecraft.enchantment.*;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
@@ -21,7 +24,7 @@ public class XEnchants
     @Instance(Reference.MOD_ID)
     public static XEnchants instance;
 
-    boolean DevMode = true;
+    boolean DevMode = false;
 
     public static Config Config;
 

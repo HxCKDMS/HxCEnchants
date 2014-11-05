@@ -1,6 +1,5 @@
 package HxCKDMS.XEnchants.enchantment;
 
-import HxCKDMS.XEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
