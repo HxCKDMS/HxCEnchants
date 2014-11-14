@@ -1,9 +1,9 @@
 package HxCKDMS.XEnchants;
 
 import HxCKDMS.XEnchants.enchantment.*;
-import HxCKDMS.XEnchants.hooks.ArmorEventHookContainer;
-import HxCKDMS.XEnchants.hooks.ArrowEventHookContainer;
-import HxCKDMS.XEnchants.hooks.ToolEventHookContainer;
+import HxCKDMS.XEnchants.Handlers.ArmorEventHandler;
+import HxCKDMS.XEnchants.Handlers.ArrowEventHandler;
+import HxCKDMS.XEnchants.Handlers.ToolEventHandler;
 import HxCKDMS.XEnchants.lib.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -184,9 +184,9 @@ public class XEnchants
             MinecraftForge.EVENT_BUS.register(WitherProtection);
             Enchs++;
         }
-        MinecraftForge.EVENT_BUS.register(new ArrowEventHookContainer());
-        MinecraftForge.EVENT_BUS.register(new ArmorEventHookContainer());
-        MinecraftForge.EVENT_BUS.register(new ToolEventHookContainer());
+        MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
 
         if (HxCKDMS.XEnchants.Config.DebugMode)
             FMLCommonHandler.instance().getFMLLogger().log(Level.DEBUG, "[XEnchants] " + Enchs + "Enchantments Have Been Registered");
