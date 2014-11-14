@@ -5,6 +5,7 @@ import HxCKDMS.XEnchants.Handlers.ArmorEventHandler;
 import HxCKDMS.XEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.XEnchants.Handlers.ToolEventHandler;
 import HxCKDMS.XEnchants.lib.Reference;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -12,12 +13,14 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+
 import org.apache.logging.log4j.Level;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES)
 
 public class XEnchants
 {
@@ -68,17 +71,16 @@ public class XEnchants
     @EventHandler
     public void init(FMLInitializationEvent event) {
         event.getModState();
-        FMLCommonHandler.instance().getFMLLogger().log(Level.INFO, "[XEnchants] " + Enchs + "Enchantments Have Been Registered");
         if (Config.enchAdrenalineBoostEnable) {
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
         }
-//        if(Config.enchAirStriderEnable){
-//            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
-//            MinecraftForge.EVENT_BUS.register(AirStrider);
-//            Enchs++;
-//}
+        if(Config.enchAirStriderEnable){
+            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
+            MinecraftForge.EVENT_BUS.register(AirStrider);
+            Enchs++;
+        }
 
         if (Config.enchRegenEnable) {
             ArmorRegen = new EnchantmentRegen(Config.enchRegenID, Config.enchRegenWeight);
@@ -116,11 +118,11 @@ public class XEnchants
             MinecraftForge.EVENT_BUS.register(FlameTouch);
             Enchs++;
         }
-//        if(HxCKDMS.XEnchants.Config.enchFlyEnable){
-//            Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
-//            MinecraftForge.EVENT_BUS.register(Fly);
-//            Enchs++;
-//    }
+        if(HxCKDMS.XEnchants.Config.enchFlyEnable){
+            Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
+            MinecraftForge.EVENT_BUS.register(Fly);
+            Enchs++;
+        }
         if(Config.enchJumpBoostEnable) {
             JumpBoost = new EnchantmentJumpBoost(Config.enchJumpBoostID, Config.enchJumpBoostWeight);
             MinecraftForge.EVENT_BUS.register(JumpBoost);

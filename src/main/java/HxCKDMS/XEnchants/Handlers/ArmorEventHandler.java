@@ -3,6 +3,7 @@ package HxCKDMS.XEnchants.Handlers;
 import HxCKDMS.XEnchants.Config;
 import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -79,12 +80,12 @@ public class ArmorEventHandler
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
 //            AttributeModifier LeadFoot = new AttributeModifier(SpeedUUID, "LeadFoot", LeadFootedLevel*10, 1);
-            //AttributeModifier ShroudBuff = new AttributeModifier(ShroudUUID, "ShroudBuff", Shroud, 1);
+//            AttributeModifier ShroudBuff = new AttributeModifier(ShroudUUID, "ShroudBuff", Shroud, 1);
 
             ph.removeModifier(HealthBuff);
             ps.removeModifier(SpeedBuff);
 //            kr.removeModifier(LeadFoot);
-            //fr.removeModifier(ShroudBuff);
+//            fr.removeModifier(ShroudBuff);
 
             ArmourHelm = player.getCurrentArmor(3);
             ArmourChest = player.getCurrentArmor(2);
@@ -135,23 +136,7 @@ public class ArmorEventHandler
                 {
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 }
-/*
-                if(AirStriderLevel > 0){FlightSpeedBuff = AirStriderLevel * 0.1F;}
-                if (player.capabilities.isFlying && AirStriderLevel > 0){
-                    if(player.motionX > 0)
-                    {
-                        player.motionX += FlightSpeedBuff;
-                    }
-                    if(player.motionY > 0)
-                    {
-                        player.motionY += FlightSpeedBuff;
-                    }
-                    if(player.motionZ > 0)
-                    {
-                        player.motionZ += FlightSpeedBuff;
-                    }
-                }
-*/
+
 
                 if(VitalityLevel > 0)
                 {
@@ -246,4 +231,23 @@ public class ArmorEventHandler
             player.motionY += JumpBuff;
 		}
 	}
+    @SubscribeEvent
+    public void playerFlying(PlayerEvent event)
+    {
+        EntityPlayer player = event.player;
+        if(player.worldObj.isRemote && AirStriderLevel > 0 && player.capabilities.isFlying)
+        {
+            System.out.println("Triggered");
+            FlightSpeedBuff = AirStriderLevel * 0.1F;
+            if (player.motionX > 0){
+                player.motionX += FlightSpeedBuff;
+            }
+            if (player.motionY > 0){
+                player.motionY += FlightSpeedBuff;
+            }
+            if (player.motionZ > 0){
+                player.motionZ += FlightSpeedBuff;
+            }
+        }
+    }
 }
