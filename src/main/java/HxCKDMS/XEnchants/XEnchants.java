@@ -1,11 +1,11 @@
 package HxCKDMS.XEnchants;
 
-import HxCKDMS.XEnchants.enchantment.*;
+import HxCKDMS.HxCCore.Utils.LogHelper;
 import HxCKDMS.XEnchants.Handlers.ArmorEventHandler;
 import HxCKDMS.XEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.XEnchants.Handlers.ToolEventHandler;
+import HxCKDMS.XEnchants.enchantment.*;
 import HxCKDMS.XEnchants.lib.Reference;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -13,11 +13,9 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-
 import org.apache.logging.log4j.Level;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES)
@@ -43,7 +41,7 @@ public class XEnchants
     public static Enchantment FlameTouch;
     public static Enchantment Fly;
     public static Enchantment JumpBoost;
-//    public static Enchantment LeadFooted;
+    public static Enchantment LeadFooted;
     public static Enchantment LifeSteal;
     public static Enchantment Poison;
     public static Enchantment Repair;
@@ -57,7 +55,8 @@ public class XEnchants
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {
-        Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));try {
+        Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
+        try {
         Class.forName( "HxCKDMS.HxCCore.HxCCore" );
         } catch( ClassNotFoundException e ) {
             if (HxCKDMS.XEnchants.Config.DebugMode || DevMode){
@@ -106,13 +105,14 @@ public class XEnchants
             BattleHealing = new EnchantmentBattleHealing(Config.enchBattleHealingID, Config.enchBattleHealingWeight);
             MinecraftForge.EVENT_BUS.register(BattleHealing);
             Enchs++;
-        }/*
+        }
+/*
         if(Config.enchBoundEnable){
             Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
             MinecraftForge.EVENT_BUS.register(Bound);
             Enchs++;
-}*/
-
+        }
+*/
         if (Config.enchFlameTouchEnable) {
             FlameTouch = new EnchantmentFlameTouch(Config.enchFlameTouchID, Config.enchFlameTouchWeight);
             MinecraftForge.EVENT_BUS.register(FlameTouch);
@@ -127,14 +127,8 @@ public class XEnchants
             JumpBoost = new EnchantmentJumpBoost(Config.enchJumpBoostID, Config.enchJumpBoostWeight);
             MinecraftForge.EVENT_BUS.register(JumpBoost);
             Enchs++;
-        }/*
-
-        if(Config.enchLeadFootedEnable){
-            LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
-            MinecraftForge.EVENT_BUS.register(LeadFooted);
-            Enchs++;
-            }
-*/      if(Config.enchLifeStealEnable) {
+        }
+        if(Config.enchLifeStealEnable) {
             LifeSteal = new EnchantmentLifeSteal(Config.enchLifeStealID, Config.enchLifeStealWeight);
             MinecraftForge.EVENT_BUS.register(LifeSteal);
             Enchs++;
@@ -150,26 +144,23 @@ public class XEnchants
             Enchs++;
         }
 /*
-
         if(Config.enchShroudEnable){
             Shroud = new EnchantmentShroud(Config.enchShroudID, Config.enchShroudWeight);
         MinecraftForge.EVENT_BUS.register(Shroud);
             Enchs++;
         }
 */
-
         if(Config.enchSwiftnessEnable){
             Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
             MinecraftForge.EVENT_BUS.register(Swiftness);
             Enchs++;
         }
 /*
-
         if(Config.enchStealthEnable){
             Stealth = new EnchantmentStealth(Config.enchStealthID, Config.enchStealthWeight);
             MinecraftForge.EVENT_BUS.register(Stealth);
             Enchs++;
-            }
+        }
 */
         if(Config.enchVampirismEnable) {
             Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);
@@ -191,7 +182,7 @@ public class XEnchants
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
 
         if (HxCKDMS.XEnchants.Config.DebugMode)
-            FMLCommonHandler.instance().getFMLLogger().log(Level.DEBUG, "[XEnchants] " + Enchs + "Enchantments Have Been Registered");
+            LogHelper.debug(Level.DEBUG, Enchs + "Enchantments Have Been Registered");
     }
     
     @EventHandler

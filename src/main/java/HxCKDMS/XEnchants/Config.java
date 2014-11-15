@@ -114,7 +114,7 @@ public class Config
     public static int enchWitherProtectionLVL;
     public int enchWitherProtectionWeight;
 
-    int defaultEnchantID = 120;
+    int defaultEnchantID = 320;
 
     public Config(Configuration config)
     {
@@ -172,12 +172,12 @@ public class Config
         enchJumpBoostEnable = config.get("Armor", "Jump Boost Enable", true).getBoolean(true);
         enchJumpBoostLVL = config.get("Armor", "Jump Boost Max Level", 4).getInt();
         enchJumpBoostWeight = config.get("Armor", "Jump Boost eWeight", 2).getInt();
-
+/*
         enchLeadFootedID = config.get("Armor", "Lead Footed ID", defaultEnchantID +10).getInt();
         enchLeadFootedEnable = config.get("Armor", "Lead Footed Enable", true).getBoolean(true);
         enchLeadFootedLVL = config.get("Armor", "Lead Footed Max Level", 1).getInt();
         enchLeadFootedWeight = config.get("Armor", "Lead Footed Weight", 2).getInt();
-
+*/
         enchLifeStealID = config.get("Sword", "Life Steal ID", defaultEnchantID +20).getInt();
         enchLifeStealEnable = config.get("Sword", "Life Steal Enable", true).getBoolean(true);
         enchLifeStealLVL = config.get("Sword", "Life Steal Max Level", 1).getInt();
