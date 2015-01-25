@@ -17,9 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "Beta-1.1"
-group= "HxCKDMS.XEnchants" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "XEnchants"
+version = "1.7.10-1.4"
+group= "HxCKDMS.HxCEnchants" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "HxCEnchants"
 
 minecraft {
     version = "1.7.10-10.13.2.1230"
@@ -31,7 +31,9 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      
+	
+    runtime files('libs/HxCCore-1.7.10-1.8-dev.jar')
+	
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env

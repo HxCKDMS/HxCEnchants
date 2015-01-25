@@ -1,5 +1,7 @@
 package HxCKDMS.XEnchants.Handlers;
 
+import HxCKDMS.HxCCore.Handlers.NBTFileIO;
+import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.XEnchants.Config;
 import HxCKDMS.XEnchants.XEnchants;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -8,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
@@ -18,13 +19,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.Level;
 
+import java.io.File;
 import java.util.Random;
 
 public class ToolEventHandler
@@ -33,9 +37,6 @@ public class ToolEventHandler
 	int VampireLevel;
 	int AutoSmeltLevel;
     int LifeStealLevel;
-    int UndeadEaten = 0;
-    int VillagersEaten = 0;
-    int PlayersEaten = 0;
     float VBRV = 0;
 
     Random random = new Random();
@@ -44,12 +45,12 @@ public class ToolEventHandler
 
 	// Misc. variables
     @SubscribeEvent
-    public void LivingAttackEvent(LivingAttackEvent event){
-        EntityLivingBase entity = event.entityLiving;
+    public void LivingHurtEvent(LivingHurtEvent event){
+        Entity hurtent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP){
+        if (ent instanceof EntityPlayerMP && hurtent instanceof EntityLiving){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
-            EntityLiving Victim = (EntityLiving) entity;
+            EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
             LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.LifeSteal.effectId, item);
             if (LifeStealLevel > 0){
@@ -64,19 +65,34 @@ public class ToolEventHandler
 	@SubscribeEvent
 	public void LivingDeathEvent(LivingDeathEvent event)
 	{
-        EntityLivingBase entity = event.entityLiving;
+        Entity deadent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP){
+        if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP)){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
-            ItemStack item = Attacker.getHeldItem();
-            VampireLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, item);
-            if (VampireLevel > 0){
-                if (entity instanceof EntityAnimal){
+            String UUID = Attacker.getUniqueID().toString();
+
+            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+            NBTTagCompound EatingTracker = NBTFileIO.getNbtTagCompound(CustomPlayerData, "xenchants");
+
+            int UndeadEaten = EatingTracker.getInteger("UndeadEaten");
+            int VillagersEaten = EatingTracker.getInteger("VillagersEaten");
+            int PlayersEaten = EatingTracker.getInteger("PlayersEaten");
+
+            ItemStack item;
+            if (Attacker.getHeldItem().getItem() instanceof ItemSword) {item = Attacker.getHeldItem();}
+            else item = null;
+            if (item != null) VampireLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.Vampirism.effectId, item);
+            else VampireLevel = 0;
+
+            if (VampireLevel > 0) {
+                if (deadent instanceof EntityAnimal){
                     VBRV = 1.3F;
-                }else if (entity instanceof EntityPlayerMP){
+                }else if (deadent instanceof EntityPlayerMP){
                     VBRV = 10;
                     if(Config.Feedback){
-                        PlayersEaten++;
+                        int NP = PlayersEaten++;
+                        EatingTracker.setInteger("PlayersEaten", NP);
+                        NBTFileIO.setNbtTagCompound(CustomPlayerData, "xenchants", EatingTracker);
                         if (PlayersEaten == 0) {
                             Attacker.addChatMessage(new ChatComponentText("\u00A74This tastes lovely."));
                         }if (PlayersEaten == 16) {
@@ -91,10 +107,12 @@ public class ToolEventHandler
                             Attacker.addChatMessage(new ChatComponentText("\u00A74Well this addiction is difficult to end."));
                         }
                     }
-                }else if (entity instanceof EntityVillager){
+                }else if (deadent instanceof EntityVillager){
                     VBRV = 8.5F;
                     if(Config.Feedback){
-                        VillagersEaten++;
+                        int NV = VillagersEaten++;
+                        EatingTracker.setInteger("PlayersEaten", NV);
+                        NBTFileIO.setNbtTagCompound(CustomPlayerData, "xenchants", EatingTracker);
                         if (VillagersEaten == 0) {
                             Attacker.addChatMessage(new ChatComponentText("\u00A74Wow this blood is rich."));
                         }if (VillagersEaten == 16) {
@@ -109,10 +127,12 @@ public class ToolEventHandler
                             Attacker.addChatMessage(new ChatComponentText("\u00A74I may need to get a blood test for any STDs."));
                         }
                     }
-                }else if (entity.isEntityUndead()){
+                }else if (((EntityLiving) deadent).isEntityUndead()){
                     VBRV = -1;
                     if(Config.Feedback){
-                        UndeadEaten++;
+                        int NU = UndeadEaten++;
+                        EatingTracker.setInteger("UndeadEaten", NU);
+                        NBTFileIO.setNbtTagCompound(CustomPlayerData, "xenchants", EatingTracker);
                         if (UndeadEaten == 0) {
                             Attacker.addChatMessage(new ChatComponentText("\u00A74Yuck"));
                         }if (UndeadEaten == 16) {
@@ -129,17 +149,17 @@ public class ToolEventHandler
                             Attacker.addChatMessage(new ChatComponentText("\u00A74Can these things stop coming near me? I am tired of eating them. :("));
                         }
                     }
-                }else if (entity instanceof EntitySlime){
+                }else if (deadent instanceof EntitySlime){
                     VBRV = 1.1F;
-                }else if (entity instanceof EntityEnderman){
+                }else if (deadent instanceof EntityEnderman){
                     VBRV = 2.2F;
-                }else if (entity instanceof EntityMob){
+                }else if (deadent instanceof EntityMob){
                     VBRV = 3.2F;
                 }else{
                     VBRV = 1.25F;
                 }
                 int curFood = Attacker.getFoodStats().getFoodLevel();
-                float newFud = (VBRV * VampireLevel) + curFood;
+                float newFud = (VBRV/4 * VampireLevel) + curFood;
                 if (curFood < 40 && newFud < 40){
                     Attacker.getFoodStats().setFoodLevel(Math.round(newFud));
                 }else if (curFood < 40 && newFud > 40){
@@ -156,14 +176,13 @@ public class ToolEventHandler
 	public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event)
 	{
         if (event.harvester != null){
-		EntityPlayer player = event.harvester;
-		Block block = event.block;
-        ItemStack itemStackBlock = new ItemStack(Item.getItemFromBlock(block), 1);
-        ItemStack heldItem = player.getHeldItem();
-        ItemStack result;
+            EntityPlayer player = event.harvester;
+            Block block = event.block;
+            ItemStack itemStackBlock = new ItemStack(Item.getItemFromBlock(block), 1);
+            ItemStack heldItem = player.getHeldItem();
+            ItemStack result;
 
-		AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
-
+            AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(XEnchants.FlameTouch.effectId, heldItem);
             if(AutoSmeltLevel > 0)
             {
                 result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
@@ -177,6 +196,6 @@ public class ToolEventHandler
                     event.drops.add(result);
                 }
             }
-    	}
+        }
     }
 }
