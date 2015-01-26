@@ -5,6 +5,8 @@ import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -142,7 +144,6 @@ public class ArmorEventHandler
                         xe.setBoolean("EFlyHasChanged", false);
                     }
                 }
-
                 if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
 
                 if(VitalityLevel > 0) ph.applyModifier(HealthBuff);
@@ -159,9 +160,8 @@ public class ArmorEventHandler
                     ShouldRepair = (Config.enchRepairRate * 20);
                 }
 
-                if(!player.worldObj.isRemote && AirStriderLevel > 0 && isFlying) {
-                    FlightSpeedBuff = AirStriderLevel * 0.25F;
-                    player.capabilities.setFlySpeed(FlightSpeedBuff);
+                if(!player.worldObj.isRemote) {
+                    airStride(player, AirStriderLevel);
                 }
         }
 	}
@@ -223,4 +223,13 @@ public class ArmorEventHandler
             player.motionY += JumpBuff;
 		}
 	}
+    @SideOnly(Side.CLIENT)
+    public void airStride (EntityPlayer player, int AirStriderLevel) {
+        if (AirStriderLevel > 0){
+            float Speed = ((AirStriderLevel*0.1f) + 0.05f);
+            player.capabilities.setFlySpeed(Speed);
+        } else {
+            player.capabilities.setFlySpeed(0.05f);
+        }
+    }
 }
