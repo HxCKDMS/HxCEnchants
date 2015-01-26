@@ -154,7 +154,7 @@ public class Config
 
         /** Armor Enchants **/
         enchAdrenalineBoostEnable = config.getBoolean("AdrenalineBoost", "Armor Enchants", true, "Enable Enchant Adrenaline Boost?");
-        enchAirStriderEnable = config.getBoolean("AirStrider", "Armor Enchants", true, "Enable Enchant Air Strider?");
+        enchAirStriderEnable = config.getBoolean("AirStrider", "Armor Enchants", false, "Enable Enchant Air Strider? DISABLED IT IS BROKEN");
         enchBattleHealingEnable = config.getBoolean("BattleHealing", "Armor Enchants", true, "Enable Enchant Battle Healing?");
         enchFlyEnable = config.getBoolean("Fly", "Armor Enchants", true, "Enable Enchant Fly?");
         enchJumpBoostEnable = config.getBoolean("JumpBoost", "Armor Enchants", true, "Enable Enchant Jump Boost");

@@ -5,8 +5,6 @@ import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -118,7 +116,7 @@ public class ArmorEventHandler
 
             //Boot Enchants
             FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
-            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
+//            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
 //            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourBoots);
 //            StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
             B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
@@ -159,10 +157,11 @@ public class ArmorEventHandler
                     RepairItems(player);
                     ShouldRepair = (Config.enchRepairRate * 20);
                 }
-
+/*
                 if(!player.worldObj.isRemote) {
                     airStride(player, AirStriderLevel);
                 }
+*/
         }
 	}
 
@@ -223,6 +222,7 @@ public class ArmorEventHandler
             player.motionY += JumpBuff;
 		}
 	}
+	/*
     @SideOnly(Side.CLIENT)
     public void airStride (EntityPlayer player, int AirStriderLevel) {
         if (AirStriderLevel > 0){
@@ -232,4 +232,5 @@ public class ArmorEventHandler
             player.capabilities.setFlySpeed(0.05f);
         }
     }
+	*/
 }
