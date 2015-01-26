@@ -226,7 +226,7 @@ public class ArmorEventHandler
     @SideOnly(Side.CLIENT)
     public void airStride (EntityPlayer player, int AirStriderLevel) {
         if (AirStriderLevel > 0){
-            float Speed = ((AirStriderLevel*0.1f) + 0.05f);
+            float Speed = ((AirStriderLevel*0.5f) + 0.05f);
             player.capabilities.setFlySpeed(Speed);
         } else {
             player.capabilities.setFlySpeed(0.05f);
