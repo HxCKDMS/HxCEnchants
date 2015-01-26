@@ -3,7 +3,7 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.HxCEnchants;
+import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -24,7 +24,6 @@ import java.util.UUID;
 
 public class ArmorEventHandler
 {
-    boolean CanFly;
     boolean isFlying;
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
@@ -44,7 +43,7 @@ public class ArmorEventHandler
     int FlyLevel;
     int RegenLevel;
     int SpeedLevel;
-    int LeadFootedLevel;
+//    int LeadFootedLevel;
 //    int StealthLevel;
 //    int ShroudLevel;
 //    int ShroudLevel1;
@@ -98,32 +97,32 @@ public class ArmorEventHandler
             ArmourBoots = player.inventory.armorItemInSlot(0);
 
             //Helmet Enchants
-            AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.AdrenalineBoost.effectId, ArmourHelm);
-            WitherProt = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.WitherProtection.effectId, ArmourHelm);
-//            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Shroud.effectId, ArmourHelm);
-            H = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArmorRegen.effectId, ArmourHelm);
+            AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
+            WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
+//            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourHelm);
+            H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
 
             //Chestplate Enchants
-            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Vitality.effectId, ArmourChest);
-            BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.BattleHealing.effectId, ArmourChest);
-//            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Shroud.effectId, ArmourChest);
-            C = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArmorRegen.effectId, ArmourChest);
+            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
+            BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
+//            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourChest);
+            C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
 
             //Legging Enchants
-            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Swiftness.effectId, ArmourLegs);
-            JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.JumpBoost.effectId, ArmourLegs);
-//            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Shroud.effectId, ArmourLegs);
-            L = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArmorRegen.effectId, ArmourLegs);
+            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
+            JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ArmourLegs);
+//            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourLegs);
+            L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
 
             //Boot Enchants
-            FlyLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Fly.effectId, ArmourBoots);
-            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.AirStrider.effectId, ArmourBoots);
-//            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Shroud.effectId, ArmourBoots);
-//            StealthLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Stealth.effectId, ArmourBoots);
-            B = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArmorRegen.effectId, ArmourBoots);
+            FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
+            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
+//            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourBoots);
+//            StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
+            B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
 
             //Other Enchants
-//                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(HxCEnchants.Bound.effectId, Armour);
+//                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(Enchants.Bound.effectId, Armour);
 
             RegenLevel = (H + C + L + B);
             Vitality = VitalityLevel * 0.5F;
@@ -173,7 +172,7 @@ public class ArmorEventHandler
         for(int j = 0; j < 36; j++){
             Inv = player.inventory.getStackInSlot(j);
             if (Inv != null && Inv.isItemStackDamageable()){
-                int a = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Repair.effectId, Inv);
+                int a = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Inv);
                 int b = Inv.getItemDamage() - a;
                 if (Inv.getItemDamage() < Inv.getMaxDamage())
                 {
@@ -184,7 +183,7 @@ public class ArmorEventHandler
         for(int j = 0; j < 4; j++){
             Armor = player.getCurrentArmor(j);
             if (Armor != null && Armor.isItemStackDamageable()){
-                int c = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Repair.effectId, Armor);
+                int c = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Armor);
                 int d = Armor.getItemDamage() - c;
                 if (Armor.getItemDamage() < Armor.getMaxDamage())
                 {

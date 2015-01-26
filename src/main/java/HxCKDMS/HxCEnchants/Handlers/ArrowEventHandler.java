@@ -1,6 +1,7 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
-import HxCKDMS.HxCEnchants.HxCEnchants;
+import HxCKDMS.HxCEnchants.Config;
+import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
@@ -41,10 +42,10 @@ public class ArrowEventHandler
         isZeus = false;
         isPoison = false;
 
-        ZeusLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArrowLightning.effectId, stack);
-        HomingLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArrowSeeking.effectId, stack);
-        ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.ArrowExplosive.effectId, stack);
-        PoisonLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Poison.effectId, stack);
+        ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
+        HomingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowSeeking.effectId, stack);
+        ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowExplosive.effectId, stack);
+        PoisonLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
 
         if(ExplosionLevel > 0){
             isExplosive = true;
@@ -63,12 +64,12 @@ public class ArrowEventHandler
         if(event.entityLiving instanceof EntityLiving){
             EntityLivingBase ent = event.entityLiving;
             if (event.source.isProjectile() && isExplosive) {
-                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, true);
+                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Config.EDT);
             } else if (event.source.isProjectile() && isHoming) {
                 float damage = 6;
                 ent.attackEntityFrom(DamageSource.generic, damage);
             } else if (event.source.isProjectile() && isZeus) {
-                ent.worldObj.spawnEntityInWorld(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY, ent.posZ));
+                ent.worldObj.spawnEntityInWorld(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
             } else if (event.source.isProjectile() && isPoison) {
                 ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
             }

@@ -3,13 +3,14 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.HxCEnchants;
+import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
@@ -35,6 +36,7 @@ public class ToolEventHandler
 {
 	// Integers, ya idiot
 	int VampireLevel;
+    int ExamineLevel;
 	int AutoSmeltLevel;
     int LifeStealLevel;
     float VBRV = 0;
@@ -52,7 +54,7 @@ public class ToolEventHandler
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
-            LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.LifeSteal.effectId, item);
+            LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
             if (LifeStealLevel > 0){
                 double PH = Victim.prevHealth;
                 double CH = Victim.getHealth();
@@ -80,8 +82,16 @@ public class ToolEventHandler
             ItemStack item;
             if (Attacker.getHeldItem().getItem() instanceof ItemSword) {item = Attacker.getHeldItem();}
             else item = null;
-            if (item != null) VampireLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.Vampirism.effectId, item);
+            if (item != null) VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
             else VampireLevel = 0;
+            if (item != null) ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
+            else ExamineLevel = 0;
+
+            if (ExamineLevel > 0){
+                if (deadent instanceof EntityLiving) {
+                    deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY+1, deadent.posZ, ExamineLevel*Config.enchXPrate));
+                }
+            }
 
             if (VampireLevel > 0) {
                 if (deadent instanceof EntityAnimal){
@@ -167,7 +177,7 @@ public class ToolEventHandler
                     Attacker.getFoodStats().setFoodLevel(40);
                 }
                 if (Config.DebugMode)
-                    FMLCommonHandler.instance().getFMLLogger().log(Level.DEBUG, "[HxCEnchants] Setting " + Attacker + "'s Food Level to" + newFud);
+                    FMLCommonHandler.instance().getFMLLogger().log(Level.DEBUG, "[Enchants] Setting " + Attacker + "'s Food Level to" + newFud);
             }
         }
 	}
@@ -180,7 +190,7 @@ public class ToolEventHandler
             ItemStack heldItem = player.getHeldItem();
             ItemStack result;
 
-            AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(HxCEnchants.FlameTouch.effectId, heldItem);
+            AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
             if(AutoSmeltLevel > 0) {
                 result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
 
