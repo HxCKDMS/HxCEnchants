@@ -1,9 +1,9 @@
 [
   {
-    "modid": "XEnchants",
-    "name": "DrZed's Extra Enchants",
+    "modid": "HxCEnchants",
+    "name": "HxC Enchants",
     "description": "Adds New/Better enchants to the game",
-    "version": "Beta-1.1",
+    "version": "1.7.10-1.5b",
     "credits": "Merged old Enchants mod from BrassGoggledArchivists and got some help from friends",
     "mcversion": "1.7.10",
     "authors": ["§4HxCK§3D§eM§0S§r"],
