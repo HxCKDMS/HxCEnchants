@@ -154,7 +154,7 @@ public class Config
 
         /** Armor Enchants **/
         enchAdrenalineBoostEnable = config.getBoolean("AdrenalineBoost", "Armor Enchants", true, "Enable Enchant Adrenaline Boost?");
-        enchAirStriderEnable = config.getBoolean("AirStrider", "Armor Enchants", false, "Enable Enchant Air Strider? DISABLED IT IS BROKEN");
+        enchAirStriderEnable = config.getBoolean("AirStrider", "Armor Enchants", false, "Enable Enchant Air Strider? DOESN'T WORK SERVER SIDE");
         enchBattleHealingEnable = config.getBoolean("BattleHealing", "Armor Enchants", true, "Enable Enchant Battle Healing?");
         enchFlyEnable = config.getBoolean("Fly", "Armor Enchants", true, "Enable Enchant Fly?");
         enchJumpBoostEnable = config.getBoolean("JumpBoost", "Armor Enchants", true, "Enable Enchant Jump Boost");
@@ -166,7 +166,7 @@ public class Config
         enchBoundEnable = config.getBoolean("Bound", "Armor Enchants", false, "Enable Enchant Bound? DISABLED IT IS BROKEN");
         enchLeadFootedEnable = config.getBoolean("LeadFooted", "Armor Enchants", false, "Enable Enchant Lead Footed? DISABLED IT IS BROKEN");
         enchShroudEnable = config.getBoolean("Shroud", "Armor Enchants", false, "Enable Enchant Shroud? DISABLED IT IS BROKEN");
-        enchStealthEnable = config.getBoolean("Stealth", "Armor Enchants", false, "Enable Enchant Stealth? DISABLED IT IS BROKEN");
+        enchStealthEnable = config.getBoolean("Stealth", "Armor Enchants", true, "Enable Enchant Stealth?");
 
         enchAdrenalineBoostID = config.getInt("AdrenalineBoostID", "Armor Enchant IDs", 300, 300, 320, "");
         enchAirStriderID = config.getInt("AirStriderID", "Armor Enchant IDs", 301, 300, 320, "");

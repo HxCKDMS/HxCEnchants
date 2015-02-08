@@ -100,7 +100,7 @@ public class Enchants {
             Enchs++;
         }
         if(Config.enchLeadFootedEnable) {
-            LeadFooted = new EnchantmentLifeSteal(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
+            LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
         }
