@@ -71,7 +71,7 @@ public class ToolEventHandler
         if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP)){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             String UUID = Attacker.getUniqueID().toString();
-
+        try{
             File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
             NBTTagCompound EatingTracker = NBTFileIO.getNbtTagCompound(CustomPlayerData, "xenchants");
 
@@ -179,6 +179,7 @@ public class ToolEventHandler
                 if (Config.DebugMode)
                     FMLCommonHandler.instance().getFMLLogger().log(Level.DEBUG, "[Enchants] Setting " + Attacker + "'s Food Level to" + newFud);
             }
+        } catch (Exception ignored) {}
         }
 	}
 	@SubscribeEvent
