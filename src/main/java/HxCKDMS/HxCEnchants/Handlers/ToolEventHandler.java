@@ -24,6 +24,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -68,7 +69,7 @@ public class ToolEventHandler
 	public void LivingDeathEvent(LivingDeathEvent event) {
         Entity deadent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP)){
+        if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP) && (!((EntityPlayerMP) ent).getDisplayName().contains("[")) && !(ent instanceof FakePlayer)){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             String UUID = Attacker.getUniqueID().toString();
         try{

@@ -100,33 +100,33 @@ public class ArmorEventHandler
             ArmourBoots = player.inventory.armorItemInSlot(0);
 
             //Helmet Enchants
-            AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
-            WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
+            if (Config.enchAdrenalineBoostEnable)AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
+            if (Config.enchWitherProtectionEnable)WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
 //            RepairLevel1 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourHelm);
 //            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourHelm);
-            H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
+            if (Config.enchRegenEnable)H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
 
             //Chestplate Enchants
-            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
-            BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
+            if (Config.enchVitalityEnable)VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
+            if (Config.enchBattleHealingEnable)BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
 //            RepairLevel2 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourChest);
 //            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourChest);
-            C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
+            if (Config.enchRegenEnable)C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
 
             //Legging Enchants
-            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
-            JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ArmourLegs);
+            if (Config.enchSwiftnessEnable)SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
+            if (Config.enchJumpBoostEnable)JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ArmourLegs);
 //            RepairLevel3 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourLegs);
 //            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourLegs);
-            L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
+            if (Config.enchRegenEnable)L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
 
             //Boot Enchants
-            FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
+            if (Config.enchFlyEnable)FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
 //            RepairLevel4 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourBoots);
-            AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
+            if (Config.enchAirStriderEnable)AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
 //            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourBoots);
-            StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
-            B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
+            if (Config.enchStealthEnable)StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
+            if (Config.enchRegenEnable)B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
 
             //Other Enchants
 //                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(Enchants.Bound.effectId, Armour);
@@ -161,7 +161,7 @@ public class ArmorEventHandler
                     CanRegen = Config.enchRegenRate * 20;
                 }
 
-                if(ShouldRepair <= 0) {
+                if(Config.enchRepairEnable && ShouldRepair <= 0) {
                     RepairItems(player);
                     ShouldRepair = (Config.enchRepairRate * 20);
                 }
