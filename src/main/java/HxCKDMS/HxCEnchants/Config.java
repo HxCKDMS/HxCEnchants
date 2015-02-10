@@ -90,6 +90,11 @@ public class Config
     public static int enchShroudLVL;
     public static int enchShroudWeight;
 
+    public static int enchSoulTearID;
+    public static boolean enchSoulTearEnable;
+    public static int enchSoulTearLVL;
+    public static int enchSoulTearWeight;
+
     public static int enchSwiftnessID;
     public static boolean enchSwiftnessEnable;
     public static int enchSwiftnessLVL;

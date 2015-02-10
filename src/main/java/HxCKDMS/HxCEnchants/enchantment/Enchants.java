@@ -26,6 +26,7 @@ public class Enchants {
     public static Enchantment Poison;
     public static Enchantment Repair;
     public static Enchantment Shroud;
+    public static Enchantment SoulTear;
     public static Enchantment Swiftness;
     public static Enchantment Stealth;
     public static Enchantment Vampirism;
@@ -117,6 +118,11 @@ public class Enchants {
         if(Config.enchShroudEnable){
             Shroud = new EnchantmentShroud(Config.enchShroudID, Config.enchShroudWeight);
             MinecraftForge.EVENT_BUS.register(Shroud);
+            Enchs++;
+        }
+        if(Config.enchSoulTearEnable){
+            SoulTear = new EnchantmentSoulTear(Config.enchSoulTearID, Config.enchSoulTearWeight);
+            MinecraftForge.EVENT_BUS.register(SoulTear);
             Enchs++;
         }
         if(Config.enchSwiftnessEnable){

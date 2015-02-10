@@ -12,7 +12,7 @@ public class EnchantmentFly extends Enchantment {
 
     @Override
     public int getMinEnchantability(int par1) {
-        return 15;
+        return 25;
     }
 
     @Override
