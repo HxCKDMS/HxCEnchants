@@ -13,7 +13,7 @@ public class EnchantmentWitherProtection extends Enchantment {
     @Override
     public int getMinEnchantability(int par1)
     {
-        return 15;
+        return 25;
     }
     
     @Override
@@ -25,6 +25,11 @@ public class EnchantmentWitherProtection extends Enchantment {
     @Override
     public int getMaxLevel()
     {
-        return 1;
+        return 10;
+    }
+
+    @Override
+    public int getMinLevel() {
+        return 10;
     }
 }
