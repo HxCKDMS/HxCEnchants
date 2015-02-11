@@ -5,11 +5,11 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
 
-public class EnchantmentAdrenalineBoost extends Enchantment {
+public class EnchantmentThickAura extends Enchantment {
 
-    public EnchantmentAdrenalineBoost(int id, int weight) {
-        super(id, weight, EnumEnchantmentType.armor_head);
-        this.setName("AdrenalineBoost");
+    public EnchantmentThickAura(int id, int weight) {
+        super(id, weight, EnumEnchantmentType.armor);
+        this.setName("ThickAura");
     }
     
     @Override
@@ -27,6 +27,6 @@ public class EnchantmentAdrenalineBoost extends Enchantment {
     @Override
     public int getMaxLevel()
     {
-        return Config.enchAdrenalineBoostLVL;
+        return Config.enchAuraThickLVL;
     }
 }

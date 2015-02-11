@@ -13,15 +13,15 @@ public class EnchantmentArrowExplosive extends Enchantment
 	}
 
 	@Override
-	public int getMinEnchantability(int i)
+	public int getMinEnchantability(int par1)
 	{
-		return 5 + (12 + (i - 1));
+		return 25;
 	}
 
 	@Override
-	public int getMaxEnchantability(int i)
+	public int getMaxEnchantability(int par1)
 	{
-		return getMinEnchantability(i) + 20;
+		return getMinEnchantability(par1) + 50;
 	}
 
 	@Override

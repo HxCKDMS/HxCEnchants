@@ -11,6 +11,11 @@ public class Enchants {
     private static int Enchs = 0;
 
     public static Enchantment AdrenalineBoost;
+    public static Enchantment AuraDark;
+    public static Enchantment AuraDeadly;
+    public static Enchantment AuraFiery;
+    public static Enchantment AuraThick;
+    public static Enchantment AuraToxic;
     public static Enchantment AirStrider;
     public static Enchantment ArmorRegen;
     public static Enchantment ArrowExplosive;
@@ -38,6 +43,31 @@ public class Enchants {
         if (Config.enchAdrenalineBoostEnable) {
             AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
+            Enchs++;
+        }
+        if (Config.enchAuraDarkEnable) {
+            AuraDark = new EnchantmentDarkAura(Config.enchAuraDarkID, Config.enchAuraDarkWeight);
+            MinecraftForge.EVENT_BUS.register(AuraDark);
+            Enchs++;
+        }
+        if (Config.enchAuraDeadlyEnable) {
+            AuraDeadly = new EnchantmentDeadlyAura(Config.enchAuraDeadlyID, Config.enchAuraDeadlyWeight);
+            MinecraftForge.EVENT_BUS.register(AuraDeadly);
+            Enchs++;
+        }
+        if (Config.enchAuraFieryEnable) {
+            AuraFiery = new EnchantmentFieryAura(Config.enchAuraFieryID, Config.enchAuraFieryWeight);
+            MinecraftForge.EVENT_BUS.register(AuraFiery);
+            Enchs++;
+        }
+        if (Config.enchAuraThickEnable) {
+            AuraThick = new EnchantmentThickAura(Config.enchAuraThickID, Config.enchAuraThickWeight);
+            MinecraftForge.EVENT_BUS.register(AuraThick);
+            Enchs++;
+        }
+        if (Config.enchAuraToxicEnable) {
+            AuraToxic = new EnchantmentToxicAura(Config.enchAuraToxicID, Config.enchAuraToxicWeight);
+            MinecraftForge.EVENT_BUS.register(AuraToxic);
             Enchs++;
         }
         if(Config.enchAirStriderEnable){

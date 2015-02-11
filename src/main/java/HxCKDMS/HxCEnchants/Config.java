@@ -19,6 +19,31 @@ public class Config
     public static int enchAirStriderLVL;
     public static int enchAirStriderWeight;
 
+    public static int enchAuraFieryID;
+    public static boolean enchAuraFieryEnable;
+    public static int enchAuraFieryLVL;
+    public static int enchAuraFieryWeight;
+
+    public static int enchAuraDeadlyID;
+    public static boolean enchAuraDeadlyEnable;
+    public static int enchAuraDeadlyLVL;
+    public static int enchAuraDeadlyWeight;
+
+    public static int enchAuraDarkID;
+    public static boolean enchAuraDarkEnable;
+    public static int enchAuraDarkLVL;
+    public static int enchAuraDarkWeight;
+
+    public static int enchAuraThickID;
+    public static boolean enchAuraThickEnable;
+    public static int enchAuraThickLVL;
+    public static int enchAuraThickWeight;
+
+    public static int enchAuraToxicID;
+    public static boolean enchAuraToxicEnable;
+    public static int enchAuraToxicLVL;
+    public static int enchAuraToxicWeight;
+
     public static int enchArrowExplosiveID;
     public static boolean enchArrowExplosiveEnable;
     public static int enchArrowExplosiveLVL;
@@ -170,8 +195,13 @@ public class Config
         enchRepairEnable = config.getBoolean("Repair", "Armor Enchants", true, "Enable Enchant Repair?");
         enchBoundEnable = config.getBoolean("Bound", "Armor Enchants", false, "Enable Enchant Bound? DISABLED IT IS BROKEN");
         enchLeadFootedEnable = config.getBoolean("LeadFooted", "Armor Enchants", false, "Enable Enchant Lead Footed? DISABLED IT IS BROKEN");
-        enchShroudEnable = config.getBoolean("Shroud", "Armor Enchants", false, "Enable Enchant Shroud? DISABLED IT IS BROKEN");
+        enchShroudEnable = config.getBoolean("Shroud", "Armor Enchants", true, "Enable Enchant Shroud?");
         enchStealthEnable = config.getBoolean("Stealth", "Armor Enchants", true, "Enable Enchant Stealth?");
+        enchAuraDarkEnable = config.getBoolean("DarkAura", "Armor Enchants", true, "Enable Enchant Dark Aura?");
+        enchAuraDeadlyEnable = config.getBoolean("DeadlyAura", "Armor Enchants", true, "Enable Enchant Deadly Aura?");
+        enchAuraFieryEnable = config.getBoolean("FieryAura", "Armor Enchants", true, "Enable Enchant Fiery Aura?");
+        enchAuraThickEnable = config.getBoolean("ThickAura", "Armor Enchants", true, "Enable Enchant Thick Aura?");
+        enchAuraToxicEnable = config.getBoolean("ToxicAura", "Armor Enchants", true, "Enable Enchant Toxic Aura?");
 
         enchAdrenalineBoostID = config.getInt("AdrenalineBoostID", "Armor Enchant IDs", 300, 300, 320, "");
         enchAirStriderID = config.getInt("AirStriderID", "Armor Enchant IDs", 301, 300, 320, "");
@@ -187,6 +217,11 @@ public class Config
         enchLeadFootedID = config.getInt("LeadFootedID", "Armor Enchant IDs", 311, 300, 320, "");
         enchShroudID = config.getInt("ShroudID", "Armor Enchant IDs", 312, 300, 320, "");
         enchStealthID = config.getInt("StealthID", "Armor Enchant IDs", 313, 300, 320, "");
+        enchAuraDeadlyID = config.getInt("DeadlyAuraID", "Armor Enchant IDs", 314, 300, 320, "");
+        enchAuraFieryID = config.getInt("FieryAuraID", "Armor Enchant IDs", 315, 300, 320, "");
+        enchAuraThickID = config.getInt("ThickAuraID", "Armor Enchant IDs", 316, 300, 320, "");
+        enchAuraToxicID = config.getInt("ToxicAuraID", "Armor Enchant IDs", 317, 300, 320, "");
+        enchAuraDarkID = config.getInt("DarkAuraID", "Armor Enchant IDs", 318, 300, 320, "");
 
         enchAdrenalineBoostLVL = config.getInt("AdrenalineBoostLVL", "Armor Enchant LVLs", 4, 1, 10, "");
         enchAirStriderLVL = config.getInt("AirStriderLVL", "Armor Enchant LVLs", 4, 1, 10, "");
@@ -201,6 +236,11 @@ public class Config
         enchLeadFootedLVL = config.getInt("LeadFootedLVL", "Armor Enchant LVLs", 1, 1, 10, "");
         enchShroudLVL = config.getInt("ShroudLVL", "Armor Enchant LVLs", 1, 1, 10, "");
         enchStealthLVL = config.getInt("StealthLVL", "Armor Enchant LVLs", 2, 1, 10, "");
+        enchAuraDeadlyLVL = config.getInt("DeadlyAuraID", "Armor Enchant LVLs", 10, 1, 10, "");
+        enchAuraFieryLVL = config.getInt("FieryAuraID", "Armor Enchant LVLs", 10, 1, 10, "");
+        enchAuraThickLVL = config.getInt("ThickAuraID", "Armor Enchant LVLs", 10, 1, 10, "");
+        enchAuraToxicLVL = config.getInt("ToxicAuraID", "Armor Enchant LVLs", 10, 1, 10, "");
+        enchAuraDarkLVL = config.getInt("DarkAuraID", "Armor Enchant LVLs", 10, 1, 10, "");
 
         enchAdrenalineBoostWeight = config.getInt("AdrenalineBoostWeight", "Armor Enchant Weights", 10, 1, 100, "");
         enchAirStriderWeight = config.getInt("AirStriderWeight", "Armor Enchant Weights", 8, 1, 100, "");
@@ -216,6 +256,11 @@ public class Config
         enchLeadFootedWeight = config.getInt("LeadFootedWeight", "Armor Enchant Weights", 10, 1, 100, "");
         enchShroudWeight = config.getInt("ShroudWeight", "Armor Enchant Weights", 2, 1, 100, "");
         enchStealthWeight = config.getInt("StealthWeight", "Armor Enchant Weights", 6, 1, 100, "");
+        enchAuraDeadlyWeight = config.getInt("DeadlyAuraID", "Armor Enchant Weights", 1, 1, 100, "");
+        enchAuraFieryWeight = config.getInt("FieryAuraID", "Armor Enchant Weights", 5, 1, 100, "");
+        enchAuraThickWeight = config.getInt("ThickAuraID", "Armor Enchant Weights", 10, 1, 100, "");
+        enchAuraToxicWeight = config.getInt("ToxicAuraID", "Armor Enchant Weights", 5, 1, 100, "");
+        enchAuraDarkWeight = config.getInt("DarkAuraID", "Armor Enchant Weights", 15, 1, 100, "");
 
         /** Arrow Enchants **/
         enchArrowExplosiveEnable = config.getBoolean("ArrowExplosive", "Arrow Enchants", true, "Enable Enchant Arrow Explosive?");

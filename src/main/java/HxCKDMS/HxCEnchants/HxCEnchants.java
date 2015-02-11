@@ -1,6 +1,7 @@
 package HxCKDMS.HxCEnchants;
 
 import HxCKDMS.HxCCore.Utils.LogHelper;
+import HxCKDMS.HxCEnchants.Handlers.AOEEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ArmorEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ToolEventHandler;
@@ -34,6 +35,7 @@ public class HxCEnchants
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
+        MinecraftForge.EVENT_BUS.register(new AOEEventHandler());
     }
     
     @EventHandler
