@@ -33,8 +33,6 @@ public class ArrowEventHandler
 	int HomingLevel;
 	int ZeusLevel;
 
-	EntityLiving target;
-
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
@@ -86,43 +84,25 @@ public class ArrowEventHandler
 			EntityArrow arrow = (EntityArrow) event.entity;
             if(isHoming) {
                 AxisAlignedBB box = arrow.boundingBox;
+                double size = 8 * HomingLevel;
+                List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
+                double distance = 100000;
+                EntityLiving target = null;
 
-                if(target == null){
-                    double size = 8 * HomingLevel;
-                    List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
-
-                    double distance = 100000;
-
-                    for(EntityLiving entityLiving : possibleTargets){
-                        double distanceToEntity = distanceTo(arrow, entityLiving);
-
-                        if(distance > distanceToEntity){
-                            distance = distanceToEntity;
-                            target = entityLiving;
-                        }
+                for(EntityLiving entityLiving : possibleTargets){
+                    double distanceToEntity = distanceTo(arrow, entityLiving);
+                    if(distance > distanceToEntity){
+                        distance = distanceToEntity;
+                        target = entityLiving;
                     }
-
-                    if(target == null)
-                        return;
-
-                    double motionX = target.posX - arrow.posX;
-                    double motionY = target.boundingBox.minY + target.height - arrow.posY;
-                    double motionZ = target.posZ - arrow.posZ;
-
-                    arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
-
-                }else{
-                    if(target.getHealth() == 0){
-                        target = null;
-                        return;
-                    }
-
-                    double motionX = target.posX - arrow.posX;
-                    double motionY = target.boundingBox.minY + target.height - arrow.posY;
-                    double motionZ = target.posZ - arrow.posZ;
-
-                    arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
                 }
+                if(target == null)
+                    return;
+
+                double motionX = target.posX - arrow.posX;
+                double motionY = target.boundingBox.minY + target.height - arrow.posY;
+                double motionZ = target.posZ - arrow.posZ;
+                arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
             }
         }
 	}
