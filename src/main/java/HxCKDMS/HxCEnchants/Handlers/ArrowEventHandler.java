@@ -4,6 +4,7 @@ import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -11,6 +12,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -78,41 +80,63 @@ public class ArrowEventHandler
 
 
 	@SubscribeEvent
+    @SuppressWarnings("unchecked")
 	public void arrowInAir(EntityEvent event) {
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
             if(isHoming) {
-                if(target == null || target.velocityChanged || !target.canEntityBeSeen(arrow)) {
-                    double posX = arrow.posX;
-                    double posY = arrow.posY;
-                    double posZ = arrow.posZ;
-                    double size = 6 * HomingLevel;
-                    double d = -1D;
-                    EntityLiving entityliving = null;
-                    List list = arrow.worldObj.getEntitiesWithinAABB(net.minecraft.entity.EntityLiving.class, arrow.boundingBox.expand(size, size, size));
-                    for (Object aList : list) {
-                        EntityLiving tempEnt = (EntityLiving) aList;
-                        if (tempEnt == arrow.shootingEntity) {
-                            continue;
-                        }
-                        double distance = tempEnt.getDistance(posX, posY, posZ);
-                        if ((size < 0.0D || distance < size * size) && (d == -1D || distance < d) && tempEnt.canEntityBeSeen(arrow)) {
-                            d = distance;
-                            entityliving = tempEnt;
+                AxisAlignedBB box = arrow.boundingBox;
+
+                if(target == null){
+                    double size = 8 * HomingLevel;
+                    List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
+
+                    double distance = 100000;
+
+                    for(EntityLiving entityLiving : possibleTargets){
+                        double distanceToEntity = distanceTo(arrow, entityLiving);
+
+                        if(distance > distanceToEntity){
+                            distance = distanceToEntity;
+                            target = entityLiving;
                         }
                     }
-                    target = entityliving;
-                }
-                if(target != null ){
-                    if(target instanceof EntityLiving) {
-                        double dirX = target.posX - arrow.posX;
-                        double dirY = target.boundingBox.minY + (double) (target.height / 2.0F) - (arrow.posY + (double) (arrow.height / 2.0F));
-                        double dirZ = target.posZ - arrow.posZ;
-                        arrow.setThrowableHeading(dirX, dirY, dirZ, 1.5F, 0.0F);
-                        arrow.setVelocity(dirX*10, dirY*10, dirZ*10);
+
+                    if(target == null)
+                        return;
+
+                    double motionX = target.posX - arrow.posX;
+                    double motionY = target.boundingBox.minY + target.height - arrow.posY;
+                    double motionZ = target.posZ - arrow.posZ;
+
+                    arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
+
+                }else{
+                    if(target.getHealth() == 0){
+                        target = null;
+                        return;
                     }
+
+                    double motionX = target.posX - arrow.posX;
+                    double motionY = target.boundingBox.minY + target.height - arrow.posY;
+                    double motionZ = target.posZ - arrow.posZ;
+
+                    arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
                 }
             }
         }
 	}
+
+    private double distanceTo(EntityArrow entityArrow, Entity entity){
+        double[] doubles = new double[]{
+                entityArrow.posX - entity.posX,
+                entityArrow.posY - entity.posY,
+                entityArrow.posZ - entity.posZ
+        };
+
+        double distance = 0D;
+        for (double aDouble : doubles) distance += Math.pow(aDouble, 2);
+
+        return Math.sqrt(distance);
+    }
 }
