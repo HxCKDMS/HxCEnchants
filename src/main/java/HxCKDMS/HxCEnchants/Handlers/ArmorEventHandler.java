@@ -165,15 +165,16 @@ public class ArmorEventHandler
                     RepairItems(player);
                     ShouldRepair = (Config.enchRepairRate * 20);
                 }
-
+/*
                 try {
-                    if (AirStriderLevel > 0) {
+                    if (Config.enchAirStriderEnable && AirStriderLevel > 0) {
                         float Speed = ((AirStriderLevel * 0.25f) + 0.05f);
                         player.capabilities.setFlySpeed(Speed);
-                    } else {
+                    } else if (Config.enchAirStriderEnable) {
                         player.capabilities.setFlySpeed(0.05f);
                     }
                 } catch (Exception ignored){}
+*/
 
                 if (!player.worldObj.isRemote){
                     Stealth(player, StealthLevel);

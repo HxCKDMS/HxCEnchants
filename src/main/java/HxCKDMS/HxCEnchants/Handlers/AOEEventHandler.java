@@ -137,7 +137,7 @@ public class AOEEventHandler
             if (FieryAuraH > 0 && FieryAuraT > 0 && FieryAuraL > 0 && FieryAuraF > 0){
                 int level = (FieryAuraH + FieryAuraT + FieryAuraL + FieryAuraF)/4;
                 double motionY = rand.nextGaussian() + 0.02D;
-                if (shroud < 1)world.spawnParticle("flame", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
+                if (shroud < 1)world.spawnParticle("flame", player.posX + 0.5 + rand.nextFloat(), player.posY + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
@@ -163,7 +163,7 @@ public class AOEEventHandler
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
-                        entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 100, 1, true));
+                        entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
                     }
                 }
             }
