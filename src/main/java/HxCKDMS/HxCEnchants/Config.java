@@ -203,25 +203,25 @@ public class Config
         enchAuraThickEnable = config.getBoolean("ThickAura", "Armor Enchants", true, "Enable Enchant Thick Aura?");
         enchAuraToxicEnable = config.getBoolean("ToxicAura", "Armor Enchants", true, "Enable Enchant Toxic Aura?");
 
-        enchAdrenalineBoostID = config.getInt("AdrenalineBoostID", "Armor Enchant IDs", 300, 300, 320, "");
-        enchAirStriderID = config.getInt("AirStriderID", "Armor Enchant IDs", 301, 300, 320, "");
-        enchBattleHealingID = config.getInt("BattleHealingID", "Armor Enchant IDs", 302, 300, 320, "");
-        enchFlyID = config.getInt("FlyID", "Armor Enchant IDs", 303, 300, 320, "");
-        enchJumpBoostID = config.getInt("JumpBoostID", "Armor Enchant IDs", 304, 300, 320, "");
-        enchRepairID = config.getInt("RepairID", "Armor Enchant IDs", 305, 300, 320, "");
-        enchRegenID = config.getInt("RegenID", "Armor Enchant IDs", 306, 300, 320, "");
-        enchSwiftnessID = config.getInt("SwiftnessID", "Armor Enchant IDs", 307, 300, 320, "");
-        enchVitalityID = config.getInt("VitalityID", "Armor Enchant IDs", 308, 300, 320, "");
-        enchWitherProtectionID = config.getInt("WitherProtectionID", "Armor Enchant IDs", 309, 300, 320, "");
-        enchBoundID = config.getInt("BoundID", "Armor Enchant IDs", 310, 300, 320, "");
-        enchLeadFootedID = config.getInt("LeadFootedID", "Armor Enchant IDs", 311, 300, 320, "");
-        enchShroudID = config.getInt("ShroudID", "Armor Enchant IDs", 312, 300, 320, "");
-        enchStealthID = config.getInt("StealthID", "Armor Enchant IDs", 313, 300, 320, "");
-        enchAuraDeadlyID = config.getInt("DeadlyAuraID", "Armor Enchant IDs", 314, 300, 320, "");
-        enchAuraFieryID = config.getInt("FieryAuraID", "Armor Enchant IDs", 315, 300, 320, "");
-        enchAuraThickID = config.getInt("ThickAuraID", "Armor Enchant IDs", 316, 300, 320, "");
-        enchAuraToxicID = config.getInt("ToxicAuraID", "Armor Enchant IDs", 317, 300, 320, "");
-        enchAuraDarkID = config.getInt("DarkAuraID", "Armor Enchant IDs", 318, 300, 320, "");
+        enchAdrenalineBoostID = config.getInt("AdrenalineBoostID", "Armor Enchant IDs", 400, 400, 420, "");
+        enchAirStriderID = config.getInt("AirStriderID", "Armor Enchant IDs", 401, 400, 420, "");
+        enchBattleHealingID = config.getInt("BattleHealingID", "Armor Enchant IDs", 402, 400, 420, "");
+        enchFlyID = config.getInt("FlyID", "Armor Enchant IDs", 403, 400, 420, "");
+        enchJumpBoostID = config.getInt("JumpBoostID", "Armor Enchant IDs", 404, 400, 420, "");
+        enchRepairID = config.getInt("RepairID", "Armor Enchant IDs", 405, 400, 420, "");
+        enchRegenID = config.getInt("RegenID", "Armor Enchant IDs", 406, 400, 420, "");
+        enchSwiftnessID = config.getInt("SwiftnessID", "Armor Enchant IDs", 407, 400, 420, "");
+        enchVitalityID = config.getInt("VitalityID", "Armor Enchant IDs", 408, 400, 420, "");
+        enchWitherProtectionID = config.getInt("WitherProtectionID", "Armor Enchant IDs", 409, 400, 420, "");
+        enchBoundID = config.getInt("BoundID", "Armor Enchant IDs", 410, 400, 420, "");
+        enchLeadFootedID = config.getInt("LeadFootedID", "Armor Enchant IDs", 411, 400, 420, "");
+        enchShroudID = config.getInt("ShroudID", "Armor Enchant IDs", 412, 400, 420, "");
+        enchStealthID = config.getInt("StealthID", "Armor Enchant IDs", 413, 400, 420, "");
+        enchAuraDeadlyID = config.getInt("DeadlyAuraID", "Armor Enchant IDs", 414, 400, 420, "");
+        enchAuraFieryID = config.getInt("FieryAuraID", "Armor Enchant IDs", 415, 400, 420, "");
+        enchAuraThickID = config.getInt("ThickAuraID", "Armor Enchant IDs", 416, 400, 420, "");
+        enchAuraToxicID = config.getInt("ToxicAuraID", "Armor Enchant IDs", 417, 400, 420, "");
+        enchAuraDarkID = config.getInt("DarkAuraID", "Armor Enchant IDs", 418, 400, 420, "");
 
         enchAdrenalineBoostLVL = config.getInt("AdrenalineBoostLVL", "Armor Enchant LVLs", 4, 1, 10, "");
         enchAirStriderLVL = config.getInt("AirStriderLVL", "Armor Enchant LVLs", 4, 1, 10, "");
@@ -267,9 +267,9 @@ public class Config
         enchArrowLightningEnable = config.getBoolean("ArrowLightning", "Arrow Enchants", true, "Enable Enchant Arrow Lightning?");
         enchArrowSeekingEnable = config.getBoolean("ArrowSeeking", "Arrow Enchants", true, "Enable Enchant Arrow Seeking?");
 
-        enchArrowExplosiveID = config.getInt("ArrowExplosiveID", "Arrow Enchant IDs", 321, 321, 330, "");
-        enchArrowLightningID = config.getInt("ArrowLightningID", "Arrow Enchant IDs", 322, 321, 330, "");
-        enchArrowSeekingID = config.getInt("ArrowSeekingID", "Arrow Enchant IDs", 323, 321, 330, "");
+        enchArrowExplosiveID = config.getInt("ArrowExplosiveID", "Arrow Enchant IDs", 421, 421, 430, "");
+        enchArrowLightningID = config.getInt("ArrowLightningID", "Arrow Enchant IDs", 422, 421, 430, "");
+        enchArrowSeekingID = config.getInt("ArrowSeekingID", "Arrow Enchant IDs", 423, 421, 430, "");
 
         enchArrowExplosiveLVL = config.getInt("ArrowExplosiveLVL", "Arrow Enchant LVLs", 4, 1, 10, "");
         enchArrowLightningLVL = config.getInt("ArrowLightningLVL", "Arrow Enchant LVLs", 1, 1, 10, "");
@@ -286,11 +286,11 @@ public class Config
         enchVampirismEnable = config.getBoolean("Vampirism", "Tool/Weapon Enchants", true, "Enable Enchant Vampirism?");
         enchExamineEnable = config.getBoolean("Examine", "Tool/Weapon Enchants", true, "Enable Enchant Examine?");
 
-        enchFlameTouchID = config.getInt("FlameTouchID", "Tool/Weapon Enchant IDs", 331, 331, 350, "");
-        enchLifeStealID = config.getInt("LifeStealID", "Tool/Weapon Enchant IDs", 332, 331, 350, "");
-        enchPoisonID = config.getInt("PoisonID", "Tool/Weapon Enchant IDs", 333, 331, 350, "");
-        enchVampirismID = config.getInt("VampirismID", "Tool/Weapon Enchant IDs", 334, 331, 350, "");
-        enchExamineID = config.getInt("ExamineID", "Tool/Weapon Enchant IDs", 335, 331, 350, "");
+        enchFlameTouchID = config.getInt("FlameTouchID", "Tool/Weapon Enchant IDs", 431, 431, 450, "");
+        enchLifeStealID = config.getInt("LifeStealID", "Tool/Weapon Enchant IDs", 432, 431, 450, "");
+        enchPoisonID = config.getInt("PoisonID", "Tool/Weapon Enchant IDs", 433, 431, 450, "");
+        enchVampirismID = config.getInt("VampirismID", "Tool/Weapon Enchant IDs", 434, 431, 450, "");
+        enchExamineID = config.getInt("ExamineID", "Tool/Weapon Enchant IDs", 435, 431, 450, "");
 
         enchFlameTouchLVL = config.getInt("FlameTouchLVL", "Tool/Weapon Enchant LVLs", 4, 1, 10, "");
         enchLifeStealLVL = config.getInt("LifeStealLVL", "Tool/Weapon Enchant LVLs", 5, 1, 10, "");
