@@ -5,7 +5,6 @@ import HxCKDMS.HxCEnchants.Handlers.AOEEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ArmorEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ToolEventHandler;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

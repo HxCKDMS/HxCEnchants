@@ -1,7 +1,7 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
+import HxCKDMS.HxCEnchants.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -79,6 +79,7 @@ public class AOEEventHandler
                 DeadlyAuraT = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, ArmourChest);
                 DeadlyAuraL = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, ArmourLegs);
                 DeadlyAuraF = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, ArmourBoots);
+                ArmourBoots.getTagCompound().getIntArray("HxCEnchants");
             }
             if (Config.enchAuraDarkEnable) {
                 DarkAuraH = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDark.effectId, ArmourHelm);

@@ -1,7 +1,7 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
+import HxCKDMS.HxCEnchants.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
