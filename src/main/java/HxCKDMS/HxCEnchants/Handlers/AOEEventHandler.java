@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -17,18 +18,12 @@ import java.util.Random;
 
 public class AOEEventHandler
 {
+    NBTTagCompound mew = new NBTTagCompound();
     int[] HelmetAura;
     int[] TorsoAura;
     int[] LeggingsAura;
     int[] BootsAura;
 
-    /** AuraDark     [1] **/
-    /** AuraDeadly   [2] **/
-    /** AuraFiery    [3] **/
-    /** AuraThick    [4] **/
-    /** AuraToxic    [5] **/
-
-    //ItemStacks
     ItemStack ArmourHelm = null;
     ItemStack ArmourChest = null;
     ItemStack ArmourLegs = null;
@@ -38,6 +33,7 @@ public class AOEEventHandler
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		if(event.entityLiving instanceof EntityPlayerMP && !(((EntityPlayerMP) event.entityLiving).getEntityWorld().isRemote)) {
+            mew.setIntArray("HxCEnchants", new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
             World world = player.getEntityWorld();
             Random rand = world.rand;
@@ -46,14 +42,31 @@ public class AOEEventHandler
             ArmourLegs = player.inventory.armorItemInSlot(1);
             ArmourBoots = player.inventory.armorItemInSlot(0);
 
-            int[] helmEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchant");
-            int[] torsoEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchant");
-            int[] leggingEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchant");
-            int[] bootEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchant");
+            int[] helmEnchs = mew.getIntArray("HxCEnchants");
+            int[] torsoEnchs = mew.getIntArray("HxCEnchants");
+            int[] legEnchs = mew.getIntArray("HxCEnchants");
+            int[] bootEnchs = mew.getIntArray("HxCEnchants");
+
+            if (ArmourHelm != null) {
+                try {helmEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourHelm.setTagCompound(mew);}
+            }
+            if (ArmourChest != null) {
+                try {torsoEnchs = ArmourChest.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourChest.setTagCompound(mew);}
+            }
+            if (ArmourLegs != null) {
+                try {legEnchs = ArmourLegs.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourLegs.setTagCompound(mew);}
+            }
+            if (ArmourBoots != null) {
+                try {bootEnchs = ArmourBoots.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourBoots.setTagCompound(mew);}
+            }
 
             HelmetAura = new int[]{helmEnchs[1],helmEnchs[2],helmEnchs[3],helmEnchs[4],helmEnchs[5],helmEnchs[20]};
             TorsoAura = new int[]{torsoEnchs[1],torsoEnchs[2],torsoEnchs[3],torsoEnchs[4],torsoEnchs[5],torsoEnchs[20]};
-            LeggingsAura = new int[]{leggingEnchs[1],leggingEnchs[2],leggingEnchs[3],leggingEnchs[4],leggingEnchs[5],leggingEnchs[20]};
+            LeggingsAura = new int[]{legEnchs[1],legEnchs[2],legEnchs[3],legEnchs[4],legEnchs[5],legEnchs[20]};
             BootsAura = new int[]{bootEnchs[1],bootEnchs[2],bootEnchs[3],bootEnchs[4],bootEnchs[5],bootEnchs[20]};
 
 //            int shroud = HelmetAura[5] + TorsoAura[5] + LeggingsAura[5] + BootsAura[5];
@@ -133,9 +146,9 @@ public class AOEEventHandler
     }
 
     public void degrade(ItemStack stack, int Enchantment){
-        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchant");
+        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchants");
         int power = enchs[Enchantment];
-        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (Math.round((power * Config.baseDrain)/2)));
-        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantCharge") - (Math.round((power * Config.baseDrain)/2)));
+        stack.getTagCompound().setInteger("HxCEnchantCharge",newPow);
     }
 }

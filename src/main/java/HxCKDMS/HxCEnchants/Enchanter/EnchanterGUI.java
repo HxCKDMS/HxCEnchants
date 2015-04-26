@@ -13,7 +13,7 @@ public class EnchanterGUI extends GuiContainer {
     public EnchanterGUI (Container container) {
         super(container);
     }
-    private EnchanterTile tile;
+    private EnchanterTile tile = new EnchanterTile();
 
     // padding (or margin w/e) and internal placement offsets
     public int paddingX = 0;
@@ -29,17 +29,13 @@ public class EnchanterGUI extends GuiContainer {
 
     @Override
     public void initGui() {
-        int button_width = 300;
-        paddingX = 1;
-        paddingY = 5;
-
         // need this to calculate center
         ScaledResolution sres = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
-        this.addButton(new GuiSlider(ELEMENTS.UsedXP.ordinal(), 0, 0, button_width, 20, "XP To Infuse: ", "", 0.0, 128.0, tile.xpti, false, true));
-        // initial padding
-        offsetXcounter = (sres.getScaledWidth() - button_width) / 2;
-        offsetYcounter = 20;
-        addButton(new GuiSlider(1, 50, 0, 50, 10, "prefix", "suffix", 1.0D, 100.0D, 1.0, true, true));
+        int[] centerCoords = new int[]{(sres.getScaledHeight()/2),(sres.getScaledWidth()/2)};
+        int width = centerCoords[1] - 40;
+        addButton(new GuiSlider(ELEMENTS.UsedXP.ordinal(), 20, 20, width, 20, "XP To Infuse: ", "", 0.0, 512.0, tile.xpti, false, true));
+        addButton(new GuiButton(1,20,400,width,10,"lel"));
+
         super.initGui();
     }
 

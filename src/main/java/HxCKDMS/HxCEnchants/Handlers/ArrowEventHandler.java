@@ -101,7 +101,7 @@ public class ArrowEventHandler
     }
 
     public void degrade(ItemStack stack, int Power){
-        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (Power * Config.baseDrain));
-        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantCharge") - (Power * Config.baseDrain));
+        stack.getTagCompound().setInteger("HxCEnchantCharge",newPow);
     }
 }

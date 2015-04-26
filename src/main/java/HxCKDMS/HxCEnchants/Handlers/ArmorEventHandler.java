@@ -25,7 +25,8 @@ import java.util.UUID;
 
 public class ArmorEventHandler
 {
-    boolean isFlying;
+    NBTTagCompound mew = new NBTTagCompound();
+
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
@@ -55,6 +56,7 @@ public class ArmorEventHandler
     @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		if(event.entityLiving instanceof EntityPlayerMP) {
+            mew.setIntArray("HxCEnchants", new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
 
             String UUID = player.getUniqueID().toString();
@@ -74,12 +76,26 @@ public class ArmorEventHandler
             ArmourChest = player.inventory.armorItemInSlot(2);
             ArmourLegs = player.inventory.armorItemInSlot(1);
             ArmourBoots = player.inventory.armorItemInSlot(0);
-
-            Helm = ArmourHelm.getTagCompound().getIntArray("HxCEnchant");
-            Torso = ArmourChest.getTagCompound().getIntArray("HxCEnchant");
-            Legging = ArmourLegs.getTagCompound().getIntArray("HxCEnchant");
-            Boot = ArmourBoots.getTagCompound().getIntArray("HxCEnchant");
-
+            Helm = mew.getIntArray("HxCEnchants");
+            Torso = mew.getIntArray("HxCEnchants");
+            Legging = mew.getIntArray("HxCEnchants");
+            Boot = mew.getIntArray("HxCEnchants");
+            if (ArmourHelm != null) {
+                try {Helm = ArmourHelm.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourHelm.setTagCompound(mew);}
+            }
+            if (ArmourChest != null) {
+                try {Torso = ArmourChest.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourChest.setTagCompound(mew);}
+            }
+            if (ArmourLegs != null) {
+                try {Legging = ArmourLegs.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourLegs.setTagCompound(mew);}
+            }
+            if (ArmourBoots != null) {
+                try {Boot = ArmourBoots.getTagCompound().getIntArray("HxCEnchants");}
+                catch (Exception ignored) {ArmourBoots.setTagCompound(mew);}
+            }
             int Regen = (Helm[7] + Torso[7] + Legging[7] + Boot[7]);
             Vitality = Torso[25] * 0.5F;
             SpeedBoost = Legging[22] * 0.2;
@@ -99,7 +115,7 @@ public class ArmorEventHandler
                 xe.setInteger("FHBE", 0);
             }
 
-            if (isFlying && Boot[14] > 0 && !player.capabilities.isCreativeMode) {
+            if (player.capabilities.isFlying && Boot[14] > 0 && !player.capabilities.isCreativeMode) {
                 player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                 degrade(ArmourBoots,14);
             }
@@ -138,14 +154,14 @@ public class ArmorEventHandler
                 if (Inv.getItemDamage() < Inv.getMaxDamage())
                 {
                     Inv.setItemDamage(b);
-                    degrade(Inv,19);
+                    degrade(Inv, 19);
                 }
             }
         }
         for(int j = 0; j < 4; j++){
             Armor = player.getCurrentArmor(j);
             if (Armor != null && Armor.isItemStackDamageable()){
-                int c = HxCEnchantHelper.getEnchantLevel(Armor,19);
+                int c = HxCEnchantHelper.getEnchantLevel(Armor, 19);
                 int d = Armor.getItemDamage() - c;
                 if (Armor.getItemDamage() < Armor.getMaxDamage())
                 {
@@ -171,7 +187,7 @@ public class ArmorEventHandler
 
             if(Helm[26] > 0 && event.source.damageType.equalsIgnoreCase("wither")) {
                 player.removePotionEffect(Potion.wither.getId());
-                degrade(ArmourHelm,26);
+                degrade(ArmourHelm, 26);
             }
             if(Torso[12] > 0 && event.source.damageType.equalsIgnoreCase("generic")) {
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Torso[12] * 60, Torso[12]));
@@ -198,10 +214,10 @@ public class ArmorEventHandler
             AttributeModifier StealthBuff = new AttributeModifier(StealthUUID, "StealthDeBuff", (StealthLevel*-15), 1);
             fr.removeModifier(StealthBuff);
             fr.applyModifier(StealthBuff);
-            degrade(ArmourHelm,23);
-            degrade(ArmourChest,23);
-            degrade(ArmourLegs,23);
-            degrade(ArmourBoots,23);
+            degrade(ArmourHelm, 23);
+            degrade(ArmourChest, 23);
+            degrade(ArmourLegs, 23);
+            degrade(ArmourBoots, 23);
         }
     }
 
@@ -221,9 +237,9 @@ public class ArmorEventHandler
 	}
 
     public void degrade(ItemStack stack, int Enchantment){
-        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchant");
+        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchants");
         int power = enchs[Enchantment];
-        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (power * Config.baseDrain));
-        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantCharge") - (power * Config.baseDrain));
+        stack.getTagCompound().setInteger("HxCEnchantCharge",newPow);
     }
 }

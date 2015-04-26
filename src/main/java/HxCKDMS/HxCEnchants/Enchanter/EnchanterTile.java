@@ -10,8 +10,8 @@ import net.minecraft.tileentity.TileEntity;
 public class EnchanterTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
 
-    public double xpti;
-    public double pxp;
+    public double xpti = 0;
+    public double pxp = 0;
 
     public EnchanterTile(){
         inv = new ItemStack[1];

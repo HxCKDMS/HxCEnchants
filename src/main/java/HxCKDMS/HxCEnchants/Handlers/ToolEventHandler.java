@@ -76,8 +76,8 @@ public class ToolEventHandler
                 degrade(item,13);
             }
             if (SoulTear > 0){
-                int newPow = (Math.round(RH) + item.getTagCompound().getInteger("HxCEnchantPower"));
-                item.getTagCompound().setInteger("HxCEnchantPower",newPow);
+                int newPow = (Math.round(RH) + item.getTagCompound().getInteger("HxCEnchantCharge"));
+                item.getTagCompound().setInteger("HxCEnchantCharge",newPow);
                 degrade(item,21);
             }
         }
@@ -228,9 +228,9 @@ public class ToolEventHandler
     }
 
     public void degrade(ItemStack stack, int Enchantment){
-        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchant");
+        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchants");
         int power = enchs[Enchantment];
-        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (power * Config.baseDrain));
-        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantCharge") - (power * Config.baseDrain));
+        stack.getTagCompound().setInteger("HxCEnchantCharge",newPow);
     }
 }

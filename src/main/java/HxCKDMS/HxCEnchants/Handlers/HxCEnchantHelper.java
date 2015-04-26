@@ -5,34 +5,34 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class HxCEnchantHelper {
     /*******************************/
-    /** AdrenalineBoost       [1] **/
-    /** AuraDark              [2] **/
-    /** AuraDeadly            [3] **/
-    /** AuraFiery             [4] **/
-    /** AuraThick             [5] **/
-    /** AuraToxic             [6] **/
-    /** AirStrider            [7] **/
-    /** ArmorRegen            [8] **/
-    /** ArrowExplosive        [9] **/
-    /** ArrowLightning       [10] **/
-    /** ArrowSeeking         [11] **/
-    /** Bound                [12] **/
-    /** BattleHealing        [13] **/
-    /** FlameTouch           [14] **/
-    /** Fly                  [15] **/
-    /** JumpBoost            [16] **/
-    /** LeadFooted           [17] **/
-    /** LifeSteal            [18] **/
-    /** Poison               [19] **/
-    /** Repair               [20] **/
-    /** Shroud               [21] **/
-    /** SoulTear             [22] **/
-    /** Swiftness            [23] **/
-    /** Stealth              [24] **/
-    /** Vampirism            [25] **/
-    /** Vitality             [26] **/
-    /** WitherProtection     [27] **/
-    /** Examine              [28] **/
+    /** AdrenalineBoost       [0] **/
+    /** AuraDark              [1] **/
+    /** AuraDeadly            [2] **/
+    /** AuraFiery             [3] **/
+    /** AuraThick             [4] **/
+    /** AuraToxic             [5] **/
+    /** AirStrider            [6] **/
+    /** ArmorRegen            [7] **/
+    /** ArrowExplosive        [8] **/
+    /** ArrowLightning        [9] **/
+    /** ArrowSeeking         [10] **/
+    /** Bound                [11] **/
+    /** BattleHealing        [12] **/
+    /** FlameTouch           [13] **/
+    /** Fly                  [14] **/
+    /** JumpBoost            [15] **/
+    /** LeadFooted           [16] **/
+    /** LifeSteal            [17] **/
+    /** Poison               [18] **/
+    /** Repair               [19] **/
+    /** Shroud               [20] **/
+    /** SoulTear             [21] **/
+    /** Swiftness            [22] **/
+    /** Stealth              [23] **/
+    /** Vampirism            [24] **/
+    /** Vitality             [25] **/
+    /** WitherProtection     [26] **/
+    /** Examine              [27] **/
     /*******************************/
 
     public static int getEnchantLevel(ItemStack stack, int EnchantNumber){
