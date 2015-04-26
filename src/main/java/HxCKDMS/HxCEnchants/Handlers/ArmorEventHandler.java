@@ -3,9 +3,7 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -37,31 +35,11 @@ public class ArmorEventHandler
     int ShouldRepair = (Config.enchRepairRate * 20);
     int CanRegen = (Config.enchRegenRate * 20);
 
-    int JumpBoostLevel;
-    int AirStriderLevel;
-    int VitalityLevel;
-    int AdrenalineBoostLevel;
-    int BattleHealingLevel;
-    int WitherProt;
-    int FlyLevel;
-    int RegenLevel;
-    int SpeedLevel;
-    int StealthLevel;
-    int RepairLevel1;
-    int RepairLevel2;
-    int RepairLevel3;
-    int RepairLevel4;
-//    int ShroudLevel;
-//    int ShroudLevel1;
-//    int ShroudLevel2;
-//    int ShroudLevel3;
-    int H;
-    int C;
-    int L;
-    int B;
-//    int BoundLevel;
+    int[] Helm;
+    int[] Torso;
+    int[] Legging;
+    int[] Boot;
 
-    float FlightSpeedBuff;
     //doubles
     double SpeedBoost;
     double Vitality;
@@ -76,8 +54,6 @@ public class ArmorEventHandler
     @SubscribeEvent
     @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        ShouldRepair--;
-        CanRegen--;
 		if(event.entityLiving instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
 
@@ -99,86 +75,55 @@ public class ArmorEventHandler
             ArmourLegs = player.inventory.armorItemInSlot(1);
             ArmourBoots = player.inventory.armorItemInSlot(0);
 
-            //Helmet Enchants
-            if (Config.enchAdrenalineBoostEnable)AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
-            if (Config.enchWitherProtectionEnable)WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
-//            RepairLevel1 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourHelm);
-//            ShroudLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourHelm);
-            if (Config.enchRegenEnable)H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
+            Helm = ArmourHelm.getTagCompound().getIntArray("HxCEnchant");
+            Torso = ArmourChest.getTagCompound().getIntArray("HxCEnchant");
+            Legging = ArmourLegs.getTagCompound().getIntArray("HxCEnchant");
+            Boot = ArmourBoots.getTagCompound().getIntArray("HxCEnchant");
 
-            //Chestplate Enchants
-            if (Config.enchVitalityEnable)VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
-            if (Config.enchBattleHealingEnable)BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
-//            RepairLevel2 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourChest);
-//            ShroudLevel1 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourChest);
-            if (Config.enchRegenEnable)C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
+            int Regen = (Helm[7] + Torso[7] + Legging[7] + Boot[7]);
+            Vitality = Torso[25] * 0.5F;
+            SpeedBoost = Legging[22] * 0.2;
 
-            //Legging Enchants
-            if (Config.enchSwiftnessEnable)SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
-            if (Config.enchJumpBoostEnable)JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ArmourLegs);
-//            RepairLevel3 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourLegs);
-//            ShroudLevel2 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourLegs);
-            if (Config.enchRegenEnable)L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
+            if (Helm[19] + Torso[19] + Legging[19] + Boot[19] > 0) ShouldRepair--;
+            if (Regen > 0) CanRegen--;
 
-            //Boot Enchants
-            if (Config.enchFlyEnable)FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
-//            RepairLevel4 = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, ArmourBoots);
-            if (Config.enchAirStriderEnable)AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
-//            ShroudLevel3 = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, ArmourBoots);
-            if (Config.enchStealthEnable)StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
-            if (Config.enchRegenEnable)B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
+            int FE = xe.getInteger("FHBE");
+            if (Boot[14] > 0 && FE < 1){
+                player.capabilities.allowFlying = true;
+                player.sendPlayerAbilities();
+                xe.setInteger("FHBE", 1);
+            }
+            if (Boot[14] < 1 && FE >= 1) {
+                player.capabilities.isFlying = false;
+                player.capabilities.allowFlying = false;
+                xe.setInteger("FHBE", 0);
+            }
 
-            //Other Enchants
-//                BoundLevel = EnchantmentHelper.getMaxEnchantmentLevel(Enchants.Bound.effectId, Armour);
+            if (isFlying && Boot[14] > 0 && !player.capabilities.isCreativeMode) {
+                player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+                degrade(ArmourBoots,14);
+            }
 
-            RegenLevel = (H + C + L + B);
-            Vitality = VitalityLevel * 0.5F;
-            SpeedBoost = SpeedLevel * 0.2;
+            if(Torso[25] > 0) {
+                ph.applyModifier(HealthBuff);
+                degrade(ArmourChest,25);
+            }
 
-            //Indented for Beyond here stuff is actually done
-                if(Config.enchFlyEnable){
-                    boolean flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
-                    if (FlyLevel > 0 && !player.capabilities.allowFlying){
-                        player.capabilities.allowFlying = true;
-                        player.sendPlayerAbilities();
-                        NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
-                    }
-                    if (FlyLevel < 1 && flyhbt) {
-                        player.capabilities.allowFlying = false;
-                        player.capabilities.isFlying = false;
-                        player.sendPlayerAbilities();
-                        NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
-                    }
-                }
-                if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+            if(Legging[22] > 0 && !player.isSneaking() && !player.isRiding()) ps.applyModifier(SpeedBuff);
 
-                if(VitalityLevel > 0) ph.applyModifier(HealthBuff);
+            if (player.getHealth() < player.getMaxHealth() && Regen > 0 && CanRegen <= 0) {
+                player.heal(Regen * 2);
+                CanRegen = Config.enchRegenRate * 20;
+            }
 
-                if(SpeedLevel > 0 && !player.isSneaking() && !player.isRiding()) ps.applyModifier(SpeedBuff);
+            if(ShouldRepair <= 0) {
+                RepairItems(player);
+                ShouldRepair = (Config.enchRepairRate * 20);
+            }
 
-                if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0) {
-                    player.heal(RegenLevel * 2);
-                    CanRegen = Config.enchRegenRate * 20;
-                }
-
-                if(Config.enchRepairEnable && ShouldRepair <= 0) {
-                    RepairItems(player);
-                    ShouldRepair = (Config.enchRepairRate * 20);
-                }
-/*
-                try {
-                    if (Config.enchAirStriderEnable && AirStriderLevel > 0) {
-                        float Speed = ((AirStriderLevel * 0.25f) + 0.05f);
-                        player.capabilities.setFlySpeed(Speed);
-                    } else if (Config.enchAirStriderEnable) {
-                        player.capabilities.setFlySpeed(0.05f);
-                    }
-                } catch (Exception ignored){}
-*/
-
-                if (!player.worldObj.isRemote){
-                    Stealth(player, StealthLevel);
-                }
+            if (!player.worldObj.isRemote){
+                Stealth(player, (Helm[23] + Torso[23] + Legging[23] + Boot[23]));
+            }
         }
 	}
 
@@ -188,22 +133,24 @@ public class ArmorEventHandler
         for(int j = 0; j < 36; j++){
             Inv = player.inventory.getStackInSlot(j);
             if (Inv != null && Inv.isItemStackDamageable()){
-                int a = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Inv);
+                int a = HxCEnchantHelper.getEnchantLevel(Inv,19);
                 int b = Inv.getItemDamage() - a;
                 if (Inv.getItemDamage() < Inv.getMaxDamage())
                 {
                     Inv.setItemDamage(b);
+                    degrade(Inv,19);
                 }
             }
         }
         for(int j = 0; j < 4; j++){
             Armor = player.getCurrentArmor(j);
             if (Armor != null && Armor.isItemStackDamageable()){
-                int c = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Armor);
+                int c = HxCEnchantHelper.getEnchantLevel(Armor,19);
                 int d = Armor.getItemDamage() - c;
                 if (Armor.getItemDamage() < Armor.getMaxDamage())
                 {
                     Armor.setItemDamage(d);
+                    degrade(Armor,19);
                 }
             }
         }
@@ -217,16 +164,27 @@ public class ArmorEventHandler
             EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
             boolean allowABEffect = true;
 
-            if (event.source.damageType.equalsIgnoreCase("wither") || event.source.damageType.equalsIgnoreCase("starve") ||event.source.damageType.equalsIgnoreCase("fall") ||event.source.damageType.equalsIgnoreCase("explosion.player") ||event.source.damageType.equalsIgnoreCase("explosion") || event.source.damageType.equalsIgnoreCase("inWall")) allowABEffect = false;
-            if(WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither")) event.setCanceled(true);
-            if(BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic")) player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
+            if (event.source.damageType.equalsIgnoreCase("wither") || event.source.damageType.equalsIgnoreCase("starve") ||
+                event.source.damageType.equalsIgnoreCase("fall") || event.source.damageType.equalsIgnoreCase("explosion.player") ||
+                event.source.damageType.equalsIgnoreCase("explosion") || event.source.damageType.equalsIgnoreCase("inWall"))
+                allowABEffect = false;
 
-            if(AdrenalineBoostLevel > 0 && allowABEffect) {
-                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, AdrenalineBoostLevel));
+            if(Helm[26] > 0 && event.source.damageType.equalsIgnoreCase("wither")) {
+                player.removePotionEffect(Potion.wither.getId());
+                degrade(ArmourHelm,26);
+            }
+            if(Torso[12] > 0 && event.source.damageType.equalsIgnoreCase("generic")) {
+                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Torso[12] * 60, Torso[12]));
+                degrade(ArmourChest,12);
+            }
+
+            if(Helm[0] > 0 && allowABEffect) {
+                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, Helm[0]));
+                player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, Helm[0]));
+                player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, Helm[0]));
+                player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, Helm[0]));
+                player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, Helm[0]));
+                degrade(ArmourHelm,0);
             }
         }
     }
@@ -240,6 +198,10 @@ public class ArmorEventHandler
             AttributeModifier StealthBuff = new AttributeModifier(StealthUUID, "StealthDeBuff", (StealthLevel*-15), 1);
             fr.removeModifier(StealthBuff);
             fr.applyModifier(StealthBuff);
+            degrade(ArmourHelm,23);
+            degrade(ArmourChest,23);
+            degrade(ArmourLegs,23);
+            degrade(ArmourBoots,23);
         }
     }
 
@@ -250,10 +212,18 @@ public class ArmorEventHandler
 
 	@SubscribeEvent
 	public void livingJumpEvent(LivingJumpEvent event) {
-		if(event.entityLiving instanceof EntityPlayer && JumpBoostLevel > 0) {
+		if(event.entityLiving instanceof EntityPlayer && Legging[15] > 0) {
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
-            double JumpBuff = player.motionY + 0.1 * JumpBoostLevel;
+            double JumpBuff = player.motionY + 0.1 * Legging[15];
             player.motionY += JumpBuff;
+            degrade(ArmourLegs,15);
 		}
 	}
+
+    public void degrade(ItemStack stack, int Enchantment){
+        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchant");
+        int power = enchs[Enchantment];
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (power * Config.baseDrain));
+        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
+    }
 }

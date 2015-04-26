@@ -22,7 +22,6 @@ public class AOEEventHandler
     int[] LeggingsAura;
     int[] BootsAura;
 
-
     /** AuraDark     [1] **/
     /** AuraDeadly   [2] **/
     /** AuraFiery    [3] **/

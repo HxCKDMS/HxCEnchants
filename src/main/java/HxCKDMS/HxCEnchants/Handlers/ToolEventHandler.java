@@ -23,6 +23,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -32,20 +34,22 @@ import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.util.Random;
-
+@SuppressWarnings("unused")
 public class ToolEventHandler
 {
-	int VampireLevel;
-    int ExamineLevel;
-	int AutoSmeltLevel;
-    int LifeStealLevel;
+	int Vampire;
+    int Examine;
+    int Poison;
+	int AutoSmelt;
+    int LifeSteal;
+    int SoulTear;
+
     float VBRV = 0;
 
     Random random = new Random();
 
     int derp = random.nextInt(50);
 
-	// Misc. variables
     @SubscribeEvent
     public void LivingHurtEvent(LivingHurtEvent event) {
         Entity hurtent = event.entity;
@@ -54,12 +58,29 @@ public class ToolEventHandler
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
-            LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
-            if (LifeStealLevel > 0){
-                double PH = Victim.prevHealth;
-                double CH = Victim.getHealth();
-                float RH = (float)CH - (float)PH;
-                Attacker.heal(RH * LifeStealLevel);
+            LifeSteal = HxCEnchantHelper.getEnchantLevel(item,17);
+            Poison = HxCEnchantHelper.getEnchantLevel(item,18);
+
+            double PH = Victim.prevHealth;
+            double CH = Victim.getHealth();
+            float RH = (float)CH - (float)PH;
+
+            if (LifeSteal > 0){
+                Attacker.heal(RH * LifeSteal);
+                degrade(item,17);
+            }
+            if (Poison > 0){
+                Victim.addPotionEffect(new PotionEffect(Potion.poison.getId(), Poison * 60, Poison));
+                degrade(item,18);
+            }
+            if (AutoSmelt > 0){
+                Victim.setFire(AutoSmelt*60);
+                degrade(item,13);
+            }
+            if (SoulTear > 0){
+                int newPow = (Math.round(RH) + item.getTagCompound().getInteger("HxCEnchantPower"));
+                item.getTagCompound().setInteger("HxCEnchantPower",newPow);
+                degrade(item,21);
             }
         }
     }
@@ -82,18 +103,20 @@ public class ToolEventHandler
             ItemStack item;
             if (Attacker.getHeldItem().getItem() instanceof ItemSword) {item = Attacker.getHeldItem();}
             else item = null;
-            if (item != null) VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
-            else VampireLevel = 0;
-            if (item != null) ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
-            else ExamineLevel = 0;
+            if (item != null) Vampire = HxCEnchantHelper.getEnchantLevel(item, 24);
+            else Vampire = 0;
+            if (item != null) Examine = HxCEnchantHelper.getEnchantLevel(item,27);
+            else Examine = 0;
 
-            if (ExamineLevel > 0){
+            if (Examine > 0){
                 if (deadent instanceof EntityLiving) {
-                    deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY+1, deadent.posZ, ExamineLevel*Config.enchXPrate));
+                    deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY+1, deadent.posZ, Examine*Config.enchXPrate));
+                    degrade(item,27);
                 }
             }
 
-            if (VampireLevel > 0) {
+            if (Vampire > 0) {
+                degrade(item,24);
                 if (deadent instanceof EntityAnimal){
                     VBRV = 1.3F;
                 }else if (deadent instanceof EntityPlayerMP){
@@ -168,7 +191,7 @@ public class ToolEventHandler
                     VBRV = 1.25F;
                 }
                 int curFood = Attacker.getFoodStats().getFoodLevel();
-                float newFud = (VBRV/4 * VampireLevel) + curFood;
+                float newFud = (VBRV/4 * Vampire) + curFood;
                 if (curFood < 40 && newFud < 40){
                     Attacker.getFoodStats().setFoodLevel(Math.round(newFud));
                 }else if (curFood < 40 && newFud > 40){
@@ -191,12 +214,12 @@ public class ToolEventHandler
             ItemStack heldItem = player.getHeldItem();
             ItemStack result;
 
-            AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
-            if(AutoSmeltLevel > 0) {
+            AutoSmelt = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
+            if(AutoSmelt > 0) {
                 result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
-
+                degrade(heldItem,13);
                 if(result != null) {
-                    result.stackSize = AutoSmeltLevel;
+                    result.stackSize = AutoSmelt;
                     for(int i = 0; i < event.drops.size(); i++) {
                         event.drops.remove(i);
                     }
@@ -204,5 +227,12 @@ public class ToolEventHandler
                 }
             }
         }
+    }
+
+    public void degrade(ItemStack stack, int Enchantment){
+        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchant");
+        int power = enchs[Enchantment];
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (power * Config.baseDrain));
+        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
     }
 }

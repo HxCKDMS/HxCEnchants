@@ -1,41 +1,41 @@
 package HxCKDMS.HxCEnchants;
 
 import HxCKDMS.HxCCore.Utils.LogHelper;
-import net.minecraft.enchantment.Enchantment;
 import org.apache.logging.log4j.Level;
 
+@SuppressWarnings("unused")
 public class Enchants {
 
     private static int Enchs = 0;
 
-    public static Enchantment AdrenalineBoost;      /** 1 **/
-    public static Enchantment AuraDark;             /** 2 **/
-    public static Enchantment AuraDeadly;           /** 3 **/
-    public static Enchantment AuraFiery;            /** 4 **/
-    public static Enchantment AuraThick;            /** 5 **/
-    public static Enchantment AuraToxic;            /** 6 **/
-    public static Enchantment AirStrider;           /** 7 **/
-    public static Enchantment ArmorRegen;           /** 8 **/
-    public static Enchantment ArrowExplosive;       /** 9 **/
-    public static Enchantment ArrowLightning;       /** 10 **/
-    public static Enchantment ArrowSeeking;         /** 11 **/
-    public static Enchantment Bound;                /** 12 **/
-    public static Enchantment BattleHealing;        /** 13 **/
-    public static Enchantment FlameTouch;           /** 14 **/
-    public static Enchantment Fly;                  /** 15 **/
-    public static Enchantment JumpBoost;            /** 16 **/
-    public static Enchantment LeadFooted;           /** 17 **/
-    public static Enchantment LifeSteal;            /** 18 **/
-    public static Enchantment Poison;               /** 19 **/
-    public static Enchantment Repair;               /** 20 **/
-    public static Enchantment Shroud;               /** 21 **/
-    public static Enchantment SoulTear;             /** 22 **/
-    public static Enchantment Swiftness;            /** 23 **/
-    public static Enchantment Stealth;              /** 24 **/
-    public static Enchantment Vampirism;            /** 25 **/
-    public static Enchantment Vitality;             /** 26 **/
-    public static Enchantment WitherProtection;     /** 27 **/
-    public static Enchantment Examine;              /** 28 **/
+    /** AdrenalineBoost;       [00] **/
+    /** AuraDark;              [01] **/
+    /** AuraDeadly;            [02] **/
+    /** AuraFiery;             [03] **/
+    /** AuraThick;             [04] **/
+    /** AuraToxic;             [05] **/
+    /** AirStrider;            [06] **/ //removed so empty
+    /** ArmorRegen;            [07] **/
+    /** ArrowExplosive;        [08] **/
+    /** ArrowLightning;        [09] **/
+    /** ArrowSeeking;          [10] **/
+    /** Bound;                 [11] **/
+    /** BattleHealing;         [12] **/
+    /** FlameTouch;            [13] **/
+    /** Fly;                   [14] **/
+    /** JumpBoost;             [15] **/
+    /** LeadFooted;            [16] **/
+    /** LifeSteal;             [17] **/
+    /** Poison;                [18] **/
+    /** Repair;                [19] **/
+    /** Shroud;                [20] **/
+    /** SoulTear;              [21] **/
+    /** Swiftness;             [22] **/
+    /** Stealth;               [23] **/
+    /** Vampirism;             [24] **/
+    /** Vitality;              [25] **/
+    /** WitherProtection;      [26] **/
+    /** Examine;               [27] **/
 
     public static void load () {
         if (Config.enchAdrenalineBoostEnable) {
@@ -56,9 +56,9 @@ public class Enchants {
         if (Config.enchAuraToxicEnable) {
             Enchs++;
         }
-        if (Config.enchAirStriderEnable){
-            Enchs++;
-        }
+//        if (Config.enchAirStriderEnable){
+//            Enchs++;
+//        }
         if (Config.enchRegenEnable) {
             Enchs++;
         }
