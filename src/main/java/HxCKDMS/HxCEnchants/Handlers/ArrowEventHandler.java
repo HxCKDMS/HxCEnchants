@@ -1,9 +1,7 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,39 +21,21 @@ import java.util.List;
 
 public class ArrowEventHandler
 {
-	boolean isExplosive;
-	boolean isHoming;
-	boolean isZeus;
-    boolean isPoison;
-
-	int ExplosionLevel;
-    int PoisonLevel;
-	int HomingLevel;
-	int ZeusLevel;
+	int Explosive = 0;
+	int Homing = 0;
+	int Zeus = 0;
+    int Poison = 0;
 
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
 
-        isExplosive = false;
-        isHoming = false;
-        isZeus = false;
-        isPoison = false;
+        Explosive = HxCEnchantHelper.getEnchantLevel(stack,8);
+        Homing = HxCEnchantHelper.getEnchantLevel(stack,9);
+        Zeus = HxCEnchantHelper.getEnchantLevel(stack,10);
+        Poison = HxCEnchantHelper.getEnchantLevel(stack,18);
 
-        if (Config.enchArrowLightningEnable)ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
-        if (Config.enchArrowSeekingEnable)HomingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowSeeking.effectId, stack);
-        if (Config.enchArrowExplosiveEnable)ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowExplosive.effectId, stack);
-        if (Config.enchPoisonEnable)PoisonLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
-
-        if(ExplosionLevel > 0){
-            isExplosive = true;
-        }if(HomingLevel > 0){
-            isHoming = true;
-        }if(ZeusLevel > 0){
-            isZeus = true;
-        }if(PoisonLevel > 0){
-            isPoison = true;
-        }
+        degrade(stack,(Explosive + Homing + Zeus + Poison));
     }
 
 
@@ -63,15 +43,15 @@ public class ArrowEventHandler
 	public void entityAttacked(LivingAttackEvent event) {
         if(event.entityLiving instanceof EntityLiving){
             EntityLivingBase ent = event.entityLiving;
-            if (event.source.isProjectile() && isExplosive) {
-                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Config.EDT);
-            } else if (event.source.isProjectile() && isHoming) {
+            if (event.source.isProjectile() && Explosive > 0) {
+                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * Explosive, Config.EDT);
+            } else if (event.source.isProjectile() && Homing > 0) {
                 float damage = 6;
                 ent.attackEntityFrom(DamageSource.generic, damage);
-            } else if (event.source.isProjectile() && isZeus) {
+            } else if (event.source.isProjectile() && Zeus > 0) {
                 ent.worldObj.spawnEntityInWorld(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
-            } else if (event.source.isProjectile() && isPoison) {
-                ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+            } else if (event.source.isProjectile() && Poison > 0) {
+                ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), Poison * 120, Poison));
             }
         }
 	} 
@@ -82,9 +62,9 @@ public class ArrowEventHandler
 	public void arrowInAir(EntityEvent event) {
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
-            if(isHoming) {
+            if(Homing > 0) {
                 AxisAlignedBB box = arrow.boundingBox;
-                double size = 8 * HomingLevel;
+                double size = 8 * Homing;
                 List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
                 double distance = 100000;
                 EntityLiving target = null;
@@ -118,5 +98,10 @@ public class ArrowEventHandler
         for (double aDouble : doubles) distance += Math.pow(aDouble, 2);
 
         return Math.sqrt(distance);
+    }
+
+    public void degrade(ItemStack stack, int Power){
+        int newPow = (stack.getTagCompound().getInteger("HxCEnchantPower") - (Power * Config.baseDrain));
+        stack.getTagCompound().setInteger("HxCEnchantPower",newPow);
     }
 }

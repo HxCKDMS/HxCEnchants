@@ -35,7 +35,7 @@ public class HxCEnchantHelper {
     /** Examine              [28] **/
     /*******************************/
 
-    public int getEnchantLevel(ItemStack stack, int EnchantNumber){
+    public static int getEnchantLevel(ItemStack stack, int EnchantNumber){
         int[] HxCEnchants;
         int EnchantLevel;
         try {
@@ -46,7 +46,7 @@ public class HxCEnchantHelper {
         EnchantLevel = HxCEnchants[EnchantNumber];
         return EnchantLevel;
     }
-    public void setEnchant(ItemStack stack, int EnchantNumber, int Level, int Power){
+    public static void setEnchant(ItemStack stack, int EnchantNumber, int Level, int Power){
         NBTTagCompound tag = stack.getTagCompound();
         int[] HxCEnchants;
         try {

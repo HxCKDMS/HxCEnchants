@@ -8,6 +8,7 @@ public class Config
     public static boolean Feedback;
     public static boolean EDT;
     public static int enchXPrate;
+    public static int baseDrain;
 
     public static int enchAdrenalineBoostID;
     public static boolean enchAdrenalineBoostEnable;
@@ -178,6 +179,7 @@ public class Config
         /** Features **/
         Feedback = config.getBoolean("Feedback", "Features", false, "ChatMessages and such from enchants.");
         enchRegenRate = config.getInt("Regen Rate Default", "Features", 3, 1, 99999, "");
+        baseDrain = config.getInt("Drain Rate", "Features", 1, 1, 10, "This is how much Ench Power will be drained per use per power.");
         enchRepairRate = config.getInt("Repair Speed Default", "Features", 1, 1, 99999, "DON'T EXCEED THE MAX (Java will crash)");
         enchXPrate = config.getInt("Extra exp Default", "Features", 1, 1, 9999999, "Increasing this means more xp gain from Examine Enchant.");
         EDT = config.getBoolean("ExplosionDestroysTerrain", "Features", false, "");
