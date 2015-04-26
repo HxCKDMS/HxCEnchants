@@ -15,26 +15,19 @@ public class EnchanterGUI extends GuiContainer {
     }
     private EnchanterTile tile = new EnchanterTile();
 
-    // padding (or margin w/e) and internal placement offsets
-    public int paddingX = 0;
-    public int paddingY = 0;
-    private int offsetXcounter = 0;
-    private int offsetYcounter = 0;
-
     // gui elements
-    private enum ELEMENTS {
-        UsedXP,
-        DONEBTN, CANCELBTN
-    }
+    private enum ELEMENTS {UsedXP,DONEBTN}
 
     @Override
     public void initGui() {
         // need this to calculate center
         ScaledResolution sres = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
-        int[] centerCoords = new int[]{(sres.getScaledHeight()/2),(sres.getScaledWidth()/2)};
-        int width = centerCoords[1] - 40;
-        addButton(new GuiSlider(ELEMENTS.UsedXP.ordinal(), 20, 20, width, 20, "XP To Infuse: ", "", 0.0, 512.0, tile.xpti, false, true));
-        addButton(new GuiButton(1,20,400,width,10,"lel"));
+
+        int GUITCX = sres.getScaledWidth();
+        int GUITCY = sres.getScaledHeight();
+
+        addButton(new GuiSlider(ELEMENTS.UsedXP.ordinal(), 0, 0, width/4, 20, "XP To Infuse: ", "", 0.0, 512.0, tile.xpti, false, true), GUITCX, GUITCY);
+        addButton(new GuiButton(ELEMENTS.DONEBTN.ordinal(), 0, 0,width/4, 20,"lel"), GUITCX, GUITCY+20);
 
         super.initGui();
     }
@@ -50,20 +43,9 @@ public class EnchanterGUI extends GuiContainer {
         drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
     }
 
-    public void addButton(GuiButton btn) {
-        btn.xPosition = offsetXcounter;
-        btn.yPosition = offsetYcounter;
+    public void addButton(GuiButton btn, int xpos, int ypos) {
+        btn.xPosition = xpos;
+        btn.yPosition = ypos;
         buttonList.add(btn);
-
-        this.offsetYcounter += btn.height + this.paddingY;
-    }
-
-    public void addButtonsH(GuiButton... btns) {
-        for (GuiButton btn : btns) {
-            btn.xPosition = offsetXcounter;
-            btn.yPosition = offsetYcounter;
-            this.buttonList.add(btn);
-            this.offsetXcounter += btn.width + this.paddingX;
-        }
     }
 }

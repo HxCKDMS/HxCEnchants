@@ -136,9 +136,9 @@ public class ArmorEventHandler
                 RepairItems(player);
                 ShouldRepair = (Config.enchRepairRate * 20);
             }
-
-            if (!player.worldObj.isRemote){
-                Stealth(player, (Helm[23] + Torso[23] + Legging[23] + Boot[23]));
+            int StealthLevel = (Helm[23] + Torso[23] + Legging[23] + Boot[23]);
+            if (!player.worldObj.isRemote && StealthLevel > 0){
+                Stealth(player, StealthLevel);
             }
         }
 	}
