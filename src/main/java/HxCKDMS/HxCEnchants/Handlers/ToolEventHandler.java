@@ -3,11 +3,9 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Config;
-import HxCKDMS.HxCEnchants.Enchants;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -214,7 +212,7 @@ public class ToolEventHandler
             ItemStack heldItem = player.getHeldItem();
             ItemStack result;
 
-            AutoSmelt = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
+            AutoSmelt = HxCEnchantHelper.getEnchantLevel(heldItem,13);
             if(AutoSmelt > 0) {
                 result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
                 degrade(heldItem,13);
