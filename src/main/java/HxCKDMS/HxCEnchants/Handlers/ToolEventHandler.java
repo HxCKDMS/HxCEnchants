@@ -35,7 +35,6 @@ import java.util.Random;
 
 public class ToolEventHandler
 {
-	// Integers, ya idiot
 	int VampireLevel;
     int ExamineLevel;
 	int AutoSmeltLevel;
