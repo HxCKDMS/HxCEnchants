@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 import java.nio.ByteBuffer;
 
@@ -15,6 +16,7 @@ public class EnchanterTile extends TileEntity implements IInventory {
     public double xpti = 0;
     public double pxp = 0;
     public byte[] enchs = null;
+    public World world = getWorldObj();
 
     public EnchanterTile(){
         inv = new ItemStack[1];

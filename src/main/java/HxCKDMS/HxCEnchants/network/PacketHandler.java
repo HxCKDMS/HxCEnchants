@@ -38,7 +38,7 @@ public class PacketHandler implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(tileEntity.getWorldObj().provider.dimensionId);
+        buf.writeInt(tileEntity.world.provider.dimensionId);
         buf.writeInt(tileEntity.xCoord);
         buf.writeInt(tileEntity.yCoord);
         buf.writeInt(tileEntity.zCoord);

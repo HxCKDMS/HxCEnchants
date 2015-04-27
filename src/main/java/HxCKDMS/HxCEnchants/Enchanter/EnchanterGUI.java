@@ -10,6 +10,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -23,8 +24,9 @@ public class EnchanterGUI extends GuiContainer {
     public EnchanterGUI (Container container) {
         super(container);
     }
-    private EnchanterTile tile = new EnchanterTile();
-    int[] HxCEnchs = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    /**Tired Coding I wish I knew a better way to do this but what ever I hope this works**/
+    private Vec3 playerLooking = mc.thePlayer.getLookVec();
+    private EnchanterTile tile = (EnchanterTile)mc.theWorld.getTileEntity(Math.round((float)playerLooking.xCoord), Math.round((float)playerLooking.yCoord), Math.round((float)playerLooking.zCoord));
     int[] Selection = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     @Override
