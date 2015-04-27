@@ -7,16 +7,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import java.nio.ByteBuffer;
+
 public class EnchanterTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
 
     public double xpti = 0;
     public double pxp = 0;
-    public String targetEnchants = null;
-    public Byte[] enchs = null;
+    public byte[] enchs = null;
+    ByteBuffer wrapped = ByteBuffer.wrap(enchs);
+    int num = wrapped.getInt();
 
     public EnchanterTile(){
         inv = new ItemStack[1];
+    }
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
     }
 
     @Override

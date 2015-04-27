@@ -42,6 +42,7 @@ public class PacketHandler implements IMessage {
         buf.writeInt(tileEntity.yCoord);
         buf.writeInt(tileEntity.zCoord);
         buf.writeDouble(tileEntity.xpti);
+        buf.writeBytes(tileEntity.enchs);
     }
 
     public static class Handler implements IMessageHandler<PacketHandler, IMessage> {
