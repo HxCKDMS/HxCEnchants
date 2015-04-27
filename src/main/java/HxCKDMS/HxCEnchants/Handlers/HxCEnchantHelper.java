@@ -41,9 +41,12 @@ public class HxCEnchantHelper {
         try {
             HxCEnchants = stack.getTagCompound().getIntArray("HxCEnchants");
             EnchantLevel = HxCEnchants[EnchantNumber];
-        } catch (Exception ignored) {
+        } catch (Exception ignored2) {
             HxCEnchants = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-            NBTTagCompound mew = stack.getTagCompound();
+            NBTTagCompound mew = new NBTTagCompound();
+            try {
+                mew = stack.getTagCompound();
+            } catch (Exception ignored) {}
             mew.setIntArray("HxCEnchants", HxCEnchants);
             stack.setTagCompound(mew);
             EnchantLevel = 0;

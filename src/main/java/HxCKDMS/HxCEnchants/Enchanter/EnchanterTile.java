@@ -39,7 +39,7 @@ public class EnchanterTile extends TileEntity implements IInventory {
                 tagCompound.setInteger("HxCEnchantCharge", xpti);
                 stack.setTagCompound(tagCompound);
             }
-
+            System.out.println(stack.getTagCompound().getInteger("HxCEnchantCharge"));
             enchs = null;
             xpti = 0;
         }
