@@ -27,6 +27,7 @@ public class HxCEnchants
     public static SimpleNetworkWrapper Network;
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
+        Network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.CHANNEL_NAME);
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
     }
 

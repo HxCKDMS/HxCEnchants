@@ -15,8 +15,6 @@ public class EnchanterTile extends TileEntity implements IInventory {
     public double xpti = 0;
     public double pxp = 0;
     public byte[] enchs = null;
-    ByteBuffer wrapped = ByteBuffer.wrap(enchs);
-    int num = wrapped.getInt();
 
     public EnchanterTile(){
         inv = new ItemStack[1];
@@ -24,6 +22,11 @@ public class EnchanterTile extends TileEntity implements IInventory {
 
     @Override
     public void updateEntity() {
+        if (enchs != null) {
+            ByteBuffer wrapped = ByteBuffer.wrap(enchs);
+            int num = wrapped.getInt();
+            System.out.println(num);
+        }
         super.updateEntity();
     }
 

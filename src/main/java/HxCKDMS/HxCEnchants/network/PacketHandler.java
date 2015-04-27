@@ -30,8 +30,9 @@ public class PacketHandler implements IMessage {
 
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof EnchanterTile) {
-            EnchanterTile teAB = (EnchanterTile)te;
-            teAB.xpti = buf.readByte();
+            EnchanterTile enchanterTile = (EnchanterTile)te;
+            enchanterTile.xpti = buf.readByte();
+            enchanterTile.enchs = buf.readBytes(tileEntity.enchs).array();
         }
     }
 

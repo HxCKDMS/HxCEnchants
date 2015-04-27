@@ -187,15 +187,15 @@ public class EnchanterGUI extends GuiContainer {
             mc.thePlayer.closeScreen();
         }
         if (button.id >= 2 && button.id <= 7) {
-            Selection[button.id - 2] = Selection[(button.id - 2)] + 1;
+            Selection[button.id - 2] = Selection[button.id - 2] + 1;
         } else if (button.id >= 8 && button.id <= 11) {
-            Selection[button.id - 1] = Selection[(button.id - 1)] + 1;
+            Selection[button.id - 1] = Selection[button.id - 1] + 1;
         } else if (button.id >= 12 && button.id <= 14) {
             Selection[button.id] = Selection[(button.id)] + 1;
         } else if (button.id >= 15 && button.id <= 17) {
-            Selection[button.id + 1] = Selection[(button.id + 1)] + 1;
+            Selection[button.id + 1] = Selection[button.id + 1] + 1;
         } else if (button.id >= 18 && button.id <= 25) {
-            Selection[button.id + 2] = Selection[(button.id + 2)] + 1;
+            Selection[button.id + 2] = Selection[button.id + 2] + 1;
         }
     }
 
