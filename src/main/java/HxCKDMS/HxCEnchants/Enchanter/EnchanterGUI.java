@@ -10,7 +10,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -21,12 +20,11 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class EnchanterGUI extends GuiContainer {
-    public EnchanterGUI (Container container) {
+    private EnchanterTile tile;
+    public EnchanterGUI (Container container, EnchanterTile tile) {
         super(container);
+        this.tile = tile;
     }
-    /**Tired Coding I wish I knew a better way to do this but what ever I hope this works**/
-    private Vec3 playerLooking = mc.thePlayer.getLookVec();
-    private EnchanterTile tile = (EnchanterTile)mc.theWorld.getTileEntity(Math.round((float)playerLooking.xCoord), Math.round((float)playerLooking.yCoord), Math.round((float)playerLooking.zCoord));
     int[] Selection = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     @Override
@@ -82,14 +80,10 @@ public class EnchanterGUI extends GuiContainer {
     }
     @Override
     public void drawScreen(int mouseX, int mouseY, float f) {
-        // Draw your stuff like Textures and Strings
         drawDefaultBackground();
         drawRect(width / 2 - 105, 60, width / 2 - 35, height / 2 + 5, new Color(50, 170, 170, 70).getRGB());
-        drawCenteredString(fontRendererObj, I18n.format("menu.title"), width / 2, 25, Color.WHITE.getRGB());
-
-        // Call this methods super, as it draws buttons and stuff
+        drawCenteredString(fontRendererObj, I18n.format("Enchanter"), width / 2, 25, Color.WHITE.getRGB());
         super.drawScreen(mouseX, mouseY, f);
-        // Add the hovering for all GuiButtons in the buttonList
         for (Object button : buttonList) {
             if (button instanceof GuiButton) {
                 GuiButton btn = (GuiButton) button;
@@ -186,7 +180,6 @@ public class EnchanterGUI extends GuiContainer {
             }
 
             HxCEnchants.Network.sendToServer(new PacketHandler(tile));
-            mc.thePlayer.closeScreen();
         }
         if (button.id >= 2 && button.id <= 7) {
             Selection[button.id - 2] = Selection[button.id - 2] + 1;

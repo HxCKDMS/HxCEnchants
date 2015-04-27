@@ -21,7 +21,7 @@ public class GUIHandler implements IGuiHandler {
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if(tileEntity instanceof EnchanterTile){
-            return new EnchanterGUI(new EnchanterContainer(player, tileEntity));
+            return new EnchanterGUI(new EnchanterContainer(player, tileEntity), (EnchanterTile)tileEntity);
         }
         return null;
     }

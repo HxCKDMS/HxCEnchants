@@ -9,12 +9,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 
 public class EnchanterTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
 
-    public double xpti = 0;
-    public double pxp = 0;
+    public int xpti = 0;
     public byte[] enchs = null;
     public World world = getWorldObj();
 
@@ -24,12 +25,24 @@ public class EnchanterTile extends TileEntity implements IInventory {
 
     @Override
     public void updateEntity() {
-        if (enchs != null) {
-            ByteBuffer wrapped = ByteBuffer.wrap(enchs);
-            int num = wrapped.getInt();
-            System.out.println(num);
+        if (enchs != null && xpti > 0) {
+            IntBuffer intBuf = ByteBuffer.wrap(enchs).order(ByteOrder.BIG_ENDIAN).asIntBuffer();
+            int[] array = new int[intBuf.remaining()];
+            intBuf.get(array);
+            ItemStack stack = inv[0];
+            try {
+                stack.getTagCompound().setIntArray("HxCEnchants", array);
+                stack.getTagCompound().setInteger("HxCEnchantCharge", xpti);
+            } catch (Exception ignored) {
+                NBTTagCompound tagCompound = new NBTTagCompound();
+                tagCompound.setIntArray("HxCEnchants", array);
+                tagCompound.setInteger("HxCEnchantCharge", xpti);
+                stack.setTagCompound(tagCompound);
+            }
+
+            enchs = null;
+            xpti = 0;
         }
-        super.updateEntity();
     }
 
     @Override

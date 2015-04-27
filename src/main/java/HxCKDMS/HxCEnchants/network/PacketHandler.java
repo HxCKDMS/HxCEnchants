@@ -21,8 +21,7 @@ public class PacketHandler implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        int dimensionId = buf.readInt();
-        World world = DimensionManager.getWorld(dimensionId);
+        World world = DimensionManager.getWorld(0);
 
         int x = buf.readInt();
         int y = buf.readInt();
@@ -31,18 +30,17 @@ public class PacketHandler implements IMessage {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof EnchanterTile) {
             EnchanterTile enchanterTile = (EnchanterTile)te;
-            enchanterTile.xpti = buf.readByte();
-            enchanterTile.enchs = buf.readBytes(tileEntity.enchs).array();
+            enchanterTile.xpti = buf.readInt();
+            enchanterTile.xpti = buf.readInt();
         }
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(tileEntity.world.provider.dimensionId);
         buf.writeInt(tileEntity.xCoord);
         buf.writeInt(tileEntity.yCoord);
         buf.writeInt(tileEntity.zCoord);
-        buf.writeDouble(tileEntity.xpti);
+        buf.writeInt(tileEntity.xpti);
         buf.writeBytes(tileEntity.enchs);
     }
 
