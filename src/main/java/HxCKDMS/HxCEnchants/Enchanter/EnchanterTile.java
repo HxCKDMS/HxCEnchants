@@ -12,6 +12,8 @@ public class EnchanterTile extends TileEntity implements IInventory {
 
     public double xpti = 0;
     public double pxp = 0;
+    public String targetEnchants = null;
+    public Byte[] enchs = null;
 
     public EnchanterTile(){
         inv = new ItemStack[1];

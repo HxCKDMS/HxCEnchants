@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,7 +17,6 @@ import java.util.Random;
 
 public class AOEEventHandler
 {
-    NBTTagCompound mew = new NBTTagCompound();
     int[] HelmetAura;
     int[] TorsoAura;
     int[] LeggingsAura;
@@ -33,7 +31,7 @@ public class AOEEventHandler
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		if(event.entityLiving instanceof EntityPlayerMP && !(((EntityPlayerMP) event.entityLiving).getEntityWorld().isRemote)) {
-            mew.setIntArray("HxCEnchants", new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+            int[] Enchants = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
             World world = player.getEntityWorld();
             Random rand = world.rand;
@@ -42,26 +40,26 @@ public class AOEEventHandler
             ArmourLegs = player.inventory.armorItemInSlot(1);
             ArmourBoots = player.inventory.armorItemInSlot(0);
 
-            int[] helmEnchs = mew.getIntArray("HxCEnchants");
-            int[] torsoEnchs = mew.getIntArray("HxCEnchants");
-            int[] legEnchs = mew.getIntArray("HxCEnchants");
-            int[] bootEnchs = mew.getIntArray("HxCEnchants");
+            int[] helmEnchs = Enchants;
+            int[] torsoEnchs = Enchants;
+            int[] legEnchs = Enchants;
+            int[] bootEnchs = Enchants;
 
             if (ArmourHelm != null) {
                 try {helmEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourHelm.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourHelm.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             if (ArmourChest != null) {
                 try {torsoEnchs = ArmourChest.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourChest.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourChest.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             if (ArmourLegs != null) {
                 try {legEnchs = ArmourLegs.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourLegs.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourLegs.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             if (ArmourBoots != null) {
                 try {bootEnchs = ArmourBoots.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourBoots.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourBoots.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
 
             HelmetAura = new int[]{helmEnchs[1],helmEnchs[2],helmEnchs[3],helmEnchs[4],helmEnchs[5],helmEnchs[20]};

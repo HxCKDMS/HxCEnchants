@@ -19,16 +19,16 @@ public class Enchants {
     /** ArrowExplosive;        [08] **/
     /** ArrowLightning;        [09] **/
     /** ArrowSeeking;          [10] **/
-    /** Bound;                 [11] **/
+    /** Bound;                 [11] **/ //disabled until Karel works on it
     /** BattleHealing;         [12] **/
     /** FlameTouch;            [13] **/
     /** Fly;                   [14] **/
     /** JumpBoost;             [15] **/
-    /** LeadFooted;            [16] **/
+    /** LeadFooted;            [16] **/ //disabled until find way to make it work
     /** LifeSteal;             [17] **/
     /** Poison;                [18] **/
     /** Repair;                [19] **/
-    /** Shroud;                [20] **/
+    /** Shroud;                [20] **/ //disabled until ready
     /** SoulTear;              [21] **/
     /** Swiftness;             [22] **/
     /** Stealth;               [23] **/

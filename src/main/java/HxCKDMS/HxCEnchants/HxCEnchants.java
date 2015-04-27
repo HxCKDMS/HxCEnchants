@@ -12,6 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -23,7 +24,7 @@ public class HxCEnchants
     @Instance(Reference.MOD_ID)
     public static HxCEnchants instance;
     public static Config Config;
-
+    public static SimpleNetworkWrapper Network;
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));

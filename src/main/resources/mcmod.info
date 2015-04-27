@@ -1,9 +1,9 @@
 [
   {
-    "modid": "HxCEnchants",
-    "name": "HxC Enchants",
+    "modid": "HxCEnchants2",
+    "name": "HxC Enchants 2",
     "description": "Adds New/Better enchants to the game",
-    "version": "1.7.10-1.2c",
+    "version": "1.7.10-1.0",
     "credits": "Merged old Enchants mod from BrassGoggledArchivists and got some help from friends",
     "mcversion": "1.7.10",
     "authors": ["§4HxCK§3D§eM§0S§r"],

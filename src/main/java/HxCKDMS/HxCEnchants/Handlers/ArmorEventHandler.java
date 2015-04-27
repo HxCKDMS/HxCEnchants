@@ -25,8 +25,6 @@ import java.util.UUID;
 
 public class ArmorEventHandler
 {
-    NBTTagCompound mew = new NBTTagCompound();
-
     //UUIDs for Attributes
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
@@ -56,7 +54,7 @@ public class ArmorEventHandler
     @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		if(event.entityLiving instanceof EntityPlayerMP) {
-            mew.setIntArray("HxCEnchants", new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+            int[] Enchants = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
 
             String UUID = player.getUniqueID().toString();
@@ -76,25 +74,27 @@ public class ArmorEventHandler
             ArmourChest = player.inventory.armorItemInSlot(2);
             ArmourLegs = player.inventory.armorItemInSlot(1);
             ArmourBoots = player.inventory.armorItemInSlot(0);
-            Helm = mew.getIntArray("HxCEnchants");
-            Torso = mew.getIntArray("HxCEnchants");
-            Legging = mew.getIntArray("HxCEnchants");
-            Boot = mew.getIntArray("HxCEnchants");
+
+            Helm = Enchants;
+            Torso = Enchants;
+            Legging = Enchants;
+            Boot = Enchants;
+
             if (ArmourHelm != null) {
                 try {Helm = ArmourHelm.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourHelm.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourHelm.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             if (ArmourChest != null) {
                 try {Torso = ArmourChest.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourChest.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourChest.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             if (ArmourLegs != null) {
                 try {Legging = ArmourLegs.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourLegs.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourLegs.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             if (ArmourBoots != null) {
                 try {Boot = ArmourBoots.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourBoots.setTagCompound(mew);}
+                catch (Exception ignored) {ArmourBoots.getTagCompound().setIntArray("HxCEnchants", Enchants);}
             }
             int Regen = (Helm[7] + Torso[7] + Legging[7] + Boot[7]);
             Vitality = Torso[25] * 0.5F;
