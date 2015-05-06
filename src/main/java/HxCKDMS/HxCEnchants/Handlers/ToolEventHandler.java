@@ -185,7 +185,7 @@ public class ToolEventHandler
 	}
 	@SubscribeEvent
     public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event) {
-        if (event.harvester != null){
+        if (event.harvester != null && Config.enchFlameTouchEnable){
             EntityPlayer player = event.harvester;
             Block block = event.block;
             ItemStack itemStackBlock = new ItemStack(Item.getItemFromBlock(block), 1);
