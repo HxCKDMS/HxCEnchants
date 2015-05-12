@@ -91,9 +91,6 @@ public class ArmorEventHandler
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
 
-            ph.removeModifier(HealthBuff);
-            ps.removeModifier(SpeedBuff);
-
             ArmourHelm = player.inventory.armorItemInSlot(3);
             ArmourChest = player.inventory.armorItemInSlot(2);
             ArmourLegs = player.inventory.armorItemInSlot(1);
@@ -153,8 +150,11 @@ public class ArmorEventHandler
                 if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
 
                 if(VitalityLevel > 0) ph.applyModifier(HealthBuff);
+                else ph.removeModifier(HealthBuff);
 
                 if(SpeedLevel > 0 && !player.isSneaking() && !player.isRiding()) ps.applyModifier(SpeedBuff);
+                else ps.removeModifier(SpeedBuff);
+
 
                 if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0) {
                     player.heal(RegenLevel * 2);
