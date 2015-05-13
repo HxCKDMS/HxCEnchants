@@ -6,7 +6,6 @@ import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -18,7 +17,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -187,21 +185,21 @@ public class ToolEventHandler
     public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event) {
         if (event.harvester != null && Config.enchFlameTouchEnable){
             EntityPlayer player = event.harvester;
-            Block block = event.block;
-            ItemStack itemStackBlock = new ItemStack(Item.getItemFromBlock(block), 1);
             ItemStack heldItem = player.getHeldItem();
-            ItemStack result;
 
             AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
             if(AutoSmeltLevel > 0) {
-                result = FurnaceRecipes.smelting().getSmeltingResult(itemStackBlock);
+                FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
-                if(result != null) {
-                    result.stackSize = AutoSmeltLevel;
-                    for(int i = 0; i < event.drops.size(); i++) {
-                        event.drops.remove(i);
+                for(int i = 0; i < event.drops.size(); i++) {
+                    ItemStack drop = event.drops.get(i);
+                    ItemStack smelted = furnaceRecipes.getSmeltingResult(drop);
+
+                    if(smelted != null){
+                        ItemStack actualDrop = new ItemStack(smelted.getItem(), drop.stackSize * AutoSmeltLevel, smelted.getItemDamage());
+                        event.drops.set(i, actualDrop);
+
                     }
-                    event.drops.add(result);
                 }
             }
         }
