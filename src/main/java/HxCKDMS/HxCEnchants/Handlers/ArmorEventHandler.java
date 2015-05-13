@@ -13,7 +13,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -83,7 +82,6 @@ public class ArmorEventHandler
 
             String UUID = player.getUniqueID().toString();
             File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-            NBTTagCompound xe = NBTFileIO.getNbtTagCompound(CustomPlayerData, "xenchants");
 
             IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
             IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
@@ -149,11 +147,17 @@ public class ArmorEventHandler
                 }
                 if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
 
-                if(VitalityLevel > 0) ph.applyModifier(HealthBuff);
-                else ph.removeModifier(HealthBuff);
+                double spbf = ps.getBaseValue() + SpeedBuff.getAmount();
+                double hpbf = ph.getBaseValue() + HealthBuff.getAmount();
 
-                if(SpeedLevel > 0 && !player.isSneaking() && !player.isRiding()) ps.applyModifier(SpeedBuff);
-                else ps.removeModifier(SpeedBuff);
+                if(ph.getAttributeValue() != hpbf) {ph.removeModifier(HealthBuff); ph.applyModifier(HealthBuff);}
+
+                if(ps.getAttributeValue() != spbf) {
+                    if (!player.isSneaking() && !player.isRiding()) {
+                        ps.removeModifier(SpeedBuff);
+                        ps.applyModifier(SpeedBuff);
+                    }
+                }
 
 
                 if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0) {
