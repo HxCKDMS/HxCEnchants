@@ -109,7 +109,9 @@ public class ArmorEventHandler
             if (Config.enchAirStriderEnable)AirStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AirStrider.effectId, ArmourBoots);
             if (Config.enchStealthEnable)StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
             if (Config.enchRegenEnable)B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
-
+            RegenLevel = 0;
+            Vitality = 0;
+            SpeedBoost = 0;
             RegenLevel = (H + C + L + B);
             Vitality = VitalityLevel * 0.5F;
             SpeedBoost = SpeedLevel * 0.2;
@@ -131,17 +133,11 @@ public class ArmorEventHandler
                 }
                 if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
 
-                double spbf = ps.getBaseValue() + SpeedBuff.getAmount();
-                double hpbf = ph.getBaseValue() + HealthBuff.getAmount();
+                if(!ph.func_111122_c().contains(HealthBuff) && VitalityLevel > 0) {ph.applyModifier(HealthBuff);}
+                if(ph.func_111122_c().contains(HealthBuff) && VitalityLevel < 1) {ph.removeModifier(HealthBuff);}
 
-                if(ph.getAttributeValue() != hpbf) {ph.removeModifier(HealthBuff); ph.applyModifier(HealthBuff);}
-
-                if(ps.getAttributeValue() != spbf) {
-                    if (!player.isSneaking() && !player.isRiding()) {
-                        ps.removeModifier(SpeedBuff);
-                        ps.applyModifier(SpeedBuff);
-                    }
-                }
+                if(!ps.func_111122_c().contains(SpeedBuff) && VitalityLevel > 0) {ps.applyModifier(SpeedBuff);}
+                if(ps.func_111122_c().contains(SpeedBuff) && VitalityLevel < 1) {ps.removeModifier(SpeedBuff);}
 
 
                 if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0) {
@@ -153,16 +149,6 @@ public class ArmorEventHandler
                     RepairItems(player);
                     ShouldRepair = (Config.enchRepairRate * 20);
                 }
-/*
-                try {
-                    if (Config.enchAirStriderEnable && AirStriderLevel > 0) {
-                        float Speed = ((AirStriderLevel * 0.25f) + 0.05f);
-                        player.capabilities.setFlySpeed(Speed);
-                    } else if (Config.enchAirStriderEnable) {
-                        player.capabilities.setFlySpeed(0.05f);
-                    }
-                } catch (Exception ignored){}
-*/
 
                 if (!player.worldObj.isRemote){
                     Stealth(player, StealthLevel);
