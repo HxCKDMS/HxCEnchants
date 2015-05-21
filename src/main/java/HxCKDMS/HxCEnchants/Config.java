@@ -221,7 +221,7 @@ public class Config
         enchAuraThickID = config.getInt("ThickAuraID", "Armor Enchant IDs", 416, 400, 420, "");
         enchAuraToxicID = config.getInt("ToxicAuraID", "Armor Enchant IDs", 417, 400, 420, "");
         enchAuraDarkID = config.getInt("DarkAuraID", "Armor Enchant IDs", 418, 400, 420, "");
-        enchDivineInterventionID = config.getInt("DarkAuraID", "Armor Enchant IDs", 419, 400, 420, "");
+        enchDivineInterventionID = config.getInt("DivineInterventionID", "Armor Enchant IDs", 419, 400, 420, "");
 
         enchAdrenalineBoostLVL = config.getInt("AdrenalineBoostLVL", "Armor Enchant LVLs", 4, 1, 10, "");
         enchBattleHealingLVL = config.getInt("BattleHealingLVL", "Armor Enchant LVLs", 4, 1, 10, "");
