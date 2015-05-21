@@ -138,8 +138,8 @@ public class ArmorEventHandler
                 if(!ph.func_111122_c().contains(HealthBuff) && VitalityLevel > 0) {ph.applyModifier(HealthBuff);}
                 if(ph.func_111122_c().contains(HealthBuff) && VitalityLevel < 1) {ph.removeModifier(HealthBuff);}
 
-                if(!ps.func_111122_c().contains(SpeedBuff) && VitalityLevel > 0) {ps.applyModifier(SpeedBuff);}
-                if(ps.func_111122_c().contains(SpeedBuff) && VitalityLevel < 1) {ps.removeModifier(SpeedBuff);}
+                if(!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel > 0) {ps.applyModifier(SpeedBuff);}
+                if(ps.func_111122_c().contains(SpeedBuff) && SpeedLevel < 1) {ps.removeModifier(SpeedBuff);}
 
 
                 if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0) {
