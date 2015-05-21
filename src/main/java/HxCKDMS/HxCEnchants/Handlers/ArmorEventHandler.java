@@ -74,11 +74,6 @@ public class ArmorEventHandler
             String UUID = player.getUniqueID().toString();
             File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
 
-            IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
-            IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
-
-            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
-            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
 
             ArmourHelm = player.inventory.armorItemInSlot(3);
             ArmourChest = player.inventory.armorItemInSlot(2);
@@ -97,10 +92,10 @@ public class ArmorEventHandler
 
             //Chestplate Enchants
             if (Config.enchVitalityEnable) {
-                VitalityLevel = 0;
-                Vitality = 0;
-                Vitality = VitalityLevel * 0.5F;
+                IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
                 VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
+                Vitality = VitalityLevel * 0.5F;
+                AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
                 if(!ph.func_111122_c().contains(HealthBuff) && VitalityLevel != 0) {ph.applyModifier(HealthBuff);}
                 if(ph.func_111122_c().contains(HealthBuff) && VitalityLevel == 0) {ph.removeModifier(HealthBuff);}
             }
@@ -108,11 +103,12 @@ public class ArmorEventHandler
 
             //Legging Enchants
             if (Config.enchSwiftnessEnable){
-                SpeedBoost = 0;
+                IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+                SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
                 SpeedBoost = SpeedLevel * 0.2;
+                AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
                 if(!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0) {ps.applyModifier(SpeedBuff);}
                 if(ps.func_111122_c().contains(SpeedBuff) && SpeedLevel == 0) {ps.removeModifier(SpeedBuff);}
-                SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
             }
             if (Config.enchJumpBoostEnable) {
                 JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ArmourLegs);
