@@ -41,7 +41,6 @@ public class ArmorEventHandler
     int CanRegen = (Config.enchRegenRate * 20);
 
     int JumpBoostLevel;
-    int AirStriderLevel;
     int VitalityLevel;
     int AdrenalineBoostLevel;
     int BattleHealingLevel;
@@ -87,7 +86,7 @@ public class ArmorEventHandler
             ArmourBoots = player.inventory.armorItemInSlot(0);
 
             /** Big blob is better than 5 char lines**/
-            JumpBoostLevel = 0;AirStriderLevel = 0;
+            JumpBoostLevel = 0;
             VitalityLevel = 0;AdrenalineBoostLevel = 0;
             BattleHealingLevel = 0;WitherProt = 0;
             FlyLevel = 0;RegenLevel = 0;SpeedLevel = 0;
@@ -235,6 +234,7 @@ public class ArmorEventHandler
 	}
     int DivineInterventionLevel;
     @SubscribeEvent
+    @SuppressWarnings("unchecked")
     public void LivingHurtEvent(LivingHurtEvent event){
         Entity hurtEntity = event.entity;
         if (hurtEntity instanceof EntityPlayerMP){
@@ -255,7 +255,7 @@ public class ArmorEventHandler
                             y = coords.posY;
                             z = coords.posZ;
                         }
-                        if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, HxCCore.server.getConfigurationManager(), x, y, z);
+                        if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, x, y, z);
                         else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
                     Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
                     enchs.remove(Config.enchDivineInterventionID);
