@@ -6,7 +6,6 @@ import HxCKDMS.HxCCore.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -258,9 +257,9 @@ public class ArmorEventHandler
                         }
                         if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, HxCCore.server.getConfigurationManager(), x, y, z);
                         else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
-                    Map<Enchantment, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
-                    if (DivineInterventionLevel > 1) enchs.replace(Enchants.DivineIntervention, DivineInterventionLevel-1);
-                    else enchs.remove(Enchants.DivineIntervention);
+                    Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
+                    enchs.remove(Config.enchDivineInterventionID);
+                    if (DivineInterventionLevel > 1) enchs.put(Config.enchDivineInterventionID, DivineInterventionLevel - 1);
                     EnchantmentHelper.setEnchantments(enchs, ArmourChest);
                 }
             }
