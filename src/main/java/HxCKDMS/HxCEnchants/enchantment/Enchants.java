@@ -23,6 +23,8 @@ public class Enchants {
     public static Enchantment ArrowSeeking;
     public static Enchantment Bound;
     public static Enchantment BattleHealing;
+    public static Enchantment DivineIntervention;
+    public static Enchantment Examine;
     public static Enchantment FlameTouch;
     public static Enchantment Fly;
     public static Enchantment JumpBoost;
@@ -37,7 +39,6 @@ public class Enchants {
     public static Enchantment Vampirism;
     public static Enchantment Vitality;
     public static Enchantment WitherProtection;
-    public static Enchantment Examine;
 
     public static void load () {
         if (Config.enchAdrenalineBoostEnable) {
@@ -70,11 +71,6 @@ public class Enchants {
             MinecraftForge.EVENT_BUS.register(AuraToxic);
             Enchs++;
         }
-        if(Config.enchAirStriderEnable){
-            AirStrider = new EnchantmentFasterFlight(Config.enchAirStriderID, Config.enchAirStriderWeight);
-            MinecraftForge.EVENT_BUS.register(AirStrider);
-            Enchs++;
-        }
         if (Config.enchRegenEnable) {
             ArmorRegen = new EnchantmentRegen(Config.enchRegenID, Config.enchRegenWeight);
             MinecraftForge.EVENT_BUS.register(ArmorRegen);
@@ -100,14 +96,19 @@ public class Enchants {
             MinecraftForge.EVENT_BUS.register(BattleHealing);
             Enchs++;
         }
-        if (Config.enchExamineEnable) {
-            Examine = new EnchantmentExtraXP(Config.enchExamineID, Config.enchExamineWeight);
-            MinecraftForge.EVENT_BUS.register(Examine);
-            Enchs++;
-        }
         if(Config.enchBoundEnable){
             Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
             MinecraftForge.EVENT_BUS.register(Bound);
+            Enchs++;
+        }
+        if (Config.enchDivineInterventionEnable) {
+            DivineIntervention = new EnchantmentDivineIntervention(Config.enchDivineInterventionID, Config.enchDivineInterventionWeight);
+            MinecraftForge.EVENT_BUS.register(DivineIntervention);
+            Enchs++;
+        }
+        if (Config.enchExamineEnable) {
+            Examine = new EnchantmentExtraXP(Config.enchExamineID, Config.enchExamineWeight);
+            MinecraftForge.EVENT_BUS.register(Examine);
             Enchs++;
         }
         if (Config.enchFlameTouchEnable) {

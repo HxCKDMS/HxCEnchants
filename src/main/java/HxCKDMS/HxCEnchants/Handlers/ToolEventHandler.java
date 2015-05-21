@@ -49,7 +49,7 @@ public class ToolEventHandler
     public void LivingHurtEvent(LivingHurtEvent event) {
         Entity hurtent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP && hurtent instanceof EntityLiving){
+        if (ent instanceof EntityPlayerMP && hurtent instanceof EntityLiving && Config.enchLifeStealEnable){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
