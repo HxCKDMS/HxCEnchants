@@ -302,6 +302,7 @@ public class Config
         enchVampirismID = config.getInt("VampirismID", "Tool/Weapon Enchant IDs", 434, 431, 450, "");
         enchExamineID = config.getInt("ExamineID", "Tool/Weapon Enchant IDs", 435, 431, 450, "");
         enchPiercingID = config.getInt("PiercingID", "Tool/Weapon Enchant IDs", 436, 431, 450, "");
+        enchVenomID = config.getInt("VenomID", "Tool/Weapon Enchant IDs", 437, 431, 450, "");
 
         enchFlameTouchLVL = config.getInt("FlameTouchLVL", "Tool/Weapon Enchant LVLs", 4, 1, 10, "");
         enchLifeStealLVL = config.getInt("LifeStealLVL", "Tool/Weapon Enchant LVLs", 5, 1, 10, "");
