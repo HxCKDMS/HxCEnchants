@@ -6,6 +6,7 @@ import HxCKDMS.HxCCore.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -24,6 +25,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ArmorEventHandler
@@ -231,20 +233,24 @@ public class ArmorEventHandler
             player.motionY += JumpBuff;
 		}
 	}
-    int DivingInterventionLevel;
+    int DivineInterventionLevel;
     @SubscribeEvent
     public void LivingHurtEvent(LivingHurtEvent event){
         Entity hurtEntity = event.entity;
         if (hurtEntity instanceof EntityPlayerMP){
             EntityPlayerMP player = (EntityPlayerMP) hurtEntity;
             ArmourChest = player.inventory.armorItemInSlot(2);
-            if (Config.enchDivineInterventionEnable) DivingInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
-            if (DivingInterventionLevel > 0){
+            if (Config.enchDivineInterventionEnable) DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
+            if (DivineInterventionLevel > 0){
                 if (player.prevHealth - event.ammount <= 1) {
                     player.heal(5);
                     int x = player.getBedLocation(0).posX, y = player.getBedLocation(0).posY, z = player.getBedLocation(0).posZ;
                     if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, HxCCore.server.getConfigurationManager(), x, y, z);
                     else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                    Map<Enchantment, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
+                    if (DivineInterventionLevel > 1) enchs.replace(Enchants.DivineIntervention, DivineInterventionLevel-1);
+                    else enchs.remove(Enchants.DivineIntervention);
+                    EnchantmentHelper.setEnchantments(enchs, ArmourChest);
                 }
             }
         }
