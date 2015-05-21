@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -244,9 +245,19 @@ public class ArmorEventHandler
             if (DivineInterventionLevel > 0){
                 if (player.prevHealth - event.ammount <= 1) {
                     player.heal(5);
-                    int x = player.getBedLocation(0).posX, y = player.getBedLocation(0).posY, z = player.getBedLocation(0).posZ;
-                    if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, HxCCore.server.getConfigurationManager(), x, y, z);
-                    else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                    int x, y, z;
+                        if (player.getBedLocation(0) != null) {
+                            x = player.getBedLocation(0).posX;
+                            y = player.getBedLocation(0).posY;
+                            z = player.getBedLocation(0).posZ;
+                        } else {
+                            ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
+                            x = coords.posX;
+                            y = coords.posY;
+                            z = coords.posZ;
+                        }
+                        if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, HxCCore.server.getConfigurationManager(), x, y, z);
+                        else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
                     Map<Enchantment, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
                     if (DivineInterventionLevel > 1) enchs.replace(Enchants.DivineIntervention, DivineInterventionLevel-1);
                     else enchs.remove(Enchants.DivineIntervention);
