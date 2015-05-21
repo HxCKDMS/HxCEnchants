@@ -16,6 +16,9 @@ enchantment.critical=Critical
 enchantment.flameTouch=Auto-Smelt
 enchantment.LeadFooted=Lead Footed
 enchantment.poison=Poison Tipped
+enchantment.venom=Venom
+enchantment.Piercing=Piercing
+enchantment.Penetrating=Penetrating
 enchantment.Repair=Repair
 enchantment.Shrouded=Shrouded
 enchantment.Stealth=Stealth
@@ -27,3 +30,8 @@ enchantment.DarkAura=Dark Aura
 enchantment.DeadlyAura=Deadly Aura
 enchantment.ThickAura=Thick Aura
 enchantment.ToxicAura=Toxic Aura
+
+
+death.attack.Piercing=%1$s was impaled.
+death.attack.Piercing.player=%1$s was impaled by %2$s.
+death.attack.Piercing.player.item=%1$s was impaled by %2$s using %3$s.

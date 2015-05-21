@@ -22,6 +22,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -38,6 +39,7 @@ public class ToolEventHandler
     int ExamineLevel;
 	int AutoSmeltLevel;
     int LifeStealLevel;
+    int PiercingLevel;
     float VBRV = 0;
 
     Random random = new Random();
@@ -49,16 +51,22 @@ public class ToolEventHandler
     public void LivingHurtEvent(LivingHurtEvent event) {
         Entity hurtent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP && hurtent instanceof EntityLiving && Config.enchLifeStealEnable){
+        if (ent instanceof EntityPlayerMP && hurtent instanceof EntityLiving && ((EntityPlayerMP) ent).getHeldItem() != null){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
-            LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
-            if (LifeStealLevel > 0){
-                double PH = Victim.prevHealth;
-                double CH = Victim.getHealth();
-                float RH = (float)CH - (float)PH;
-                Attacker.heal(RH * LifeStealLevel);
+            if (Config.enchLifeStealEnable) {
+                LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
+                if (LifeStealLevel > 0) {
+                    double PH = Victim.prevHealth;
+                    double CH = Victim.getHealth();
+                    float RH = (float) CH - (float) PH;
+                    Attacker.heal(RH * LifeStealLevel);
+                }
+            }
+            if (Config.enchPiercingEnable) {
+                PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
+                if (PiercingLevel > 0) Victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor(), Config.PiercingDamage);
             }
         }
     }

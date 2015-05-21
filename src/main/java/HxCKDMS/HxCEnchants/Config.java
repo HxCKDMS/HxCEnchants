@@ -8,6 +8,7 @@ public class Config
     public static boolean Feedback;
     public static boolean EDT;
     public static int enchXPrate;
+    public static int PiercingDamage;
 
     public static int enchAdrenalineBoostID;
     public static boolean enchAdrenalineBoostEnable;
@@ -98,7 +99,14 @@ public class Config
     public static int enchLifeStealLVL;
     public static int enchLifeStealWeight;
 
+    public static int enchPiercingID;
+    public static int enchArrowPiercingID;
+    public static boolean enchPiercingEnable;
+    public static int enchPiercingLVL;
+    public static int enchPiercingWeight;
+
     public static int enchPoisonID;
+    public static int enchVenomID;
     public static boolean enchPoisonEnable;
     public static int enchPoisonLVL;
     public static int enchPoisonWeight;
@@ -270,6 +278,7 @@ public class Config
         enchArrowExplosiveID = config.getInt("ArrowExplosiveID", "Arrow Enchant IDs", 421, 421, 430, "");
         enchArrowLightningID = config.getInt("ArrowLightningID", "Arrow Enchant IDs", 422, 421, 430, "");
         enchArrowSeekingID = config.getInt("ArrowSeekingID", "Arrow Enchant IDs", 423, 421, 430, "");
+        enchArrowPiercingID = config.getInt("ArrowPiercingID", "Arrow Enchant IDs", 424, 421, 430, "");
 
         enchArrowExplosiveLVL = config.getInt("ArrowExplosiveLVL", "Arrow Enchant LVLs", 4, 1, 10, "");
         enchArrowLightningLVL = config.getInt("ArrowLightningLVL", "Arrow Enchant LVLs", 1, 1, 10, "");
@@ -285,24 +294,28 @@ public class Config
         enchPoisonEnable = config.getBoolean("Poison", "Tool/Weapon Enchants", true, "Enable Enchant Poison?");
         enchVampirismEnable = config.getBoolean("Vampirism", "Tool/Weapon Enchants", true, "Enable Enchant Vampirism?");
         enchExamineEnable = config.getBoolean("Examine", "Tool/Weapon Enchants", true, "Enable Enchant Examine?");
+        enchPiercingEnable = config.getBoolean("Piercing", "Tool/Weapon Enchants", true, "Enable Enchant Piercing?");
 
         enchFlameTouchID = config.getInt("FlameTouchID", "Tool/Weapon Enchant IDs", 431, 431, 450, "");
         enchLifeStealID = config.getInt("LifeStealID", "Tool/Weapon Enchant IDs", 432, 431, 450, "");
         enchPoisonID = config.getInt("PoisonID", "Tool/Weapon Enchant IDs", 433, 431, 450, "");
         enchVampirismID = config.getInt("VampirismID", "Tool/Weapon Enchant IDs", 434, 431, 450, "");
         enchExamineID = config.getInt("ExamineID", "Tool/Weapon Enchant IDs", 435, 431, 450, "");
+        enchPiercingID = config.getInt("PiercingID", "Tool/Weapon Enchant IDs", 436, 431, 450, "");
 
         enchFlameTouchLVL = config.getInt("FlameTouchLVL", "Tool/Weapon Enchant LVLs", 4, 1, 10, "");
         enchLifeStealLVL = config.getInt("LifeStealLVL", "Tool/Weapon Enchant LVLs", 5, 1, 10, "");
         enchPoisonLVL = config.getInt("PoisonLVL", "Tool/Weapon Enchant LVLs", 4, 1, 10, "");
         enchVampirismLVL = config.getInt("VampirismLVL", "Tool/Weapon Enchant LVLs", 5, 1, 10, "");
         enchExamineLVL = config.getInt("ExamineLVL", "Tool/Weapon Enchant LVLs", 10, 1, 10, "");
+        enchPiercingLVL = config.getInt("ExamineLVL", "Tool/Weapon Enchant LVLs", 1, 1, 10, "");
 
         enchFlameTouchWeight = config.getInt("FlameTouchWeight", "Tool/Weapon Enchant Weights", 2, 1, 100, "");
         enchLifeStealWeight = config.getInt("LifeStealWeight", "Tool/Weapon Enchant Weights", 7, 1, 100, "");
         enchPoisonWeight = config.getInt("PoisonWeight", "Tool/Weapon Enchant Weights", 10, 1, 100, "");
         enchVampirismWeight = config.getInt("VampirismWeight", "Tool/Weapon Enchant Weights", 3, 1, 100, "");
         enchExamineWeight = config.getInt("ExamineWeight", "Tool/Weapon Enchant Weights", 1, 1, 100, "");
+        enchPiercingWeight = config.getInt("PiercingWeight", "Tool/Weapon Enchant Weights", 1, 1, 100, "");
 
         if(config.hasChanged())
         {

@@ -27,11 +27,13 @@ public class ArrowEventHandler
 	boolean isHoming;
 	boolean isZeus;
     boolean isPoison;
+    boolean isPiercing;
 
 	int ExplosionLevel;
     int PoisonLevel;
 	int HomingLevel;
 	int ZeusLevel;
+    int PiercingLevel;
 
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
@@ -41,11 +43,13 @@ public class ArrowEventHandler
         isHoming = false;
         isZeus = false;
         isPoison = false;
+        isPiercing = false;
 
         if (Config.enchArrowLightningEnable)ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
         if (Config.enchArrowSeekingEnable)HomingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowSeeking.effectId, stack);
         if (Config.enchArrowExplosiveEnable)ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowExplosive.effectId, stack);
         if (Config.enchPoisonEnable)PoisonLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
+        if (Config.enchPiercingEnable)PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Penetrating.effectId, stack);
 
         if(ExplosionLevel > 0){
             isExplosive = true;
@@ -55,6 +59,8 @@ public class ArrowEventHandler
             isZeus = true;
         }if(PoisonLevel > 0){
             isPoison = true;
+        }if(PiercingLevel > 0){
+            isPiercing = true;
         }
     }
 
@@ -72,6 +78,8 @@ public class ArrowEventHandler
                 ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
             } else if (event.source.isProjectile() && isPoison) {
                 ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+            } else if (event.source.isProjectile() && isPiercing){
+                ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor(), Config.PiercingDamage);
             }
         }
 	} 

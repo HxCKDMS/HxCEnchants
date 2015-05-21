@@ -16,7 +16,6 @@ public class Enchants {
     public static Enchantment AuraFiery;
     public static Enchantment AuraThick;
     public static Enchantment AuraToxic;
-    public static Enchantment AirStrider;
     public static Enchantment ArmorRegen;
     public static Enchantment ArrowExplosive;
     public static Enchantment ArrowLightning;
@@ -31,12 +30,15 @@ public class Enchants {
     public static Enchantment LeadFooted;
     public static Enchantment LifeSteal;
     public static Enchantment Poison;
+    public static Enchantment Piercing;
+    public static Enchantment Penetrating;
     public static Enchantment Repair;
     public static Enchantment Shroud;
     public static Enchantment SoulTear;
     public static Enchantment Swiftness;
     public static Enchantment Stealth;
     public static Enchantment Vampirism;
+    public static Enchantment Venom;
     public static Enchantment Vitality;
     public static Enchantment WitherProtection;
 
@@ -138,7 +140,18 @@ public class Enchants {
         }
         if(Config.enchPoisonEnable) {
             Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
+            Venom = new EnchantmentVenom(Config.enchVenomID, Config.enchPoisonWeight);
             MinecraftForge.EVENT_BUS.register(Poison);
+            Enchs++;
+            MinecraftForge.EVENT_BUS.register(Venom);
+            Enchs++;
+        }
+        if(Config.enchPiercingEnable) {
+            Piercing = new EnchantmentPiercing(Config.enchPiercingID, Config.enchPiercingWeight);
+            Penetrating = new EnchantmentPenetrating(Config.enchArrowPiercingID, Config.enchPiercingWeight);
+            MinecraftForge.EVENT_BUS.register(Piercing);
+            Enchs++;
+            MinecraftForge.EVENT_BUS.register(Penetrating);
             Enchs++;
         }
         if(Config.enchRepairEnable){
