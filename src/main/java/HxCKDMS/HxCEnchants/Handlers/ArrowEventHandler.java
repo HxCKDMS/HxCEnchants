@@ -71,14 +71,18 @@ public class ArrowEventHandler
             EntityLivingBase ent = event.entityLiving;
             if (event.source.isProjectile() && isExplosive) {
                 ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Config.EDT);
-            } else if (event.source.isProjectile() && isHoming) {
+            }
+            if (event.source.isProjectile() && isHoming) {
                 float damage = 6;
                 ent.attackEntityFrom(DamageSource.generic, damage);
-            } else if (event.source.isProjectile() && isZeus) {
+            }
+            if (event.source.isProjectile() && isZeus) {
                 ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
-            } else if (event.source.isProjectile() && isPoison) {
+            }
+            if (event.source.isProjectile() && isPoison) {
                 ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
-            } else if (event.source.isProjectile() && isPiercing){
+            }
+            if (event.source.isProjectile() && isPiercing){
                 ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor(), Config.PiercingDamage);
             }
         }
