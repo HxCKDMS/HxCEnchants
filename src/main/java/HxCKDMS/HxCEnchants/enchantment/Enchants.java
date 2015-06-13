@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
-import HxCKDMS.HxCCore.Utils.LogHelper;
+import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.MinecraftForge;

@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
+import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -10,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -26,41 +26,14 @@ public class AOEEventHandler
      * F = Feet  *
      ************/
 
-    int DeadlyAuraH;
-    int DeadlyAuraT;
-    int DeadlyAuraL;
-    int DeadlyAuraF;
+    int DeadlyAuraH, DeadlyAuraT, DeadlyAuraL, DeadlyAuraF,
+             FieryAuraH, FieryAuraT, FieryAuraL, FieryAuraF,
+             ToxicAuraH, ToxicAuraT, ToxicAuraL, ToxicAuraF,
+             ThickAuraH, ThickAuraT, ThickAuraL, ThickAuraF,
+             DarkAuraH, DarkAuraT, DarkAuraL, DarkAuraF,
+             ShroudH, ShroudT, ShroudL, ShroudF;
 
-    int FieryAuraH;
-    int FieryAuraT;
-    int FieryAuraL;
-    int FieryAuraF;
-
-    int ToxicAuraH;
-    int ToxicAuraT;
-    int ToxicAuraL;
-    int ToxicAuraF;
-
-    int ThickAuraH;
-    int ThickAuraT;
-    int ThickAuraL;
-    int ThickAuraF;
-
-    int DarkAuraH;
-    int DarkAuraT;
-    int DarkAuraL;
-    int DarkAuraF;
-
-    int ShroudH;
-    int ShroudT;
-    int ShroudL;
-    int ShroudF;
-
-    //ItemStacks
-    ItemStack ArmourHelm = null;
-    ItemStack ArmourChest = null;
-    ItemStack ArmourLegs = null;
-    ItemStack ArmourBoots = null;
+    ItemStack ArmourHelm = null, ArmourChest = null, ArmourLegs = null, ArmourBoots = null;
 
     @SubscribeEvent
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
@@ -115,7 +88,7 @@ public class AOEEventHandler
                 int level = (DeadlyAuraH + DeadlyAuraT + DeadlyAuraL + DeadlyAuraF)/4;
                 double motionY = rand.nextGaussian() + 0.02D;
                 if (shroud < 1)world.spawnParticle("magicCrit", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
                         entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
@@ -126,7 +99,7 @@ public class AOEEventHandler
                 int level = (DarkAuraH + DarkAuraT + DarkAuraL + DarkAuraF)/4;
                 double motionY = rand.nextGaussian() + 0.02D;
                 if (shroud < 1)world.spawnParticle("largesmoke", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
                         entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true));
@@ -138,7 +111,7 @@ public class AOEEventHandler
                 int level = (FieryAuraH + FieryAuraT + FieryAuraL + FieryAuraF)/4;
                 double motionY = rand.nextGaussian() + 0.02D;
                 if (shroud < 1)world.spawnParticle("flame", player.posX + 0.5 + rand.nextFloat(), player.posY + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
                         entity.setFire(100);
@@ -147,7 +120,7 @@ public class AOEEventHandler
             }
             if (ThickAuraH > 0 && ThickAuraT > 0 && ThickAuraL > 0 && ThickAuraF > 0){
                 int level = (ThickAuraH + ThickAuraT + ThickAuraL + ThickAuraF)/4;
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
                         entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true));
@@ -160,7 +133,7 @@ public class AOEEventHandler
                 int level = (ToxicAuraH + ToxicAuraT + ToxicAuraL + ToxicAuraF)/4;
                 double motionY = rand.nextGaussian() + 0.02D;
                 if (shroud < 1)world.spawnParticle("slime", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
                         entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
@@ -169,9 +142,4 @@ public class AOEEventHandler
             }
         }
 	}
-
-    protected AxisAlignedBB getAreaBoundingBox(double x, double y, double z, int modifier) {
-        return AxisAlignedBB.getBoundingBox(x - modifier, y - modifier, z - modifier,
-        /** Indented because CDO :P **/    x + modifier, y + modifier, z + modifier);
-    }
 }

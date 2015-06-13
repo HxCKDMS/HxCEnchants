@@ -2,8 +2,8 @@ package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
-import HxCKDMS.HxCCore.Utils.AABBUtils;
-import HxCKDMS.HxCCore.Utils.Teleporter;
+import HxCKDMS.HxCCore.api.Utils.AABBUtils;
+import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -28,43 +28,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ArmorEventHandler
-{
+@SuppressWarnings("unused")
+public class ArmorEventHandler {
     boolean isFlying;
     //UUIDs for Attributes
-    public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
-    public static UUID SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba");
-    public static UUID StealthUUID = UUID.fromString("1e4a1a12-ab1e-4987-b527-e0adeefc904a");
+    public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba"),
+            SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba"),
+            StealthUUID = UUID.fromString("1e4a1a12-ab1e-4987-b527-e0adeefc904a");
 
-    // Integers
-    int ShouldRepair = (Config.enchRepairRate * 20);
-    int CanRegen = (Config.enchRegenRate * 20);
+    int ShouldRepair = (Config.enchRepairRate * 20), CanRegen = (Config.enchRegenRate * 20);
+    int JumpBoostLevel, VitalityLevel, AdrenalineBoostLevel, BattleHealingLevel,
+         WitherProt, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H, C, L, B;
+    double SpeedBoost, Vitality;
 
-    int JumpBoostLevel;
-    int VitalityLevel;
-    int AdrenalineBoostLevel;
-    int BattleHealingLevel;
-    int WitherProt;
-    int FlyLevel;
-    int RegenLevel;
-    int SpeedLevel;
-    int StealthLevel;
-    int H;
-    int C;
-    int L;
-    int B;
-    //doubles
-    double SpeedBoost;
-    double Vitality;
-
-    //ItemStacks
-    ItemStack ArmourHelm = null;
-    ItemStack ArmourChest = null;
-    ItemStack ArmourLegs = null;
-    ItemStack ArmourBoots = null;
+    ItemStack ArmourHelm = null, ArmourChest = null, ArmourLegs = null, ArmourBoots = null;
 
     @SubscribeEvent
-    @SuppressWarnings("ConstantConditions")
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         ShouldRepair--;
         CanRegen--;

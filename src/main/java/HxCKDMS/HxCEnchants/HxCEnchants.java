@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants;
 
-import HxCKDMS.HxCCore.Utils.LogHelper;
+import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Handlers.AOEEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ArmorEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;

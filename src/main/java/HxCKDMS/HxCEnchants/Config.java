@@ -4,7 +4,7 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config
 {
-    public static boolean DebugMode;
+    public static boolean DebugMode = HxCKDMS.HxCCore.Configs.Config.DebugMode;
     public static boolean Feedback;
     public static boolean EDT;
     public static int enchXPrate;
@@ -162,7 +162,6 @@ public class Config
     {
         config.load();
         /** Config Group Descriptions **/
-        config.setCategoryComment("Debugging", "This allows you to see all debugging things. WARNING SPAMS CONSOLE.");
         config.setCategoryComment("Features", "This allows you to tweak anything we add.");
         config.setCategoryComment("Armor Enchants", "This allows you to disable any enchants if you feel they are useless.");
         config.setCategoryComment("Arrow Enchants", "This allows you to disable any enchants if you feel they are useless.");
@@ -179,9 +178,6 @@ public class Config
         config.setCategoryComment("Armor Enchant Weights", "This allows you to set the Weight of the Enchants. The higher the number the less difficult to obtain.");
         config.setCategoryComment("Arrow Enchant Weights", "This allows you to set the Weight of the Enchants. The higher the number the less difficult to obtain.");
         config.setCategoryComment("Tool/Weapon Enchant Weights", "This allows you to set the Weight of the Enchants. The higher the number the less difficult to obtain.");
-
-        /** Debugging **/
-        DebugMode = config.getBoolean("Debug", "Debugging", false, "Only enable this if you want a ton of debug spam.");
 
         /** Features **/
         Feedback = config.getBoolean("Feedback", "Features", false, "ChatMessages and such from enchants.");
