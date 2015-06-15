@@ -55,7 +55,7 @@ public class ToolEventHandler {
             }
             if (Config.enchPiercingEnable) {
                 PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
-                if (PiercingLevel > 0) Victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor(), Config.PiercingDamage);
+                if (PiercingLevel > 0) Victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), event.ammount * Config.PiercingPercent);
             }
         }
     }

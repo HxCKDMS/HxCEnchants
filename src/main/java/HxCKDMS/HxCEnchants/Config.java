@@ -8,7 +8,7 @@ public class Config
     public static boolean Feedback;
     public static boolean EDT;
     public static int enchXPrate;
-    public static int PiercingDamage;
+    public static float PiercingPercent;
 
     public static int enchAdrenalineBoostID;
     public static boolean enchAdrenalineBoostEnable;
@@ -185,6 +185,7 @@ public class Config
         enchRepairRate = config.getInt("Repair Speed Default", "Features", 1, 1, 99999, "DON'T EXCEED THE MAX (Java will crash)");
         enchXPrate = config.getInt("Extra exp Default", "Features", 1, 1, 9999999, "Increasing this means more xp gain from Examine Enchant.");
         EDT = config.getBoolean("ExplosionDestroysTerrain", "Features", false, "");
+        PiercingPercent = config.getFloat("PiercingPercent", "Features", 0.1f, 0.01f, 10000.0f, "set this value as high as you want");
 
         /** Armor Enchants **/
         enchAdrenalineBoostEnable = config.getBoolean("AdrenalineBoost", "Armor Enchants", true, "Enable Enchant Adrenaline Boost?");

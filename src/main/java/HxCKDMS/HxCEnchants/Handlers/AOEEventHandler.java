@@ -20,12 +20,21 @@ public class AOEEventHandler {
      //if you're wondering the reason the size is 16 not 4 it's because incase other mods extend the armour inventory I did to prevent crashes
 
     int[] DeadlyAura = new int[16], FieryAura = new int[16],
-             ToxicAura = new int[16], ThickAura = new int[16],
-             DarkAura = new int[16];
+            ToxicAura = new int[16], ThickAura = new int[16],
+            DarkAura = new int[16];
 
-    int deadid = Enchants.AuraDeadly.effectId, darkid = Enchants.AuraDark.effectId,
-            fireid = Enchants.AuraFiery.effectId, toxid = Enchants.AuraToxic.effectId,
-            thickid = Enchants.AuraThick.effectId, shid = Enchants.Shroud.effectId, Shroud;
+    int deadid, darkid,
+            fireid, toxid,
+            thickid, shid, Shroud;
+
+    public void init(){
+        if (Config.enchAuraDeadlyEnable) deadid = Enchants.AuraDeadly.effectId;
+        if (Config.enchAuraDarkEnable) darkid = Enchants.AuraDark.effectId;
+        if (Config.enchAuraFieryEnable) fireid = Enchants.AuraFiery.effectId;
+        if (Config.enchAuraToxicEnable) toxid = Enchants.AuraToxic.effectId;
+        if (Config.enchAuraThickEnable) thickid = Enchants.AuraThick.effectId;
+        if (Config.enchShroudEnable) shid = Enchants.Shroud.effectId;
+    }
 
     @SubscribeEvent
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
