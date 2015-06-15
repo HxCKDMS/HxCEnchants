@@ -6,7 +6,7 @@ import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -47,10 +47,7 @@ public class ToolEventHandler {
             if (Config.enchLifeStealEnable) {
                 LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
                 if (LifeStealLevel > 0) {
-                    double PH = Victim.prevHealth;
-                    double CH = Victim.getHealth();
-                    float RH = (float) CH - (float) PH;
-                    Attacker.heal(RH * LifeStealLevel);
+                    Attacker.heal(event.ammount + LifeStealLevel);
                 }
             }
             if (Config.enchPiercingEnable) {
@@ -64,7 +61,7 @@ public class ToolEventHandler {
 	public void LivingDeathEvent(LivingDeathEvent event) {
         Entity deadent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP) && (!((EntityPlayerMP) ent).getDisplayName().contains("[")) && !(ent instanceof FakePlayer)){
+        if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP) && (!((EntityPlayerMP) ent).getDisplayNameString().contains("[")) && !(ent instanceof FakePlayer)){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             String UUID = Attacker.getUniqueID().toString();
             try{
@@ -159,7 +156,7 @@ public class ToolEventHandler {
 
             AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
             if(AutoSmeltLevel > 0) {
-                FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
+                FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
 
                 for(int i = 0; i < event.drops.size(); i++) {
                     ItemStack drop = event.drops.get(i);

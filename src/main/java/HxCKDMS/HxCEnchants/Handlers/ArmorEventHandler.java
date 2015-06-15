@@ -6,7 +6,9 @@ import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -109,7 +110,7 @@ public class ArmorEventHandler {
                     player.sendPlayerAbilities();
                     NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
                 }
-                if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+                if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, true, player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
             }
             if (Config.enchStealthEnable) {
                 StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
@@ -220,21 +221,14 @@ public class ArmorEventHandler {
             ArmourChest = player.inventory.armorItemInSlot(2);
             if (Config.enchDivineInterventionEnable) DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
             if (DivineInterventionLevel > 0){
-                if (player.prevHealth - event.ammount <= 1) {
+                if (player.getHealth() - event.ammount <= 1) {
                     player.heal(5);
-                    int x, y, z;
-                        if (player.getBedLocation(0) != null) {
-                            x = player.getBedLocation(0).posX;
-                            y = player.getBedLocation(0).posY;
-                            z = player.getBedLocation(0).posZ;
-                        } else {
-                            ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
-                            x = coords.posX;
-                            y = coords.posY;
-                            z = coords.posZ;
-                        }
-                        if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, x, y, z);
-                        else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                    BlockPos pos;
+                        if (player.getBedLocation(0) != null) pos = player.getBedLocation(0);
+                        else pos = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
+
+                        if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, pos);
+                        else player.playerNetServerHandler.setPlayerLocation(pos.getX(), pos.getY(), pos.getZ(), 90, 0);
                     Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
                     enchs.remove(Config.enchDivineInterventionID);
                     if (DivineInterventionLevel > 1) enchs.put(Config.enchDivineInterventionID, DivineInterventionLevel - 1);

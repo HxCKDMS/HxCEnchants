@@ -2,7 +2,7 @@ package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -62,7 +62,7 @@ public class ArrowEventHandler
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
             if(isHoming) {
-                AxisAlignedBB box = arrow.boundingBox;
+                AxisAlignedBB box = arrow.getBoundingBox();
                 double size = 8 * HomingLevel;
                 List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
                 double distance = 100000;
@@ -79,7 +79,7 @@ public class ArrowEventHandler
                     return;
 
                 double motionX = target.posX - arrow.posX;
-                double motionY = target.boundingBox.minY + target.height - arrow.posY;
+                double motionY = target.getBoundingBox().minY + target.height - arrow.posY;
                 double motionZ = target.posZ - arrow.posZ;
                 arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
             }
