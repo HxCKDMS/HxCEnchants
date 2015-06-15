@@ -21,7 +21,7 @@ public class Enchants {
 
     public static void load () {
         if (Config.enchAdrenalineBoostEnable) {
-            AdrenalineBoost = new HxCEnchantment(Config.enchAdrenalineBoostID, new ResourceLocation("asdf"),Config.enchAdrenalineBoostWeight, EnumEnchantmentType.WEAPON, Config.enchAdrenalineBoostLVL);
+            AdrenalineBoost = new HxCEnchantment(Config.enchAdrenalineBoostID, new ResourceLocation("adrenalineBoost"),Config.enchAdrenalineBoostWeight, EnumEnchantmentType.WEAPON, Config.enchAdrenalineBoostLVL);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
         }

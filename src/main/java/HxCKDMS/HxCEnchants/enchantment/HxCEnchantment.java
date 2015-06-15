@@ -7,9 +7,11 @@ import net.minecraft.util.ResourceLocation;
 public class HxCEnchantment extends Enchantment
 {
     private int MaxLevel;
-    public HxCEnchantment(int id, ResourceLocation name,int rarity, EnumEnchantmentType type, int MaxLevel) {
+    public HxCEnchantment(int id, ResourceLocation name,int rarity, EnumEnchantmentType type, int maxLevel) {
         super(id, name, rarity, type);
-        this.MaxLevel = MaxLevel;
+        MaxLevel = maxLevel;
+        setName(name.getResourcePath());
+        addToBookList(this);
     }
 
     @Override
