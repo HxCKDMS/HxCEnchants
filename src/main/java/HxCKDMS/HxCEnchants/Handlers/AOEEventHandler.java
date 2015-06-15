@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -91,7 +92,7 @@ public class AOEEventHandler
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
-                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
+                        entity.attackEntityFrom(new DamageSource("Deadly"), 1);
                     }
                 }
             }
