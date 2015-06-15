@@ -3,6 +3,7 @@ package HxCKDMS.HxCEnchants.enchantment;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 
@@ -10,187 +11,162 @@ public class Enchants {
 
     private static int Enchs = 0;
 
-    public static Enchantment AdrenalineBoost;
-    public static Enchantment AuraDark;
-    public static Enchantment AuraDeadly;
-    public static Enchantment AuraFiery;
-    public static Enchantment AuraThick;
-    public static Enchantment AuraToxic;
-    public static Enchantment ArmorRegen;
-    public static Enchantment ArrowExplosive;
-    public static Enchantment ArrowLightning;
-    public static Enchantment ArrowSeeking;
-    public static Enchantment Bound;
-    public static Enchantment BattleHealing;
-    public static Enchantment DivineIntervention;
-    public static Enchantment Examine;
-    public static Enchantment FlameTouch;
-    public static Enchantment Fly;
-    public static Enchantment JumpBoost;
-    public static Enchantment LeadFooted;
-    public static Enchantment LifeSteal;
-    public static Enchantment Poison;
-    public static Enchantment Piercing;
-    public static Enchantment Penetrating;
-    public static Enchantment Repair;
-    public static Enchantment Shroud;
-    public static Enchantment SoulTear;
-    public static Enchantment Swiftness;
-    public static Enchantment Stealth;
-    public static Enchantment Vampirism;
-    public static Enchantment Venom;
-    public static Enchantment Vitality;
-    public static Enchantment WitherProtection;
+    public static Enchantment AdrenalineBoost,
+            AuraDark, AuraDeadly, AuraFiery, AuraThick, AuraToxic,
+            ArmorRegen, ArrowExplosive, ArrowLightning, ArrowSeeking, Bound,
+            BattleHealing, DivineIntervention, Examine, FlameTouch, Fly, JumpBoost,
+            LeadFooted, LifeSteal, Poison, Piercing, Penetrating, Repair, Shroud,
+            SoulTear, Swiftness, Stealth, Vampirism, Venom, Vitality, WitherProtection;
 
     public static void load () {
         if (Config.enchAdrenalineBoostEnable) {
-            AdrenalineBoost = new EnchantmentAdrenalineBoost(Config.enchAdrenalineBoostID, Config.enchAdrenalineBoostWeight);
+            AdrenalineBoost = new HxCEnchantment(Config.enchAdrenalineBoostID, "adrenalineBoost",Config.enchAdrenalineBoostWeight, EnumEnchantmentType.armor_head, Config.enchAdrenalineBoostLVL);
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
         }
         if (Config.enchAuraDarkEnable) {
-            AuraDark = new EnchantmentDarkAura(Config.enchAuraDarkID, Config.enchAuraDarkWeight);
+            AuraDark = new HxCEnchantment(Config.enchAuraDarkID, "darkAura", Config.enchAuraDarkWeight, EnumEnchantmentType.armor, Config.enchAuraDarkLVL);
             MinecraftForge.EVENT_BUS.register(AuraDark);
             Enchs++;
         }
         if (Config.enchAuraDeadlyEnable) {
-            AuraDeadly = new EnchantmentDeadlyAura(Config.enchAuraDeadlyID, Config.enchAuraDeadlyWeight);
+            AuraDeadly = new HxCEnchantment(Config.enchAuraDeadlyID, "deadlyAura", Config.enchAuraDeadlyWeight, EnumEnchantmentType.armor, Config.enchAuraDeadlyLVL);
             MinecraftForge.EVENT_BUS.register(AuraDeadly);
             Enchs++;
         }
         if (Config.enchAuraFieryEnable) {
-            AuraFiery = new EnchantmentFieryAura(Config.enchAuraFieryID, Config.enchAuraFieryWeight);
+            AuraFiery = new HxCEnchantment(Config.enchAuraFieryID, "flameAura", Config.enchAuraFieryWeight, EnumEnchantmentType.armor, Config.enchAuraFieryLVL);
             MinecraftForge.EVENT_BUS.register(AuraFiery);
             Enchs++;
         }
         if (Config.enchAuraThickEnable) {
-            AuraThick = new EnchantmentThickAura(Config.enchAuraThickID, Config.enchAuraThickWeight);
+            AuraThick = new HxCEnchantment(Config.enchAuraThickID, "thickAura", Config.enchAuraThickWeight, EnumEnchantmentType.armor, Config.enchAuraThickLVL);
             MinecraftForge.EVENT_BUS.register(AuraThick);
             Enchs++;
         }
         if (Config.enchAuraToxicEnable) {
-            AuraToxic = new EnchantmentToxicAura(Config.enchAuraToxicID, Config.enchAuraToxicWeight);
+            AuraToxic = new HxCEnchantment(Config.enchAuraToxicID, "toxicAura", Config.enchAuraToxicWeight, EnumEnchantmentType.armor, Config.enchAuraToxicLVL);
             MinecraftForge.EVENT_BUS.register(AuraToxic);
             Enchs++;
         }
         if (Config.enchRegenEnable) {
-            ArmorRegen = new EnchantmentRegen(Config.enchRegenID, Config.enchRegenWeight);
+            ArmorRegen = new HxCEnchantment(Config.enchRegenID, "regen", Config.enchRegenWeight, EnumEnchantmentType.armor, Config.enchRegenLVL);
             MinecraftForge.EVENT_BUS.register(ArmorRegen);
             Enchs++;
         }
         if (Config.enchArrowExplosiveEnable) {
-            ArrowExplosive = new EnchantmentArrowExplosive(Config.enchArrowExplosiveID, Config.enchArrowExplosiveWeight);
+            ArrowExplosive = new HxCEnchantment(Config.enchArrowExplosiveID, "arrowExplosive", Config.enchArrowExplosiveWeight, EnumEnchantmentType.bow, Config.enchArrowExplosiveLVL);
             MinecraftForge.EVENT_BUS.register(ArrowExplosive);
             Enchs++;
         }
         if (Config.enchArrowLightningEnable) {
-            ArrowLightning = new EnchantmentArrowLightning(Config.enchArrowLightningID, Config.enchArrowLightningWeight);
+            ArrowLightning = new HxCEnchantment(Config.enchArrowLightningID, "arrowZeus", Config.enchArrowLightningWeight, EnumEnchantmentType.bow, Config.enchArrowLightningLVL);
             MinecraftForge.EVENT_BUS.register(ArrowLightning);
             Enchs++;
         }
         if (Config.enchArrowSeekingEnable) {
-            ArrowSeeking = new EnchantmentArrowSeeking(Config.enchArrowSeekingID, Config.enchArrowSeekingWeight);
+            ArrowSeeking = new HxCEnchantment(Config.enchArrowSeekingID, "arrowSeeking", Config.enchArrowSeekingWeight, EnumEnchantmentType.bow, Config.enchArrowSeekingLVL);
             MinecraftForge.EVENT_BUS.register(ArrowSeeking);
             Enchs++;
         }
         if (Config.enchBattleHealingEnable) {
-            BattleHealing = new EnchantmentBattleHealing(Config.enchBattleHealingID, Config.enchBattleHealingWeight);
+            BattleHealing = new HxCEnchantment(Config.enchBattleHealingID, "battleHeal", Config.enchBattleHealingWeight, EnumEnchantmentType.armor_torso, Config.enchBattleHealingLVL);
             MinecraftForge.EVENT_BUS.register(BattleHealing);
             Enchs++;
         }
         if(Config.enchBoundEnable){
-            Bound = new EnchantmentBound(Config.enchBoundID, Config.enchBoundWeight);
+            Bound = new HxCEnchantment(Config.enchBoundID, "bound", Config.enchBoundWeight, EnumEnchantmentType.all, Config.enchBoundLVL);
             MinecraftForge.EVENT_BUS.register(Bound);
             Enchs++;
         }
         if (Config.enchDivineInterventionEnable) {
-            DivineIntervention = new EnchantmentDivineIntervention(Config.enchDivineInterventionID, Config.enchDivineInterventionWeight);
+            DivineIntervention = new HxCEnchantment(Config.enchDivineInterventionID, "divineIntervention", Config.enchDivineInterventionWeight, EnumEnchantmentType.armor_torso, Config.enchDivineInterventionLVL);
             MinecraftForge.EVENT_BUS.register(DivineIntervention);
             Enchs++;
         }
         if (Config.enchExamineEnable) {
-            Examine = new EnchantmentExtraXP(Config.enchExamineID, Config.enchExamineWeight);
+            Examine = new HxCEnchantment(Config.enchExamineID, "examine", Config.enchExamineWeight, EnumEnchantmentType.weapon, Config.enchExamineLVL);
             MinecraftForge.EVENT_BUS.register(Examine);
             Enchs++;
         }
         if (Config.enchFlameTouchEnable) {
-            FlameTouch = new EnchantmentFlameTouch(Config.enchFlameTouchID, Config.enchFlameTouchWeight);
+            FlameTouch = new HxCEnchantment(Config.enchFlameTouchID, "flameTouch", Config.enchFlameTouchWeight, EnumEnchantmentType.digger, Config.enchFlameTouchLVL);
             MinecraftForge.EVENT_BUS.register(FlameTouch);
             Enchs++;
         }
         if(Config.enchFlyEnable){
-            Fly = new EnchantmentFly(Config.enchFlyID, Config.enchFlyWeight);
+            Fly = new HxCEnchantment(Config.enchFlyID, "fly", Config.enchFlyWeight, EnumEnchantmentType.armor_feet, 10);
             MinecraftForge.EVENT_BUS.register(Fly);
             Enchs++;
         }
         if(Config.enchJumpBoostEnable) {
-            JumpBoost = new EnchantmentJumpBoost(Config.enchJumpBoostID, Config.enchJumpBoostWeight);
+            JumpBoost = new HxCEnchantment(Config.enchJumpBoostID, "jumpBoost", Config.enchJumpBoostWeight, EnumEnchantmentType.armor_legs, Config.enchJumpBoostLVL);
             MinecraftForge.EVENT_BUS.register(JumpBoost);
             Enchs++;
         }
         if(Config.enchLifeStealEnable) {
-            LifeSteal = new EnchantmentLifeSteal(Config.enchLifeStealID, Config.enchLifeStealWeight);
+            LifeSteal = new HxCEnchantment(Config.enchLifeStealID, "lifeSteal", Config.enchLifeStealWeight, EnumEnchantmentType.weapon, Config.enchLifeStealLVL);
             MinecraftForge.EVENT_BUS.register(LifeSteal);
             Enchs++;
         }
         if(Config.enchLeadFootedEnable) {
-            LeadFooted = new EnchantmentLeadFooted(Config.enchLeadFootedID, Config.enchLeadFootedWeight);
+            LeadFooted = new HxCEnchantment(Config.enchLeadFootedID, "leadFooted", Config.enchLeadFootedWeight, EnumEnchantmentType.armor_feet, Config.enchLeadFootedLVL);
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
         }
         if(Config.enchPoisonEnable) {
-            Poison = new EnchantmentPoison(Config.enchPoisonID, Config.enchPoisonWeight);
-            Venom = new EnchantmentVenom(Config.enchVenomID, Config.enchPoisonWeight);
+            Poison = new HxCEnchantment(Config.enchPoisonID, "poison", Config.enchPoisonWeight, EnumEnchantmentType.bow, Config.enchPoisonLVL);
+            Venom = new HxCEnchantment(Config.enchVenomID, "venom", Config.enchPoisonWeight, EnumEnchantmentType.weapon, Config.enchPoisonLVL);
             MinecraftForge.EVENT_BUS.register(Poison);
             Enchs++;
             MinecraftForge.EVENT_BUS.register(Venom);
             Enchs++;
         }
         if(Config.enchPiercingEnable) {
-            Piercing = new EnchantmentPiercing(Config.enchPiercingID, Config.enchPiercingWeight);
-            Penetrating = new EnchantmentPenetrating(Config.enchArrowPiercingID, Config.enchPiercingWeight);
+            Piercing = new HxCEnchantment(Config.enchPiercingID, "piercing", Config.enchPiercingWeight, EnumEnchantmentType.weapon, Config.enchPiercingLVL);
+            Penetrating = new HxCEnchantment(Config.enchArrowPiercingID, "penetrating", Config.enchPiercingWeight, EnumEnchantmentType.bow, Config.enchPiercingLVL);
             MinecraftForge.EVENT_BUS.register(Piercing);
             Enchs++;
             MinecraftForge.EVENT_BUS.register(Penetrating);
             Enchs++;
         }
         if(Config.enchRepairEnable){
-            Repair = new EnchantmentRepair(Config.enchRepairID, Config.enchRepairWeight);
+            Repair = new HxCEnchantment(Config.enchRepairID, "repair", Config.enchRepairWeight, EnumEnchantmentType.weapon, Config.enchRepairLVL);
             MinecraftForge.EVENT_BUS.register(Repair);
             Enchs++;
         }
         if(Config.enchShroudEnable){
-            Shroud = new EnchantmentShroud(Config.enchShroudID, Config.enchShroudWeight);
+            Shroud = new HxCEnchantment(Config.enchShroudID, "shroud", Config.enchShroudWeight, EnumEnchantmentType.armor, Config.enchShroudLVL);
             MinecraftForge.EVENT_BUS.register(Shroud);
             Enchs++;
         }
         if(Config.enchSoulTearEnable){
-            SoulTear = new EnchantmentSoulTear(Config.enchSoulTearID, Config.enchSoulTearWeight);
+            SoulTear = new HxCEnchantment(Config.enchSoulTearID, "soulTear", Config.enchSoulTearWeight, EnumEnchantmentType.weapon, Config.enchSoulTearLVL);
             MinecraftForge.EVENT_BUS.register(SoulTear);
             Enchs++;
         }
         if(Config.enchSwiftnessEnable){
-            Swiftness = new EnchantmentSwiftness(Config.enchSwiftnessID, Config.enchSwiftnessWeight);
+            Swiftness = new HxCEnchantment(Config.enchSwiftnessID, "swiftness", Config.enchSwiftnessWeight, EnumEnchantmentType.armor_legs, Config.enchSwiftnessLVL);
             MinecraftForge.EVENT_BUS.register(Swiftness);
             Enchs++;
         }
         if(Config.enchStealthEnable){
-            Stealth = new EnchantmentStealth(Config.enchStealthID, Config.enchStealthWeight);
+            Stealth = new HxCEnchantment(Config.enchStealthID, "stealth", Config.enchStealthWeight, EnumEnchantmentType.armor_feet, Config.enchStealthLVL);
             MinecraftForge.EVENT_BUS.register(Stealth);
             Enchs++;
         }
         if(Config.enchVampirismEnable) {
-            Vampirism = new EnchantmentVampirism(Config.enchVampirismID, Config.enchVampirismWeight);
+            Vampirism = new HxCEnchantment(Config.enchVampirismID, "vampirism", Config.enchVampirismWeight, EnumEnchantmentType.weapon, Config.enchVampirismLVL);
             MinecraftForge.EVENT_BUS.register(Vampirism);
             Enchs++;
         }
         if(Config.enchVitalityEnable) {
-            Vitality = new EnchantmentVitality(Config.enchVitalityID, Config.enchVitalityWeight);
+            Vitality = new HxCEnchantment(Config.enchVitalityID, "vitality", Config.enchVitalityWeight, EnumEnchantmentType.armor_torso, Config.enchVitalityLVL);
             MinecraftForge.EVENT_BUS.register(Vitality);
             Enchs++;
         }
         if(Config.enchWitherProtectionEnable) {
-            WitherProtection = new EnchantmentWitherProtection(Config.enchWitherProtectionID, Config.enchWitherProtectionWeight);
+            WitherProtection = new HxCEnchantment(Config.enchWitherProtectionID, "witherProt", Config.enchWitherProtectionWeight, EnumEnchantmentType.armor_head, Config.enchWitherProtectionLVL);
             MinecraftForge.EVENT_BUS.register(WitherProtection);
             Enchs++;
         }

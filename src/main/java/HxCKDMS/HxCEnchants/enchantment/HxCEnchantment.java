@@ -1,21 +1,21 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
-import HxCKDMS.HxCEnchants.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
-public class EnchantmentExtraXP extends Enchantment
+public class HxCEnchantment extends Enchantment
 {
-    public EnchantmentExtraXP(int id, int rarity)
-    {
-        super(id, rarity, EnumEnchantmentType.weapon);
-        setName("examine");
+    private int MaxLevel;
+    public HxCEnchantment(int id, String name, int rarity, EnumEnchantmentType type, int MaxLevel) {
+        super(id, rarity, type);
+        setName(name);
+        this.MaxLevel = MaxLevel;
     }
 
     @Override
     public int getMinEnchantability(int i)
     {
-        return 5 + (12 + (i - 1));
+        return 16+i;
     }
 
     @Override
@@ -27,6 +27,6 @@ public class EnchantmentExtraXP extends Enchantment
     @Override
     public int getMaxLevel()
     {
-        return Config.enchExamineLVL;
+        return MaxLevel;
     }
 }
