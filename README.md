@@ -1,6 +1,7 @@
 ## HxCEnchants
 ---------
-HxCEnchants adds many enchants to minecraft.
+-HxCEnchants adds new enchants
+---------
 
 AdrenalineBoost : Whilst in battle it buffs you with strength speed and jump boost.
 
