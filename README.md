@@ -1,1 +1,1 @@
-HxCEnchants is a mod that adds new enchants to minecraft
+## HxCEnchants is a mod that adds new enchants to minecraft
