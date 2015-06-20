@@ -35,8 +35,8 @@ public class HxCEnchants
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        aoe.init();
         Enchants.load();
+        aoe.init();
         MinecraftForge.EVENT_BUS.register(arrow);
         MinecraftForge.EVENT_BUS.register(armor);
         MinecraftForge.EVENT_BUS.register(tool);
