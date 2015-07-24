@@ -8,100 +8,21 @@ public class Config
     public static boolean EDT;
     public static float PiercingPercent;
 
-    public static int[] enchAdrenalineBoostVals;
-    public static boolean enchAdrenalineBoostEnable;
+    public static int[] enchAdrenalineBoostVals, enchAuraFieryVals, enchAuraDeadlyVals, enchAuraDarkVals,
+            enchAuraThickVals, enchAuraToxicVals, enchArrowExplosiveVals, enchArrowLightningVals,
+            enchArrowSeekingVals, enchBattleHealingVals, enchBoundVals, enchDivineInterventionVals,
+            enchExamineVals, enchFlameTouchVals, enchFlyVals, enchJumpBoostVals, enchLeadFootedVals,
+            enchLifeStealVals, enchPiercingVals, enchArrowPiercingVals, enchPoisonVals, enchVenomVals,
+            enchRegenVals, enchRepairVals, enchShroudVals, enchSoulTearVals, enchSCurseVals, enchStealthVals,
+            enchSwiftnessVals, enchVampirismVals, enchVitalityVals, enchVorpalVals, enchWitherProtectionVals;
 
-    public static int[] enchAuraFieryVals;
-    public static boolean enchAuraFieryEnable;
-
-    public static int[] enchAuraDeadlyVals;
-    public static boolean enchAuraDeadlyEnable;
-
-    public static int[] enchAuraDarkVals;
-    public static boolean enchAuraDarkEnable;
-    
-    public static int[] enchAuraThickVals;
-    public static boolean enchAuraThickEnable;
-
-    public static int[] enchAuraToxicVals;
-    public static boolean enchAuraToxicEnable;
-
-    public static int[] enchArrowExplosiveVals;
-    public static boolean enchArrowExplosiveEnable;
-
-    public static int[] enchArrowLightningVals;
-    public static boolean enchArrowLightningEnable;
-
-    public static int[] enchArrowSeekingVals;
-    public static boolean enchArrowSeekingEnable;
-
-    public static int[] enchBattleHealingVals;
-    public static boolean enchBattleHealingEnable;
-
-    public static int[] enchBoundVals;
-    public static boolean enchBoundEnable;
-
-    public static int[] enchDivineInterventionVals;
-    public static boolean enchDivineInterventionEnable;
-
-    public static int[] enchExamineVals;
-    public static boolean enchExamineEnable;
-
-    public static int[] enchFlameTouchVals;
-    public static boolean enchFlameTouchEnable;
-
-    public static int[] enchFlyVals = new int[3];
-    public static boolean enchFlyEnable;
-
-    public static int[] enchJumpBoostVals;
-    public static boolean enchJumpBoostEnable;
-
-    public static int[] enchLeadFootedVals;
-    public static boolean enchLeadFootedEnable;
-
-    public static int[] enchLifeStealVals;
-    public static boolean enchLifeStealEnable;
-
-    public static int[] enchPiercingVals;
-    public static int[] enchArrowPiercingVals;
-    public static boolean enchPiercingEnable;
-
-    public static int[] enchPoisonVals;
-    public static int[] enchVenomVals;
-    public static boolean enchPoisonEnable;
-
-    public static int[] enchRegenVals;
-    public static boolean enchRegenEnable;
-
-    public static int[] enchRepairVals;
-    public static boolean enchRepairEnable;
-
-    public static int[] enchShroudVals;
-    public static boolean enchShroudEnable;
-
-    public static int[] enchSoulTearVals;
-    public static boolean enchSoulTearEnable;
-
-    public static int[] enchSCurseVals;
-    public static boolean enchSCurseEnable;
-
-    public static int[] enchStealthVals;
-    public static boolean enchStealthEnable;
-
-    public static int[] enchSwiftnessVals;
-    public static boolean enchSwiftnessEnable;
-
-    public static int[] enchVampirismVals;
-    public static boolean enchVampirismEnable;
-
-    public static int[] enchVitalityVals;
-    public static boolean enchVitalityEnable;
-
-    public static int[] enchVorpalVals;
-    public static boolean enchVorpalEnable;
-
-    public static int[] enchWitherProtectionVals;
-    public static boolean enchWitherProtectionEnable;
+    public static boolean enchAdrenalineBoostEnable, enchAuraFieryEnable, enchAuraDeadlyEnable,
+            enchAuraDarkEnable, enchAuraToxicEnable, enchAuraThickEnable, enchArrowExplosiveEnable, enchArrowLightningEnable,
+            enchArrowSeekingEnable, enchBattleHealingEnable, enchBoundEnable, enchDivineInterventionEnable,
+            enchExamineEnable, enchFlameTouchEnable, enchFlyEnable, enchJumpBoostEnable, enchLeadFootedEnable,
+            enchLifeStealEnable, enchPiercingEnable, enchPoisonEnable, enchRegenEnable, enchRepairEnable,
+            enchShroudEnable, enchSoulTearEnable, enchSCurseEnable, enchStealthEnable, enchSwiftnessEnable,
+            enchVampirismEnable, enchVitalityEnable, enchVorpalEnable, enchWitherProtectionEnable;
 
     public Config(Configuration config)
     {
@@ -161,7 +82,7 @@ public class Config
         enchAuraDarkVals = config.get("C Armor Enchant Values", "DarkAuraVals", new int[]{418, 10, 15, 20}).getIntList();
         enchDivineInterventionVals = config.get("C Armor Enchant Values", "DivineInterventionVals", new int[]{419, 5, 1, 45}).getIntList();
 
-        /** D Arrow Enchants **/
+        /** Arrow Enchants **/
         enchArrowExplosiveEnable = config.getBoolean("ArrowExplosive", "D Arrow Enchants", true, "Enable Enchant Arrow Explosive?");
         enchArrowLightningEnable = config.getBoolean("ArrowLightning", "D Arrow Enchants", true, "Enable Enchant Arrow Lightning?");
         enchArrowSeekingEnable = config.getBoolean("ArrowSeeking", "D Arrow Enchants", true, "Enable Enchant Arrow Seeking?");
@@ -171,7 +92,7 @@ public class Config
         enchArrowSeekingVals = config.get("E Arrow Enchant Values", "ArrowSeekingVals", new int[]{423, 4, 1, 45}).getIntList();
         enchArrowPiercingVals = config.get("E Arrow Enchant Values", "ArrowPiercingVals", new int[]{424, 5, 1, 40}).getIntList();
 
-        /** F Tool/Weapon Enchants **/
+        /** Tool/Weapon Enchants **/
         enchFlameTouchEnable = config.getBoolean("FlameTouch", "F Tool/Weapon Enchants", true, "Enable Enchant Auto-Smelt?");
         enchLifeStealEnable = config.getBoolean("LifeSteal", "F Tool/Weapon Enchants", true, "Enable Enchant Life Steal?");
         enchPoisonEnable = config.getBoolean("Poison", "F Tool/Weapon Enchants", true, "Enable Enchant Poison?");
@@ -192,8 +113,6 @@ public class Config
         enchSCurseVals = config.get("G Tool/Weapon Enchant Values", "SCurseVals", new int[]{439, 10, 1, 55, 3}).getIntList();
 
         if(config.hasChanged())
-        {
             config.save();
-        }
     }
 }
