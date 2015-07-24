@@ -53,6 +53,8 @@ Shroud : makes armour not render
 
 SoulTear : tears enemies soul (NYI)
 
+Slayer's Curse : Debilitates the player in exchange for massive damage.
+
 Swiftness : increases movement speed
 
 Stealth : makes you invisible to mobs
@@ -60,6 +62,8 @@ Stealth : makes you invisible to mobs
 Vampirism : fills hunger based on damage dealt
 
 Venom : poisons hit entities
+
+Vorpal : This enchant deals absolute damage (default 1 * level) but the damage bypasses armour this is similar to the way the enchant technically works in lore, though it is supposed to cut through anything which does mean it should insta-kill in the game but I decided too OP for that before even trying...
 
 Vitality : increases max health
 
