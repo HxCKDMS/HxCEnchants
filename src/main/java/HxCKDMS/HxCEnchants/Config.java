@@ -5,185 +5,118 @@ import net.minecraftforge.common.config.Configuration;
 public class Config
 {
     public static boolean DebugMode = HxCKDMS.HxCCore.Configs.Config.DebugMode;
-    public static boolean Feedback;
     public static boolean EDT;
-    public static int enchXPrate;
     public static float PiercingPercent;
 
-    public static int enchAdrenalineBoostID;
+    public static int[] enchAdrenalineBoostVals;
     public static boolean enchAdrenalineBoostEnable;
-    public static int enchAdrenalineBoostLVL;
-    public static int enchAdrenalineBoostWeight;
 
-    public static int enchAuraFieryID;
+    public static int[] enchAuraFieryVals;
     public static boolean enchAuraFieryEnable;
-    public static int enchAuraFieryLVL;
-    public static int enchAuraFieryWeight;
 
-    public static int enchAuraDeadlyID;
+    public static int[] enchAuraDeadlyVals;
     public static boolean enchAuraDeadlyEnable;
-    public static int enchAuraDeadlyLVL;
-    public static int enchAuraDeadlyWeight;
 
-    public static int enchAuraDarkID;
+    public static int[] enchAuraDarkVals;
     public static boolean enchAuraDarkEnable;
-    public static int enchAuraDarkLVL;
-    public static int enchAuraDarkWeight;
-
-    public static int enchAuraThickID;
+    
+    public static int[] enchAuraThickVals;
     public static boolean enchAuraThickEnable;
-    public static int enchAuraThickLVL;
-    public static int enchAuraThickWeight;
 
-    public static int enchAuraToxicID;
+    public static int[] enchAuraToxicVals;
     public static boolean enchAuraToxicEnable;
-    public static int enchAuraToxicLVL;
-    public static int enchAuraToxicWeight;
 
-    public static int enchArrowExplosiveID;
+    public static int[] enchArrowExplosiveVals;
     public static boolean enchArrowExplosiveEnable;
-    public static int enchArrowExplosiveLVL;
-    public static int enchArrowExplosiveWeight;
 
-    public static int enchArrowLightningID;
+    public static int[] enchArrowLightningVals;
     public static boolean enchArrowLightningEnable;
-    public static int enchArrowLightningLVL;
-    public static int enchArrowLightningWeight;
 
-    public static int enchArrowSeekingID;
+    public static int[] enchArrowSeekingVals;
     public static boolean enchArrowSeekingEnable;
-    public static int enchArrowSeekingLVL;
-    public static int enchArrowSeekingWeight;
 
-    public static int enchBattleHealingID;
+    public static int[] enchBattleHealingVals;
     public static boolean enchBattleHealingEnable;
-    public static int enchBattleHealingLVL;
-    public static int enchBattleHealingWeight;
 
-    public static int enchBoundID;
+    public static int[] enchBoundVals;
     public static boolean enchBoundEnable;
-    public static int enchBoundLVL;
-    public static int enchBoundWeight;
 
-    public static int enchDivineInterventionID;
+    public static int[] enchDivineInterventionVals;
     public static boolean enchDivineInterventionEnable;
-    public static int enchDivineInterventionLVL;
-    public static int enchDivineInterventionWeight;
 
-    public static int enchExamineID;
+    public static int[] enchExamineVals;
     public static boolean enchExamineEnable;
-    public static int enchExamineLVL;
-    public static int enchExamineWeight;
 
-    public static int enchFlameTouchID;
+    public static int[] enchFlameTouchVals;
     public static boolean enchFlameTouchEnable;
-    public static int enchFlameTouchLVL;
-    public static int enchFlameTouchWeight;
 
-    public static int enchFlyID;
+    public static int[] enchFlyVals = new int[3];
     public static boolean enchFlyEnable;
-    public static int enchFlyWeight;
 
-    public static int enchJumpBoostID;
+    public static int[] enchJumpBoostVals;
     public static boolean enchJumpBoostEnable;
-    public static int enchJumpBoostLVL;
-    public static int enchJumpBoostWeight;
 
-    public static int enchLeadFootedID;
+    public static int[] enchLeadFootedVals;
     public static boolean enchLeadFootedEnable;
-    public static int enchLeadFootedLVL;
-    public static int enchLeadFootedWeight;
 
-    public static int enchLifeStealID;
+    public static int[] enchLifeStealVals;
     public static boolean enchLifeStealEnable;
-    public static int enchLifeStealLVL;
-    public static int enchLifeStealWeight;
 
-    public static int enchPiercingID;
-    public static int enchArrowPiercingID;
+    public static int[] enchPiercingVals;
+    public static int[] enchArrowPiercingVals;
     public static boolean enchPiercingEnable;
-    public static int enchPiercingLVL;
-    public static int enchPiercingWeight;
 
-    public static int enchPoisonID;
-    public static int enchVenomID;
+    public static int[] enchPoisonVals;
+    public static int[] enchVenomVals;
     public static boolean enchPoisonEnable;
-    public static int enchPoisonLVL;
-    public static int enchPoisonWeight;
 
-    public static int enchRegenID;
+    public static int[] enchRegenVals;
     public static boolean enchRegenEnable;
-    public static int enchRegenLVL;
-    public static int enchRegenWeight;
-    public static int enchRegenRate;
 
-    public static int enchRepairID;
+    public static int[] enchRepairVals;
     public static boolean enchRepairEnable;
-    public static int enchRepairLVL;
-    public static int enchRepairWeight;
-    public static int enchRepairRate;
 
-    public static int enchShroudID;
+    public static int[] enchShroudVals;
     public static boolean enchShroudEnable;
-    public static int enchShroudLVL;
-    public static int enchShroudWeight;
 
-    public static int enchSoulTearID;
+    public static int[] enchSoulTearVals;
     public static boolean enchSoulTearEnable;
-    public static int enchSoulTearLVL;
-    public static int enchSoulTearWeight;
 
-    public static int enchSwiftnessID;
-    public static boolean enchSwiftnessEnable;
-    public static int enchSwiftnessLVL;
-    public static int enchSwiftnessWeight;
+    public static int[] enchSCurseVals;
+    public static boolean enchSCurseEnable;
 
-    public static int enchStealthID;
+    public static int[] enchStealthVals;
     public static boolean enchStealthEnable;
-    public static int enchStealthLVL;
-    public static int enchStealthWeight;
 
-    public static int enchVampirismID;
+    public static int[] enchSwiftnessVals;
+    public static boolean enchSwiftnessEnable;
+
+    public static int[] enchVampirismVals;
     public static boolean enchVampirismEnable;
-    public static int enchVampirismLVL;
-    public static int enchVampirismWeight;
 
-    public static int enchVitalityID;
+    public static int[] enchVitalityVals;
     public static boolean enchVitalityEnable;
-    public static int enchVitalityLVL;
-    public static int enchVitalityWeight;
 
-    public static int enchWitherProtectionID;
+    public static int[] enchVorpalVals;
+    public static boolean enchVorpalEnable;
+
+    public static int[] enchWitherProtectionVals;
     public static boolean enchWitherProtectionEnable;
-    public static int enchWitherProtectionLVL;
-    public static int enchWitherProtectionWeight;
 
     public Config(Configuration config)
     {
         config.load();
         /** Config Group Descriptions **/
         config.setCategoryComment("Features", "This allows you to tweak anything we add.");
-        config.setCategoryComment("Armor Enchants", "This allows you to disable any enchants if you feel they are useless.");
-        config.setCategoryComment("Arrow Enchants", "This allows you to disable any enchants if you feel they are useless.");
-        config.setCategoryComment("Tool/Weapon Enchants", "This allows you to disable any enchants if you feel they are useless.");
+        config.setCategoryComment("Armor Enchants", "This allows you to disable any enchants.");
+        config.setCategoryComment("Arrow Enchants", "This allows you to disable any enchants.");
+        config.setCategoryComment("Tool/Weapon Enchants", "This allows you to disable any enchants.");
         
-        config.setCategoryComment("Armor Enchant IDs", "This allows you to set the ID of the Enchants");
-        config.setCategoryComment("Arrow Enchant IDs", "This allows you to set the ID of the Enchants");
-        config.setCategoryComment("Tool/Weapon Enchant IDs", "This allows you to set the ID of the Enchants");
-
-        config.setCategoryComment("Armor Enchant LVLs", "This allows you to set the Max Level of the Enchants");
-        config.setCategoryComment("Arrow Enchant LVLs", "This allows you to set the Max Level of the Enchants");
-        config.setCategoryComment("Tool/Weapon Enchant LVLs", "This allows you to set the Max Level of the Enchants");
-
-        config.setCategoryComment("Armor Enchant Weights", "This allows you to set the Weight of the Enchants. The higher the number the less difficult to obtain.");
-        config.setCategoryComment("Arrow Enchant Weights", "This allows you to set the Weight of the Enchants. The higher the number the less difficult to obtain.");
-        config.setCategoryComment("Tool/Weapon Enchant Weights", "This allows you to set the Weight of the Enchants. The higher the number the less difficult to obtain.");
+        config.setCategoryComment("Armor Enchant Values", "ID, Max Level, Weight, Cost, Special");
+        config.setCategoryComment("Arrow Enchant Values", "ID, Max Level, Weight, Cost, Special");
+        config.setCategoryComment("Tool/Weapon Enchant Values", "ID, Max Level, Weight, Cost, Special");
 
         /** Features **/
-        Feedback = config.getBoolean("Feedback", "Features", false, "ChatMessages and such from enchants.");
-        enchRegenRate = config.getInt("Regen Rate Default", "Features", 3, 1, 99999, "");
-        enchRepairRate = config.getInt("Repair Speed Default", "Features", 1, 1, 99999, "DON'T EXCEED THE MAX (Java will crash)");
-        enchXPrate = config.getInt("Extra exp Default", "Features", 1, 1, 9999999, "Increasing this means more xp gain from Examine Enchant.");
         EDT = config.getBoolean("ExplosionDestroysTerrain", "Features", false, "");
         PiercingPercent = config.getFloat("PiercingPercent", "Features", 0.1f, 0.01f, 10000.0f, "set this value as high as you want");
 
@@ -208,82 +141,35 @@ public class Config
         enchAuraToxicEnable = config.getBoolean("ToxicAura", "Armor Enchants", true, "Enable Enchant Toxic Aura?");
         enchDivineInterventionEnable = config.getBoolean("DivineIntervention", "Armor Enchants", true, "Enable Enchant Divine Intervention?");
 
-        enchAdrenalineBoostID = config.getInt("AdrenalineBoostID", "Armor Enchant IDs", 400, 400, 420, "");
-        enchBattleHealingID = config.getInt("BattleHealingID", "Armor Enchant IDs", 402, 400, 420, "");
-        enchFlyID = config.getInt("FlyID", "Armor Enchant IDs", 403, 400, 420, "");
-        enchJumpBoostID = config.getInt("JumpBoostID", "Armor Enchant IDs", 404, 400, 420, "");
-        enchRepairID = config.getInt("RepairID", "Armor Enchant IDs", 405, 400, 420, "");
-        enchRegenID = config.getInt("RegenID", "Armor Enchant IDs", 406, 400, 420, "");
-        enchSwiftnessID = config.getInt("SwiftnessID", "Armor Enchant IDs", 407, 400, 420, "");
-        enchVitalityID = config.getInt("VitalityID", "Armor Enchant IDs", 408, 400, 420, "");
-        enchWitherProtectionID = config.getInt("WitherProtectionID", "Armor Enchant IDs", 409, 400, 420, "");
-        enchBoundID = config.getInt("BoundID", "Armor Enchant IDs", 410, 400, 420, "");
-        enchLeadFootedID = config.getInt("LeadFootedID", "Armor Enchant IDs", 411, 400, 420, "");
-        enchShroudID = config.getInt("ShroudID", "Armor Enchant IDs", 412, 400, 420, "");
-        enchStealthID = config.getInt("StealthID", "Armor Enchant IDs", 413, 400, 420, "");
-        enchAuraDeadlyID = config.getInt("DeadlyAuraID", "Armor Enchant IDs", 414, 400, 420, "");
-        enchAuraFieryID = config.getInt("FieryAuraID", "Armor Enchant IDs", 415, 400, 420, "");
-        enchAuraThickID = config.getInt("ThickAuraID", "Armor Enchant IDs", 416, 400, 420, "");
-        enchAuraToxicID = config.getInt("ToxicAuraID", "Armor Enchant IDs", 417, 400, 420, "");
-        enchAuraDarkID = config.getInt("DarkAuraID", "Armor Enchant IDs", 418, 400, 420, "");
-        enchDivineInterventionID = config.getInt("DivineInterventionID", "Armor Enchant IDs", 419, 400, 420, "");
-
-        enchAdrenalineBoostLVL = config.getInt("AdrenalineBoostLVL", "Armor Enchant LVLs", 4, 1, 10, "");
-        enchBattleHealingLVL = config.getInt("BattleHealingLVL", "Armor Enchant LVLs", 4, 1, 10, "");
-        enchJumpBoostLVL = config.getInt("JumpBoostLVL", "Armor Enchant LVLs", 4, 1, 10, "");
-        enchRepairLVL = config.getInt("RepairLVL", "Armor Enchant LVLs", 4, 5, 10, "");
-        enchRegenLVL = config.getInt("RegenLVL", "Armor Enchant LVLs", 4, 2, 10, "");
-        enchSwiftnessLVL = config.getInt("SwiftnessLVL", "Armor Enchant LVLs", 4, 1, 10, "");
-        enchVitalityLVL = config.getInt("VitalityLVL", "Armor Enchant LVLs", 4, 1, 10, "");
-        enchWitherProtectionLVL = config.getInt("WitherProtectionLVL", "Armor Enchant LVLs", 4, 1, 10, "");
-        enchBoundLVL = config.getInt("BoundLVL", "Armor Enchant LVLs", 3, 1, 10, "");
-        enchLeadFootedLVL = config.getInt("LeadFootedLVL", "Armor Enchant LVLs", 1, 1, 10, "");
-        enchShroudLVL = config.getInt("ShroudLVL", "Armor Enchant LVLs", 1, 1, 10, "");
-        enchStealthLVL = config.getInt("StealthLVL", "Armor Enchant LVLs", 2, 1, 10, "");
-        enchAuraDeadlyLVL = config.getInt("DeadlyAuraLVL", "Armor Enchant LVLs", 10, 1, 10, "");
-        enchAuraFieryLVL = config.getInt("FieryAuraLVL", "Armor Enchant LVLs", 10, 1, 10, "");
-        enchAuraThickLVL = config.getInt("ThickAuraLVL", "Armor Enchant LVLs", 10, 1, 10, "");
-        enchAuraToxicLVL = config.getInt("ToxicAuraLVL", "Armor Enchant LVLs", 10, 1, 10, "");
-        enchAuraDarkLVL = config.getInt("DarkAuraLVL", "Armor Enchant LVLs", 10, 1, 10, "");
-        enchDivineInterventionLVL = config.getInt("DivineInterventionLVL", "Armor Enchant LVLs", 5, 1, 10, "");
-
-        enchAdrenalineBoostWeight = config.getInt("AdrenalineBoostWeight", "Armor Enchant Weights", 10, 1, 100, "");
-        enchBattleHealingWeight = config.getInt("BattleHealingWeight", "Armor Enchant Weights", 3, 1, 100, "");
-        enchFlyWeight = config.getInt("FlyWeight", "Armor Enchant Weights", 1, 1, 100, "");
-        enchJumpBoostWeight = config.getInt("JumpBoostWeight", "Armor Enchant Weights", 10, 1, 100, "");
-        enchRegenWeight = config.getInt("RegenWeight", "Armor Enchant Weights", 1, 1, 100, "");
-        enchRepairWeight = config.getInt("RepairWeight", "Armor Enchant Weights", 1, 1, 100, "");
-        enchSwiftnessWeight = config.getInt("SwiftnessWeight", "Armor Enchant Weights", 10, 1, 100, "");
-        enchVitalityWeight = config.getInt("VitalityWeight", "Armor Enchant Weights", 4, 1, 100, "");
-        enchWitherProtectionWeight = config.getInt("WitherProtectionWeight", "Armor Enchant Weights", 8, 1, 100, "");
-        enchBoundWeight = config.getInt("BoundWeight", "Armor Enchant Weights", 5, 1, 100, "");
-        enchLeadFootedWeight = config.getInt("LeadFootedWeight", "Armor Enchant Weights", 10, 1, 100, "");
-        enchShroudWeight = config.getInt("ShroudWeight", "Armor Enchant Weights", 2, 1, 100, "");
-        enchStealthWeight = config.getInt("StealthWeight", "Armor Enchant Weights", 6, 1, 100, "");
-        enchAuraDeadlyWeight = config.getInt("DeadlyAuraWeight", "Armor Enchant Weights", 1, 1, 100, "");
-        enchAuraFieryWeight = config.getInt("FieryAuraWeight", "Armor Enchant Weights", 5, 1, 100, "");
-        enchAuraThickWeight = config.getInt("ThickAuraWeight", "Armor Enchant Weights", 10, 1, 100, "");
-        enchAuraToxicWeight = config.getInt("ToxicAuraWeight", "Armor Enchant Weights", 5, 1, 100, "");
-        enchAuraDarkWeight = config.getInt("DarkAuraWeight", "Armor Enchant Weights", 15, 1, 100, "");
-        enchDivineInterventionWeight = config.getInt("DivineInterventionWeight", "Armor Enchant Weights", 1, 1, 100, "");
+        enchAdrenalineBoostVals = config.get("Armor Enchant Vals", "AdrenalineBoostVals", new int[]{400, 4, 10, 30}).getIntList();
+        enchBattleHealingVals = config.get("Armor Enchant Vals", "BattleHealingVals", new int[]{402, 4, 3, 40}).getIntList();
+        enchFlyVals = config.get("Armor Enchant Vals", "FlyVals", new int[]{403, 1, 1, 55}).getIntList();
+        enchJumpBoostVals = config.get("Armor Enchant Vals", "JumpBoostVals", new int[]{404, 4, 10, 20}).getIntList();
+        enchRepairVals = config.get("Armor Enchant Vals", "RepairVals", new int[]{405, 4, 1, 15, 35}).getIntList();
+        enchRegenVals = config.get("Armor Enchant Vals", "RegenVals", new int[]{406, 4, 1, 15, 50}).getIntList();
+        enchSwiftnessVals = config.get("Armor Enchant Vals", "SwiftnessVals", new int[]{407, 4, 10, 20}).getIntList();
+        enchVitalityVals = config.get("Armor Enchant Vals", "VitalityVals", new int[]{408, 4, 4, 30}).getIntList();
+        enchWitherProtectionVals = config.get("Armor Enchant Vals", "WitherProtectionVals", new int[]{409, 4, 8, 40}).getIntList();
+        enchBoundVals = config.get("Armor Enchant Vals", "BoundVals", new int[]{410, 3, 5, 45}).getIntList();
+        enchLeadFootedVals = config.get("Armor Enchant Vals", "LeadFootedVals", new int[]{411, 1, 10, 20}).getIntList();
+        enchShroudVals = config.get("Armor Enchant Vals", "ShroudVals", new int[]{412, 1, 2, 45}).getIntList();
+        enchStealthVals = config.get("Armor Enchant Vals", "StealthVals", new int[]{413, 2, 6, 40}).getIntList();
+        enchAuraDeadlyVals = config.get("Armor Enchant Vals", "DeadlyAuraVals", new int[]{414, 10, 1, 50}).getIntList();
+        enchAuraFieryVals = config.get("Armor Enchant Vals", "FieryAuraVals", new int[]{415, 10, 5, 30}).getIntList();
+        enchAuraThickVals = config.get("Armor Enchant Vals", "ThickAuraVals", new int[]{416, 10, 10, 20}).getIntList();
+        enchAuraToxicVals = config.get("Armor Enchant Vals", "ToxicAuraVals", new int[]{417, 10, 5, 35}).getIntList();
+        enchAuraDarkVals = config.get("Armor Enchant Vals", "DarkAuraVals", new int[]{418, 10, 15, 20}).getIntList();
+        enchDivineInterventionVals = config.get("Armor Enchant Vals", "DivineInterventionVals", new int[]{419, 5, 1, 45}).getIntList();
 
         /** Arrow Enchants **/
         enchArrowExplosiveEnable = config.getBoolean("ArrowExplosive", "Arrow Enchants", true, "Enable Enchant Arrow Explosive?");
         enchArrowLightningEnable = config.getBoolean("ArrowLightning", "Arrow Enchants", true, "Enable Enchant Arrow Lightning?");
         enchArrowSeekingEnable = config.getBoolean("ArrowSeeking", "Arrow Enchants", true, "Enable Enchant Arrow Seeking?");
 
-        enchArrowExplosiveID = config.getInt("ArrowExplosiveID", "Arrow Enchant IDs", 421, 421, 430, "");
-        enchArrowLightningID = config.getInt("ArrowLightningID", "Arrow Enchant IDs", 422, 421, 430, "");
-        enchArrowSeekingID = config.getInt("ArrowSeekingID", "Arrow Enchant IDs", 423, 421, 430, "");
-        enchArrowPiercingID = config.getInt("ArrowPiercingID", "Arrow Enchant IDs", 424, 421, 430, "");
-
-        enchArrowExplosiveLVL = config.getInt("ArrowExplosiveLVL", "Arrow Enchant LVLs", 4, 1, 10, "");
-        enchArrowLightningLVL = config.getInt("ArrowLightningLVL", "Arrow Enchant LVLs", 1, 1, 10, "");
-        enchArrowSeekingLVL = config.getInt("ArrowSeekingLVL", "Arrow Enchant LVLs", 4, 1, 10, "");
-
-        enchArrowExplosiveWeight = config.getInt("ArrowExplosiveWeight", "Arrow Enchant Weights", 2, 1, 100, "");
-        enchArrowLightningWeight = config.getInt("ArrowLightningWeight", "Arrow Enchant Weights", 5, 1, 100, "");
-        enchArrowSeekingWeight = config.getInt("ArrowSeekingWeight", "Arrow Enchant Weights", 1, 1, 100, "");
+        enchArrowExplosiveVals = config.get("Arrow Enchant Vals", "ArrowExplosiveVals", new int[]{421, 4, 2, 40}).getIntList();
+        enchArrowLightningVals = config.get("Arrow Enchant Vals", "ArrowLightningVals", new int[]{422, 1, 5, 30}).getIntList();
+        enchArrowSeekingVals = config.get("Arrow Enchant Vals", "ArrowSeekingVals", new int[]{423, 4, 1, 45}).getIntList();
+        enchArrowPiercingVals = config.get("Arrow Enchant Vals", "ArrowPiercingVals", new int[]{424, 5, 1, 40}).getIntList();
 
         /** Tool/Weapon Enchants **/
         enchFlameTouchEnable = config.getBoolean("FlameTouch", "Tool/Weapon Enchants", true, "Enable Enchant Auto-Smelt?");
@@ -292,28 +178,18 @@ public class Config
         enchVampirismEnable = config.getBoolean("Vampirism", "Tool/Weapon Enchants", true, "Enable Enchant Vampirism?");
         enchExamineEnable = config.getBoolean("Examine", "Tool/Weapon Enchants", true, "Enable Enchant Examine?");
         enchPiercingEnable = config.getBoolean("Piercing", "Tool/Weapon Enchants", true, "Enable Enchant Piercing?");
+        enchVorpalEnable = config.getBoolean("Vorpal", "Tool/Weapon Enchants", true, "Enable Enchant Vorpal?");
+        enchSCurseEnable = config.getBoolean("SCurse", "Tool/Weapon Enchants", true, "Enable Enchant SCurse?");
 
-        enchFlameTouchID = config.getInt("FlameTouchID", "Tool/Weapon Enchant IDs", 431, 431, 450, "");
-        enchLifeStealID = config.getInt("LifeStealID", "Tool/Weapon Enchant IDs", 432, 431, 450, "");
-        enchPoisonID = config.getInt("PoisonID", "Tool/Weapon Enchant IDs", 433, 431, 450, "");
-        enchVampirismID = config.getInt("VampirismID", "Tool/Weapon Enchant IDs", 434, 431, 450, "");
-        enchExamineID = config.getInt("ExamineID", "Tool/Weapon Enchant IDs", 435, 431, 450, "");
-        enchPiercingID = config.getInt("PiercingID", "Tool/Weapon Enchant IDs", 436, 431, 450, "");
-        enchVenomID = config.getInt("VenomID", "Tool/Weapon Enchant IDs", 437, 431, 450, "");
-
-        enchFlameTouchLVL = config.getInt("FlameTouchLVL", "Tool/Weapon Enchant LVLs", 4, 1, 10, "");
-        enchLifeStealLVL = config.getInt("LifeStealLVL", "Tool/Weapon Enchant LVLs", 5, 1, 10, "");
-        enchPoisonLVL = config.getInt("PoisonLVL", "Tool/Weapon Enchant LVLs", 4, 1, 10, "");
-        enchVampirismLVL = config.getInt("VampirismLVL", "Tool/Weapon Enchant LVLs", 5, 1, 10, "");
-        enchExamineLVL = config.getInt("ExamineLVL", "Tool/Weapon Enchant LVLs", 10, 1, 10, "");
-        enchPiercingLVL = config.getInt("ExamineLVL", "Tool/Weapon Enchant LVLs", 1, 1, 10, "");
-
-        enchFlameTouchWeight = config.getInt("FlameTouchWeight", "Tool/Weapon Enchant Weights", 2, 1, 100, "");
-        enchLifeStealWeight = config.getInt("LifeStealWeight", "Tool/Weapon Enchant Weights", 7, 1, 100, "");
-        enchPoisonWeight = config.getInt("PoisonWeight", "Tool/Weapon Enchant Weights", 10, 1, 100, "");
-        enchVampirismWeight = config.getInt("VampirismWeight", "Tool/Weapon Enchant Weights", 3, 1, 100, "");
-        enchExamineWeight = config.getInt("ExamineWeight", "Tool/Weapon Enchant Weights", 1, 1, 100, "");
-        enchPiercingWeight = config.getInt("PiercingWeight", "Tool/Weapon Enchant Weights", 1, 1, 100, "");
+        enchFlameTouchVals = config.get("Tool/Weapon Enchant Vals", "FlameTouchVals", new int[]{431, 4, 2, 30}).getIntList();
+        enchLifeStealVals = config.get("Tool/Weapon Enchant Vals", "LifeStealVals", new int[]{432, 5, 7, 35}).getIntList();
+        enchPoisonVals = config.get("Tool/Weapon Enchant Vals", "PoisonVals", new int[]{433, 4, 10, 25}).getIntList();
+        enchVampirismVals = config.get("Tool/Weapon Enchant Vals", "VampirismVals", new int[]{434, 5, 3, 45}).getIntList();
+        enchExamineVals = config.get("Tool/Weapon Enchant Vals", "ExamineVals", new int[]{435, 10, 1, 55}).getIntList();
+        enchPiercingVals = config.get("Tool/Weapon Enchant Vals", "PiercingVals", new int[]{436, 10, 1, 50}).getIntList();
+        enchVenomVals = config.get("Tool/Weapon Enchant Vals", "VenomVals", new int[]{437, 4, 1, 25}).getIntList();
+        enchVorpalVals = config.get("Tool/Weapon Enchant Vals", "VorpalVals", new int[]{438, 10, 1, 55, 8}).getIntList();
+        enchSCurseVals = config.get("Tool/Weapon Enchant Vals", "SCurseVals", new int[]{439, 10, 1, 55, 3}).getIntList();
 
         if(config.hasChanged())
         {

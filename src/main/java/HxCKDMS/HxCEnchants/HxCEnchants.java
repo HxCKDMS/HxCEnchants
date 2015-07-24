@@ -28,6 +28,7 @@ public class HxCEnchants
     ArmorEventHandler armor = new ArmorEventHandler();
     ToolEventHandler tool = new ToolEventHandler();
     AOEEventHandler aoe = new AOEEventHandler();
+
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
@@ -45,6 +46,6 @@ public class HxCEnchants
     
     @EventHandler
     public void postInit(FMLPostInitializationEvent event){
-        LogHelper.info("HxCEnchants has completed loading.", Reference.MOD_NAME);
+        LogHelper.info("Completed loading.", Reference.MOD_NAME);
     }
 }

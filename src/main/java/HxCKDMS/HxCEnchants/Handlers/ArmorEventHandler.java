@@ -36,7 +36,7 @@ public class ArmorEventHandler {
             SpeedUUID = UUID.fromString("fe15f828-62d7-11e4-b116-123b93f75cba"),
             StealthUUID = UUID.fromString("1e4a1a12-ab1e-4987-b527-e0adeefc904a");
 
-    int ShouldRepair = (Config.enchRepairRate * 20), CanRegen = (Config.enchRegenRate * 20);
+    int ShouldRepair = 60, CanRegen = 60;
     int JumpBoostLevel, VitalityLevel, AdrenalineBoostLevel, BattleHealingLevel,
          WitherProt, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H, C, L, B;
     double SpeedBoost, Vitality;
@@ -111,18 +111,18 @@ public class ArmorEventHandler {
                 }
                 if (isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode) player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
             }
+
             if (Config.enchStealthEnable) {
                 StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
 
-                if (!player.worldObj.isRemote){
+                if (!player.worldObj.isRemote)
                     Stealth(player, StealthLevel);
-                }
             }
 
 
             if(Config.enchRepairEnable && ShouldRepair <= 0) {
                 RepairItems(player);
-                ShouldRepair = (Config.enchRepairRate * 20);
+                ShouldRepair = (Config.enchRepairVals[4] * 20);
             }
 
             if (Config.enchRegenEnable){
@@ -135,7 +135,7 @@ public class ArmorEventHandler {
 
                 if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0 && CanRegen <= 0) {
                     player.heal(RegenLevel * 2);
-                    CanRegen = Config.enchRegenRate * 20;
+                    CanRegen = Config.enchRegenVals[4] * 20;
                 }
             }
         }
@@ -196,7 +196,7 @@ public class ArmorEventHandler {
         List list  = player.worldObj.getEntitiesWithinAABB(EntityMob.class, AABBUtils.getAreaBoundingBox(px, py, pz, 24));
         for (EntityMob entity : (List<EntityMob>) list) {
             IAttributeInstance fr = entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange);
-            AttributeModifier StealthBuff = new AttributeModifier(StealthUUID, "StealthDeBuff", (StealthLevel*-15), 1);
+            AttributeModifier StealthBuff = new AttributeModifier(StealthUUID, "StealthDeBuff", (fr.getBaseValue()-StealthLevel), 1);
             fr.removeModifier(StealthBuff);
             fr.applyModifier(StealthBuff);
         }
@@ -236,8 +236,8 @@ public class ArmorEventHandler {
                         if (player.dimension != 0)Teleporter.transferPlayerToDimension(player, 0, x, y, z);
                         else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
                     Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
-                    enchs.remove(Config.enchDivineInterventionID);
-                    if (DivineInterventionLevel > 1) enchs.put(Config.enchDivineInterventionID, DivineInterventionLevel - 1);
+                    enchs.remove(Config.enchDivineInterventionVals[0]);
+                    if (DivineInterventionLevel > 1) enchs.put(Config.enchDivineInterventionVals[0], DivineInterventionLevel - 1);
                     EnchantmentHelper.setEnchantments(enchs, ArmourChest);
                 }
             }

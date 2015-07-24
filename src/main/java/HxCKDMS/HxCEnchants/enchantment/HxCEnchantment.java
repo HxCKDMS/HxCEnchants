@@ -5,11 +5,12 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 
 public class HxCEnchantment extends Enchantment
 {
-    private int MaxLevel;
-    public HxCEnchantment(int id, String name, int rarity, EnumEnchantmentType type, int MaxLevel) {
+    private int MaxLevel, cost;
+    public HxCEnchantment(int id, String name, int rarity, EnumEnchantmentType type, int MaxLevel, int cost) {
         super(id, rarity, type);
         setName(name);
         this.MaxLevel = MaxLevel;
+        this.cost = cost;
     }
 
     @Override
@@ -21,7 +22,7 @@ public class HxCEnchantment extends Enchantment
     @Override
     public int getMaxEnchantability(int i)
     {
-        return getMinEnchantability(i) + 20;
+        return getMinEnchantability(i) + cost;
     }
 
     @Override
