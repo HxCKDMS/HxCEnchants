@@ -160,8 +160,6 @@ public class ToolEventHandler {
 
             AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
             if(AutoSmeltLevel > 0) {
-                FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
-
                 for(int i = 0; i < event.drops.size(); i++) {
                     ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
 
