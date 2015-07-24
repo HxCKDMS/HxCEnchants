@@ -141,9 +141,9 @@ public class ToolEventHandler {
 
                     int curFood = Attacker.getFoodStats().getFoodLevel();
                     float newFud = (VBRV/4 * VampireLevel) + curFood;
-                    if (curFood < 40 && newFud < 40) Attacker.getFoodStats().setFoodLevel(Math.round(newFud));
-                    else if (curFood < 40 && newFud > 40) Attacker.getFoodStats().setFoodLevel(40);
-                    else Attacker.getFoodStats().setFoodLevel(40);
+                    if (curFood < 40 && newFud < 40) Attacker.getFoodStats().addStats(Math.round(newFud), 0);
+                    else if (curFood < 40 && newFud > 40) Attacker.getFoodStats().addStats(40, 0);
+                    else Attacker.getFoodStats().addStats(40, 0);
 
                     if (Config.DebugMode)
                         LogHelper.debug("[Enchants] Setting " + Attacker + "'s Food Level to" + newFud, Reference.MOD_ID);
