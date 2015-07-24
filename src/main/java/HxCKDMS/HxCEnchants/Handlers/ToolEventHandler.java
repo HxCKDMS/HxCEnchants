@@ -34,6 +34,7 @@ import java.io.File;
 public class ToolEventHandler {
 	int VampireLevel, ExamineLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel;
     float VBRV = 0;
+    FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
 	// Misc. variables
     @SubscribeEvent
@@ -162,12 +163,12 @@ public class ToolEventHandler {
                 FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
                 for(int i = 0; i < event.drops.size(); i++) {
-                    ItemStack drop = event.drops.get(i);
-                    ItemStack smelted = furnaceRecipes.getSmeltingResult(drop);
+                    ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
 
                     if(smelted != null){
-                        ItemStack actualDrop = new ItemStack(smelted.getItem(), drop.stackSize * AutoSmeltLevel, smelted.getItemDamage());
-                        event.drops.set(i, actualDrop);
+                        ItemStack drop = smelted.copy();
+                        drop.stackSize *= AutoSmeltLevel;
+                        event.drops.set(i, drop);
                     }
                 }
             }
