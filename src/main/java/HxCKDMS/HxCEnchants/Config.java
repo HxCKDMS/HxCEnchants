@@ -188,7 +188,7 @@ public class Config
         enchExamineVals = config.get("Tool/Weapon Enchant Vals", "ExamineVals", new int[]{435, 10, 1, 55}).getIntList();
         enchPiercingVals = config.get("Tool/Weapon Enchant Vals", "PiercingVals", new int[]{436, 10, 1, 50}).getIntList();
         enchVenomVals = config.get("Tool/Weapon Enchant Vals", "VenomVals", new int[]{437, 4, 1, 25}).getIntList();
-        enchVorpalVals = config.get("Tool/Weapon Enchant Vals", "VorpalVals", new int[]{438, 10, 1, 55, 8}).getIntList();
+        enchVorpalVals = config.get("Tool/Weapon Enchant Vals", "VorpalVals", new int[]{438, 10, 1, 55, 1}).getIntList();
         enchSCurseVals = config.get("Tool/Weapon Enchant Vals", "SCurseVals", new int[]{439, 10, 1, 55, 3}).getIntList();
 
         if(config.hasChanged())
