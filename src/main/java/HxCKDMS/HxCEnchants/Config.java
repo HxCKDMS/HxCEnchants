@@ -24,8 +24,7 @@ public class Config
             enchShroudEnable, enchSoulTearEnable, enchSCurseEnable, enchStealthEnable, enchSwiftnessEnable,
             enchVampirismEnable, enchVitalityEnable, enchVorpalEnable, enchWitherProtectionEnable;
 
-    public Config(Configuration config)
-    {
+    public Config(Configuration config) {
         config.load();
         /** Config Group Descriptions **/
         config.setCategoryComment("A Features", "This allows you to tweak anything we add.");
@@ -66,8 +65,8 @@ public class Config
         enchBattleHealingVals = config.get("C Armor Enchant Values", "BattleHealingVals", new int[]{402, 4, 3, 40}).getIntList();
         enchFlyVals = config.get("C Armor Enchant Values", "FlyVals", new int[]{403, 1, 1, 55}).getIntList();
         enchJumpBoostVals = config.get("C Armor Enchant Values", "JumpBoostVals", new int[]{404, 4, 10, 20}).getIntList();
-        enchRepairVals = config.get("C Armor Enchant Values", "RepairVals", new int[]{405, 4, 1, 15, 35}).getIntList();
-        enchRegenVals = config.get("C Armor Enchant Values", "RegenVals", new int[]{406, 4, 1, 15, 50}).getIntList();
+        enchRepairVals = config.get("C Armor Enchant Values", "RepairVals", new int[]{405, 4, 1, 15, 35, 60}).getIntList();
+        enchRegenVals = config.get("C Armor Enchant Values", "RegenVals", new int[]{406, 4, 1, 15, 50, 60}).getIntList();
         enchSwiftnessVals = config.get("C Armor Enchant Values", "SwiftnessVals", new int[]{407, 4, 10, 20}).getIntList();
         enchVitalityVals = config.get("C Armor Enchant Values", "VitalityVals", new int[]{408, 4, 4, 30}).getIntList();
         enchWitherProtectionVals = config.get("C Armor Enchant Values", "WitherProtectionVals", new int[]{409, 4, 8, 40}).getIntList();

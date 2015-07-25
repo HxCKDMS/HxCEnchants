@@ -24,11 +24,6 @@ public class HxCEnchants
     public static HxCEnchants instance;
     public static Config Config;
 
-    ArrowEventHandler arrow = new ArrowEventHandler();
-    ArmorEventHandler armor = new ArmorEventHandler();
-    ToolEventHandler tool = new ToolEventHandler();
-    AOEEventHandler aoe = new AOEEventHandler();
-
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
@@ -37,11 +32,10 @@ public class HxCEnchants
     @EventHandler
     public void init(FMLInitializationEvent event) {
         Enchants.load();
-        aoe.init();
-        MinecraftForge.EVENT_BUS.register(arrow);
-        MinecraftForge.EVENT_BUS.register(armor);
-        MinecraftForge.EVENT_BUS.register(tool);
-        MinecraftForge.EVENT_BUS.register(aoe);
+        MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
+        MinecraftForge.EVENT_BUS.register(new AOEEventHandler());
     }
     
     @EventHandler
