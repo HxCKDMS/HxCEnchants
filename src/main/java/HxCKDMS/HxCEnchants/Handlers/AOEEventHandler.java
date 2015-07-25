@@ -1,152 +1,121 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
+import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Config;
+import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
 import java.util.List;
-import java.util.Random;
 
-public class AOEEventHandler
-{
-    int[] HelmetAura;
-    int[] TorsoAura;
-    int[] LeggingsAura;
-    int[] BootsAura;
+public class AOEEventHandler {
+     //if you're wondering the reason the size is 16 not 4 it's because incase other mods extend the armour inventory I did to prevent crashes
 
-    ItemStack ArmourHelm = null;
-    ItemStack ArmourChest = null;
-    ItemStack ArmourLegs = null;
-    ItemStack ArmourBoots = null;
+    int[] DeadlyAura = new int[4], FieryAura = new int[4],
+            ToxicAura = new int[4], ThickAura = new int[4],
+            DarkAura = new int[4], Chrgs, Shroud = new int[4];
+
 
     @SubscribeEvent
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		if(event.entityLiving instanceof EntityPlayerMP && !(((EntityPlayerMP) event.entityLiving).getEntityWorld().isRemote)) {
-            int[] Enchants = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-            EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
+        if (event.entityLiving instanceof EntityPlayer && !(((EntityPlayer) event.entityLiving).getEntityWorld().isRemote)) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             World world = player.getEntityWorld();
-            Random rand = world.rand;
-            ArmourHelm = player.inventory.armorItemInSlot(3);
-            ArmourChest = player.inventory.armorItemInSlot(2);
-            ArmourLegs = player.inventory.armorItemInSlot(1);
-            ArmourBoots = player.inventory.armorItemInSlot(0);
+            Chrgs = new int[]{0,0,0,0};
 
-            int[] helmEnchs = Enchants;
-            int[] torsoEnchs = Enchants;
-            int[] legEnchs = Enchants;
-            int[] bootEnchs = Enchants;
 
-            if (ArmourHelm != null) {
-                try {helmEnchs = ArmourHelm.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourHelm.getTagCompound().setIntArray("HxCEnchants", Enchants);}
-            }
-            if (ArmourChest != null) {
-                try {torsoEnchs = ArmourChest.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourChest.getTagCompound().setIntArray("HxCEnchants", Enchants);}
-            }
-            if (ArmourLegs != null) {
-                try {legEnchs = ArmourLegs.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourLegs.getTagCompound().setIntArray("HxCEnchants", Enchants);}
-            }
-            if (ArmourBoots != null) {
-                try {bootEnchs = ArmourBoots.getTagCompound().getIntArray("HxCEnchants");}
-                catch (Exception ignored) {ArmourBoots.getTagCompound().setIntArray("HxCEnchants", Enchants);}
-            }
-
-            HelmetAura = new int[]{helmEnchs[1],helmEnchs[2],helmEnchs[3],helmEnchs[4],helmEnchs[5],helmEnchs[20]};
-            TorsoAura = new int[]{torsoEnchs[1],torsoEnchs[2],torsoEnchs[3],torsoEnchs[4],torsoEnchs[5],torsoEnchs[20]};
-            LeggingsAura = new int[]{legEnchs[1],legEnchs[2],legEnchs[3],legEnchs[4],legEnchs[5],legEnchs[20]};
-            BootsAura = new int[]{bootEnchs[1],bootEnchs[2],bootEnchs[3],bootEnchs[4],bootEnchs[5],bootEnchs[20]};
-
-//            int shroud = HelmetAura[5] + TorsoAura[5] + LeggingsAura[5] + BootsAura[5];
-
-            if (HelmetAura[1] > 0 && TorsoAura[1] > 0 && LeggingsAura[1] > 0 && BootsAura[1] > 0){
-                int level = (HelmetAura[1] + TorsoAura[1] + LeggingsAura[1] + BootsAura[1])/4;
-//                double motionY = rand.nextGaussian() + 0.02D;
-//                if (shroud < 1)world.spawnParticle("magicCrit", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>)list){
-                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
-                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
-                        degrade(ArmourHelm,2); degrade(ArmourChest,2);
-                        degrade(ArmourLegs,2); degrade(ArmourBoots,2);
-                    }
+            for (int i = 0; i < 4; i++) {
+                if (player.inventory.armorItemInSlot(i) != null) {
+                    if (Config.enchAuraDeadlyEnable)
+                        DeadlyAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraDarkEnable)
+                        DarkAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDark.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraFieryEnable)
+                        FieryAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraFiery.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraThickEnable)
+                        ThickAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraThick.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraToxicEnable)
+                        ToxicAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraToxic.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchShroudEnable)
+                        Shroud[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, player.inventory.armorItemInSlot(i));
+                    if (player.inventory.armorItemInSlot(i).getTagCompound() != null && Config.enableChargesSystem)
+                        Chrgs[i] = player.inventory.armorItemInSlot(i).getTagCompound().getInteger("HxCEnchantCharge");
                 }
             }
-            if (HelmetAura[0] > 0 && TorsoAura[0] > 0 && LeggingsAura[0] > 0 && BootsAura[0] > 0){
-                int level = (HelmetAura[0] + TorsoAura[0] + LeggingsAura[0] + BootsAura[0])/4;
-//                double motionY = rand.nextGaussian() + 0.02D;
-//                if (shroud < 1)world.spawnParticle("largesmoke", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>)list){
-                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
+
+            if (DeadlyAura[0] > 0 && DeadlyAura[1] > 0 && DeadlyAura[2] > 0 && DeadlyAura[3] > 0 && ((Chrgs[0] > Config.enchAuraDeadlyVals[4] && Chrgs[1] > Config.enchAuraDeadlyVals[4] && Chrgs[2] > Config.enchAuraDeadlyVals[4] && Chrgs[3] > Config.enchAuraDeadlyVals[4]) || !Config.enableChargesSystem)) {
+                int level = (DeadlyAura[0] + DeadlyAura[1] + DeadlyAura[2] + DeadlyAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+//                if (shroud < 1)world.spawnParticle(EnumParticleTypes.CRIT_MAGIC, player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
+                List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), level));
+                for (EntityLivingBase entity : list)
+                    if ((Config.PAuraDeadly || !(entity instanceof EntityPlayer)) && entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
+                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
+                        for (int i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setInteger("HxCEnchantCharge", Chrgs[i] - DeadlyAura[i]);
+                    }
+            }
+
+            if (DarkAura[0] > 0 && DarkAura[1] > 0 && DarkAura[2] > 0 && DarkAura[3] > 0 && ((Chrgs[0] > Config.enchAuraDarkVals[4] && Chrgs[1] > Config.enchAuraDarkVals[4] && Chrgs[2] > Config.enchAuraDarkVals[4] && Chrgs[3] > Config.enchAuraDarkVals[4]) || !Config.enableChargesSystem)) {
+                int level = (DarkAura[0] + DarkAura[1] + DarkAura[2] + DarkAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+//                if (shroud < 1)world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if ((Config.PAuraDark || !(entity instanceof EntityPlayer)) && entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
                         entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true));
                         entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true));
-                        degrade(ArmourHelm,1); degrade(ArmourChest,1);
-                        degrade(ArmourLegs,1); degrade(ArmourBoots,1);
+                        for (int i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setInteger("HxCEnchantCharge", Chrgs[i] - DarkAura[i]);
                     }
-                }
             }
-            if (HelmetAura[2] > 0 && TorsoAura[2] > 0 && LeggingsAura[2] > 0 && BootsAura[2] > 0){
-                int level = (HelmetAura[2] + TorsoAura[2] + LeggingsAura[2] + BootsAura[2])/4;
-//                double motionY = rand.nextGaussian() + 0.02D;
-//                if (shroud < 1)world.spawnParticle("flame", player.posX + 0.5 + rand.nextFloat(), player.posY + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>)list){
-                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
+
+            if (FieryAura[0] > 0 && FieryAura[1] > 0 && FieryAura[2] > 0 && FieryAura[3] > 0 && ((Chrgs[0] > Config.enchAuraFieryVals[4] && Chrgs[1] > Config.enchAuraFieryVals[4] && Chrgs[2] > Config.enchAuraFieryVals[4] && Chrgs[3] > Config.enchAuraFieryVals[4]) || !Config.enableChargesSystem)) {
+                int level = (FieryAura[0] + FieryAura[1] + FieryAura[2] + FieryAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+//                if (shroud < 1)world.spawnParticle(EnumParticleTypes.FLAME, player.posX + 0.5 + rand.nextFloat(), player.posY + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if ((Config.PAuraFiery || !(entity instanceof EntityPlayer)) && entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
                         entity.setFire(100);
-                        degrade(ArmourHelm,3); degrade(ArmourChest,3);
-                        degrade(ArmourLegs,3); degrade(ArmourBoots,3);
+                        for (int i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setInteger("HxCEnchantCharge", Chrgs[i] - FieryAura[i]);
                     }
-                }
             }
-            if (HelmetAura[3] > 0 && TorsoAura[3] > 0 && LeggingsAura[3] > 0 && BootsAura[3] > 0){
-                int level = (HelmetAura[3] + TorsoAura[3] + LeggingsAura[3] + BootsAura[3])/4;
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>)list){
-                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
+
+            if (ThickAura[0] > 0 && ThickAura[1] > 0 && ThickAura[2] > 0 && ThickAura[3] > 0 && ((Chrgs[0] > Config.enchAuraThickVals[4] && Chrgs[1] > Config.enchAuraThickVals[4] && Chrgs[2] > Config.enchAuraThickVals[4] && Chrgs[3] > Config.enchAuraThickVals[4]) || !Config.enableChargesSystem)) {
+                int level = (ThickAura[0] + ThickAura[1] + ThickAura[2] + ThickAura[3]) / 4;
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if ((Config.PAuraThick || !(entity instanceof EntityPlayer)) && entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
                         entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true));
                         entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true));
                         entity.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true));
-                        degrade(ArmourHelm,4); degrade(ArmourChest,4);
-                        degrade(ArmourLegs,4); degrade(ArmourBoots,4);
+                        for (int i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setInteger("HxCEnchantCharge", Chrgs[i] - ThickAura[i]);
                     }
-                }
             }
-            if (HelmetAura[4] > 0 && TorsoAura[4] > 0 && LeggingsAura[4] > 0 && BootsAura[4] > 0){
-                int level = (HelmetAura[4] + TorsoAura[4] + LeggingsAura[4] + BootsAura[4])/4;
-//                double motionY = rand.nextGaussian() + 0.02D;
-//                if (shroud < 1)world.spawnParticle("slime", player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getAreaBoundingBox(player.posX, player.posY, player.posZ, level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>)list){
-                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
+
+            if (ToxicAura[0] > 0 && ToxicAura[1] > 0 && ToxicAura[2] > 0 && ToxicAura[3] > 0 && ((Chrgs[0] > Config.enchAuraToxicVals[4] && Chrgs[1] > Config.enchAuraToxicVals[4] && Chrgs[2] > Config.enchAuraToxicVals[4] && Chrgs[3] > Config.enchAuraToxicVals[4]) || !Config.enableChargesSystem)) {
+                int level = (ToxicAura[0] + ToxicAura[1] + ToxicAura[2] + ToxicAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+//                if (shroud < 1)world.spawnParticle(EnumParticleTypes.SLIME, player.posX + 0.5 + rand.nextFloat(), player.posY + 0.5 + rand.nextFloat(), player.posZ + 0.5 + rand.nextFloat(), 0, motionY, 0);
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if ((Config.PAuraToxic || !(entity instanceof EntityPlayer)) && entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
                         entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
-                        degrade(ArmourHelm,5); degrade(ArmourChest,5);
-                        degrade(ArmourLegs,5); degrade(ArmourBoots,5);
+                        for (int i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setInteger("HxCEnchantCharge", Chrgs[i] - ToxicAura[i]);
                     }
-                }
             }
         }
-	}
-
-    protected AxisAlignedBB getAreaBoundingBox(double x, double y, double z, int modifier) {
-        return AxisAlignedBB.getBoundingBox(x - modifier, y - modifier, z - modifier,
-        /** Indented because CDO :P **/    x + modifier, y + modifier, z + modifier);
-    }
-
-    public void degrade(ItemStack stack, int Enchantment){
-        int[] enchs = stack.getTagCompound().getIntArray("HxCEnchants");
-        int power = enchs[Enchantment];
-        int newPow = (stack.getTagCompound().getInteger("HxCEnchantCharge") - (Math.round((power * Config.baseDrain)/2)));
-        stack.getTagCompound().setInteger("HxCEnchantCharge",newPow);
     }
 }

@@ -13,7 +13,7 @@ public class GUIHandler implements IGuiHandler {
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if(tileEntity instanceof EnchanterTile){
-            return new EnchanterContainer(player, tileEntity);
+            return new EnchanterContainer(player, (EnchanterTile)tileEntity);
         }
         return null;
     }
@@ -21,7 +21,7 @@ public class GUIHandler implements IGuiHandler {
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if(tileEntity instanceof EnchanterTile){
-            return new EnchanterGUI(new EnchanterContainer(player, tileEntity), (EnchanterTile)tileEntity);
+            return new EnchanterGUI(new EnchanterContainer(player, (EnchanterTile)tileEntity), player);
         }
         return null;
     }

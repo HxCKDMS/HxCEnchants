@@ -55,19 +55,15 @@ public class EnchanterBlock extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister){
-        blockIcons = new IIcon[6];
-
+        blockIcons = new IIcon[2];
         blockIcons[0] = iconRegister.registerIcon(Reference.MOD_ID + ":Enchanter_Top");
         blockIcons[1] = iconRegister.registerIcon(Reference.MOD_ID + ":Enchanter_Side");
     }
 
     @Override
     public IIcon getIcon(int Side, int Metadata){
-        if(Side == 1){
-            return blockIcons[0];
-        }else{
-            return blockIcons[1];
-        }
+        if(Side == 1) return blockIcons[0];
+        else return blockIcons[1];
     }
 
     private void dropItems(World world, int x, int y, int z){

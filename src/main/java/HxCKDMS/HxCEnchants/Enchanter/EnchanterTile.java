@@ -6,18 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 
 public class EnchanterTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
 
     public int xpti = 0;
-    public byte[] enchs = null;
-    public World world = getWorldObj();
+    public String player = "";
 
     public EnchanterTile(){
         inv = new ItemStack[1];
@@ -25,23 +19,25 @@ public class EnchanterTile extends TileEntity implements IInventory {
 
     @Override
     public void updateEntity() {
-        if (enchs != null && xpti > 0) {
-            IntBuffer intBuf = ByteBuffer.wrap(enchs).order(ByteOrder.BIG_ENDIAN).asIntBuffer();
-            int[] array = new int[intBuf.remaining()];
-            intBuf.get(array);
+        if (xpti > 0 && !player.isEmpty()) {
             ItemStack stack = inv[0];
-            try {
-                stack.getTagCompound().setIntArray("HxCEnchants", array);
-                stack.getTagCompound().setInteger("HxCEnchantCharge", xpti);
-            } catch (Exception ignored) {
-                NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setIntArray("HxCEnchants", array);
-                tagCompound.setInteger("HxCEnchantCharge", xpti);
-                stack.setTagCompound(tagCompound);
+            if (stack != null) {
+                EntityPlayer p = worldObj.getPlayerEntityByName(player);
+                int chr;
+                if (xpti <= 15) chr = (xpti * xpti) + (6 * xpti);
+                else if (xpti <= 30) chr = (int) Math.round(2.5 * (xpti * xpti) - (40.5 * xpti) + 360);
+                else chr = (int) Math.round(4.5 * (xpti * xpti) - (162.5 * xpti) + 2220);
+                if (stack.getTagCompound() != null) {
+                    NBTTagCompound tagCompound = stack.getTagCompound();
+                    tagCompound.setInteger("HxCEnchantCharge", tagCompound.getInteger("HxCEnchantCharge") + chr);
+                } else {
+                    NBTTagCompound tagCompound = new NBTTagCompound();
+                    tagCompound.setInteger("HxCEnchantCharge", chr);
+                    stack.setTagCompound(tagCompound);
+                }
+                p.addExperienceLevel(-xpti);
+                xpti = 0;
             }
-            System.out.println(stack.getTagCompound().getInteger("HxCEnchantCharge"));
-            enchs = null;
-            xpti = 0;
         }
     }
 
@@ -58,14 +54,13 @@ public class EnchanterTile extends TileEntity implements IInventory {
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
         inv[slot] = stack;
-        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+        if (stack != null && stack.stackSize > getInventoryStackLimit())
             stack.stackSize = getInventoryStackLimit();
-        }
     }
 
     @Override
     public String getInventoryName() {
-        return "Enchanter";
+        return "XP Infuser";
     }
 
     @Override
@@ -127,13 +122,14 @@ public class EnchanterTile extends TileEntity implements IInventory {
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
-
-        NBTTagList tagList = tagCompound.getTagList("Inventory", 1);
-        for (int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound tag = (NBTTagCompound) tagList.getCompoundTagAt(i);
-            byte slot = tag.getByte("Slot");
-            if (slot >= 0 && slot < inv.length) {
-                inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+        if (inv[0] == null) {
+            NBTTagList tagList = tagCompound.getTagList("Inventory", 1);
+            for (int i = 0; i < tagList.tagCount(); i++) {
+                NBTTagCompound tag = tagList.getCompoundTagAt(i);
+                byte slot = tag.getByte("Slot");
+                if (slot >= 0 && slot < inv.length) {
+                    inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+                }
             }
         }
     }
@@ -142,14 +138,16 @@ public class EnchanterTile extends TileEntity implements IInventory {
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
 
-        NBTTagList itemList = new NBTTagList();
-        ItemStack stack = inv[0];
-        if (stack != null) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setByte("Slot", (byte) 0);
-            stack.writeToNBT(tag);
-            itemList.appendTag(tag);
+        if (inv[0] != null) {
+            NBTTagList itemList = new NBTTagList();
+            ItemStack stack = inv[0];
+            if (stack != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setByte("Slot", (byte) 0);
+                stack.writeToNBT(tag);
+                itemList.appendTag(tag);
+            }
+            tagCompound.setTag("Inventory", itemList);
         }
-        tagCompound.setTag("Inventory", itemList);
     }
 }

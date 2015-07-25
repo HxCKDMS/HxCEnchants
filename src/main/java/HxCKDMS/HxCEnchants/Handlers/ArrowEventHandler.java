@@ -1,7 +1,9 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Config;
+import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,21 +23,49 @@ import java.util.List;
 
 public class ArrowEventHandler
 {
-	int Explosive = 0;
-	int Homing = 0;
-	int Zeus = 0;
-    int Poison = 0;
+	boolean isExplosive, isHoming, isZeus, isPoison, isPiercing;
+	int ExplosionLevel, PoisonLevel, HomingLevel, ZeusLevel, PiercingLevel;
 
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
 
-        Explosive = HxCEnchantHelper.getEnchantLevel(stack,8);
-        Homing = HxCEnchantHelper.getEnchantLevel(stack,9);
-        Zeus = HxCEnchantHelper.getEnchantLevel(stack,10);
-        Poison = HxCEnchantHelper.getEnchantLevel(stack,18);
+        if (stack.getTagCompound() != null && (stack.getTagCompound().getInteger("HxCEnchantCharge") > 0 || !Config.enableChargesSystem)) {
+            if (Config.enchArrowLightningEnable)
+                ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
+            if (Config.enchArrowSeekingEnable)
+                HomingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowSeeking.effectId, stack);
+            if (Config.enchArrowExplosiveEnable)
+                ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowExplosive.effectId, stack);
+            if (Config.enchPoisonEnable)
+                PoisonLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
+            if (Config.enchPiercingEnable)
+                PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Penetrating.effectId, stack);
 
-        degrade(stack,(Explosive + Homing + Zeus + Poison));
+            isExplosive = ExplosionLevel > 0 && Config.enchArrowExplosiveEnable;
+            isHoming = HomingLevel > 0 && Config.enchArrowSeekingEnable;
+            isZeus = ZeusLevel > 0 && Config.enchArrowLightningEnable;
+            isPoison = PoisonLevel > 0 && Config.enchPoisonEnable;
+            isPiercing = PiercingLevel > 0 && Config.enchPiercingEnable;
+            if (Config.enableChargesSystem) {
+                int use = 0;
+                if (isExplosive) use += Config.enchArrowExplosiveVals[4];
+                if (isHoming) use += Config.enchArrowSeekingVals[4];
+                if (isZeus) use += Config.enchArrowLightningVals[4];
+                if (isPoison) use += Config.enchPoisonVals[4];
+                if (isPiercing) use += Config.enchArrowPiercingVals[4];
+
+                int tmp = stack.getTagCompound().getInteger("HxCEnchantCharge") - use;
+
+                if (tmp >= 0)
+                    stack.getTagCompound().setInteger("HxCEnchantCharge", tmp);
+                else {
+                    isExplosive = false; isHoming = false;
+                    isZeus = false; isPoison = false;
+                    isPiercing = false;
+                }
+            }
+        }
     }
 
 
@@ -43,16 +73,11 @@ public class ArrowEventHandler
 	public void entityAttacked(LivingAttackEvent event) {
         if(event.entityLiving instanceof EntityLiving){
             EntityLivingBase ent = event.entityLiving;
-            if (event.source.isProjectile() && Explosive > 0) {
-                ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * Explosive, Config.EDT);
-            } else if (event.source.isProjectile() && Homing > 0) {
-                float damage = 6;
-                ent.attackEntityFrom(DamageSource.generic, damage);
-            } else if (event.source.isProjectile() && Zeus > 0) {
-                ent.worldObj.spawnEntityInWorld(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
-            } else if (event.source.isProjectile() && Poison > 0) {
-                ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), Poison * 120, Poison));
-            }
+            if (event.source.isProjectile() && isExplosive) ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Config.EDT);
+            if (event.source.isProjectile() && isHoming) ent.attackEntityFrom(DamageSource.generic, 6);
+            if (event.source.isProjectile() && isZeus) ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
+            if (event.source.isProjectile() && isPoison) ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+            if (event.source.isProjectile() && isPiercing) ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Config.PiercingPercent);
         }
 	} 
 
@@ -62,9 +87,9 @@ public class ArrowEventHandler
 	public void arrowInAir(EntityEvent event) {
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
-            if(Homing > 0) {
+            if(isHoming) {
                 AxisAlignedBB box = arrow.boundingBox;
-                double size = 8 * Homing;
+                double size = 8 * HomingLevel;
                 List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
                 double distance = 100000;
                 EntityLiving target = null;
@@ -98,10 +123,5 @@ public class ArrowEventHandler
         for (double aDouble : doubles) distance += Math.pow(aDouble, 2);
 
         return Math.sqrt(distance);
-    }
-
-    public void degrade(ItemStack stack, int Power){
-        int newPow = (stack.getTagCompound().getInteger("HxCEnchantCharge") - (Power * Config.baseDrain));
-        stack.getTagCompound().setInteger("HxCEnchantCharge",newPow);
     }
 }

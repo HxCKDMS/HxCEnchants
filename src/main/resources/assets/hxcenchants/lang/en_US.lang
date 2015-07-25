@@ -1,0 +1,49 @@
+enchantment.fly=Flight
+enchantment.swiftness=Swiftness
+enchantment.vitality=Vitality
+enchantment.witherProt=Wither Protection
+enchantment.battleHeal=Battle Healing
+enchantment.adrenalineBoost=Adrenaline Boost
+enchantment.jumpBoost=Jump Boost
+enchantment.divineIntervention=Divine Intervention
+enchantment.vampirism=Vampirism
+enchantment.arrowZeus=Zeus
+enchantment.arrowExplosive=Explosive
+enchantment.arrowSeeking=Homing
+enchantment.regen=Regen
+enchantment.bound=Bound
+enchantment.critical=Critical
+enchantment.flameTouch=Auto-Smelt
+enchantment.leadFoot=Lead Footed
+enchantment.poison=Poison Tipped
+enchantment.venom=Venom
+enchantment.piercing=Piercing
+enchantment.penetrating=Penetrating
+enchantment.repair=Repair
+enchantment.shroud=Shrouded
+enchantment.stealth=Stealth
+enchantment.lifeSteal=Life Stealer
+enchantment.examine=Examine
+enchantment.soulTear=Soul Tear
+enchantment.flameAura=Fiery Aura
+enchantment.darkAura=Dark Aura
+enchantment.deadlyAura=Deadly Aura
+enchantment.thickAura=Thick Aura
+enchantment.toxicAura=Toxic Aura
+enchantment.vorpal=Vorpal
+enchantment.slayersCurse=Slayer's Curse
+
+death.attack.Piercing=%1$s was impaled.
+death.attack.Piercing.player=%1$s was impaled by %2$s.
+death.attack.Piercing.player.item=%1$s was impaled by %2$s using %3$s.
+
+death.attack.Vorpal=%1$s was sliced to bits.
+death.attack.Vorpal.player=%1$s was sliced to bits by %2$s.
+death.attack.Vorpal.player.item=%1$s was sliced to bits by %2$s using %3$s.
+
+death.attack.scurse=%1$s was slain.
+death.attack.scurse.player=%1$s was slain by %2$s.
+death.attack.scurse.player.item=%1$s was slain by %2$s using %3$s.
+
+death.attack.Deadly=%1$s got too close to a powerful being.
+death.attack.Deadly.player=%1$s couldn't stand %2$s's massive power.
