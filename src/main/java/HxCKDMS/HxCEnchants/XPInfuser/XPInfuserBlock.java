@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.Enchanter;
+package HxCKDMS.HxCEnchants.XPInfuser;
 
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
@@ -18,16 +18,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class EnchanterBlock extends BlockContainer {
+public class XPInfuserBlock extends BlockContainer {
     @SideOnly(Side.CLIENT)
     private IIcon[] blockIcons;
 
-    public EnchanterBlock () {
+    public XPInfuserBlock() {
         super(Material.rock);
         setHardness(1.0F);
         setResistance(10.0F);
         isBlockContainer = true;
-        setBlockName("HxCEnchanter");
+        setBlockName("XPInfuser");
         setCreativeTab(CreativeTabs.tabDecorations);
     }
 
@@ -49,15 +49,16 @@ public class EnchanterBlock extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meh) {
-        return new EnchanterTile();
+        return new XPInfuserTile();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister){
-        blockIcons = new IIcon[2];
-        blockIcons[0] = iconRegister.registerIcon(Reference.MOD_ID + ":Enchanter_Top");
-        blockIcons[1] = iconRegister.registerIcon(Reference.MOD_ID + ":Enchanter_Side");
+        blockIcons = new IIcon[6];
+        for (int i = 0; i < 6; i++) {
+            blockIcons[i] = iconRegister.registerIcon(Reference.MOD_ID + ":XPInfuser");
+        }
     }
 
     @Override

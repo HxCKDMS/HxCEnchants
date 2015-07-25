@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.Enchanter;
+package HxCKDMS.HxCEnchants.XPInfuser;
 
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
@@ -17,14 +17,14 @@ import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class EnchanterGUI extends GuiContainer {
-    private int x, y, z, xpti;
+public class XPInfuserGUI extends GuiContainer {
+    private int x, y, z, xpti, xp;
     private EntityPlayer player;
-    public EnchanterGUI (EnchanterContainer container, EntityPlayer player) {
+    public XPInfuserGUI (XPInfuserContainer container, EntityPlayer player) {
         super(container);
-        this.x = container.enchanterTile.xCoord;
-        this.y = container.enchanterTile.yCoord;
-        this.z = container.enchanterTile.zCoord;
+        this.x = container.infuserTile.xCoord;
+        this.y = container.infuserTile.yCoord;
+        this.z = container.infuserTile.zCoord;
         this.player = player;
     }
 
@@ -34,7 +34,7 @@ public class EnchanterGUI extends GuiContainer {
         ScaledResolution sres = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
         int button_width = 160;
 
-        int xp = player.experienceLevel;
+        xp = player.experienceLevel;
 
         int GUITCX = (sres.getScaledWidth() - button_width) / 2;
         int GUITCY = (sres.getScaledHeight() - 160) / 2;
@@ -49,7 +49,7 @@ public class EnchanterGUI extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/EnchanterGUI.png"));
+        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/XPInfuserGUI.png"));
 
         int xStart = (width - xSize) / 2;
         int yStart = (height - ySize) / 2;
@@ -81,15 +81,22 @@ public class EnchanterGUI extends GuiContainer {
             }
         }
     }
+
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 1) {
             for (Object b : this.buttonList) {
                 GuiButton btn = (GuiButton)b;
-                if (btn.id == 0)
-                    xpti = ((GuiSlider)btn).getValueInt();
+                if (btn.id == 0) {
+                    xpti = ((GuiSlider) btn).getValueInt();
+                    ((GuiSlider)btn).setValue(0);
+                    ((GuiSlider)btn).sliderValue = 0;
+                    xp -= xpti;
+                    ((GuiSlider)btn).maxValue = xp;
+                }
             }
             HxCEnchants.packetPipeline.sendToServer(new PacketEnchanterSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
+            xpti = 0;
         }
     }
 

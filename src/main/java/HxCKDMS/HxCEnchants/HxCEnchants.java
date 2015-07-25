@@ -1,12 +1,13 @@
 package HxCKDMS.HxCEnchants;
 
 import HxCKDMS.HxCCore.network.PacketPipeline;
-import HxCKDMS.HxCEnchants.Enchanter.EnchanterBlock;
-import HxCKDMS.HxCEnchants.Enchanter.EnchanterTile;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserBlock;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.Handlers.*;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.network.PacketEnchanterSync;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -49,12 +50,13 @@ public class HxCEnchants
         Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+        FMLCommonHandler.instance().bus().register(new ArmorEventHandler());
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
-        MinecraftForge.EVENT_BUS.register(new AOEEventHandler());
+        FMLCommonHandler.instance().bus().register(new AOEEventHandler());
         if (Config.enableChargesSystem) {
             NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
-            GameRegistry.registerBlock(new EnchanterBlock(), "EnchanterBlock");
-            GameRegistry.registerTileEntity(EnchanterTile.class, "EnchanterTile");
+            GameRegistry.registerBlock(new XPInfuserBlock(), "XPInfuserBlock");
+            GameRegistry.registerTileEntity(XPInfuserTile.class, "XPInfuserTile");
         }
     }
     

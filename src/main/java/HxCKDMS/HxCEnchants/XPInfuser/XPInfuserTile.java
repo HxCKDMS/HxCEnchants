@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.Enchanter;
+package HxCKDMS.HxCEnchants.XPInfuser;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -7,13 +7,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public class EnchanterTile extends TileEntity implements IInventory {
+public class XPInfuserTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
 
     public int xpti = 0;
     public String player = "";
 
-    public EnchanterTile(){
+    public XPInfuserTile(){
         inv = new ItemStack[1];
     }
 

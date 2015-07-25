@@ -7,6 +7,7 @@ import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -38,165 +38,160 @@ public class ArmorEventHandler {
     private int ShouldRepair = 60, CanRegen = 60, flyTimer = 1200, swiftTimer = 600, vitTimer = 600, stealthTimer = 600;
 
     @SubscribeEvent
-	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		if(event.entityLiving instanceof EntityPlayerMP) {
-            double SpeedBoost, Vitality;
-            int VitalityLevel, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H = 0, C = 0, L = 0, B = 0;
-            EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
-            ShouldRepair--;
-            CanRegen--;
+	public void playerTickEvent(TickEvent.PlayerTickEvent event) {
+        double SpeedBoost, Vitality;
+        int VitalityLevel, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H = 0, C = 0, L = 0, B = 0;
+        EntityPlayer player = event.player;
+        ShouldRepair--;
+        CanRegen--;
 
-            String UUID = player.getUniqueID().toString();
-            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+        String UUID = player.getUniqueID().toString();
+        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
 
+        ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
+                ArmourChest = player.inventory.armorItemInSlot(2),
+                ArmourLegs = player.inventory.armorItemInSlot(1),
+                ArmourBoots = player.inventory.armorItemInSlot(0);
 
-            ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
-                    ArmourChest = player.inventory.armorItemInSlot(2),
-                    ArmourLegs = player.inventory.armorItemInSlot(1),
-                    ArmourBoots = player.inventory.armorItemInSlot(0);
+        int HChrg = 0, CChrg = 0, LChrg = 0, BChrg = 0;
+        if (Config.enableChargesSystem) {
+            if (ArmourHelm != null && ArmourHelm.getTagCompound() != null)
+                HChrg = ArmourHelm.getTagCompound().getInteger("HxCEnchantCharge");
+            if (ArmourChest != null && ArmourChest.getTagCompound() != null)
+                CChrg = ArmourChest.getTagCompound().getInteger("HxCEnchantCharge");
+            if (ArmourLegs != null && ArmourLegs.getTagCompound() != null)
+                LChrg = ArmourLegs.getTagCompound().getInteger("HxCEnchantCharge");
+            if (ArmourBoots != null && ArmourBoots.getTagCompound() != null)
+                BChrg = ArmourBoots.getTagCompound().getInteger("HxCEnchantCharge");
+        }
 
-            int HChrg = 0, CChrg = 0, LChrg = 0, BChrg = 0;
-            if (Config.enableChargesSystem) {
+        //Chestplate Enchants
+        if (Config.enchVitalityEnable && ArmourChest != null) {
+            vitTimer--;
+            IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
+            Vitality = VitalityLevel * 0.5F;
+            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
+            if(!ph.func_111122_c().contains(HealthBuff) && VitalityLevel != 0 && (CChrg > Config.enchVitalityVals[4] || !Config.enableChargesSystem))
+                ph.applyModifier(HealthBuff);
+            if(ph.func_111122_c().contains(HealthBuff) && (VitalityLevel == 0 || (CChrg < Config.enchVitalityVals[4]) || !Config.enableChargesSystem))
+                ph.removeModifier(HealthBuff);
 
-                if (ArmourHelm != null && ArmourHelm.getTagCompound() != null)
-                    HChrg = ArmourHelm.getTagCompound().getInteger("HxCEnchantCharge");
-                if (ArmourChest != null && ArmourChest.getTagCompound() != null)
-                    CChrg = ArmourChest.getTagCompound().getInteger("HxCEnchantCharge");
-                if (ArmourLegs != null && ArmourLegs.getTagCompound() != null)
-                    LChrg = ArmourLegs.getTagCompound().getInteger("HxCEnchantCharge");
-                if (ArmourBoots != null && ArmourBoots.getTagCompound() != null)
-                    BChrg = ArmourBoots.getTagCompound().getInteger("HxCEnchantCharge");
+            if (vitTimer <= 0 && Config.enableChargesSystem) {
+                ArmourChest.getTagCompound().setInteger("HxCEnchantCharge", CChrg - Config.enchVitalityVals[4]);
+                vitTimer = 600;
             }
-            //Chestplate Enchants
-            if (Config.enchVitalityEnable && ArmourChest != null) {
-                vitTimer--;
-                IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
-                VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
-                Vitality = VitalityLevel * 0.5F;
-                AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
-                if(!ph.func_111122_c().contains(HealthBuff) && VitalityLevel != 0 && (CChrg > Config.enchVitalityVals[4] || !Config.enableChargesSystem))
-                    ph.applyModifier(HealthBuff);
-                if(ph.func_111122_c().contains(HealthBuff) && (VitalityLevel == 0 || (CChrg < Config.enchVitalityVals[4]) || !Config.enableChargesSystem))
-                    ph.removeModifier(HealthBuff);
+        }
 
-                if (vitTimer <= 0 && Config.enableChargesSystem) {
-                    ArmourChest.getTagCompound().setInteger("HxCEnchantCharge", CChrg - Config.enchVitalityVals[4]);
-                    vitTimer = 600;
-                }
+        //Legging Enchants
+        if (Config.enchSwiftnessEnable && ArmourLegs != null){
+            swiftTimer--;
+            IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
+            SpeedBoost = SpeedLevel * 0.2;
+            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
+            if(!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0 && (BChrg > Config.enchSwiftnessVals[4] || !Config.enableChargesSystem))
+                ps.applyModifier(SpeedBuff);
+            if(ps.func_111122_c().contains(SpeedBuff) && (SpeedLevel == 0 || (BChrg < Config.enchSwiftnessVals[4] || !Config.enableChargesSystem)))
+                ps.removeModifier(SpeedBuff);
+
+            if (swiftTimer <= 0 && Config.enableChargesSystem) {
+                ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchSwiftnessVals[4]);
+                swiftTimer = 600;
+            }
+        }
+
+
+        //Boot Enchants
+        if (Config.enchFlyEnable && ArmourBoots != null) {
+            FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
+            if (FlyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
+                flyTimer--;
+
+            if (flyTimer <= 0 && Config.enableChargesSystem) {
+                flyTimer = 1200;
+                ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchFlyVals[4]);
             }
 
-            //Legging Enchants
-            if (Config.enchSwiftnessEnable && ArmourLegs != null){
-                swiftTimer--;
-                IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
-                SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
-                SpeedBoost = SpeedLevel * 0.2;
-                AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
-                if(!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0 && (BChrg > Config.enchSwiftnessVals[4] || !Config.enableChargesSystem))
-                    ps.applyModifier(SpeedBuff);
-                if(ps.func_111122_c().contains(SpeedBuff) && (SpeedLevel == 0 || (BChrg < Config.enchSwiftnessVals[4] || !Config.enableChargesSystem)))
-                    ps.removeModifier(SpeedBuff);
-
-                if (swiftTimer <= 0 && Config.enableChargesSystem) {
-                    ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchSwiftnessVals[4]);
-                    swiftTimer = 600;
-                }
-            }
-
-
-            //Boot Enchants
-            if (Config.enchFlyEnable && ArmourBoots != null) {
-                FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
-                if (FlyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
-                    flyTimer--;
-
-                if (flyTimer <= 0 && Config.enableChargesSystem) {
-                    flyTimer = 1200;
+            boolean flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
+            if (FlyLevel > 0 && !player.capabilities.allowFlying && (BChrg > Config.enchFlyVals[4] * 2 || !Config.enableChargesSystem)){
+                player.capabilities.allowFlying = true;
+                player.sendPlayerAbilities();
+                NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
+                if (Config.enableChargesSystem)
                     ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchFlyVals[4]);
-                }
+            }
+            if ((FlyLevel < 1 && flyhbt) || (FlyLevel > 0 && BChrg < Config.enchFlyVals[4])) {
+                player.capabilities.allowFlying = false;
+                player.capabilities.isFlying = false;
+                player.sendPlayerAbilities();
+                NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
+            }
+            if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
+                player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
+                        player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+        }
 
-                boolean flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
-                if (FlyLevel > 0 && !player.capabilities.allowFlying && (BChrg > Config.enchFlyVals[4] * 2 || !Config.enableChargesSystem)){
-                    player.capabilities.allowFlying = true;
-                    player.sendPlayerAbilities();
-                    NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
+        if (Config.enchStealthEnable && ArmourBoots != null) {
+            stealthTimer--;
+            StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
+
+            Stealth(player, StealthLevel);
+
+            if (stealthTimer <= 0 && Config.enableChargesSystem) {
+                ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchStealthVals[4]);
+                stealthTimer = 600;
+            }
+        }
+
+
+        if(Config.enchRepairEnable && ShouldRepair <= 0) {
+            RepairItems(player);
+            ShouldRepair = (Config.enchRepairVals[5] * 20);
+        }
+
+        if (Config.enchRegenEnable && CanRegen <= 0) {
+            RegenLevel = 0;
+            if (ArmourHelm != null)
+                H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
+            if (ArmourBoots != null)
+                B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
+            if (ArmourChest != null)
+                C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
+            if (ArmourLegs != null)
+                L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
+
+            if (H > 0) RegenLevel += 1;
+            if (B > 0) RegenLevel += 1;
+            if (C > 0) RegenLevel += 1;
+            if (L > 0) RegenLevel += 1;
+
+            if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0) {
+                float hp = player.getMaxHealth() - player.getHealth();
+                CanRegen = Config.enchRegenVals[5] * 20;
+                if (H > 0) {
+                    player.heal(H / 2);
+                }
+                if (C > 0 && CChrg > (hp * 2) / RegenLevel) {
                     if (Config.enableChargesSystem)
-                        ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchFlyVals[4]);
+                        ArmourChest.getTagCompound().setInteger("HxCEnchantCharge", CChrg - C);
+                    player.heal(C / 2);
                 }
-                if ((FlyLevel < 1 && flyhbt) || (FlyLevel > 0 && BChrg < Config.enchFlyVals[4])) {
-                    player.capabilities.allowFlying = false;
-                    player.capabilities.isFlying = false;
-                    player.sendPlayerAbilities();
-                    NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
+                if (L > 0 && LChrg > (hp * 2) / RegenLevel) {
+                    if (Config.enableChargesSystem)
+                        ArmourLegs.getTagCompound().setInteger("HxCEnchantCharge", LChrg - L);
+                    player.heal(L / 2);
                 }
-                if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
-                    player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
-                            player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
-            }
-
-            if (Config.enchStealthEnable && ArmourBoots != null) {
-                stealthTimer--;
-                StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
-
-                Stealth(player, StealthLevel);
-
-                if (stealthTimer <= 0 && Config.enableChargesSystem) {
-                    ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchStealthVals[4]);
-                    stealthTimer = 600;
-                }
-            }
-
-
-            if(Config.enchRepairEnable && ShouldRepair <= 0) {
-                RepairItems(player);
-                ShouldRepair = (Config.enchRepairVals[5] * 20);
-            }
-
-            if (Config.enchRegenEnable && CanRegen <= 0){
-                RegenLevel = 0;
-                if (ArmourHelm != null)
-                    H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
-                if (ArmourBoots != null)
-                    B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
-                if (ArmourChest != null)
-                    C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
-                if (ArmourLegs != null)
-                    L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
-
-                if (H > 0) RegenLevel += 1;
-                if (B > 0) RegenLevel += 1;
-                if (C > 0) RegenLevel += 1;
-                if (L > 0) RegenLevel += 1;
-
-                if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0) {
-                    float hp = player.getMaxHealth() - player.getHealth();
-                    CanRegen = Config.enchRegenVals[5] * 20;
-                    if (H > 0 && HChrg > (hp * 2)/RegenLevel) {
-                        if (Config.enableChargesSystem)
-                            ArmourHelm.getTagCompound().setInteger("HxCEnchantCharge", HChrg - H);
-                        player.heal(H/2);
-                    }
-                    if (C > 0 && CChrg > (hp * 2)/RegenLevel) {
-                        if (Config.enableChargesSystem)
-                            ArmourChest.getTagCompound().setInteger("HxCEnchantCharge", CChrg - C);
-                        player.heal(C/2);
-                    }
-                    if (L > 0 && LChrg > (hp * 2)/RegenLevel) {
-                        if (Config.enableChargesSystem)
-                            ArmourLegs.getTagCompound().setInteger("HxCEnchantCharge", LChrg - L);
-                        player.heal(L/2);
-                    }
-                    if (B > 0 && BChrg > (hp * 2)/RegenLevel) {
-                        if (Config.enableChargesSystem)
-                            ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - B);
-                        player.heal(B/2);
-                    }
+                if (B > 0 && BChrg > (hp * 2) / RegenLevel) {
+                    if (Config.enableChargesSystem)
+                        ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - B);
+                    player.heal(B / 2);
                 }
             }
         }
 	}
 
-    public void RepairItems(EntityPlayerMP player){
+    public void RepairItems(EntityPlayer player){
         ItemStack Inv;
         ItemStack Armor;
         int tmp = 0;

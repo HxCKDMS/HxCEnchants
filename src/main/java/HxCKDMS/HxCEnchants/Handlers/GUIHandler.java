@@ -1,8 +1,8 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
-import HxCKDMS.HxCEnchants.Enchanter.EnchanterContainer;
-import HxCKDMS.HxCEnchants.Enchanter.EnchanterGUI;
-import HxCKDMS.HxCEnchants.Enchanter.EnchanterTile;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserContainer;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserGUI;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -12,16 +12,16 @@ public class GUIHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if(tileEntity instanceof EnchanterTile){
-            return new EnchanterContainer(player, (EnchanterTile)tileEntity);
+        if(tileEntity instanceof XPInfuserTile){
+            return new XPInfuserContainer(player, (XPInfuserTile)tileEntity);
         }
         return null;
     }
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if(tileEntity instanceof EnchanterTile){
-            return new EnchanterGUI(new EnchanterContainer(player, (EnchanterTile)tileEntity), player);
+        if(tileEntity instanceof XPInfuserTile){
+            return new XPInfuserGUI(new XPInfuserContainer(player, (XPInfuserTile)tileEntity), player);
         }
         return null;
     }

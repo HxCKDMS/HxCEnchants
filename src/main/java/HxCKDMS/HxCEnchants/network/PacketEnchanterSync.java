@@ -1,7 +1,7 @@
 package HxCKDMS.HxCEnchants.network;
 
 import HxCKDMS.HxCCore.api.AbstractPacket;
-import HxCKDMS.HxCEnchants.Enchanter.EnchanterTile;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -49,8 +49,8 @@ public class PacketEnchanterSync extends AbstractPacket {
     public void handleServerSide(EntityPlayer p) {
         TileEntity tileEntity = p.worldObj.getTileEntity(x, y, z);
 
-        if(tileEntity != null && tileEntity instanceof EnchanterTile){
-            EnchanterTile HxCTile = (EnchanterTile) tileEntity;
+        if(tileEntity != null && tileEntity instanceof XPInfuserTile){
+            XPInfuserTile HxCTile = (XPInfuserTile) tileEntity;
             HxCTile.xpti = xpti;
             HxCTile.player = player;
             p.worldObj.markBlockForUpdate(x, y, z);

@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.Enchanter;
+package HxCKDMS.HxCEnchants.XPInfuser;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -6,11 +6,11 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class EnchanterContainer extends Container {
-    protected EnchanterTile enchanterTile;
-    public EnchanterContainer (EntityPlayer player, EnchanterTile te){
-        enchanterTile = te;
-        addSlotToContainer(new Slot(enchanterTile, 0, 80, 35));
+public class XPInfuserContainer extends Container {
+    protected XPInfuserTile infuserTile;
+    public XPInfuserContainer(EntityPlayer player, XPInfuserTile te){
+        infuserTile = te;
+        addSlotToContainer(new Slot(infuserTile, 0, 80, 35));
         bindPlayerInventory(player.inventory);
     }
 

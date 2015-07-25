@@ -47,3 +47,5 @@ death.attack.scurse.player.item=%1$s was slain by %2$s using %3$s.
 
 death.attack.Deadly=%1$s got too close to a powerful being.
 death.attack.Deadly.player=%1$s couldn't stand %2$s's massive power.
+
+tile.XPInfuser.name=XP Infuser
