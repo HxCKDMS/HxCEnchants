@@ -3,8 +3,7 @@ package HxCKDMS.HxCEnchants.enchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
-public class HxCEnchantment extends Enchantment
-{
+public class HxCEnchantment extends Enchantment {
     private int MaxLevel, cost;
     public HxCEnchantment(int id, String name, int rarity, EnumEnchantmentType type, int MaxLevel, int cost) {
         super(id, rarity, type);
@@ -14,20 +13,17 @@ public class HxCEnchantment extends Enchantment
     }
 
     @Override
-    public int getMinEnchantability(int i)
-    {
+    public int getMinEnchantability(int i) {
         return 16+i;
     }
 
     @Override
-    public int getMaxEnchantability(int i)
-    {
+    public int getMaxEnchantability(int i) {
         return getMinEnchantability(i) + cost;
     }
 
     @Override
-    public int getMaxLevel()
-    {
+    public int getMaxLevel() {
         return MaxLevel;
     }
 }

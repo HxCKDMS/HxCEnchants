@@ -7,6 +7,7 @@ import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ToolEventHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -34,8 +35,9 @@ public class HxCEnchants
         Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+        FMLCommonHandler.instance().bus().register(new ArmorEventHandler());
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
-        MinecraftForge.EVENT_BUS.register(new AOEEventHandler());
+        FMLCommonHandler.instance().bus().register(new AOEEventHandler());
     }
     
     @EventHandler

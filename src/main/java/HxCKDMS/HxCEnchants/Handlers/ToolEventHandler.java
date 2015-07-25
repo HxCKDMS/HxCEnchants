@@ -42,12 +42,8 @@ public class ToolEventHandler {
             ItemStack item = Attacker.getHeldItem();
             if (Config.enchLifeStealEnable) {
                 LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
-                if (LifeStealLevel > 0) {
-                    double PH = Victim.prevHealth;
-                    double CH = Victim.getHealth();
-                    float RH = (float) CH - (float) PH;
-                    Attacker.heal(RH * LifeStealLevel);
-                }
+                if (LifeStealLevel > 0)
+                    Attacker.heal(event.ammount * LifeStealLevel);
             }
             if (Config.enchPiercingEnable) {
                 PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
@@ -78,13 +74,10 @@ public class ToolEventHandler {
             try{
                 ItemStack item;
                 if (Attacker.getHeldItem().getItem() instanceof ItemSword) item = Attacker.getHeldItem();
-                else item = null;
+                else return;
 
-                if (item != null) VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
-                else VampireLevel = 0;
-
-                if (item != null) ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
-                else ExamineLevel = 0;
+                VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
+                ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
 
                 if (ExamineLevel > 0)
                     if (deadent instanceof EntityLiving)
