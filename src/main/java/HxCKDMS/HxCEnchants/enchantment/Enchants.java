@@ -8,8 +8,8 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
+@SuppressWarnings("all")
 public class Enchants {
-
     private static int Enchs = 0;
 
     public static Enchantment AdrenalineBoost,

@@ -7,14 +7,15 @@ import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.ToolEventHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES)
 
@@ -34,8 +35,9 @@ public class HxCEnchants
         Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+        FMLCommonHandler.instance().bus().register(new ArmorEventHandler());
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
-        MinecraftForge.EVENT_BUS.register(new AOEEventHandler());
+        FMLCommonHandler.instance().bus().register(new AOEEventHandler());
     }
     
     @EventHandler

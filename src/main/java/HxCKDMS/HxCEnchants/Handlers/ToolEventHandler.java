@@ -74,13 +74,10 @@ public class ToolEventHandler {
             try{
                 ItemStack item;
                 if (Attacker.getHeldItem().getItem() instanceof ItemSword) item = Attacker.getHeldItem();
-                else item = null;
+                else return;
 
-                if (item != null) VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
-                else VampireLevel = 0;
-
-                if (item != null) ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
-                else ExamineLevel = 0;
+                VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
+                ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
 
                 if (ExamineLevel > 0)
                     if (deadent instanceof EntityLiving)
