@@ -53,10 +53,10 @@ public class ArmorEventHandler {
                 ArmourLegs = player.inventory.armorItemInSlot(1),
                 ArmourBoots = player.inventory.armorItemInSlot(0);
 
-        int HChrg = 0, CChrg = 0, LChrg = 0, BChrg = 0;
+        int CChrg = 0, LChrg = 0, BChrg = 0;
         if (Config.enableChargesSystem) {
-            if (ArmourHelm != null && ArmourHelm.getTagCompound() != null)
-                HChrg = ArmourHelm.getTagCompound().getInteger("HxCEnchantCharge");
+//            if (ArmourHelm != null && ArmourHelm.getTagCompound() != null)
+//                HChrg = ArmourHelm.getTagCompound().getInteger("HxCEnchantCharge");
             if (ArmourChest != null && ArmourChest.getTagCompound() != null)
                 CChrg = ArmourChest.getTagCompound().getInteger("HxCEnchantCharge");
             if (ArmourLegs != null && ArmourLegs.getTagCompound() != null)
@@ -90,13 +90,13 @@ public class ArmorEventHandler {
             SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
             SpeedBoost = SpeedLevel * 0.2;
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
-            if(!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0 && (BChrg > Config.enchSwiftnessVals[4] || !Config.enableChargesSystem))
+            if(!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0 && (LChrg > Config.enchSwiftnessVals[4] || !Config.enableChargesSystem))
                 ps.applyModifier(SpeedBuff);
-            if(ps.func_111122_c().contains(SpeedBuff) && (SpeedLevel == 0 || (BChrg < Config.enchSwiftnessVals[4] || !Config.enableChargesSystem)))
+            if(ps.func_111122_c().contains(SpeedBuff) && (SpeedLevel == 0 || (LChrg < Config.enchSwiftnessVals[4] || !Config.enableChargesSystem)))
                 ps.removeModifier(SpeedBuff);
 
-            if (swiftTimer <= 0 && Config.enableChargesSystem) {
-                ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchSwiftnessVals[4]);
+            if (swiftTimer <= 0 && Config.enableChargesSystem && LChrg > Config.enchSwiftnessVals[4]) {
+                ArmourLegs.getTagCompound().setInteger("HxCEnchantCharge", LChrg - Config.enchSwiftnessVals[4]);
                 swiftTimer = 600;
             }
         }
@@ -108,7 +108,7 @@ public class ArmorEventHandler {
             if (FlyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
                 flyTimer--;
 
-            if (flyTimer <= 0 && Config.enableChargesSystem) {
+            if (flyTimer <= 0 && Config.enableChargesSystem && BChrg > Config.enchFlyVals[4]) {
                 flyTimer = 1200;
                 ArmourBoots.getTagCompound().setInteger("HxCEnchantCharge", BChrg - Config.enchFlyVals[4]);
             }
@@ -226,8 +226,7 @@ public class ArmorEventHandler {
     }
 
     @SubscribeEvent
-    public void livingHurtEvent(LivingHurtEvent event)
-    {
+    public void livingHurtEvent(LivingHurtEvent event) {
         if (event.entity instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
             boolean allowABEffect = true;
@@ -253,8 +252,10 @@ public class ArmorEventHandler {
             }
             if (BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic")) {
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
-                if (Config.enableChargesSystem)
+                if (Config.enableChargesSystem) {
+                    assert ArmourHelm != null;
                     ArmourHelm.getTagCompound().setInteger("HxCEnchantCharge", ArmourHelm.getTagCompound().getInteger("HxCEnchantCharge") - Config.enchBattleHealingVals[4]);
+                }
             }
 
             if(AdrenalineBoostLevel > 0 && allowABEffect && (ArmourHelm.getTagCompound().getInteger("HxCEnchantCharge") > Config.enchAdrenalineBoostVals[4] || !Config.enableChargesSystem)) {
@@ -298,13 +299,14 @@ public class ArmorEventHandler {
 
     int DivineInterventionLevel;
     @SubscribeEvent
-    @SuppressWarnings("unchecked")
     public void LivingHurtEvent(LivingHurtEvent event){
         Entity hurtEntity = event.entity;
         if (hurtEntity instanceof EntityPlayerMP){
             EntityPlayerMP player = (EntityPlayerMP) hurtEntity;
             ItemStack ArmourChest = player.inventory.armorItemInSlot(2);
-            if (Config.enchDivineInterventionEnable && ArmourChest != null) DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
+            assert ArmourChest != null;
+            if (Config.enchDivineInterventionEnable)
+                DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
             if (DivineInterventionLevel > 0){
                 if (player.prevHealth - event.ammount <= 1) {
                     player.heal(5);

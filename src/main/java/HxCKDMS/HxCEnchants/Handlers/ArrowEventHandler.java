@@ -29,6 +29,7 @@ public class ArrowEventHandler
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
+        assert stack != null;
         if (stack.getTagCompound() != null && (stack.getTagCompound().getInteger("HxCEnchantCharge") > 0 || !Config.enableChargesSystem)) {
             if (Config.enchArrowLightningEnable)
                 ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
