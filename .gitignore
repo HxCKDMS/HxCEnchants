@@ -7,5 +7,6 @@ HxCEnchants.iws
 .gradle
 .gitignore
 .classpath
+.settings
 build
 .project
