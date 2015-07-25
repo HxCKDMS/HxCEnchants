@@ -6,6 +6,7 @@ import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -40,8 +41,8 @@ public class AOEEventHandler {
     @SubscribeEvent
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		if(event.entityLiving instanceof EntityPlayerMP && !event.entityLiving.getEntityWorld().isRemote) {
-            EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
+		if (event.entityLiving instanceof EntityPlayerMP && !event.entityLiving.getEntityWorld().isRemote) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             World world = player.getEntityWorld();
 
             int slot = 0;
@@ -68,7 +69,7 @@ public class AOEEventHandler {
             if (DarkAura[0] > 0 && DarkAura[1] > 0 && DarkAura[2] > 0 && DarkAura[3] > 0){
                 int level = (DarkAura[0] + DarkAura[1] + DarkAura[2] + DarkAura[3])/4;
                 double motionY = world.rand.nextGaussian() + 0.02D;
-                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
+//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
@@ -80,7 +81,7 @@ public class AOEEventHandler {
             if (FieryAura[0] > 0 && FieryAura[1] > 0 && FieryAura[2] > 0 && FieryAura[3] > 0){
                 int level = (FieryAura[0] + FieryAura[1] + FieryAura[2] + FieryAura[3])/4;
                 double motionY = world.rand.nextGaussian() + 0.02D;
-                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.FLAME, player.posX + 0.5 + world.rand.nextFloat(), player.posY + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
+//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.FLAME, player.posX + 0.5 + world.rand.nextFloat(), player.posY + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
@@ -102,7 +103,7 @@ public class AOEEventHandler {
             if (ToxicAura[0] > 0 && ToxicAura[1] > 0 && ToxicAura[2] > 0 && ToxicAura[3] > 0){
                 int level = (ToxicAura[0] + ToxicAura[1] + ToxicAura[2] + ToxicAura[3])/4;
                 double motionY = world.rand.nextGaussian() + 0.02D;
-                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.SLIME, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
+//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.SLIME, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>)list){
                     if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){

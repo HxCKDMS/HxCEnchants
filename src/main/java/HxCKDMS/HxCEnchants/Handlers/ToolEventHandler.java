@@ -1,12 +1,9 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
-import HxCKDMS.HxCCore.Handlers.NBTFileIO;
-import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Config;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -21,19 +18,18 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
-
-import java.io.File;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @SuppressWarnings("unused")
 public class ToolEventHandler {
-	int VampireLevel, ExamineLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel;
-    float VBRV = 0;
+    int VampireLevel, ExamineLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel, VorpalLevel, SCurseLevel;
+    FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
 
 	// Misc. variables
     @SubscribeEvent
@@ -46,13 +42,25 @@ public class ToolEventHandler {
             ItemStack item = Attacker.getHeldItem();
             if (Config.enchLifeStealEnable) {
                 LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
-                if (LifeStealLevel > 0) {
-                    Attacker.heal(event.ammount + LifeStealLevel);
-                }
+                if (LifeStealLevel > 0)
+                    Attacker.heal(event.ammount * LifeStealLevel);
             }
             if (Config.enchPiercingEnable) {
                 PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
                 if (PiercingLevel > 0) Victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), event.ammount * Config.PiercingPercent);
+            }
+            if (Config.enchVorpalEnable) {
+                VorpalLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vorpal.effectId, item);
+                if (VorpalLevel > 0) Victim.attackEntityFrom(new DamageSource("Vorpal").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), VorpalLevel * Config.enchVorpalVals[4]);
+            }
+            if (Config.enchSCurseEnable) {
+                SCurseLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.SCurse.effectId, item);
+                if (SCurseLevel > 0) {
+                    Victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), Config.enchSCurseVals[4] * SCurseLevel);
+                    Attacker.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120, Config.enchSCurseVals[4] * SCurseLevel, true, false));
+                    Attacker.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 120, Config.enchSCurseVals[4] * SCurseLevel, true, false));
+                    Attacker.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel, true, false));
+                }
             }
         }
     }
@@ -63,15 +71,7 @@ public class ToolEventHandler {
         Entity ent = event.source.getSourceOfDamage();
         if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP) && (!((EntityPlayerMP) ent).getDisplayNameString().contains("[")) && !(ent instanceof FakePlayer)){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
-            String UUID = Attacker.getUniqueID().toString();
             try{
-                File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-                NBTTagCompound EatingTracker = NBTFileIO.getNbtTagCompound(CustomPlayerData, "xenchants");
-
-                int UndeadEaten = EatingTracker.getInteger("UndeadEaten");
-                int VillagersEaten = EatingTracker.getInteger("VillagersEaten");
-                int PlayersEaten = EatingTracker.getInteger("PlayersEaten");
-
                 ItemStack item;
                 if (Attacker.getHeldItem().getItem() instanceof ItemSword) item = Attacker.getHeldItem();
                 else item = null;
@@ -82,70 +82,32 @@ public class ToolEventHandler {
                 if (item != null) ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
                 else ExamineLevel = 0;
 
-                if (ExamineLevel > 0) {
+                if (ExamineLevel > 0)
                     if (deadent instanceof EntityLiving)
-                        deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY+1, deadent.posZ, ExamineLevel*Config.enchXPrate));
-                }
+                        deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY+1, deadent.posZ, ExamineLevel*Config.enchExamineVals[4]));
 
                 if (VampireLevel > 0) {
-                    if (deadent instanceof EntityAnimal){
-                        VBRV = 1.3F;
-                    } else if (deadent instanceof EntityPlayerMP){
-                        VBRV = 10;
-                        if(Config.Feedback){
-                            int NP = PlayersEaten++;
-                            EatingTracker.setInteger("PlayersEaten", NP);
-                            NBTFileIO.setNbtTagCompound(CustomPlayerData, "xenchants", EatingTracker);
-                            if (PlayersEaten == 0) Attacker.addChatMessage(new ChatComponentText("\u00A74This tastes lovely."));
-                            if (PlayersEaten == 16) Attacker.addChatMessage(new ChatComponentText("\u00A74So this is what winning all the time tastes like."));
-                            if (PlayersEaten == 32) Attacker.addChatMessage(new ChatComponentText("\u00A74I think this guy just Shat himself"));
-                            if (PlayersEaten == 64) Attacker.addChatMessage(new ChatComponentText("\u00A74This taste is very addictive."));
-                            if (PlayersEaten == 128) Attacker.addChatMessage(new ChatComponentText("\u00A74So yeah this is addictive. I think I need help"));
-                            if (PlayersEaten == 512) Attacker.addChatMessage(new ChatComponentText("\u00A74Well this addiction is difficult to end."));
-                        }
-                    } else if (deadent instanceof EntityVillager){
-                        VBRV = 8.5F;
-                        if(Config.Feedback) {
-                            int NV = VillagersEaten++;
-                            EatingTracker.setInteger("PlayersEaten", NV);
-                            NBTFileIO.setNbtTagCompound(CustomPlayerData, "xenchants", EatingTracker);
-                            if (VillagersEaten == 0) Attacker.addChatMessage(new ChatComponentText("\u00A74Wow this blood is rich."));
-                            if (VillagersEaten == 16) Attacker.addChatMessage(new ChatComponentText("\u00A74I wonder if this blood is too rich."));
-                            if (VillagersEaten == 32) Attacker.addChatMessage(new ChatComponentText("\u00A74Yuck diabetes blood."));
-                            if (VillagersEaten == 64) Attacker.addChatMessage(new ChatComponentText("\u00A74I kind of wonder if this blood can cause problems in the future."));
-                            if (VillagersEaten == 72) Attacker.addChatMessage(new ChatComponentText("\u00A74Mmm virgin blood."));
-                            if (VillagersEaten == 128) Attacker.addChatMessage(new ChatComponentText("\u00A74I may need to get a blood test for any STDs."));
-                        }
-                    } else if (((EntityLiving) deadent).isEntityUndead()){
-                        VBRV = -1;
-                        if(Config.Feedback){
-                            int NU = UndeadEaten++;
-                            EatingTracker.setInteger("UndeadEaten", NU);
-                            NBTFileIO.setNbtTagCompound(CustomPlayerData, "xenchants", EatingTracker);
-                            if (UndeadEaten == 0) Attacker.addChatMessage(new ChatComponentText("\u00A74Yuck"));
-                            if (UndeadEaten == 16) Attacker.addChatMessage(new ChatComponentText("\u00A74I really don't like this taste."));
-                            if (UndeadEaten == 32) Attacker.addChatMessage(new ChatComponentText("\u00A74When this thing was alive it must've been a fat dude."));
-                            if (UndeadEaten == 64) Attacker.addChatMessage(new ChatComponentText("\u00A74I think this taste is driving me insane."));
-                            if (UndeadEaten == 128) Attacker.addChatMessage(new ChatComponentText("\u00A74I am starting to wonder if sucking the blood of the undead can cause some real problems."));
-                            if (UndeadEaten == 256) Attacker.addChatMessage(new ChatComponentText("\u00A74If mojang added guns I would make one instantly so I can shoot myself this tastes horrible."));
-                            if (UndeadEaten == 512) Attacker.addChatMessage(new ChatComponentText("\u00A74Can these things stop coming near me? I am tired of this taste. :("));
-                        }
-                    }
-                    else if (deadent instanceof EntitySlime) VBRV = 1.1F;
-                    else if (deadent instanceof EntityEnderman) VBRV = 2.2F;
-                    else if (deadent instanceof EntityMob) VBRV = 3.2F;
-                    else VBRV = 1.25F;
+                    if (deadent instanceof EntityAnimal)
+                        Attacker.getFoodStats().addStats(1, 0.3F);
+                    else if (deadent instanceof EntityPlayerMP)
+                        Attacker.getFoodStats().addStats(10, 0.5F);
+                    else if (deadent instanceof EntityVillager)
+                        Attacker.getFoodStats().addStats(5, 0.5F);
+                    else if (((EntityLiving) deadent).isEntityUndead())
+                        Attacker.getFoodStats().addStats(0, 0);
+                    else if (deadent instanceof EntitySlime)
+                        Attacker.getFoodStats().addStats(1, 0.1F);
+                    else if (deadent instanceof EntityEnderman)
+                        Attacker.getFoodStats().addStats(2, 0.2F);
+                    else if (deadent instanceof EntityMob)
+                        Attacker.getFoodStats().addStats(3, 0.2F);
 
-                    int curFood = Attacker.getFoodStats().getFoodLevel();
-                    float newFud = (VBRV/4 * VampireLevel) + curFood;
-                    if (curFood < 40 && newFud < 40) Attacker.getFoodStats().setFoodLevel(Math.round(newFud));
-                    else if (curFood < 40 && newFud > 40) Attacker.getFoodStats().setFoodLevel(40);
-                    else Attacker.getFoodStats().setFoodLevel(40);
+                    else Attacker.getFoodStats().addStats(1, 0.1F);
 
                     if (Config.DebugMode)
-                        LogHelper.debug("[Enchants] Setting " + Attacker + "'s Food Level to" + newFud, Reference.MOD_ID);
+                        LogHelper.warn(Attacker + "has had their hunger increased by Vampirism.", Reference.MOD_ID);
                 }
-            } catch (Exception e) {if (Config.DebugMode) LogHelper.debug(e.getLocalizedMessage(), Reference.MOD_ID);}
+            } catch (Exception e) {if (Config.DebugMode) LogHelper.warn(e.getLocalizedMessage(), Reference.MOD_ID);}
         }
 	}
 	@SubscribeEvent
@@ -156,15 +118,13 @@ public class ToolEventHandler {
 
             AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
             if(AutoSmeltLevel > 0) {
-                FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
-
                 for(int i = 0; i < event.drops.size(); i++) {
-                    ItemStack drop = event.drops.get(i);
-                    ItemStack smelted = furnaceRecipes.getSmeltingResult(drop);
+                    ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
 
                     if(smelted != null){
-                        ItemStack actualDrop = new ItemStack(smelted.getItem(), drop.stackSize * AutoSmeltLevel, smelted.getItemDamage());
-                        event.drops.set(i, actualDrop);
+                        ItemStack drop = smelted.copy();
+                        drop.stackSize *= AutoSmeltLevel;
+                        event.drops.set(i, drop);
                     }
                 }
             }

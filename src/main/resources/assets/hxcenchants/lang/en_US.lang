@@ -30,10 +30,20 @@ enchantment.darkAura=Dark Aura
 enchantment.deadlyAura=Deadly Aura
 enchantment.thickAura=Thick Aura
 enchantment.toxicAura=Toxic Aura
+enchantment.vorpal=Vorpal
+enchantment.slayersCurse=Slayer's Curse
 
 death.attack.Piercing=%1$s was impaled.
 death.attack.Piercing.player=%1$s was impaled by %2$s.
 death.attack.Piercing.player.item=%1$s was impaled by %2$s using %3$s.
+
+death.attack.Vorpal=%1$s was sliced to bits.
+death.attack.Vorpal.player=%1$s was sliced to bits by %2$s.
+death.attack.Vorpal.player.item=%1$s was sliced to bits by %2$s using %3$s.
+
+death.attack.scurse=%1$s was slain.
+death.attack.scurse.player=%1$s was slain by %2$s.
+death.attack.scurse.player.item=%1$s was slain by %2$s using %3$s.
 
 death.attack.Deadly=%1$s got too close to a powerful being.
 death.attack.Deadly.player=%1$s couldn't stand %2$s's massive power.
