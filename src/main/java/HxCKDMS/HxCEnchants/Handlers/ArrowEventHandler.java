@@ -20,9 +20,8 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 import java.util.List;
 
-
-public class ArrowEventHandler
-{
+@SuppressWarnings("unused")
+public class ArrowEventHandler {
 	boolean isExplosive, isHoming, isZeus, isPoison, isPiercing;
 	int ExplosionLevel, PoisonLevel, HomingLevel, ZeusLevel, PiercingLevel;
 
@@ -35,11 +34,11 @@ public class ArrowEventHandler
         if (Config.enchPoisonEnable) PoisonLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
         if (Config.enchPiercingEnable) PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Penetrating.effectId, stack);
 
-        isExplosive = ExplosionLevel > 0 && Config.enchArrowExplosiveEnable;
-        isHoming = HomingLevel > 0 && Config.enchArrowSeekingEnable;
-        isZeus = ZeusLevel > 0 && Config.enchArrowLightningEnable;
-        isPoison = PoisonLevel > 0 && Config.enchPoisonEnable;
-        isPiercing = PiercingLevel > 0 && Config.enchPiercingEnable;
+        isExplosive = ExplosionLevel > 0;
+        isHoming = HomingLevel > 0;
+        isZeus = ZeusLevel > 0;
+        isPoison = PoisonLevel > 0;
+        isPiercing = PiercingLevel > 0;
     }
 
 

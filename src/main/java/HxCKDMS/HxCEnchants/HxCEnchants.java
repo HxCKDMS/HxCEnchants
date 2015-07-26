@@ -18,15 +18,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES)
-
-public class HxCEnchants
-{
+@SuppressWarnings("unused")
+public class HxCEnchants {
     @Instance(Reference.MOD_ID)
     public static HxCEnchants instance;
     public static Config Config;
 
     @EventHandler
-    public void preinit(FMLPreInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event) {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
     }
 

@@ -18,79 +18,78 @@ import java.util.List;
 public class AOEEventHandler {
     int[] DeadlyAura = new int[4], FieryAura = new int[4],
             ToxicAura = new int[4], ThickAura = new int[4],
-            DarkAura = new int[4], Shroud = new int[4];
+            DarkAura = new int[4];
 
+    private int tickTimer = Config.updateTime;
     @SubscribeEvent
     @SuppressWarnings({"unused", "ConstantConditions", "unchecked"})
     public void playerTickEvent(TickEvent.PlayerTickEvent event) {
-        EntityPlayer player = event.player;
-        World world = player.getEntityWorld();
+        tickTimer--;
+        if (tickTimer <= 0) {
+            tickTimer = Config.updateTime;
+            EntityPlayer player = event.player;
+            World world = player.getEntityWorld();
 
-        for (int i = 0; i < 4; i++) {
-            if (player.inventory.armorItemInSlot(i) != null) {
-                if (Config.enchAuraDeadlyEnable)
-                    DeadlyAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, player.inventory.armorItemInSlot(i));
-                if (Config.enchAuraDarkEnable)
-                    DarkAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDark.effectId, player.inventory.armorItemInSlot(i));
-                if (Config.enchAuraFieryEnable)
-                    FieryAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraFiery.effectId, player.inventory.armorItemInSlot(i));
-                if (Config.enchAuraThickEnable)
-                    ThickAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraThick.effectId, player.inventory.armorItemInSlot(i));
-                if (Config.enchAuraToxicEnable)
-                    ToxicAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraToxic.effectId, player.inventory.armorItemInSlot(i));
-//                    if (Config.enchShroudEnable)
-//                        Shroud[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.Shroud.effectId, player.inventory.armorItemInSlot(i));
+            for (int i = 0; i < 4; i++) {
+                if (player.inventory.armorItemInSlot(i) != null) {
+                    if (Config.enchAuraDeadlyEnable)
+                        DeadlyAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraDarkEnable)
+                        DarkAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDark.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraFieryEnable)
+                        FieryAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraFiery.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraThickEnable)
+                        ThickAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraThick.effectId, player.inventory.armorItemInSlot(i));
+                    if (Config.enchAuraToxicEnable)
+                        ToxicAura[i] = EnchantmentHelper.getEnchantmentLevel(Enchants.AuraToxic.effectId, player.inventory.armorItemInSlot(i));
+                }
             }
-        }
 
-        if (DeadlyAura[0] > 0 && DeadlyAura[1] > 0 && DeadlyAura[2] > 0 && DeadlyAura[3] > 0){
-            int level = (DeadlyAura[0] + DeadlyAura[1] + DeadlyAura[2] + DeadlyAura[3])/4;
-            double motionY = world.rand.nextGaussian() + 0.02D;
-//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.CRIT_MAGIC, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
-            List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
-            for (EntityLivingBase entity : (List<EntityLivingBase>)list){
-                if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal))
-                    entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true, false));
+            if (DeadlyAura[0] > 0 && DeadlyAura[1] > 0 && DeadlyAura[2] > 0 && DeadlyAura[3] > 0) {
+                int level = (DeadlyAura[0] + DeadlyAura[1] + DeadlyAura[2] + DeadlyAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list) {
+                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal))
+                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true, false));
+                }
             }
-        }
-        if (DarkAura[0] > 0 && DarkAura[1] > 0 && DarkAura[2] > 0 && DarkAura[3] > 0){
-            int level = (DarkAura[0] + DarkAura[1] + DarkAura[2] + DarkAura[3])/4;
-            double motionY = world.rand.nextGaussian() + 0.02D;
-//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
-            List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
-            for (EntityLivingBase entity : (List<EntityLivingBase>)list)
-                if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
-                    entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true, false));
-                    entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true, false));
-                }
-        }
-        if (FieryAura[0] > 0 && FieryAura[1] > 0 && FieryAura[2] > 0 && FieryAura[3] > 0){
-            int level = (FieryAura[0] + FieryAura[1] + FieryAura[2] + FieryAura[3])/4;
-            double motionY = world.rand.nextGaussian() + 0.02D;
-//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.FLAME, player.posX + 0.5 + world.rand.nextFloat(), player.posY + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
-            List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
-            for (EntityLivingBase entity : (List<EntityLivingBase>)list)
-                if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal))
-                    entity.setFire(100);
-        }
-        if (ThickAura[0] > 0 && ThickAura[1] > 0 && ThickAura[2] > 0 && ThickAura[3] > 0){
-            int level = (ThickAura[0] + ThickAura[1] + ThickAura[2] + ThickAura[3])/4;
-            List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
-            for (EntityLivingBase entity : (List<EntityLivingBase>)list)
-                if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)){
-                    entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true, false));
-                    entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true, false));
-                    entity.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true, false));
-                }
-        }
-        if (ToxicAura[0] > 0 && ToxicAura[1] > 0 && ToxicAura[2] > 0 && ToxicAura[3] > 0){
-            int level = (ToxicAura[0] + ToxicAura[1] + ToxicAura[2] + ToxicAura[3])/4;
-            double motionY = world.rand.nextGaussian() + 0.02D;
-//                if (Shroud < 1)world.spawnParticle(EnumParticleTypes.SLIME, player.posX + 0.5 + world.rand.nextFloat(), player.posY + 0.5 + world.rand.nextFloat(), player.posZ + 0.5 + world.rand.nextFloat(), 0, motionY, 0);
-            List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
-            for (EntityLivingBase entity : (List<EntityLivingBase>)list)
-                if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal))
-                    entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true, false));
+            if (DarkAura[0] > 0 && DarkAura[1] > 0 && DarkAura[2] > 0 && DarkAura[3] > 0) {
+                int level = (DarkAura[0] + DarkAura[1] + DarkAura[2] + DarkAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
+                        entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true, false));
+                        entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true, false));
+                    }
+            }
+            if (FieryAura[0] > 0 && FieryAura[1] > 0 && FieryAura[2] > 0 && FieryAura[3] > 0) {
+                int level = (FieryAura[0] + FieryAura[1] + FieryAura[2] + FieryAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal))
+                        entity.setFire(100);
+            }
+            if (ThickAura[0] > 0 && ThickAura[1] > 0 && ThickAura[2] > 0 && ThickAura[3] > 0) {
+                int level = (ThickAura[0] + ThickAura[1] + ThickAura[2] + ThickAura[3]) / 4;
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal)) {
+                        entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true, false));
+                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true, false));
+                        entity.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true, false));
+                    }
+            }
+            if (ToxicAura[0] > 0 && ToxicAura[1] > 0 && ToxicAura[2] > 0 && ToxicAura[3] > 0) {
+                int level = (ToxicAura[0] + ToxicAura[1] + ToxicAura[2] + ToxicAura[3]) / 4;
+                double motionY = world.rand.nextGaussian() + 0.02D;
+                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox(player.serverPosX, player.serverPosY, player.serverPosZ, level));
+                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
+                    if (entity != player && !entity.isDead && !(entity instanceof EntityAnimal))
+                        entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true, false));
+            }
         }
 	}
 }

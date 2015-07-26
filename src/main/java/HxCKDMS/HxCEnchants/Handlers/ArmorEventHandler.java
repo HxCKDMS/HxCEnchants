@@ -38,90 +38,95 @@ public class ArmorEventHandler {
 
     private int ShouldRepair = 60, CanRegen = 60;
 
+    private int tickTimer = Config.updateTime;
     @SubscribeEvent
     public void playerTickEvent(TickEvent.PlayerTickEvent event) {
-        double SpeedBoost, Vitality;
-        int VitalityLevel, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H = 0, C = 0, L = 0, B = 0;
-        EntityPlayer player = event.player;
-        ShouldRepair--;
-        CanRegen--;
+        tickTimer--;
+        if (tickTimer <= 0) {
+            tickTimer = Config.updateTime;
+            double SpeedBoost, Vitality;
+            int VitalityLevel, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H = 0, C = 0, L = 0, B = 0;
+            EntityPlayer player = event.player;
+            ShouldRepair--;
+            CanRegen--;
 
-        String UUID = player.getUniqueID().toString();
-        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-
-
-        ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
-                ArmourChest = player.inventory.armorItemInSlot(2),
-                ArmourLegs = player.inventory.armorItemInSlot(1),
-                ArmourBoots = player.inventory.armorItemInSlot(0);
-
-        //Chestplate Enchants
-        if (Config.enchVitalityEnable && ArmourChest != null) {
-            IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
-            VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
-            Vitality = VitalityLevel * 0.5F;
-            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
-            if (!ph.func_111122_c().contains(HealthBuff) && VitalityLevel != 0)
-                ph.applyModifier(HealthBuff);
-            if (ph.func_111122_c().contains(HealthBuff) && VitalityLevel == 0)
-                ph.removeModifier(HealthBuff);
-        }
-
-        //Legging Enchants
-        if (Config.enchSwiftnessEnable && ArmourLegs != null) {
-            IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
-            SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
-            SpeedBoost = SpeedLevel * 0.2;
-            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
-            if (!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0)
-                ps.applyModifier(SpeedBuff);
-            if (ps.func_111122_c().contains(SpeedBuff) && SpeedLevel == 0)
-                ps.removeModifier(SpeedBuff);
-        }
+            String UUID = player.getUniqueID().toString();
+            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
 
 
-        //Boot Enchants
-        if (Config.enchFlyEnable && ArmourBoots != null) {
-            FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
-            boolean flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
-            if (FlyLevel > 0 && !player.capabilities.allowFlying) {
-                player.capabilities.allowFlying = true;
-                player.sendPlayerAbilities();
-                NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
+            ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
+                    ArmourChest = player.inventory.armorItemInSlot(2),
+                    ArmourLegs = player.inventory.armorItemInSlot(1),
+                    ArmourBoots = player.inventory.armorItemInSlot(0);
+
+            //Chestplate Enchants
+            if (Config.enchVitalityEnable && ArmourChest != null) {
+                IAttributeInstance ph = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+                VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
+                Vitality = VitalityLevel * 0.5F;
+                AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
+                if (!ph.func_111122_c().contains(HealthBuff) && VitalityLevel != 0)
+                    ph.applyModifier(HealthBuff);
+                if (ph.func_111122_c().contains(HealthBuff) && VitalityLevel == 0)
+                    ph.removeModifier(HealthBuff);
             }
-            if (FlyLevel < 1 && flyhbt) {
-                player.capabilities.allowFlying = false;
-                player.capabilities.isFlying = false;
-                player.sendPlayerAbilities();
-                NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
+
+            //Legging Enchants
+            if (Config.enchSwiftnessEnable && ArmourLegs != null) {
+                IAttributeInstance ps = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+                SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
+                SpeedBoost = SpeedLevel * 0.2;
+                AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
+                if (!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0)
+                    ps.applyModifier(SpeedBuff);
+                if (ps.func_111122_c().contains(SpeedBuff) && SpeedLevel == 0)
+                    ps.removeModifier(SpeedBuff);
             }
-            if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
-                player.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, true, player.posX + Math.random() - 0.5d,
-                        player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
-
-        }
-
-        if (Config.enchStealthEnable && ArmourBoots != null) {
-            StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
-
-            Stealth(player, StealthLevel);
-        }
 
 
-        if (Config.enchRepairEnable && ShouldRepair <= 0) {
-            RepairItems(player);
-            ShouldRepair = (Config.enchRepairVals[5] * 20);
-        }
+            //Boot Enchants
+            if (Config.enchFlyEnable && ArmourBoots != null) {
+                FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
+                boolean flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
+                if (FlyLevel > 0 && !player.capabilities.allowFlying) {
+                    player.capabilities.allowFlying = true;
+                    player.sendPlayerAbilities();
+                    NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
+                }
+                if (FlyLevel < 1 && flyhbt) {
+                    player.capabilities.allowFlying = false;
+                    player.capabilities.isFlying = false;
+                    player.sendPlayerAbilities();
+                    NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
+                }
+                if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
+                    player.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, true, player.posX + Math.random() - 0.5d,
+                            player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
 
-        if (Config.enchRegenEnable && CanRegen <= 0){
-            CanRegen = Config.enchRegenVals[4] * 20;
-            RegenLevel = 0;
-            RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
-            RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
-            RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
-            RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
-            if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0)
-                player.heal(RegenLevel/2);
+            }
+
+            if (Config.enchStealthEnable && ArmourBoots != null) {
+                StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
+
+                Stealth(player, StealthLevel);
+            }
+
+
+            if (Config.enchRepairEnable && ShouldRepair <= 0) {
+                RepairItems(player);
+                ShouldRepair = (Config.enchRepairVals[5] * 20);
+            }
+
+            if (Config.enchRegenEnable && CanRegen <= 0) {
+                CanRegen = Config.enchRegenVals[4] * 20;
+                RegenLevel = 0;
+                RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
+                RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
+                RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
+                RegenLevel += EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
+                if (player.getHealth() < player.getMaxHealth() && RegenLevel > 0)
+                    player.heal(RegenLevel / 2);
+            }
         }
 	}
 
