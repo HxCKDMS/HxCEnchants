@@ -7,6 +7,7 @@ public class Config
     public static boolean DebugMode = HxCKDMS.HxCCore.Configs.Config.DebugMode;
     public static boolean EDT, PAuraDeadly, PAuraFiery, PAuraThick, PAuraDark, PAuraToxic,  enableChargesSystem;
     public static float PiercingPercent;
+    public static int updateTime;
 
     public static int[] enchAdrenalineBoostVals, enchAuraFieryVals, enchAuraDeadlyVals, enchAuraDarkVals,
             enchAuraThickVals, enchAuraToxicVals, enchArrowExplosiveVals, enchArrowLightningVals,
@@ -41,6 +42,7 @@ public class Config
         EDT = config.getBoolean("ExplosionDestroysTerrain", "A Features", false, "");
         PiercingPercent = config.getFloat("PiercingPercent", "A Features", 0.15f, 0.01f, 10000.0f, "set this value as high as you want");
         enableChargesSystem = config.getBoolean("EnableChargesSystem", "A Features", true, "");
+        updateTime = config.getInt("updateTime", "A Features", 10, 1, 200000, "Lower this to speed up checks for enchants, increase to slow down in case of lag.");
         PAuraDark = config.getBoolean("AuraDarkOnPlayers", "A Features", true, "");
         PAuraDeadly = config.getBoolean("AuraDeadlyOnPlayers", "A Features", true, "");
         PAuraToxic = config.getBoolean("AuraToxicOnPlayers", "A Features", true, "");

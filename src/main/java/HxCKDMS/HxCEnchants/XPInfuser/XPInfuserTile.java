@@ -29,10 +29,10 @@ public class XPInfuserTile extends TileEntity implements IInventory {
                 else chr = (int) Math.round(4.5 * (xpti * xpti) - (162.5 * xpti) + 2220);
                 if (stack.getTagCompound() != null) {
                     NBTTagCompound tagCompound = stack.getTagCompound();
-                    tagCompound.setInteger("HxCEnchantCharge", tagCompound.getInteger("HxCEnchantCharge") + chr);
+                    tagCompound.setLong("HxCEnchantCharge", tagCompound.getLong("HxCEnchantCharge") + chr);
                 } else {
                     NBTTagCompound tagCompound = new NBTTagCompound();
-                    tagCompound.setInteger("HxCEnchantCharge", chr);
+                    tagCompound.setLong("HxCEnchantCharge", chr);
                     stack.setTagCompound(tagCompound);
                 }
                 p.addExperienceLevel(-xpti);

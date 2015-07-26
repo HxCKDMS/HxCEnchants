@@ -30,7 +30,7 @@ public class ArrowEventHandler
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
         assert stack != null;
-        if (stack.getTagCompound() != null && (stack.getTagCompound().getInteger("HxCEnchantCharge") > 0 || !Config.enableChargesSystem)) {
+        if (stack.getTagCompound() != null && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Config.enableChargesSystem)) {
             if (Config.enchArrowLightningEnable)
                 ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
             if (Config.enchArrowSeekingEnable)
@@ -55,10 +55,10 @@ public class ArrowEventHandler
                 if (isPoison) use += Config.enchPoisonVals[4];
                 if (isPiercing) use += Config.enchArrowPiercingVals[4];
 
-                int tmp = stack.getTagCompound().getInteger("HxCEnchantCharge") - use;
+                long tmp = stack.getTagCompound().getLong("HxCEnchantCharge") - use;
 
                 if (tmp >= 0)
-                    stack.getTagCompound().setInteger("HxCEnchantCharge", tmp);
+                    stack.getTagCompound().setLong("HxCEnchantCharge", tmp);
                 else {
                     isExplosive = false; isHoming = false;
                     isZeus = false; isPoison = false;

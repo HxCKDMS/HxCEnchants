@@ -10,8 +10,8 @@ public class TooltipHandler {
     @SubscribeEvent
     public void onItemTooltip (ItemTooltipEvent event) {
         if (event.itemStack.isItemStackDamageable() && event.itemStack.getTagCompound() != null) {
-            int Charge = event.itemStack.getTagCompound().getInteger("HxCEnchantCharge");
-            if (Charge > 0)
+            long Charge = event.itemStack.getTagCompound().getLong("HxCEnchantCharge");
+            if (Charge != 0)
                 event.toolTip.add("Charge : " + Charge);
         }
     }

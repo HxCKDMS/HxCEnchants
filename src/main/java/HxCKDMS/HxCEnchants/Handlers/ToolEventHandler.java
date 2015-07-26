@@ -40,7 +40,7 @@ public class ToolEventHandler {
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
-            int chrg = item.getTagCompound().getInteger("HxCEnchantCharge");
+            long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
             if (Config.enchLifeStealEnable && (chrg > Config.enchLifeStealVals[4] || !Config.enableChargesSystem)) {
                 LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
                 if (LifeStealLevel > 0) {
@@ -48,7 +48,7 @@ public class ToolEventHandler {
                     double CH = Victim.getHealth();
                     float RH = (float) CH - (float) PH;
                     Attacker.heal(RH * LifeStealLevel);
-                    item.getTagCompound().setInteger("HxCEnchantCharge", chrg - Config.enchLifeStealVals[4]);
+                    item.getTagCompound().setLong("HxCEnchantCharge", chrg - Config.enchLifeStealVals[4]);
                 }
             }
 
@@ -56,14 +56,14 @@ public class ToolEventHandler {
                 PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
                 if (PiercingLevel > 0) Victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), event.ammount * Config.PiercingPercent);
                 if (Config.enableChargesSystem)
-                    item.getTagCompound().setInteger("HxCEnchantCharge", chrg - Config.enchPiercingVals[4]);
+                    item.getTagCompound().setLong("HxCEnchantCharge", chrg - Config.enchPiercingVals[4]);
             }
 
             if (Config.enchVorpalEnable && (chrg > Config.enchVorpalVals[4] || !Config.enableChargesSystem)) {
                 VorpalLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vorpal.effectId, item);
                 if (VorpalLevel > 0) Victim.attackEntityFrom(new DamageSource("Vorpal").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), VorpalLevel * Config.enchVorpalVals[4]);
                 if (Config.enableChargesSystem)
-                    item.getTagCompound().setInteger("HxCEnchantCharge", chrg - Config.enchVorpalVals[4]);
+                    item.getTagCompound().setLong("HxCEnchantCharge", chrg - Config.enchVorpalVals[4]);
             }
 
             if (Config.enchSCurseEnable && (chrg > Config.enchSCurseVals[4] || !Config.enableChargesSystem)) {
@@ -74,7 +74,7 @@ public class ToolEventHandler {
                     Attacker.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 120, Math.round(SCurseLevel/3), true));
                     Attacker.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel * Config.enchSCurseVals[5], true));
                     if (Config.enableChargesSystem)
-                        item.getTagCompound().setInteger("HxCEnchantCharge", chrg - Config.enchSCurseVals[4]);
+                        item.getTagCompound().setLong("HxCEnchantCharge", chrg - Config.enchSCurseVals[4]);
                 }
             }
         }
@@ -90,7 +90,7 @@ public class ToolEventHandler {
                 ItemStack item;
                 if (Attacker.getHeldItem().getItem() instanceof ItemSword) item = Attacker.getHeldItem();
                 else return;
-                int chrg = item.getTagCompound().getInteger("HxCEnchantCharge");
+                long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
 
                 VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
                 ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
@@ -99,7 +99,7 @@ public class ToolEventHandler {
                     if (deadent instanceof EntityLiving) {
                         deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY + 1, deadent.posZ, ExamineLevel * Config.enchExamineVals[4]));
                         if (Config.enableChargesSystem)
-                            item.getTagCompound().setInteger("HxCEnchantCharge", chrg - Config.enchExamineVals[4]);
+                            item.getTagCompound().setLong("HxCEnchantCharge", chrg - Config.enchExamineVals[4]);
                     }
 
                 if (VampireLevel > 0 && (chrg > Config.enchVampirismVals[4] || !Config.enableChargesSystem)) {
@@ -123,7 +123,7 @@ public class ToolEventHandler {
                     if (Config.DebugMode)
                         LogHelper.warn(Attacker + "has had their hunger increased by Vampirism.", Reference.MOD_ID);
                     if (Config.enableChargesSystem)
-                        item.getTagCompound().setInteger("HxCEnchantCharge", chrg - Config.enchVampirismVals[4]);
+                        item.getTagCompound().setLong("HxCEnchantCharge", chrg - Config.enchVampirismVals[4]);
                 }
             } catch (Exception e) {if (Config.DebugMode) LogHelper.warn(e.getLocalizedMessage(), Reference.MOD_ID);}
         }
@@ -135,7 +135,7 @@ public class ToolEventHandler {
             ItemStack heldItem = player.getHeldItem();
 
             AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
-            if(AutoSmeltLevel > 0 && (heldItem.getTagCompound().getInteger("HxCEnchantCharge") > Config.enchFlameTouchVals[4] || !Config.enableChargesSystem)) {
+            if(AutoSmeltLevel > 0 && (heldItem.getTagCompound().getLong("HxCEnchantCharge") > Config.enchFlameTouchVals[4] || !Config.enableChargesSystem)) {
                 for(int i = 0; i < event.drops.size(); i++) {
                     ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
 
@@ -144,7 +144,7 @@ public class ToolEventHandler {
                         drop.stackSize *= AutoSmeltLevel;
                         event.drops.set(i, drop);
                         if (Config.enableChargesSystem)
-                            heldItem.getTagCompound().setInteger("HxCEnchantCharge", heldItem.getTagCompound().getInteger("HxCEnchantCharge") - (Config.enchFlameTouchVals[4] * AutoSmeltLevel));
+                            heldItem.getTagCompound().setLong("HxCEnchantCharge", heldItem.getTagCompound().getLong("HxCEnchantCharge") - (Config.enchFlameTouchVals[4] * AutoSmeltLevel));
                     }
                 }
             }
