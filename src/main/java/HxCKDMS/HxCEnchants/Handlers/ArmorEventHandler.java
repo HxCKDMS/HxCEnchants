@@ -196,7 +196,7 @@ public class ArmorEventHandler {
 
 	@SubscribeEvent
 	public void livingJumpEvent(LivingJumpEvent event) {
-		if(event.entityLiving instanceof EntityPlayer && EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1)) > 0) {
+		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(0) != null && EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1)) > 0) {
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
             double JumpBuff = player.motionY + 0.1 * EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1));
             player.motionY += JumpBuff;
