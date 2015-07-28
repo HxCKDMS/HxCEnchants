@@ -1,10 +1,13 @@
 package HxCKDMS.HxCEnchants;
 
+import HxCKDMS.HxCCore.HxCCore;
+import HxCKDMS.HxCCore.api.Configuration.Category;
+import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
 import HxCKDMS.HxCCore.network.PacketPipeline;
-import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserBlock;
-import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.Handlers.*;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserBlock;
+import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.network.PacketEnchanterSync;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -18,7 +21,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
 
 import static HxCKDMS.HxCEnchants.lib.Reference.*;
 
@@ -28,7 +32,7 @@ public class HxCEnchants
 {
     @Instance(MOD_ID)
     public static HxCEnchants instance;
-    public static Config Cfg;
+//    public static Config Cfg;
 
     public static PacketPipeline packetPipeline = new PacketPipeline();
 
@@ -37,8 +41,9 @@ public class HxCEnchants
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        Cfg = new Config(new Configuration(event.getSuggestedConfigurationFile()));
-        if (Config.enableChargesSystem) {
+        HxCConfig hxCConfig = new HxCConfig();
+        registerNewConfigSys(hxCConfig);
+        if (Configurations.enableChargesSystem) {
             proxy.preInit(event);
             packetPipeline.addPacket(PacketEnchanterSync.class);
             packetPipeline.initialize(CHANNEL_NAME);
@@ -53,7 +58,7 @@ public class HxCEnchants
         FMLCommonHandler.instance().bus().register(new ArmorEventHandler());
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
         FMLCommonHandler.instance().bus().register(new AOEEventHandler());
-        if (Config.enableChargesSystem) {
+        if (Configurations.enableChargesSystem) {
             NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
             GameRegistry.registerBlock(new XPInfuserBlock(), "XPInfuserBlock");
             GameRegistry.registerTileEntity(XPInfuserTile.class, "XPInfuserTile");
@@ -62,4 +67,12 @@ public class HxCEnchants
     
     @EventHandler
     public void postInit(FMLPostInitializationEvent event){}
+
+    public void registerNewConfigSys(HxCConfig config) {
+        config.registerCategory(new Category("General", "General Stuff"));
+        config.registerCategory(new Category("ToolEnchants", "Commands Configurations"));
+        config.registerCategory(new Category("ArmourEnchants", "Permissions System"));
+        config.registerCategory(new Category("WeaponEnchants", "Permissions System"));
+        config.handleConfig(Configurations.class, new File(HxCCore.HxCConfigDir, "HxCEnchants.cfg"));
+    }
 }

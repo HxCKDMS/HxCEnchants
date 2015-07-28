@@ -1,186 +1,313 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
+import HxCKDMS.HxCCore.Configs.Configurations;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
-import HxCKDMS.HxCEnchants.Config;
+import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings("all")
 public class Enchants {
     private static int Enchs = 0;
+    
+    private static int[] data;
 
     public static Enchantment AdrenalineBoost,
             AuraDark, AuraDeadly, AuraFiery, AuraThick, AuraToxic,
-            ArmorRegen, ArrowExplosive, ArrowLightning, ArrowSeeking, Bound,
-            BattleHealing, DivineIntervention, Examine, FlameTouch, Fly, JumpBoost,
-            LeadFooted, LifeSteal, Poison, Piercing, Penetrating, Repair, Shroud, SCurse,
-            SoulTear, Swiftness, Stealth, Vampirism, Venom, Vitality, Vorpal, WitherProtection;
+            ArmorRegen, ArrowExplosive, Zeus, ArrowSeeking, Bound,
+            BattleHealing, DivineIntervention, Examine, FlameTouch,
+            Fly, JumpBoost, LeadFooted, LifeSteal, Poison, Piercing,
+            Penetrating, Repair, Shroud, SCurse, SoulTear, Swiftness,
+            Stealth, Vampirism, Venom, Vitality, Vorpal, WitherProtection,
+            SpeedMine, VoidTouch, Overcharge, MeteorFall, PipeMine, EnchLeech,
+            ExplosiveDischarge, FeatherFall, FlashStep, HealingAura,
+            RepulsiveAura, AuraMagnetic, GaiaAura, IcyAura, LightningArrow, Gluttony;
 
     public static void load () {
-        if (Config.enchAdrenalineBoostEnable) {
-            AdrenalineBoost = new HxCEnchantment(Config.enchAdrenalineBoostVals[0], "adrenalineBoost",Config.enchAdrenalineBoostVals[2], EnumEnchantmentType.armor_head, Config.enchAdrenalineBoostVals[1], Config.enchAdrenalineBoostVals[3]);
+        if (EnchantConfigHandler.isEnabled("AdrenalineBoost", "armor")) {
+            data = EnchantConfigHandler.getData("AdrenalineBoost", "armor");
+            AdrenalineBoost = new HxCEnchantment(data[0], "adrenalineBoost",data[2], EnumHxCEnchantType.ARMOR_HEAD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
         }
-        if (Config.enchAuraDarkEnable) {
-            AuraDark = new HxCEnchantment(Config.enchAuraDarkVals[0], "darkAura", Config.enchAuraDarkVals[2], EnumEnchantmentType.armor, Config.enchAuraDarkVals[1], Config.enchAuraDarkVals[3]);
+        if (EnchantConfigHandler.isEnabled("AuraDark", "armor")) {
+            data = EnchantConfigHandler.getData("AuraDark", "armor");
+            AuraDark = new HxCEnchantment(data[0], "darkAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(AuraDark);
             Enchs++;
         }
-        if (Config.enchAuraDeadlyEnable) {
-            AuraDeadly = new HxCEnchantment(Config.enchAuraDeadlyVals[0], "deadlyAura", Config.enchAuraDeadlyVals[2], EnumEnchantmentType.armor, Config.enchAuraDeadlyVals[1], Config.enchAuraDeadlyVals[3]);
+        if (EnchantConfigHandler.isEnabled("AuraDeadly", "armor")) {
+            data = EnchantConfigHandler.getData("AuraDeadly", "armor");
+            AuraDeadly = new HxCEnchantment(data[0], "deadlyAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{GaiaAura, HealingAura});
             MinecraftForge.EVENT_BUS.register(AuraDeadly);
             Enchs++;
         }
-        if (Config.enchAuraFieryEnable) {
-            AuraFiery = new HxCEnchantment(Config.enchAuraFieryVals[0], "flameAura", Config.enchAuraFieryVals[2], EnumEnchantmentType.armor, Config.enchAuraFieryVals[1], Config.enchAuraFieryVals[3]);
+        if (EnchantConfigHandler.isEnabled("AuraFiery", "armor")) {
+            data = EnchantConfigHandler.getData("AuraFiery", "armor");
+            AuraFiery = new HxCEnchantment(data[0], "flameAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{HealingAura, GaiaAura, IcyAura});
             MinecraftForge.EVENT_BUS.register(AuraFiery);
             Enchs++;
         }
-        if (Config.enchAuraThickEnable) {
-            AuraThick = new HxCEnchantment(Config.enchAuraThickVals[0], "thickAura", Config.enchAuraThickVals[2], EnumEnchantmentType.armor, Config.enchAuraThickVals[1], Config.enchAuraThickVals[3]);
+        if (EnchantConfigHandler.isEnabled("AuraThick", "armor")) {
+            data = EnchantConfigHandler.getData("AuraThick", "armor");
+            AuraThick = new HxCEnchantment(data[0], "thickAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(AuraThick);
             Enchs++;
         }
-        if (Config.enchAuraToxicEnable) {
-            AuraToxic = new HxCEnchantment(Config.enchAuraToxicVals[0], "toxicAura", Config.enchAuraToxicVals[2], EnumEnchantmentType.armor, Config.enchAuraToxicVals[1], Config.enchAuraToxicVals[3]);
+        if (EnchantConfigHandler.isEnabled("AuraToxic", "armor")) {
+            data = EnchantConfigHandler.getData("AuraToxic", "armor");
+            AuraToxic = new HxCEnchantment(data[0], "toxicAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{GaiaAura, HealingAura});
             MinecraftForge.EVENT_BUS.register(AuraToxic);
             Enchs++;
         }
-        if (Config.enchRegenEnable) {
-            ArmorRegen = new HxCEnchantment(Config.enchRegenVals[0], "regen", Config.enchRegenVals[2], EnumEnchantmentType.armor, Config.enchRegenVals[1], Config.enchRegenVals[3]);
+        if (EnchantConfigHandler.isEnabled("Regen", "armor")) {
+            data = EnchantConfigHandler.getData("Regen", "armor");
+            ArmorRegen = new HxCEnchantment(data[0], "regen", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{BattleHealing});
             MinecraftForge.EVENT_BUS.register(ArmorRegen);
             Enchs++;
         }
-        if (Config.enchArrowExplosiveEnable) {
-            ArrowExplosive = new HxCEnchantment(Config.enchArrowExplosiveVals[0], "arrowExplosive", Config.enchArrowExplosiveVals[2], EnumEnchantmentType.bow, Config.enchArrowExplosiveVals[1], Config.enchArrowExplosiveVals[3]);
+        if (EnchantConfigHandler.isEnabled("ArrowExplosive", "weapon")) {
+            data = EnchantConfigHandler.getData("ArrowExplosive", "weapon");
+            ArrowExplosive = new HxCEnchantment(data[0], "arrowExplosive", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(ArrowExplosive);
             Enchs++;
         }
-        if (Config.enchArrowLightningEnable) {
-            ArrowLightning = new HxCEnchantment(Config.enchArrowLightningVals[0], "arrowZeus", Config.enchArrowLightningVals[2], EnumEnchantmentType.bow, Config.enchArrowLightningVals[1], Config.enchArrowLightningVals[3]);
-            MinecraftForge.EVENT_BUS.register(ArrowLightning);
+        if (EnchantConfigHandler.isEnabled("Zeus", "weapon")) {
+            data = EnchantConfigHandler.getData("Zeus", "weapon");
+            Zeus = new HxCEnchantment(data[0], "arrowZeus", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(Zeus);
             Enchs++;
         }
-        if (Config.enchArrowSeekingEnable) {
-            ArrowSeeking = new HxCEnchantment(Config.enchArrowSeekingVals[0], "arrowSeeking", Config.enchArrowSeekingVals[2], EnumEnchantmentType.bow, Config.enchArrowSeekingVals[1], Config.enchArrowSeekingVals[3]);
+        if (EnchantConfigHandler.isEnabled("ArrowSeeking", "weapon")) {
+            data = EnchantConfigHandler.getData("ArrowSeeking", "weapon");
+            ArrowSeeking = new HxCEnchantment(data[0], "arrowSeeking", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(ArrowSeeking);
             Enchs++;
         }
-        if (Config.enchBattleHealingEnable) {
-            BattleHealing = new HxCEnchantment(Config.enchBattleHealingVals[0], "battleHeal", Config.enchBattleHealingVals[2], EnumEnchantmentType.armor_torso, Config.enchBattleHealingVals[1], Config.enchBattleHealingVals[3]);
+        if (EnchantConfigHandler.isEnabled("BattleHealing", "armor")) {
+            data = EnchantConfigHandler.getData("BattleHealing", "armor");
+            BattleHealing = new HxCEnchantment(data[0], "battleHeal", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{ArmorRegen});
             MinecraftForge.EVENT_BUS.register(BattleHealing);
             Enchs++;
         }
-        if(Config.enchBoundEnable){
-            Bound = new HxCEnchantment(Config.enchBoundVals[0], "bound", Config.enchBoundVals[2], EnumEnchantmentType.all, Config.enchBoundVals[1], Config.enchBoundVals[3]);
+        if (EnchantConfigHandler.isEnabled("Bound", "other")) {
+            data = EnchantConfigHandler.getData("Bound", "other");
+            Bound = new HxCEnchantment(data[0], "bound", data[2], EnumHxCEnchantType.ALL, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Bound);
             Enchs++;
         }
-        if (Config.enchDivineInterventionEnable) {
-            DivineIntervention = new HxCEnchantment(Config.enchDivineInterventionVals[0], "divineIntervention", Config.enchDivineInterventionVals[2], EnumEnchantmentType.armor_torso, Config.enchDivineInterventionVals[1], Config.enchDivineInterventionVals[3]);
+        if (EnchantConfigHandler.isEnabled("DivineIntervention", "armor")) {
+            data = EnchantConfigHandler.getData("DivineIntervention", "armor");
+            DivineIntervention = new HxCEnchantment(data[0], "divineIntervention", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(DivineIntervention);
             Enchs++;
         }
-        if (Config.enchExamineEnable) {
-            Examine = new HxCEnchantment(Config.enchExamineVals[0], "examine", Config.enchExamineVals[2], EnumEnchantmentType.weapon, Config.enchExamineVals[1], Config.enchExamineVals[3]);
+        if (EnchantConfigHandler.isEnabled("Examine", "weapon")) {
+            data = EnchantConfigHandler.getData("Examine", "weapon");
+            Examine = new HxCEnchantment(data[0], "examine", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{SoulTear});
             MinecraftForge.EVENT_BUS.register(Examine);
             Enchs++;
         }
-        if (Config.enchFlameTouchEnable) {
-            FlameTouch = new HxCEnchantment(Config.enchFlameTouchVals[0], "flameTouch", Config.enchFlameTouchVals[2], EnumEnchantmentType.digger, Config.enchFlameTouchVals[1], Config.enchFlameTouchVals[3]);
+        if (EnchantConfigHandler.isEnabled("FlameTouch", "other")) {
+            data = EnchantConfigHandler.getData("FlameTouch", "other");
+            FlameTouch = new HxCEnchantment(data[0], "flameTouch", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{VoidTouch});
             MinecraftForge.EVENT_BUS.register(FlameTouch);
             Enchs++;
         }
-        if(Config.enchFlyEnable){
-            Fly = new HxCEnchantment(Config.enchFlyVals[0], "fly", Config.enchFlyVals[2], EnumEnchantmentType.armor_feet, Config.enchFlyVals[1], Config.enchFlyVals[3]);
+        if (EnchantConfigHandler.isEnabled("Fly" , "armor")) {
+            data = EnchantConfigHandler.getData("Fly" , "armor");
+            Fly = new HxCEnchantment(data[0], "fly", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{LeadFooted, JumpBoost});
             MinecraftForge.EVENT_BUS.register(Fly);
             Enchs++;
         }
-        if(Config.enchJumpBoostEnable) {
-            JumpBoost = new HxCEnchantment(Config.enchJumpBoostVals[0], "jumpBoost", Config.enchJumpBoostVals[2], EnumEnchantmentType.armor_legs, Config.enchJumpBoostVals[1], Config.enchJumpBoostVals[3]);
+        if (EnchantConfigHandler.isEnabled("JumpBoost", "armor")) {
+            data = EnchantConfigHandler.getData("JumpBoost", "armor");
+            JumpBoost = new HxCEnchantment(data[0], "jumpBoost", data[2], EnumHxCEnchantType.ARMOR_LEGS, data[1], data[3], new Enchantment[]{LeadFooted, Fly});
             MinecraftForge.EVENT_BUS.register(JumpBoost);
             Enchs++;
         }
-        if(Config.enchLifeStealEnable) {
-            LifeSteal = new HxCEnchantment(Config.enchLifeStealVals[0], "lifeSteal", Config.enchLifeStealVals[2], EnumEnchantmentType.weapon, Config.enchLifeStealVals[1], Config.enchLifeStealVals[3]);
+        if (EnchantConfigHandler.isEnabled("LifeSteal", "weapon")) {
+            data = EnchantConfigHandler.getData("LifeSteal", "weapon");
+            LifeSteal = new HxCEnchantment(data[0], "lifeSteal", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(LifeSteal);
             Enchs++;
         }
-        if(Config.enchLeadFootedEnable) {
-            LeadFooted = new HxCEnchantment(Config.enchLeadFootedVals[0], "leadFooted", Config.enchLeadFootedVals[2], EnumEnchantmentType.armor_feet, Config.enchLeadFootedVals[1], Config.enchLeadFootedVals[3]);
+        if (EnchantConfigHandler.isEnabled("LeadFooted", "armor")) {
+            data = EnchantConfigHandler.getData("LeadFooted", "armor");
+            LeadFooted = new HxCEnchantment(data[0], "leadFooted", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{Swiftness, Fly, JumpBoost, FeatherFall, Enchantment.featherFalling});
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
         }
-        if(Config.enchPoisonEnable) {
-            Poison = new HxCEnchantment(Config.enchPoisonVals[0], "poison", Config.enchPoisonVals[2], EnumEnchantmentType.bow, Config.enchPoisonVals[1], Config.enchPoisonVals[3]);
-            Venom = new HxCEnchantment(Config.enchVenomVals[0], "venom", Config.enchPoisonVals[2], EnumEnchantmentType.weapon, Config.enchPoisonVals[1], Config.enchPoisonVals[3]);
+        if (EnchantConfigHandler.isEnabled("Poison", "weapon")) {
+            data = EnchantConfigHandler.getData("Poison", "weapon");
+            Poison = new HxCEnchantment(data[0], "poison", data[2], EnumHxCEnchantType.WEAPON, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Poison);
             Enchs++;
-            MinecraftForge.EVENT_BUS.register(Venom);
-            Enchs++;
         }
-        if(Config.enchPiercingEnable) {
-            Piercing = new HxCEnchantment(Config.enchPiercingVals[0], "piercing", Config.enchPiercingVals[2], EnumEnchantmentType.weapon, Config.enchPiercingVals[1], Config.enchPiercingVals[3]);
-            Penetrating = new HxCEnchantment(Config.enchArrowPiercingVals[0], "penetrating", Config.enchPiercingVals[2], EnumEnchantmentType.bow, Config.enchPiercingVals[1], Config.enchPiercingVals[3]);
+        if (EnchantConfigHandler.isEnabled("Piercing", "weapon")) {
+            data = EnchantConfigHandler.getData("Piercing", "weapon");
+            Piercing = new HxCEnchantment(data[0], "piercing", data[2], EnumHxCEnchantType.WEAPON, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Piercing);
             Enchs++;
-            MinecraftForge.EVENT_BUS.register(Penetrating);
-            Enchs++;
         }
-        if(Config.enchRepairEnable){
-            Repair = new HxCEnchantment(Config.enchRepairVals[0], "repair", Config.enchRepairVals[2], EnumEnchantmentType.breakable, Config.enchRepairVals[1], Config.enchRepairVals[3]);
+        if (EnchantConfigHandler.isEnabled("Repair", "other")) {
+            data = EnchantConfigHandler.getData("Repair", "other");
+            Repair = new HxCEnchantment(data[0], "repair", data[2], EnumHxCEnchantType.BREAKABLE, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Repair);
             Enchs++;
         }
-        if(Config.enchShroudEnable){
-            Shroud = new HxCEnchantment(Config.enchShroudVals[0], "shroud", Config.enchShroudVals[2], EnumEnchantmentType.armor, Config.enchShroudVals[1], Config.enchShroudVals[3]);
+        if (EnchantConfigHandler.isEnabled("Shroud" , "armor")){
+            data = EnchantConfigHandler.getData("Shroud" , "armor");
+            Shroud = new HxCEnchantment(data[0], "shroud", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Shroud);
             Enchs++;
         }
-        if(Config.enchSoulTearEnable){
-            SoulTear = new HxCEnchantment(Config.enchSoulTearVals[0], "soulTear", Config.enchSoulTearVals[2], EnumEnchantmentType.weapon, Config.enchSoulTearVals[1], Config.enchSoulTearVals[3]);
+        if (EnchantConfigHandler.isEnabled("SoulTear", "weapon")){
+            data = EnchantConfigHandler.getData("SoulTear", "weapon");
+            SoulTear = new HxCEnchantment(data[0], "soulTear", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(SoulTear);
             Enchs++;
         }
-        if(Config.enchSCurseEnable){
-            SCurse = new HxCEnchantment(Config.enchSCurseVals[0], "slayersCurse", Config.enchSCurseVals[2], EnumEnchantmentType.weapon, Config.enchSCurseVals[1], Config.enchSCurseVals[3]);
+        if (EnchantConfigHandler.isEnabled("SCurse", "weapon")){
+            data = EnchantConfigHandler.getData("SCurse", "weapon");
+            SCurse = new HxCEnchantment(data[0], "slayersCurse", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(SCurse);
             Enchs++;
         }
-        if(Config.enchStealthEnable){
-            Stealth = new HxCEnchantment(Config.enchStealthVals[0], "stealth", Config.enchStealthVals[2], EnumEnchantmentType.armor_feet, Config.enchStealthVals[1], Config.enchStealthVals[3]);
+        if (EnchantConfigHandler.isEnabled("Stealth", "armor")){
+            data = EnchantConfigHandler.getData("Stealth", "armor");
+            Stealth = new HxCEnchantment(data[0], "stealth", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Stealth);
             Enchs++;
         }
-        if(Config.enchSwiftnessEnable){
-            Swiftness = new HxCEnchantment(Config.enchSwiftnessVals[0], "swiftness", Config.enchSwiftnessVals[2], EnumEnchantmentType.armor_legs, Config.enchSwiftnessVals[1], Config.enchSwiftnessVals[3]);
+        if (EnchantConfigHandler.isEnabled("Swiftness", "armor")){
+            data = EnchantConfigHandler.getData("Swiftness", "armor");
+            Swiftness = new HxCEnchantment(data[0], "swiftness", data[2], EnumHxCEnchantType.ARMOR_LEGS, data[1], data[3], new Enchantment[]{LeadFooted});
             MinecraftForge.EVENT_BUS.register(Swiftness);
             Enchs++;
         }
-        if(Config.enchVampirismEnable) {
-            Vampirism = new HxCEnchantment(Config.enchVampirismVals[0], "vampirism", Config.enchVampirismVals[2], EnumEnchantmentType.weapon, Config.enchVampirismVals[1], Config.enchVampirismVals[3]);
+        if (EnchantConfigHandler.isEnabled("Vampirism", "weapon")) {
+            data = EnchantConfigHandler.getData("Vampirism", "weapon");
+            Vampirism = new HxCEnchantment(data[0], "vampirism", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Vampirism);
             Enchs++;
         }
-        if(Config.enchVitalityEnable) {
-            Vitality = new HxCEnchantment(Config.enchVitalityVals[0], "vitality", Config.enchVitalityVals[2], EnumEnchantmentType.armor_torso, Config.enchVitalityVals[1], Config.enchVitalityVals[3]);
+        if (EnchantConfigHandler.isEnabled("Vitality", "armor")) {
+            data = EnchantConfigHandler.getData("Vitality", "armor");
+            Vitality = new HxCEnchantment(data[0], "vitality", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Vitality);
             Enchs++;
         }
-        if(Config.enchVitalityEnable) {
-            Vorpal = new HxCEnchantment(Config.enchVorpalVals[0], "vorpal", Config.enchVorpalVals[2], EnumEnchantmentType.weapon, Config.enchVitalityVals[1], Config.enchVorpalVals[3]);
+        if (EnchantConfigHandler.isEnabled("Vorpal", "weapon")) {
+            data = EnchantConfigHandler.getData("Vorpal", "weapon");
+            Vorpal = new HxCEnchantment(data[0], "vorpal", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Vorpal);
             Enchs++;
         }
-        if(Config.enchWitherProtectionEnable) {
-            WitherProtection = new HxCEnchantment(Config.enchWitherProtectionVals[0], "witherProt", Config.enchWitherProtectionVals[2], EnumEnchantmentType.armor_head, Config.enchWitherProtectionVals[1], Config.enchWitherProtectionVals[3]);
+        if (EnchantConfigHandler.isEnabled("WitherProtection", "armor")) {
+            data = EnchantConfigHandler.getData("WitherProtection", "armor");
+            WitherProtection = new HxCEnchantment(data[0], "witherProt", data[2], EnumHxCEnchantType.ARMOR_HEAD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(WitherProtection);
             Enchs++;
         }
-        if (HxCKDMS.HxCEnchants.Config.DebugMode)
+        if (EnchantConfigHandler.isEnabled("SpeedMine", "tool")) {
+            data = EnchantConfigHandler.getData("SpeedMine", "tool");
+            SpeedMine = new HxCEnchantment(data[0], "speedMine", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(SpeedMine);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("VoidTouch", "tool")) {
+            data = EnchantConfigHandler.getData("VoidTouch", "tool");
+            VoidTouch = new HxCEnchantment(data[0], "voidTouch", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{Enchantment.fortune, Enchantment.silkTouch});
+            MinecraftForge.EVENT_BUS.register(VoidTouch);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("EnchLeech", "weapon")) {
+            data = EnchantConfigHandler.getData("EnchLeech", "weapon");
+            EnchLeech = new HxCEnchantment(data[0], "enchLeech", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(EnchLeech);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("PipeMine", "tool")) {
+            data = EnchantConfigHandler.getData("PipeMine", "tool");
+            PipeMine = new HxCEnchantment(data[0], "pipeMine", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(PipeMine);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("FeatherFall", "armor")) {
+            data = EnchantConfigHandler.getData("FeatherFall", "armor");
+            FeatherFall = new HxCEnchantment(data[0], "featherFall", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{MeteorFall});
+            MinecraftForge.EVENT_BUS.register(FeatherFall);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("MeteorFall", "armor")) {
+            data = EnchantConfigHandler.getData("MeteorFall", "armor");
+            MeteorFall = new HxCEnchantment(data[0], "meteorFall", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{FeatherFall, Enchantment.featherFalling, Fly});
+            MinecraftForge.EVENT_BUS.register(MeteorFall);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("Overcharge", "weapon")) {
+            data = EnchantConfigHandler.getData("Overcharge", "weapon");
+            Overcharge = new HxCEnchantment(data[0], "overcharge", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(Overcharge);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("ExplosiveDischarge", "armor")) {
+            data = EnchantConfigHandler.getData("ExplosiveDischarge", "armor");
+            ExplosiveDischarge = new HxCEnchantment(data[0], "explosiveDischarge", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(ExplosiveDischarge);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("GaiaAura", "armor")) {
+            data = EnchantConfigHandler.getData("GaiaAura", "armor");
+            GaiaAura = new HxCEnchantment(data[0], "gaiaAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraToxic, AuraFiery, IcyAura, AuraDeadly});
+            MinecraftForge.EVENT_BUS.register(GaiaAura);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("FlashStep", "armor")) {
+            data = EnchantConfigHandler.getData("FlashStep", "armor");
+            FlashStep = new HxCEnchantment(data[0], "flashStep", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{LeadFooted});
+            MinecraftForge.EVENT_BUS.register(FlashStep);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("HealingAura", "armor")) {
+            data = EnchantConfigHandler.getData("HealingAura", "armor");
+            HealingAura = new HxCEnchantment(data[0], "healingAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraToxic, AuraDeadly, AuraFiery});
+            MinecraftForge.EVENT_BUS.register(HealingAura);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("Gluttony", "armor")) {
+            data = EnchantConfigHandler.getData("Gluttony", "armor");
+            Gluttony = new HxCEnchantment(data[0], "gluttony", data[2], EnumHxCEnchantType.ARMOR_HEAD, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(Gluttony);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("RepulsiveAura", "armor")) {
+            data = EnchantConfigHandler.getData("RepulsiveAura", "armor");
+            RepulsiveAura = new HxCEnchantment(data[0], "repulsiveAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraMagnetic});
+            MinecraftForge.EVENT_BUS.register(RepulsiveAura);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("AuraMagnetic", "armor")) {
+            data = EnchantConfigHandler.getData("AuraMagnetic", "armor");
+            AuraMagnetic = new HxCEnchantment(data[0], "auraMagnetic", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{RepulsiveAura});
+            MinecraftForge.EVENT_BUS.register(AuraMagnetic);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("IcyAura", "armor")) {
+            data = EnchantConfigHandler.getData("IcyAura", "armor");
+            IcyAura = new HxCEnchantment(data[0], "icyAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraFiery});
+            MinecraftForge.EVENT_BUS.register(IcyAura);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("LightningArrow", "weapon")) {
+            data = EnchantConfigHandler.getData("LightningArrow", "weapon");
+            LightningArrow = new HxCEnchantment(data[0], "lightningArrow", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{Zeus});
+            MinecraftForge.EVENT_BUS.register(LightningArrow);
+            Enchs++;
+        }
+        if (Configurations.DebugMode)
             LogHelper.warn(Enchs + " enchantments have been registered.", Reference.MOD_NAME);
     }
 }

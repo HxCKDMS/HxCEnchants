@@ -1,20 +1,29 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.item.ItemStack;
 
+import java.util.Arrays;
+import java.util.List;
+
+@SuppressWarnings("unchecked")
 public class HxCEnchantment extends Enchantment {
     private int MaxLevel, cost;
-    public HxCEnchantment(int id, String name, int rarity, EnumEnchantmentType type, int MaxLevel, int cost) {
-        super(id, rarity, type);
+    List<Enchantment> bannedEnchs;
+    public EnumHxCEnchantType eType;
+
+    public HxCEnchantment(int id, String name, int rarity, EnumHxCEnchantType HxCType, int MaxLevel, int cost, Enchantment[] enchs) {
+        super(id, rarity, null);
         setName(name);
         this.MaxLevel = MaxLevel;
         this.cost = cost;
+        this.bannedEnchs = Arrays.asList(enchs);
+        this.eType = HxCType;
     }
 
     @Override
     public int getMinEnchantability(int i) {
-        return 16+i;
+        return 15+i;
     }
 
     @Override
@@ -25,5 +34,15 @@ public class HxCEnchantment extends Enchantment {
     @Override
     public int getMaxLevel() {
         return MaxLevel;
+    }
+
+    @Override
+    public boolean canApplyTogether(Enchantment ench) {
+        return !bannedEnchs.contains(ench);
+    }
+
+    @Override
+    public boolean canApply(ItemStack stack) {
+        return eType.canEnchantItem(stack.getItem());
     }
 }

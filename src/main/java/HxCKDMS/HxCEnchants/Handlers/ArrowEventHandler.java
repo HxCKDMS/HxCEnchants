@@ -1,6 +1,7 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
-import HxCKDMS.HxCEnchants.Config;
+import HxCKDMS.HxCEnchants.Configurations;
+import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -20,40 +21,45 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 import java.util.List;
 
-
+@SuppressWarnings("all")
 public class ArrowEventHandler
 {
-	boolean isExplosive, isHoming, isZeus, isPoison, isPiercing;
-	int ExplosionLevel, PoisonLevel, HomingLevel, ZeusLevel, PiercingLevel;
+	boolean isExplosive, isHoming, isZeus, isPoison, isPiercing, isLightning;
+	int ExplosionLevel, PoisonLevel, HomingLevel, ZeusLevel, PiercingLevel, LightningLevel;
 
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
         assert stack != null;
-        if (stack.getTagCompound() != null && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Config.enableChargesSystem)) {
-            if (Config.enchArrowLightningEnable)
-                ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowLightning.effectId, stack);
-            if (Config.enchArrowSeekingEnable)
+        if (stack.getTagCompound() != null && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Configurations.enableChargesSystem)) {
+            if (EnchantConfigHandler.isEnabled("Zeus", "weapon"))
+                ZeusLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Zeus.effectId, stack);
+            if (EnchantConfigHandler.isEnabled("ArrowSeeking", "weapon"))
                 HomingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowSeeking.effectId, stack);
-            if (Config.enchArrowExplosiveEnable)
+            if (EnchantConfigHandler.isEnabled("ArrowExplosive", "weapon"))
                 ExplosionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowExplosive.effectId, stack);
-            if (Config.enchPoisonEnable)
+            if (EnchantConfigHandler.isEnabled("Poison", "weapon"))
                 PoisonLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
-            if (Config.enchPiercingEnable)
-                PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Penetrating.effectId, stack);
+            if (EnchantConfigHandler.isEnabled("Piercing", "weapon"))
+                PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, stack);
+            if (EnchantConfigHandler.isEnabled("LightningArrow", "weapon"))
+                LightningLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LightningArrow.effectId, stack);
 
-            isExplosive = ExplosionLevel > 0 && Config.enchArrowExplosiveEnable;
-            isHoming = HomingLevel > 0 && Config.enchArrowSeekingEnable;
-            isZeus = ZeusLevel > 0 && Config.enchArrowLightningEnable;
-            isPoison = PoisonLevel > 0 && Config.enchPoisonEnable;
-            isPiercing = PiercingLevel > 0 && Config.enchPiercingEnable;
-            if (Config.enableChargesSystem) {
+            isExplosive = ExplosionLevel > 0;
+            isHoming = HomingLevel > 0;
+            isZeus = ZeusLevel > 0;
+            isPoison = PoisonLevel > 0;
+            isPiercing = PiercingLevel > 0;
+            isLightning = LightningLevel > 0;
+
+            if (Configurations.enableChargesSystem) {
                 int use = 0;
-                if (isExplosive) use += Config.enchArrowExplosiveVals[4];
-                if (isHoming) use += Config.enchArrowSeekingVals[4];
-                if (isZeus) use += Config.enchArrowLightningVals[4];
-                if (isPoison) use += Config.enchPoisonVals[4];
-                if (isPiercing) use += Config.enchArrowPiercingVals[4];
+                if (isExplosive) use += EnchantConfigHandler.getData("ArrowExplosive", "weapon")[4];
+                if (isHoming) use += EnchantConfigHandler.getData("ArrowSeeking", "weapon")[4];
+                if (isZeus) use += EnchantConfigHandler.getData("Zeus", "weapon")[4];
+                if (isPoison) use += EnchantConfigHandler.getData("Poison", "weapon")[4];
+                if (isPiercing) use += EnchantConfigHandler.getData("ArrowPiercing", "weapon")[4];
+                if (isLightning) use += EnchantConfigHandler.getData("LightningArrow", "weapon")[4];
 
                 long tmp = stack.getTagCompound().getLong("HxCEnchantCharge") - use;
 
@@ -62,7 +68,7 @@ public class ArrowEventHandler
                 else {
                     isExplosive = false; isHoming = false;
                     isZeus = false; isPoison = false;
-                    isPiercing = false;
+                    isPiercing = false; isLightning = false;
                 }
             }
         }
@@ -73,11 +79,12 @@ public class ArrowEventHandler
 	public void entityAttacked(LivingAttackEvent event) {
         if(event.entityLiving instanceof EntityLiving){
             EntityLivingBase ent = event.entityLiving;
-            if (event.source.isProjectile() && isExplosive) ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Config.EDT);
-            if (event.source.isProjectile() && isHoming) ent.attackEntityFrom(DamageSource.generic, 6);
-            if (event.source.isProjectile() && isZeus) ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
-            if (event.source.isProjectile() && isPoison) ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
-            if (event.source.isProjectile() && isPiercing) ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Config.PiercingPercent);
+            if (!event.source.isProjectile()) return;
+            if (isExplosive) ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Configurations.ExplosionDestroysTerrain);
+            if (isLightning) ent.attackEntityFrom(new DamageSource("LightningArrow"), 7);
+            if (isZeus) ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
+            if (isPoison) ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+            if (isPiercing) ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Configurations.PiercingPercent);
         }
 	} 
 
@@ -108,6 +115,14 @@ public class ArrowEventHandler
                 double motionY = target.boundingBox.minY + target.height - arrow.posY;
                 double motionZ = target.posZ - arrow.posZ;
                 arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
+            }
+            if (isLightning) {
+                if (arrow.shootingEntity != null) {
+                    arrow.motionX = arrow.motionX * LightningLevel;
+                    arrow.motionY = arrow.motionY * LightningLevel;
+                    arrow.motionZ = arrow.motionZ * LightningLevel;
+                    isLightning = false;
+                }
             }
         }
 	}
