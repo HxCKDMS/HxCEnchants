@@ -10,22 +10,26 @@ import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +44,8 @@ public class ArmorEventHandler {
     private int ShouldRepair = 60, CanRegen = 60, flyTimer = 1200, swiftTimer = 600, vitTimer = 600, stealthTimer = 600;
 
     private int tickTimer = Configurations.updateTime;
+
+    public static boolean OverCharge = false;
 
     @SubscribeEvent
 	public void playerTickEvent(TickEvent.PlayerTickEvent event) {
@@ -152,6 +158,21 @@ public class ArmorEventHandler {
             }
 
 
+            if (EnchantConfigHandler.isEnabled("Gluttony", "armor") && ArmourHelm != null) {
+                int gluttony = EnchantmentHelper.getEnchantmentLevel(Enchants.Gluttony.effectId, ArmourHelm);
+                LinkedHashMap<Boolean, Item> tmp = hasFood(player);
+                if (gluttony > 0 && player.getFoodStats().getFoodLevel() <= (gluttony/2)+5 && !tmp.isEmpty() && tmp.containsKey(true) && tmp.get(true) != null) {
+                    player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
+                    for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+                        if (player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].getItem() instanceof ItemFood && player.inventory.mainInventory[i].getItem() == tmp.get(true)) {
+                            player.inventory.decrStackSize(i, 1);
+                            if (Configurations.enableChargesSystem)
+                                ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", HChrg - EnchantConfigHandler.getData("Gluttony", "armor")[4]);
+                        }
+                    }
+                }
+            }
+
             if (EnchantConfigHandler.isEnabled("Repair", "other") && ShouldRepair <= 0) {
                 RepairItems(player);
                 ShouldRepair = (EnchantConfigHandler.getData("Repair", "other")[5] * 20);
@@ -195,6 +216,39 @@ public class ArmorEventHandler {
                         if (Configurations.enableChargesSystem)
                             ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - B * EnchantConfigHandler.getData("Regen", "armor")[4]);
                         player.heal(B / 2);
+                    }
+                }
+            }
+
+            //Didn't wanna create another hook to the event with just this 1 enchant needing ticks
+            //So yeah 1 sword enchant in armor class.... Big woopty do...
+            if (EnchantConfigHandler.isEnabled("OverCharge", "weapon") && player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null) {
+                long HeldCharges = 0;
+                if (Configurations.enableChargesSystem) {
+                    HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
+                }
+                boolean stored = player.getHeldItem().getTagCompound().getBoolean("StoredCharge");
+                int temp = EnchantmentHelper.getEnchantmentLevel(Enchants.Overcharge.effectId, player.getHeldItem()), RequiredCharge = EnchantConfigHandler.getData("OverCharge", "weapon")[4];
+                if (temp > 0 && (HeldCharges >= RequiredCharge || !Configurations.enableChargesSystem) && !stored) {
+                    if (OverCharge && !stored && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0) {
+                        player.addChatComponentMessage(new ChatComponentText("You have just stored a charge of " + player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + "!"));
+                        player.getHeldItem().getTagCompound().setBoolean("StoredCharge", true);
+                        OverCharge = false;
+                        if (Configurations.enableChargesSystem)
+                            player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
+                    }
+
+                    if (!OverCharge && !stored && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0 && HeldCharges >= RequiredCharge*2) {
+                        player.getHeldItem().getTagCompound().setInteger("HxCOverCharge", player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + 1);
+                        if (Configurations.enableChargesSystem)
+                            player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
+                    }
+
+                    if (OverCharge && !stored && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") == 0 && HeldCharges >= RequiredCharge*2) {
+                        OverCharge = false;
+                        player.getHeldItem().getTagCompound().setInteger("HxCOverCharge", player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + 1);
+                        if (Configurations.enableChargesSystem)
+                            player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
                     }
                 }
             }
@@ -262,14 +316,18 @@ public class ArmorEventHandler {
             ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
                     ArmourChest = player.inventory.armorItemInSlot(2);
 
-            int AdrenalineBoostLevel = 0, BattleHealingLevel = 0, WitherProt = 0;
+            int AdrenalineBoostLevel = 0, BattleHealingLevel = 0, WitherProt = 0, DivineInterventionLevel = 0, ExplosiveDischarge = 0;
 
-            if (EnchantConfigHandler.isEnabled("BattleHealing", "armor") && ArmourChest != null)
+            if (EnchantConfigHandler.isEnabled("BattleHealing", "armor") && ArmourChest != null && ArmourChest.hasTagCompound())
                 BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
-            if (EnchantConfigHandler.isEnabled("AdrenalineBoost", "armor") && ArmourHelm != null)
+            if (EnchantConfigHandler.isEnabled("AdrenalineBoost", "armor") && ArmourHelm != null && ArmourHelm.hasTagCompound())
                 AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
-            if (EnchantConfigHandler.isEnabled("WitherProtection", "armor") && ArmourHelm != null)
+            if (EnchantConfigHandler.isEnabled("WitherProtection", "armor") && ArmourHelm != null && ArmourHelm.hasTagCompound())
                 WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
+            if (EnchantConfigHandler.isEnabled("DivineIntervention", "armor") && ArmourChest != null && ArmourChest.hasTagCompound())
+                DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
+            if (EnchantConfigHandler.isEnabled("ExplosiveDischarge", "armor") && ArmourChest != null && ArmourChest.hasTagCompound())
+                ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel(Enchants.ExplosiveDischarge.effectId, ArmourChest);
 
             if (event.source.damageType.equalsIgnoreCase("wither") || event.source.damageType.equalsIgnoreCase("starve") ||event.source.damageType.equalsIgnoreCase("fall") ||event.source.damageType.equalsIgnoreCase("explosion.player") ||event.source.damageType.equalsIgnoreCase("explosion") || event.source.damageType.equalsIgnoreCase("inWall"))
                 allowABEffect = false;
@@ -281,10 +339,8 @@ public class ArmorEventHandler {
             }
             if (BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic")) {
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
-                if (Configurations.enableChargesSystem) {
-                    assert ArmourHelm != null;
-                    ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("BattleHealing", "armor")[4]);
-                }
+                if (Configurations.enableChargesSystem)
+                    ArmourChest.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("BattleHealing", "armor")[4]);
             }
 
             if(AdrenalineBoostLevel > 0 && allowABEffect && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("AdrenalineBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
@@ -295,6 +351,33 @@ public class ArmorEventHandler {
                 player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, AdrenalineBoostLevel));
                 if (Configurations.enableChargesSystem)
                     ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("AdrenalineBoost", "armor")[4]);
+            }
+
+            if (DivineInterventionLevel > 0 && player.prevHealth - event.ammount <= 1) {
+                player.heal(5);
+                int x, y, z;
+                if (player.getBedLocation(0) != null) {
+                    x = player.getBedLocation(0).posX;
+                    y = player.getBedLocation(0).posY;
+                    z = player.getBedLocation(0).posZ;
+                } else {
+                    ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
+                    x = coords.posX;
+                    y = coords.posY;
+                    z = coords.posZ;
+                }
+                if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, x, y, z);
+                else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
+                enchs.remove(EnchantConfigHandler.getData("DivineIntervention", "armor")[0]);
+                if (DivineInterventionLevel > 1) enchs.put(EnchantConfigHandler.getData("DivineIntevention", "armor")[0], DivineInterventionLevel - 1);
+                EnchantmentHelper.setEnchantments(enchs, ArmourChest);
+            }
+
+            if (ExplosiveDischarge > 0 && (ArmourChest.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("ExplosiveDischarge", "armor")[4] || !Configurations.enableChargesSystem)) {
+                player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 2f * ExplosiveDischarge, false);
+                if (Configurations.enableChargesSystem)
+                    ArmourChest.getTagCompound().setLong("HxCEnchantCharge", ArmourChest.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("ExplosiveDischarge", "armor")[4]);
             }
         }
     }
@@ -327,41 +410,6 @@ public class ArmorEventHandler {
 	}
 
     @SubscribeEvent
-    public void LivingHurtEvent(LivingHurtEvent event){
-        Entity hurtEntity = event.entity;
-        if (hurtEntity instanceof EntityPlayerMP){
-            EntityPlayerMP player = (EntityPlayerMP) hurtEntity;
-            ItemStack ArmourChest = player.inventory.armorItemInSlot(2);
-            int DivineInterventionLevel = 0;
-            assert ArmourChest != null;
-            if (EnchantConfigHandler.isEnabled("DivineIntervention", "armor"));
-                DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
-            if (DivineInterventionLevel > 0) {
-                if (player.prevHealth - event.ammount <= 1) {
-                    player.heal(5);
-                    int x, y, z;
-                        if (player.getBedLocation(0) != null) {
-                            x = player.getBedLocation(0).posX;
-                            y = player.getBedLocation(0).posY;
-                            z = player.getBedLocation(0).posZ;
-                        } else {
-                            ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
-                            x = coords.posX;
-                            y = coords.posY;
-                            z = coords.posZ;
-                        }
-                        if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, x, y, z);
-                        else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
-                    Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
-                    enchs.remove(EnchantConfigHandler.getData("DivineIntervention", "armor")[0]);
-                    if (DivineInterventionLevel > 1) enchs.put(EnchantConfigHandler.getData("DivineIntevention", "armor")[0], DivineInterventionLevel - 1);
-                    EnchantmentHelper.setEnchantments(enchs, ArmourChest);
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
     public void livingFallEvent(LivingFallEvent event) {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)event.entityLiving;
@@ -377,10 +425,18 @@ public class ArmorEventHandler {
                 else if (meh > 4) event.distance = 0;
 
                 if (meh2 > 0 && event.distance > 10) {
-                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, event.distance/2 * meh2, false);
+                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, event.distance / 2 * meh2, false);
                     event.distance = 0;
                 }
             }
         }
+    }
+
+    private LinkedHashMap<Boolean, Item> hasFood(EntityPlayer player) {
+        LinkedHashMap<Boolean, Item> meh = new LinkedHashMap<>();
+        for (ItemStack item : player.inventory.mainInventory)
+            if (item != null && item.getItem() instanceof ItemFood)
+                meh.put(true, item.getItem());
+        return meh;
     }
 }

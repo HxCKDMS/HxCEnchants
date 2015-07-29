@@ -3,8 +3,9 @@
     "modid": "HxCEnchants",
     "name": "HxC Enchants",
     "description": "Adds New/Better enchants to the game",
-    "version": "1.7.10-2.0.0",
+    "version": "1.7.10-2.0.0_Preview",
     "credits": "Merged old Enchants mod from BrassGoggledArchivists and My old XEnchants",
+	"logoFile": "assets/hxcenchants/textures/HxCEnchants.jpg",
     "mcversion": "1.7.10",
     "authors": ["§4HxCK§3D§eM§0S§r"],
     "dependencies": [

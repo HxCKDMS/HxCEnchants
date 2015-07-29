@@ -9,7 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings("all")
 public class Enchants {
-    private static int Enchs = 0;
+    public static int Enchs = 0;
     
     private static int[] data;
 
@@ -247,8 +247,8 @@ public class Enchants {
             MinecraftForge.EVENT_BUS.register(MeteorFall);
             Enchs++;
         }
-        if (EnchantConfigHandler.isEnabled("Overcharge", "weapon")) {
-            data = EnchantConfigHandler.getData("Overcharge", "weapon");
+        if (EnchantConfigHandler.isEnabled("OverCharge", "weapon")) {
+            data = EnchantConfigHandler.getData("OverCharge", "weapon");
             Overcharge = new HxCEnchantment(data[0], "overcharge", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Overcharge);
             Enchs++;

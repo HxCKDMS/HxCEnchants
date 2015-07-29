@@ -1,6 +1,7 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;
@@ -9,11 +10,11 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class HxCEnchantment extends Enchantment {
     private int MaxLevel, cost;
-    List<Enchantment> bannedEnchs;
+    private List<Enchantment> bannedEnchs;
     public EnumHxCEnchantType eType;
 
     public HxCEnchantment(int id, String name, int rarity, EnumHxCEnchantType HxCType, int MaxLevel, int cost, Enchantment[] enchs) {
-        super(id, rarity, null);
+        super(id, rarity, EnumEnchantmentType.all);
         setName(name);
         this.MaxLevel = MaxLevel;
         this.cost = cost;

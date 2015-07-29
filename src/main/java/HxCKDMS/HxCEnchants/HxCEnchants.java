@@ -27,13 +27,10 @@ import java.io.File;
 import static HxCKDMS.HxCEnchants.lib.Reference.*;
 
 @Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION, dependencies = DEPENDENCIES)
-
-public class HxCEnchants
-{
+@SuppressWarnings("unused")
+public class HxCEnchants {
     @Instance(MOD_ID)
     public static HxCEnchants instance;
-//    public static Config Cfg;
-
     public static PacketPipeline packetPipeline = new PacketPipeline();
 
     @SidedProxy(serverSide = SERVER_PROXY_CLASS, clientSide = CLIENT_PROXY_CLASS)

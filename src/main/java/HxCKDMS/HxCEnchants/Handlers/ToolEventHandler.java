@@ -1,14 +1,17 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
+import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityMob;
@@ -26,11 +29,15 @@ import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("all")
 public class ToolEventHandler {
-	int VampireLevel, ExamineLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel, VorpalLevel, SCurseLevel;
+	int VampireLevel, ExamineLevel, VoidLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel, VorpalLevel, SCurseLevel;
     FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
 	// Misc. variables
@@ -77,6 +84,26 @@ public class ToolEventHandler {
                     Attacker.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel * EnchantConfigHandler.getData("SCurse", "weapon")[5], true));
                     if (Configurations.enableChargesSystem)
                         item.getTagCompound().setLong("HxCEnchantCharge", chrg - EnchantConfigHandler.getData("SCurse", "weapon")[4]);
+                }
+            }
+
+            if (EnchantConfigHandler.isEnabled("OverCharge", "weapon") && (chrg > EnchantConfigHandler.getData("OverCharge", "weapon")[4] || !Configurations.enableChargesSystem) && item.getTagCompound().getBoolean("StoredCharge")) {
+                int OverChage = EnchantmentHelper.getEnchantmentLevel(Enchants.Overcharge.effectId, item);
+                int storedCharge = item.getTagCompound().getInteger("HxCOverCharge");
+                if (OverChage > 0) {
+                    List<EntityLivingBase> list = event.entityLiving.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(Attacker.posX), (int)Math.round(Attacker.posY), (int)Math.round(Attacker.posZ), OverChage*5));
+                    int damage = storedCharge/list.size();
+                    for (EntityLivingBase liv : list) {
+                        if (liv != Attacker) {
+                            liv.attackEntityFrom(new DamageSource("OverCharge").setDamageIsAbsolute().setDamageAllowedInCreativeMode(), damage);
+                        }
+                    }
+                    item.getTagCompound().setInteger("HxCOverCharge", 0);
+                    item.getTagCompound().setBoolean("StoredCharge", false);
+                    Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(item);
+                    enchs.remove(EnchantConfigHandler.getData("OverCharge", "weapon")[0]);
+                    if (OverChage > 1) enchs.put(EnchantConfigHandler.getData("OverCharge", "weapon")[0], OverChage - 1);
+                    EnchantmentHelper.setEnchantments(enchs, item);
                 }
             }
         }
@@ -132,24 +159,41 @@ public class ToolEventHandler {
 	}
 	@SubscribeEvent
     public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event) {
-        if (event.harvester != null && EnchantConfigHandler.isEnabled("FlameTouch", "weapon")) {
+        if (event.harvester != null) {
             EntityPlayer player = event.harvester;
             ItemStack heldItem = player.getHeldItem();
 
-            AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
-            if(AutoSmeltLevel > 0 && (heldItem.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("FlameTouch", "weapon")[4] || !Configurations.enableChargesSystem)) {
-                for(int i = 0; i < event.drops.size(); i++) {
-                    ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
+            if (EnchantConfigHandler.isEnabled("FlameTouch", "tool")) {
+                AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
+                if (AutoSmeltLevel > 0 && (heldItem.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("FlameTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
+                    for (int i = 0; i < event.drops.size(); i++) {
+                        ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
 
-                    if(smelted != null){
-                        ItemStack drop = smelted.copy();
-                        drop.stackSize *= AutoSmeltLevel;
-                        event.drops.set(i, drop);
-                        if (Configurations.enableChargesSystem)
-                            heldItem.getTagCompound().setLong("HxCEnchantCharge", heldItem.getTagCompound().getLong("HxCEnchantCharge") - (EnchantConfigHandler.getData("FlameTouch", "weapon")[4] * AutoSmeltLevel));
+                        if (smelted != null) {
+                            ItemStack drop = smelted.copy();
+                            drop.stackSize *= AutoSmeltLevel;
+                            event.drops.set(i, drop);
+                            if (Configurations.enableChargesSystem)
+                                heldItem.getTagCompound().setLong("HxCEnchantCharge", heldItem.getTagCompound().getLong("HxCEnchantCharge") - (EnchantConfigHandler.getData("FlameTouch", "tool")[4] * AutoSmeltLevel));
+                        }
                     }
                 }
             }
+            if (EnchantConfigHandler.isEnabled("VoidTouch", "tool")) {
+                VoidLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.VoidTouch.effectId, heldItem);
+                if (VoidLevel > 0 && (heldItem.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("VoidTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
+                    for(String block : Configurations.VoidedItems)
+                        event.drops.remove(new ItemStack(Block.getBlockFromName(block)));
+                    if (Configurations.enableChargesSystem)
+                        heldItem.getTagCompound().setLong("HxCEnchantCharge", heldItem.getTagCompound().getLong("HxCEnchantCharge") - (EnchantConfigHandler.getData("VoidTouch", "tool")[4] * VoidLevel));
+                }
+            }
         }
+    }
+
+    @SubscribeEvent
+    public void PlayerEvent(PlayerEvent.BreakSpeed event) {
+        if (EnchantConfigHandler.isEnabled("SpeedMine", "tool") && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel(Enchants.SpeedMine.effectId, event.entityPlayer.getHeldItem()) > 0)
+            event.newSpeed = (event.originalSpeed + event.originalSpeed*(EnchantmentHelper.getEnchantmentLevel(Enchants.SpeedMine.effectId, event.entityPlayer.getHeldItem()) / 10));
     }
 }

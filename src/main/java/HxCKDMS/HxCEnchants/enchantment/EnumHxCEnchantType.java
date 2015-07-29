@@ -2,7 +2,7 @@ package HxCKDMS.HxCEnchants.enchantment;
 
 import net.minecraft.item.*;
 
-public enum EnumHxCEnchantType {
+public enum EnumHxCEnchantType  {
     ALL,
     ARMOR,
     ARMOR_FEET,
