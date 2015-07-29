@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.XPInfuser;
 
+import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketEnchanterSync;
@@ -45,7 +46,7 @@ public class XPInfuserGUI extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/XPInfuserGUI.png"));
+        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/XPInfuserGUI" + Configurations.guiVersion + ".png"));
         int xStart = (width - xSize) / 2;
         int yStart = (height - ySize) / 2;
         drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
@@ -76,7 +77,7 @@ public class XPInfuserGUI extends GuiContainer {
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0 && xpti != 0 && xpti <= xp) {
             HxCEnchants.packetPipeline.sendToServer(new PacketEnchanterSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
-            xpti = 0; xp_percentage = 1;
+            xp -= xpti; xpti = 0; xp_percentage = 1;
         }
     }
 
@@ -95,7 +96,10 @@ public class XPInfuserGUI extends GuiContainer {
             if(x >= xStart + 7 && x <= xStart + 168){
                 float percent = 1 - ((float)(x - xStart - 7)) / 168;
 
-                if(y >= yStart + 8 && y <= yStart + 16) xp_percentage = percent;
+                if(y >= yStart + 7 && y <= yStart + 27) {
+                    xp_percentage = percent;
+                    xpti = xp - Math.round(xp * xp_percentage);
+                }
             }
         }
         super.mouseClicked(x, y, button);

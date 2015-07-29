@@ -12,7 +12,7 @@ public class Configurations {
     @Config.Float
     public static float PiercingPercent = 0.15f;
     @Config.Integer
-    public static int updateTime = 10;
+    public static int updateTime = 10, guiVersion = 1;
 
     @Config.List
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
@@ -74,7 +74,7 @@ public class Configurations {
         WeaponEnchants.put("SCurse", "true, 468, 10, 1, 55, 20, 3");
         WeaponEnchants.put("Vampirism", "true, 469, 5, 3, 45, 25");
         WeaponEnchants.put("Vorpal", "true, 470, 10, 1, 55, 20, 1");
-        WeaponEnchants.put("OverCharge", "true, 471, 4, 2, 30, 500");
+        WeaponEnchants.put("OverCharge", "false, 471, 4, 2, 30, 500");
         WeaponEnchants.put("EnchLeech", "false, 472, 4, 2, 30, 100");
         WeaponEnchants.put("Examine", "true, 473, 10, 1, 55, 25");
     }
