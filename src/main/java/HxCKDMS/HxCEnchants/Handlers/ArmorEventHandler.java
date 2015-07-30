@@ -57,7 +57,7 @@ public class ArmorEventHandler {
             if (tickTimer <= 0) {
                 tickTimer = Configurations.updateTime;
                 double SpeedBoost, Vitality;
-                int VitalityLevel, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H = 0, C = 0, L = 0, B = 0;
+                short VitalityLevel, FlyLevel, RegenLevel, SpeedLevel, StealthLevel, H = 0, C = 0, L = 0, B = 0;
                 ShouldRepair--;
                 CanRegen--;
 
@@ -85,7 +85,7 @@ public class ArmorEventHandler {
                 if (ArmourChest != null && ArmourChest.hasTagCompound() && EnchantConfigHandler.isEnabled("Vitality", "armor")) {
                     vitTimer--;
                     IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-                    VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
+                    VitalityLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
                     Vitality = VitalityLevel * 0.5F;
                     AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", Vitality, 1);
                     if (!ph.func_111122_c().contains(HealthBuff) && VitalityLevel != 0 && (CChrg > EnchantConfigHandler.getData("Vitality", "armor")[4] || !Configurations.enableChargesSystem))
@@ -103,7 +103,7 @@ public class ArmorEventHandler {
                 if (ArmourLegs != null && ArmourLegs.hasTagCompound() && EnchantConfigHandler.isEnabled("Swiftness", "armor")) {
                     swiftTimer--;
                     IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-                    SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
+                    SpeedLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
                     SpeedBoost = SpeedLevel * 0.2;
                     AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", SpeedBoost, 1);
                     if (!ps.func_111122_c().contains(SpeedBuff) && SpeedLevel != 0 && (LChrg > EnchantConfigHandler.getData("Swiftness", "armor")[4] || !Configurations.enableChargesSystem))
@@ -120,7 +120,7 @@ public class ArmorEventHandler {
 
                 if (ArmourBoots != null && ArmourBoots.hasTagCompound()) {
                     if (EnchantConfigHandler.isEnabled("Fly", "armor")) {
-                        FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
+                        FlyLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
                         if (FlyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
                             flyTimer--;
 
@@ -153,7 +153,7 @@ public class ArmorEventHandler {
 
                     if (EnchantConfigHandler.isEnabled("Stealth", "armor")) {
                         stealthTimer--;
-                        StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
+                        StealthLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
 
                         if (StealthLevel > 0) {
                             Stealth(player, StealthLevel);
@@ -220,13 +220,13 @@ public class ArmorEventHandler {
                 if (EnchantConfigHandler.isEnabled("Regen", "armor") && CanRegen <= 0) {
                     RegenLevel = 0;
                     if (ArmourHelm != null)
-                        H = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
+                        H = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourHelm);
                     if (ArmourBoots != null)
-                        B = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
+                        B = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourBoots);
                     if (ArmourChest != null)
-                        C = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
+                        C = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourChest);
                     if (ArmourLegs != null)
-                        L = EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
+                        L = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, ArmourLegs);
 
                     if (H > 0) RegenLevel += 1;
                     if (B > 0) RegenLevel += 1;

@@ -9,9 +9,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings("all")
 public class Enchants {
-    public static int Enchs = 0;
+    public static short Enchs = 0;
     
-    private static int[] data;
+    private static short[] data;
 
     public static Enchantment AdrenalineBoost,
             AuraDark, AuraDeadly, AuraFiery, AuraThick, AuraToxic,
