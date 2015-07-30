@@ -19,7 +19,7 @@ public enum EnumHxCEnchantType  {
     public boolean canEnchantItem(Item item) {
         if (this == ALL) return true;
         else if (this == BREAKABLE && item.isDamageable()) return true;
-        else if (this == WEAPON) return (item instanceof ItemSword || item instanceof ItemBow);
+        else if (this == WEAPON) return (item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemAxe);
 
         else if (item instanceof ItemArmor) {
             if (this == ARMOR)

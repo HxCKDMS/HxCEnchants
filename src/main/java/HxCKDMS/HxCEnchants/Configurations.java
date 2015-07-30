@@ -13,6 +13,8 @@ public class Configurations {
     public static float PiercingPercent = 0.15f;
     @Config.Integer
     public static int updateTime = 10, guiVersion = 1;
+    @Config.Boolean
+    public static boolean notice = true;
 
     @Config.List
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});

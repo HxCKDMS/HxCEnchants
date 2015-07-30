@@ -55,6 +55,9 @@ public class HxCEnchants {
         FMLCommonHandler.instance().bus().register(new ArmorEventHandler());
         MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
         FMLCommonHandler.instance().bus().register(new AOEEventHandler());
+        if (Configurations.notice) {
+            MinecraftForge.EVENT_BUS.register(new OtherHandler());
+        }
         if (Configurations.enableChargesSystem) {
             NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
             GameRegistry.registerBlock(new XPInfuserBlock(), "XPInfuserBlock");

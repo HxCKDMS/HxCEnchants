@@ -11,7 +11,7 @@ public class EnchantConfigHandler {
         }
     }
 
-    public static int[] getData(String name, String type) {
+    public static short[] getData(String name, String type) {
         String[] tmp;
         switch(type) {
             case("armor") : tmp = Configurations.ArmorEnchants.get(name).split(", ");
@@ -26,9 +26,9 @@ public class EnchantConfigHandler {
                 break;
         }
         if (tmp != null) {
-            int[] tmp2 = new int[tmp.length-1];
+            short[] tmp2 = new short[tmp.length-1];
             for (int i = 1; i < tmp.length; i++) {
-                tmp2[i-1] = Integer.parseInt(tmp[i].trim());
+                tmp2[i-1] = Short.parseShort(tmp[i].trim());
             }
             return tmp2;
         } else return null;

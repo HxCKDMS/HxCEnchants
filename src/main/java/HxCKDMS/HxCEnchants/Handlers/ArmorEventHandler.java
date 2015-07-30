@@ -82,7 +82,7 @@ public class ArmorEventHandler {
                 }
 
                 //Chestplate Enchants
-                if (EnchantConfigHandler.isEnabled("Vitality", "armor") && ArmourChest != null) {
+                if (ArmourChest != null && ArmourChest.hasTagCompound() && EnchantConfigHandler.isEnabled("Vitality", "armor")) {
                     vitTimer--;
                     IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
                     VitalityLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, ArmourChest);
@@ -100,7 +100,7 @@ public class ArmorEventHandler {
                 }
 
                 //Legging Enchants
-                if (EnchantConfigHandler.isEnabled("Swiftness", "armor") && ArmourLegs != null) {
+                if (ArmourLegs != null && ArmourLegs.hasTagCompound() && EnchantConfigHandler.isEnabled("Swiftness", "armor")) {
                     swiftTimer--;
                     IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
                     SpeedLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, ArmourLegs);
@@ -118,83 +118,86 @@ public class ArmorEventHandler {
                 }
 
 
-                //Boot Enchants
-                if (EnchantConfigHandler.isEnabled("Fly", "armor") && ArmourBoots != null) {
-                    FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
-                    if (FlyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
-                        flyTimer--;
+                if (ArmourBoots != null && ArmourBoots.hasTagCompound()) {
+                    if (EnchantConfigHandler.isEnabled("Fly", "armor")) {
+                        FlyLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, ArmourBoots);
+                        if (FlyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
+                            flyTimer--;
 
-                    if (flyTimer <= 0 && Configurations.enableChargesSystem && BChrg > EnchantConfigHandler.getData("Fly", "armor")[4]) {
-                        flyTimer = 1200;
-                        ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("Fly", "armor")[4]);
-                    }
-                    boolean flyhbt = false;
-                    try {
-                        flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
-                    } catch (Exception ignored) {
-                    }
-                    if (FlyLevel > 0 && !player.capabilities.allowFlying && (BChrg > EnchantConfigHandler.getData("Fly", "armor")[4] * 2 || !Configurations.enableChargesSystem)) {
-                        player.capabilities.allowFlying = true;
-                        player.sendPlayerAbilities();
-                        NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
-                        if (Configurations.enableChargesSystem)
+                        if (flyTimer <= 0 && Configurations.enableChargesSystem && BChrg > EnchantConfigHandler.getData("Fly", "armor")[4]) {
+                            flyTimer = 1200;
                             ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("Fly", "armor")[4]);
+                        }
+                        boolean flyhbt = false;
+                        try {
+                            flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
+                        } catch (Exception ignored) {}
+
+                        if (FlyLevel > 0 && !player.capabilities.allowFlying && (BChrg > EnchantConfigHandler.getData("Fly", "armor")[4] * 2 || !Configurations.enableChargesSystem)) {
+                            player.capabilities.allowFlying = true;
+                            player.sendPlayerAbilities();
+                            NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
+                            if (Configurations.enableChargesSystem)
+                                ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("Fly", "armor")[4]);
+                        }
+                        if ((FlyLevel < 1 && flyhbt) || (FlyLevel > 0 && BChrg < EnchantConfigHandler.getData("Fly", "armor")[4])) {
+                            player.capabilities.allowFlying = false;
+                            player.capabilities.isFlying = false;
+                            player.sendPlayerAbilities();
+                            NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
+                        }
+                        if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
+                            player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
+                                    player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
                     }
-                    if ((FlyLevel < 1 && flyhbt) || (FlyLevel > 0 && BChrg < EnchantConfigHandler.getData("Fly", "armor")[4])) {
-                        player.capabilities.allowFlying = false;
-                        player.capabilities.isFlying = false;
-                        player.sendPlayerAbilities();
-                        NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
-                    }
-                    if (player.capabilities.isFlying && FlyLevel > 0 && !player.capabilities.isCreativeMode)
-                        player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
-                                player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
-                }
 
-                if (EnchantConfigHandler.isEnabled("Stealth", "armor") && ArmourBoots != null) {
-                    stealthTimer--;
-                    StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
+                    if (EnchantConfigHandler.isEnabled("Stealth", "armor")) {
+                        stealthTimer--;
+                        StealthLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, ArmourBoots);
 
-                    Stealth(player, StealthLevel);
+                        if (StealthLevel > 0) {
+                            Stealth(player, StealthLevel);
 
-                    if (stealthTimer <= 0 && Configurations.enableChargesSystem) {
-                        ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("Stealth", "armor")[4]);
-                        stealthTimer = 600;
-                    }
-                }
-
-                if (EnchantConfigHandler.isEnabled("FlashStep", "armor") && ArmourBoots != null && FlashButton && BChrg >= EnchantConfigHandler.getData("FlashStep", "armor")[4]) {
-                    int FlashLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlashStep.effectId, ArmourBoots);
-                    if (FlashLevel > 0) {
-                        World world = player.worldObj;
-                        Vec3 posVec = player.getPosition(1);
-                        double vx, vy, vz, x, y, z;
-                        x = posVec.xCoord;
-                        y = posVec.yCoord;
-                        z = posVec.zCoord;
-                        vx = player.getLookVec().xCoord;
-                        vy = player.getLookVec().yCoord;
-                        vz = player.getLookVec().zCoord;
-                        for (int i = 10; i < 10 + (3 * FlashLevel); i++) {
-                            if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
-                                player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
-                                if (Configurations.enableChargesSystem)
-                                    ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("FlashStep", "armor")[4]);
-                            } else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
-                                player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
-                                if (Configurations.enableChargesSystem)
-                                    ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("FlashStep", "armor")[4]);
-                            } else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
-                                player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
-                                if (Configurations.enableChargesSystem)
-                                    ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("FlashStep", "armor")[4]);
+                            if (stealthTimer <= 0 && Configurations.enableChargesSystem) {
+                                ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("Stealth", "armor")[4]);
+                                stealthTimer = 600;
                             }
                         }
                     }
-                    FlashButton = false;
+
+                    if (EnchantConfigHandler.isEnabled("FlashStep", "armor") && FlashButton && BChrg >= EnchantConfigHandler.getData("FlashStep", "armor")[4]) {
+                        int FlashLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlashStep.effectId, ArmourBoots);
+                        if (FlashLevel > 0) {
+                            World world = player.worldObj;
+                            Vec3 posVec = player.getPosition(1);
+                            double vx, vy, vz, x, y, z;
+                            x = posVec.xCoord;
+                            y = posVec.yCoord;
+                            z = posVec.zCoord;
+                            vx = player.getLookVec().xCoord;
+                            vy = player.getLookVec().yCoord;
+                            vz = player.getLookVec().zCoord;
+                            for (int i = 10; i < 10 + (3 * FlashLevel); i++) {
+                                if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
+                                    player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
+                                    if (Configurations.enableChargesSystem)
+                                        ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("FlashStep", "armor")[4]);
+                                } else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
+                                    player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
+                                    if (Configurations.enableChargesSystem)
+                                        ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("FlashStep", "armor")[4]);
+                                } else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
+                                    player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
+                                    if (Configurations.enableChargesSystem)
+                                        ArmourBoots.getTagCompound().setLong("HxCEnchantCharge", BChrg - EnchantConfigHandler.getData("FlashStep", "armor")[4]);
+                                }
+                            }
+                        }
+                        FlashButton = false;
+                    }
                 }
 
-                if (EnchantConfigHandler.isEnabled("Gluttony", "armor") && ArmourHelm != null) {
+                if (ArmourHelm != null && ArmourHelm.hasTagCompound() && EnchantConfigHandler.isEnabled("Gluttony", "armor")) {
                     int gluttony = EnchantmentHelper.getEnchantmentLevel(Enchants.Gluttony.effectId, ArmourHelm);
                     LinkedHashMap<Boolean, Item> tmp = hasFood(player);
                     if (gluttony > 0 && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && !tmp.isEmpty() && tmp.containsKey(true) && tmp.get(true) != null) {
@@ -290,7 +293,7 @@ public class ArmorEventHandler {
                 }
             }
 
-            if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
+            if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
                 int tmp = 0, tmp2 = 0;
                 if (EnchantConfigHandler.isEnabled("FeatherFall", "armor") && player.inventory.armorItemInSlot(0).getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("FeatherFall", "armor")[4])
                     tmp = EnchantmentHelper.getEnchantmentLevel(Enchants.FeatherFall.effectId, player.inventory.armorItemInSlot(0));
@@ -349,72 +352,85 @@ public class ArmorEventHandler {
     public void livingHurtEvent(LivingHurtEvent event) {
         if (event.entity instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
-            boolean allowABEffect = true;
+            boolean allowABEffect = !(event.source.damageType.equalsIgnoreCase("wither") ||
+                    event.source.damageType.equalsIgnoreCase("starve") ||
+                    event.source.damageType.equalsIgnoreCase("fall") ||
+                    event.source.damageType.equalsIgnoreCase("explosion.player") ||
+                    event.source.damageType.equalsIgnoreCase("explosion") ||
+                    event.source.damageType.equalsIgnoreCase("inWall"));
+
             ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
                     ArmourChest = player.inventory.armorItemInSlot(2);
 
             int AdrenalineBoostLevel = 0, BattleHealingLevel = 0, WitherProt = 0, DivineInterventionLevel = 0, ExplosiveDischarge = 0;
 
-            if (EnchantConfigHandler.isEnabled("BattleHealing", "armor") && ArmourChest != null && ArmourChest.hasTagCompound())
-                BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
-            if (EnchantConfigHandler.isEnabled("AdrenalineBoost", "armor") && ArmourHelm != null && ArmourHelm.hasTagCompound())
-                AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
-            if (EnchantConfigHandler.isEnabled("WitherProtection", "armor") && ArmourHelm != null && ArmourHelm.hasTagCompound())
-                WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
-            if (EnchantConfigHandler.isEnabled("DivineIntervention", "armor") && ArmourChest != null && ArmourChest.hasTagCompound())
-                DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
-            if (EnchantConfigHandler.isEnabled("ExplosiveDischarge", "armor") && ArmourChest != null && ArmourChest.hasTagCompound())
-                ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel(Enchants.ExplosiveDischarge.effectId, ArmourChest);
+            if (ArmourChest != null && ArmourChest.hasTagCompound()) {
+                if (EnchantConfigHandler.isEnabled("BattleHealing", "armor"))
+                    BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
 
-            if (event.source.damageType.equalsIgnoreCase("wither") || event.source.damageType.equalsIgnoreCase("starve") ||event.source.damageType.equalsIgnoreCase("fall") ||event.source.damageType.equalsIgnoreCase("explosion.player") ||event.source.damageType.equalsIgnoreCase("explosion") || event.source.damageType.equalsIgnoreCase("inWall"))
-                allowABEffect = false;
-            if (WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither") && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("WitherProtection", "armor")[4] || !Configurations.enableChargesSystem)) {
-                player.removePotionEffect(Potion.wither.getId());
-                event.setCanceled(true);
-                if (Configurations.enableChargesSystem)
-                    ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("WitherProtection", "armor")[4]);
-            }
-            if (BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic")) {
-                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
-                if (Configurations.enableChargesSystem)
-                    ArmourChest.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("BattleHealing", "armor")[4]);
-            }
+                if (EnchantConfigHandler.isEnabled("DivineIntervention", "armor"))
+                    DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
 
-            if(AdrenalineBoostLevel > 0 && allowABEffect && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("AdrenalineBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
-                player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, AdrenalineBoostLevel));
-                player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, AdrenalineBoostLevel));
-                if (Configurations.enableChargesSystem)
-                    ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("AdrenalineBoost", "armor")[4]);
-            }
+                if (EnchantConfigHandler.isEnabled("ExplosiveDischarge", "armor"))
+                    ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel(Enchants.ExplosiveDischarge.effectId, ArmourChest);
 
-            if (DivineInterventionLevel > 0 && player.prevHealth - event.ammount <= 1) {
-                player.heal(5);
-                int x, y, z;
-                if (player.getBedLocation(0) != null) {
-                    x = player.getBedLocation(0).posX;
-                    y = player.getBedLocation(0).posY;
-                    z = player.getBedLocation(0).posZ;
-                } else {
-                    ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
-                    x = coords.posX;
-                    y = coords.posY;
-                    z = coords.posZ;
+                if (BattleHealingLevel > 0 && event.source.damageType.equalsIgnoreCase("generic")) {
+                    player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
+                    if (Configurations.enableChargesSystem)
+                        ArmourChest.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("BattleHealing", "armor")[4]);
                 }
-                if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, x, y, z);
-                else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
-                Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
-                enchs.remove(EnchantConfigHandler.getData("DivineIntervention", "armor")[0]);
-                if (DivineInterventionLevel > 1) enchs.put(EnchantConfigHandler.getData("DivineIntevention", "armor")[0], DivineInterventionLevel - 1);
-                EnchantmentHelper.setEnchantments(enchs, ArmourChest);
-            }
 
-            if (ExplosiveDischarge > 0 && (ArmourChest.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("ExplosiveDischarge", "armor")[4] || !Configurations.enableChargesSystem)) {
-                player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 2f * ExplosiveDischarge, false);
-                if (Configurations.enableChargesSystem)
-                    ArmourChest.getTagCompound().setLong("HxCEnchantCharge", ArmourChest.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("ExplosiveDischarge", "armor")[4]);
+
+                if (DivineInterventionLevel > 0 && player.prevHealth - event.ammount <= 1) {
+                    player.heal(5);
+                    int x, y, z;
+                    if (player.getBedLocation(0) != null) {
+                        x = player.getBedLocation(0).posX;
+                        y = player.getBedLocation(0).posY;
+                        z = player.getBedLocation(0).posZ;
+                    } else {
+                        ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
+                        x = coords.posX;
+                        y = coords.posY;
+                        z = coords.posZ;
+                    }
+                    if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, x, y, z);
+                    else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                    Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
+                    enchs.remove(EnchantConfigHandler.getData("DivineIntervention", "armor")[0]);
+                    if (DivineInterventionLevel > 1) enchs.put((int)EnchantConfigHandler.getData("DivineIntevention", "armor")[0], DivineInterventionLevel - 1);
+                    EnchantmentHelper.setEnchantments(enchs, ArmourChest);
+                }
+
+                if (ExplosiveDischarge > 0 && (ArmourChest.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("ExplosiveDischarge", "armor")[4] || !Configurations.enableChargesSystem)) {
+                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 2f * ExplosiveDischarge, false);
+                    if (Configurations.enableChargesSystem)
+                        ArmourChest.getTagCompound().setLong("HxCEnchantCharge", ArmourChest.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("ExplosiveDischarge", "armor")[4]);
+                }
+            }
+            if (ArmourHelm != null && ArmourHelm.hasTagCompound()) {
+                if (EnchantConfigHandler.isEnabled("AdrenalineBoost", "armor"))
+                    AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
+
+                if (EnchantConfigHandler.isEnabled("WitherProtection", "armor"))
+                    WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
+
+                if (WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither") && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("WitherProtection", "armor")[4] || !Configurations.enableChargesSystem)) {
+                    player.removePotionEffect(Potion.wither.getId());
+                    event.setCanceled(true);
+                    if (Configurations.enableChargesSystem)
+                        ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("WitherProtection", "armor")[4]);
+                }
+
+                if(AdrenalineBoostLevel > 0 && allowABEffect && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("AdrenalineBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
+                    player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, AdrenalineBoostLevel));
+                    player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, AdrenalineBoostLevel));
+                    player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, AdrenalineBoostLevel));
+                    player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, AdrenalineBoostLevel));
+                    player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, AdrenalineBoostLevel));
+                    if (Configurations.enableChargesSystem)
+                        ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("AdrenalineBoost", "armor")[4]);
+                }
             }
         }
     }
@@ -433,7 +449,7 @@ public class ArmorEventHandler {
 
 	@SubscribeEvent
 	public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {
-		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null) {
+		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).hasTagCompound() && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).isItemEnchanted()) {
             ItemStack boots = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
             int JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, boots);
             if (JumpBoostLevel > 0 && (boots.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("JumpBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
@@ -450,7 +466,7 @@ public class ArmorEventHandler {
     public void livingFallEvent(LivingFallEvent event) {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)event.entityLiving;
-            if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).isItemEnchanted()) {
+            if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted()) {
                 ItemStack boots = player.inventory.armorItemInSlot(0);
                 int meh = 0, meh2 = 0;
                 if (EnchantConfigHandler.isEnabled("FeatherFall", "armor"))

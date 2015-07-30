@@ -37,21 +37,20 @@ import java.util.Map;
 
 @SuppressWarnings("all")
 public class ToolEventHandler {
-	int VampireLevel, ExamineLevel, VoidLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel, VorpalLevel, SCurseLevel;
+    private short VampireLevel, ExamineLevel, VoidLevel, AutoSmeltLevel, LifeStealLevel, PiercingLevel, VorpalLevel, SCurseLevel;
     FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
-	// Misc. variables
     @SubscribeEvent
     public void LivingHurtEvent(LivingHurtEvent event) {
         Entity hurtent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayer && hurtent instanceof EntityLiving && ((EntityPlayer) ent).getHeldItem() != null && ((EntityPlayer) ent).getHeldItem().getTagCompound() != null){
+        if (ent instanceof EntityPlayer && hurtent instanceof EntityLivingBase && ((EntityPlayer) ent).getHeldItem() != null && ((EntityPlayer) ent).getHeldItem().hasTagCompound()){
             EntityPlayer Attacker = (EntityPlayer) ent;
             EntityLiving Victim = (EntityLiving) hurtent;
             ItemStack item = Attacker.getHeldItem();
             long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
             if (EnchantConfigHandler.isEnabled("LifeSteal", "weapon") && (chrg > EnchantConfigHandler.getData("LifeSteal", "weapon")[4] || !Configurations.enableChargesSystem)) {
-                LifeStealLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
+                LifeStealLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, item);
                 if (LifeStealLevel > 0) {
                     Attacker.heal(event.ammount/10 * LifeStealLevel);
                     if (Configurations.enableChargesSystem)
@@ -60,7 +59,7 @@ public class ToolEventHandler {
             }
 
             if (EnchantConfigHandler.isEnabled("Piercing", "weapon") && (chrg > EnchantConfigHandler.getData("Piercing", "weapon")[4] || !Configurations.enableChargesSystem)) {
-                PiercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
+                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, item);
                 if (PiercingLevel > 0)
                     Victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageAllowedInCreativeMode()
                             .setDamageIsAbsolute(), event.ammount * Configurations.PiercingPercent);
@@ -69,14 +68,14 @@ public class ToolEventHandler {
             }
 
             if (EnchantConfigHandler.isEnabled("Vorpal", "weapon") && (chrg > EnchantConfigHandler.getData("Vorpal", "weapon")[4] || !Configurations.enableChargesSystem)) {
-                VorpalLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vorpal.effectId, item);
+                VorpalLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Vorpal.effectId, item);
                 if (VorpalLevel > 0) Victim.attackEntityFrom(new DamageSource("Vorpal").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), VorpalLevel * EnchantConfigHandler.getData("Vorpal", "weapon")[4]);
                 if (Configurations.enableChargesSystem)
                     item.getTagCompound().setLong("HxCEnchantCharge", chrg - EnchantConfigHandler.getData("Vorpal", "weapon")[4]);
             }
 
             if (EnchantConfigHandler.isEnabled("SCurse", "weapon") && (chrg > EnchantConfigHandler.getData("SCurse", "weapon")[4] || !Configurations.enableChargesSystem)) {
-                SCurseLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.SCurse.effectId, item);
+                SCurseLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.SCurse.effectId, item);
                 if (SCurseLevel > 0) {
                     Victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), EnchantConfigHandler.getData("SCurse", "weapon")[5] * SCurseLevel);
                     Attacker.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120 * SCurseLevel, SCurseLevel, true));
@@ -102,7 +101,7 @@ public class ToolEventHandler {
                     item.getTagCompound().setBoolean("StoredCharge", false);
                     Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(item);
                     enchs.remove(EnchantConfigHandler.getData("OverCharge", "weapon")[0]);
-                    if (OverChage > 1) enchs.put(EnchantConfigHandler.getData("OverCharge", "weapon")[0], OverChage - 1);
+                    if (OverChage > 1) enchs.put((int)EnchantConfigHandler.getData("OverCharge", "weapon")[0], OverChage - 1);
                     EnchantmentHelper.setEnchantments(enchs, item);
                 }
             }
@@ -113,7 +112,7 @@ public class ToolEventHandler {
 	public void LivingDeathEvent(LivingDeathEvent event) {
         Entity deadent = event.entity;
         Entity ent = event.source.getSourceOfDamage();
-        if (ent instanceof EntityPlayerMP && (deadent instanceof EntityLiving || deadent instanceof EntityPlayerMP) && (!((EntityPlayerMP) ent).getDisplayName().contains("[")) && !(ent instanceof FakePlayer)){
+        if (ent instanceof EntityPlayerMP && deadent instanceof EntityLivingBase && (!((EntityPlayerMP) ent).getDisplayName().contains("[")) && !(ent instanceof FakePlayer)){
             EntityPlayerMP Attacker = (EntityPlayerMP) ent;
             try{
                 ItemStack item;
@@ -121,8 +120,8 @@ public class ToolEventHandler {
                 else return;
                 long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
 
-                VampireLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
-                ExamineLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
+                VampireLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, item);
+                ExamineLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, item);
 
                 if (ExamineLevel > 0 && (chrg > EnchantConfigHandler.getData("Examine", "weapon")[4] || !Configurations.enableChargesSystem))
                     if (deadent instanceof EntityLiving) {
@@ -151,6 +150,7 @@ public class ToolEventHandler {
 
                     if (HxCKDMS.HxCCore.Configs.Configurations.DebugMode)
                         LogHelper.warn(Attacker + "has had their hunger increased by Vampirism.", Reference.MOD_ID);
+
                     if (Configurations.enableChargesSystem)
                         item.getTagCompound().setLong("HxCEnchantCharge", chrg - EnchantConfigHandler.getData("Vampirism", "weapon")[4]);
                 }
@@ -164,7 +164,7 @@ public class ToolEventHandler {
             ItemStack heldItem = player.getHeldItem();
 
             if (EnchantConfigHandler.isEnabled("FlameTouch", "tool")) {
-                AutoSmeltLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
+                AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, heldItem);
                 if (AutoSmeltLevel > 0 && (heldItem.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("FlameTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
                     for (int i = 0; i < event.drops.size(); i++) {
                         ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
@@ -179,8 +179,9 @@ public class ToolEventHandler {
                     }
                 }
             }
+
             if (EnchantConfigHandler.isEnabled("VoidTouch", "tool")) {
-                VoidLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.VoidTouch.effectId, heldItem);
+                VoidLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.VoidTouch.effectId, heldItem);
                 if (VoidLevel > 0 && (heldItem.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("VoidTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
                     for(String block : Configurations.VoidedItems)
                         event.drops.remove(new ItemStack(Block.getBlockFromName(block)));
