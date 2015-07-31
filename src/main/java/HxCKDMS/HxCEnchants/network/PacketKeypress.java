@@ -1,29 +1,34 @@
 package HxCKDMS.HxCEnchants.network;
 
-import HxCKDMS.HxCCore.api.AbstractPacket;
+import HxCKDMS.HxCEnchants.Handlers.ArmorEventHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
 
-public class PacketKeypress extends AbstractPacket{
-    int button;
+public class PacketKeypress implements IMessage {
+    private int keyid = -1;
+
     public PacketKeypress() {}
 
+    public PacketKeypress(int id) { this.keyid = id;}
+
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf byteBuf) {
+    public void toBytes(ByteBuf byteBuf) {
+        byteBuf.writeInt(keyid);
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf byteBuf) {
+    public void fromBytes(ByteBuf byteBuf) {
+        keyid = byteBuf.readInt();
     }
 
-    @Override
-    public void handleClientSide(EntityPlayer player) {
-        //NOOP
-    }
-
-    @Override
-    public void handleServerSide(EntityPlayer p) {
-
+    public static class handler implements IMessageHandler<PacketKeypress, IMessage> {
+        @Override
+        public IMessage onMessage(PacketKeypress message, MessageContext ctx) {
+            if (message.keyid == 1) ArmorEventHandler.FlashButton = true;
+            if (message.keyid == 2) ArmorEventHandler.OverCharge = true;
+            return null;
+        }
     }
 }

@@ -24,7 +24,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -169,11 +168,10 @@ public class ArmorEventHandler {
                         int FlashLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlashStep.effectId, ArmourBoots);
                         if (FlashLevel > 0) {
                             World world = player.worldObj;
-                            Vec3 posVec = player.getPosition(1);
                             double vx, vy, vz, x, y, z;
-                            x = posVec.xCoord;
-                            y = posVec.yCoord;
-                            z = posVec.zCoord;
+                            x = player.posX;
+                            y = player.posY;
+                            z = player.posZ;
                             vx = player.getLookVec().xCoord;
                             vy = player.getLookVec().yCoord;
                             vz = player.getLookVec().zCoord;

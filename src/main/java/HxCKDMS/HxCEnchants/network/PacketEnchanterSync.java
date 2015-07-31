@@ -40,8 +40,7 @@ public class PacketEnchanterSync implements IMessage {
         player = ByteBufUtils.readUTF8String(byteBuf);
     }
 
-    public static class handler implements IMessageHandler<PacketEnchanterSync, IMessage>
-    {
+    public static class handler implements IMessageHandler<PacketEnchanterSync, IMessage> {
         @Override
         public IMessage onMessage(PacketEnchanterSync message, MessageContext ctx) {
             TileEntity tileEntity = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.x, message.y, message.z);
@@ -52,20 +51,7 @@ public class PacketEnchanterSync implements IMessage {
                 HxCTile.player = message.player;
                 ctx.getServerHandler().playerEntity.worldObj.markBlockForUpdate(message.x, message.y, message.z);
             }
-
             return null;
         }
-/*
-        @Override
-        public void handleServerSide(EntityPlayer p) {
-            TileEntity tileEntity = p.worldObj.getTileEntity(x, y, z);
-
-            if (tileEntity != null && tileEntity instanceof XPInfuserTile) {
-                XPInfuserTile HxCTile = (XPInfuserTile) tileEntity;
-                HxCTile.xpti = xpti;
-                HxCTile.player = player;
-                p.worldObj.markBlockForUpdate(x, y, z);
-            }
-        }*/
     }
 }

@@ -46,7 +46,7 @@ public class ToolEventHandler {
         Entity ent = event.source.getSourceOfDamage();
         if (ent instanceof EntityPlayer && hurtent instanceof EntityLivingBase && ((EntityPlayer) ent).getHeldItem() != null && ((EntityPlayer) ent).getHeldItem().hasTagCompound()){
             EntityPlayer Attacker = (EntityPlayer) ent;
-            EntityLiving Victim = (EntityLiving) hurtent;
+            EntityLivingBase Victim = (EntityLivingBase) hurtent;
             ItemStack item = Attacker.getHeldItem();
             long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
             if (EnchantConfigHandler.isEnabled("LifeSteal", "weapon") && (chrg > EnchantConfigHandler.getData("LifeSteal", "weapon")[4] || !Configurations.enableChargesSystem)) {

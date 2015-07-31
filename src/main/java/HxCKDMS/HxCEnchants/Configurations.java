@@ -52,7 +52,7 @@ public class Configurations {
         ArmorEnchants.put("WitherProtection", "true, 426, 4, 8, 40, 25");
         ArmorEnchants.put("MeteorFall", "true, 427, 10, 1, 40, 50");
         ArmorEnchants.put("FeatherFall", "true, 428, 10, 1, 40, 15");
-        ArmorEnchants.put("FlashStep", "false, 429, 10, 1, 40, 120");
+        ArmorEnchants.put("FlashStep", "true, 429, 10, 1, 40, 120");
         ArmorEnchants.put("HealingAura", "true, 430, 10, 1, 40, 15");
         ArmorEnchants.put("RepulsiveAura", "true, 431, 10, 1, 40, 15");
         ArmorEnchants.put("AuraMagnetic", "true, 432, 10, 1, 40, 15");
@@ -76,7 +76,7 @@ public class Configurations {
         WeaponEnchants.put("SCurse", "true, 468, 10, 1, 55, 20, 3");
         WeaponEnchants.put("Vampirism", "true, 469, 5, 3, 45, 25");
         WeaponEnchants.put("Vorpal", "true, 470, 10, 1, 55, 20, 1");
-        WeaponEnchants.put("OverCharge", "false, 471, 4, 2, 30, 500");
+        WeaponEnchants.put("OverCharge", "true, 471, 4, 2, 30, 500");
         WeaponEnchants.put("EnchLeech", "false, 472, 4, 2, 30, 100");
         WeaponEnchants.put("Examine", "true, 473, 10, 1, 55, 25");
     }
