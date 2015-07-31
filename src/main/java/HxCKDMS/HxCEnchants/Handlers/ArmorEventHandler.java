@@ -398,7 +398,7 @@ public class ArmorEventHandler {
                     else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
                     Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
                     enchs.remove(EnchantConfigHandler.getData("DivineIntervention", "armor")[0]);
-                    if (DivineInterventionLevel > 1) enchs.put((int)EnchantConfigHandler.getData("DivineIntevention", "armor")[0], DivineInterventionLevel - 1);
+                    if (DivineInterventionLevel > 1) enchs.put((int)EnchantConfigHandler.getData("DivineIntervention", "armor")[0], DivineInterventionLevel - 1);
                     EnchantmentHelper.setEnchantments(enchs, ArmourChest);
                 }
 

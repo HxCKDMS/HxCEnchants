@@ -76,7 +76,7 @@ public class XPInfuserGUI extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0 && xpti != 0 && xpti <= xp) {
-            HxCEnchants.packetPipeline.sendToServer(new PacketEnchanterSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
+            HxCEnchants.networkWrapper.sendToServer(new PacketEnchanterSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
             xp -= xpti; xpti = 0; xp_percentage = 1;
         }
     }

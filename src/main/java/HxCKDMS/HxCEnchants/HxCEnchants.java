@@ -3,7 +3,6 @@ package HxCKDMS.HxCEnchants;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCCore.api.Configuration.Category;
 import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
-import HxCKDMS.HxCCore.network.PacketPipeline;
 import HxCKDMS.HxCEnchants.Handlers.*;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserBlock;
@@ -19,7 +18,9 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.File;
@@ -31,7 +32,7 @@ import static HxCKDMS.HxCEnchants.lib.Reference.*;
 public class HxCEnchants {
     @Instance(MOD_ID)
     public static HxCEnchants instance;
-    public static PacketPipeline packetPipeline = new PacketPipeline();
+    public static SimpleNetworkWrapper networkWrapper = new SimpleNetworkWrapper(CHANNEL_NAME);
 
     @SidedProxy(serverSide = SERVER_PROXY_CLASS, clientSide = CLIENT_PROXY_CLASS)
     public static IProxy proxy;
@@ -42,8 +43,7 @@ public class HxCEnchants {
         registerNewConfigSys(hxCConfig);
         if (Configurations.enableChargesSystem) {
             proxy.preInit(event);
-            packetPipeline.addPacket(PacketEnchanterSync.class);
-            packetPipeline.initialize(CHANNEL_NAME);
+            networkWrapper.registerMessage(PacketEnchanterSync.handler.class, PacketEnchanterSync.class, 0, Side.SERVER);
         }
     }
 
