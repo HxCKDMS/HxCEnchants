@@ -657,7 +657,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/HxCCore-1.7.10-1.6.0-dev.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/HxCCore-1.7.10-1.7.0-dev.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

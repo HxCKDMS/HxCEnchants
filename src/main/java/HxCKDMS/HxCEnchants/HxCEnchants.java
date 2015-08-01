@@ -56,6 +56,7 @@ public class HxCEnchants {
         Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
+//        FMLCommonHandler.instance().bus().register(new EventHandlers());
         if (Configurations.notice) {
             MinecraftForge.EVENT_BUS.register(new OtherHandler());
         }

@@ -61,7 +61,7 @@ public class Configurations {
         ArmorEnchants.put("Gluttony", "true, 435, 20, 1, 40, 20");
         ArmorEnchants.put("ExplosiveDischarge", "true, 436, 10, 1, 40, 120");
 
-        ToolEnchants.put("PipeMine", "false, 451, 4, 2, 30, 25");
+//        ToolEnchants.put("PipeMine", "false, 451, 4, 2, 30, 25");
         ToolEnchants.put("SpeedMine", "true, 452, 4, 2, 30, 5");
         ToolEnchants.put("VoidTouch", "true, 453, 4, 2, 30, 5");
 
@@ -79,5 +79,6 @@ public class Configurations {
         WeaponEnchants.put("OverCharge", "true, 471, 4, 2, 30, 500");
         WeaponEnchants.put("EnchLeech", "false, 472, 4, 2, 30, 100");
         WeaponEnchants.put("Examine", "true, 473, 10, 1, 55, 25");
+        WeaponEnchants.put("FlamingArrow", "true, 474, 3, 7, 20, 30");
     }
 }

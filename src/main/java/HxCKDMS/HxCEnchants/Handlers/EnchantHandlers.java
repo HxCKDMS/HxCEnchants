@@ -48,8 +48,9 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.io.File;
 import java.util.*;
 
+import static HxCKDMS.HxCEnchants.EnchantConfigHandler.getData;
+import static HxCKDMS.HxCEnchants.EnchantConfigHandler.isEnabled;
 import static HxCKDMS.HxCEnchants.lib.Reference.*;
-import static HxCKDMS.HxCEnchants.EnchantConfigHandler.*;
 
 @SuppressWarnings("all")
 public class EnchantHandlers implements IEnchantHandler {
@@ -249,6 +250,7 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerTickEvent(EntityPlayerMP player) {
+//        player.noClip = true;
         if (EnchantConfigHandler.isEnabled("OverCharge", "weapon") && player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null) {
             long HeldCharges = 0;
             if (Configurations.enableChargesSystem) {
@@ -614,7 +616,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 weapon.getTagCompound().setBoolean("StoredCharge", false);
                 Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(weapon);
                 enchs.remove(EnchantConfigHandler.getData("OverCharge", "weapon")[0]);
-                if (OverChage > 1) enchs.put((int)EnchantConfigHandler.getData("OverCharge", "weapon")[0], OverChage - 1);
+                if (OverChage > 1) enchs.put((int) EnchantConfigHandler.getData("OverCharge", "weapon")[0], OverChage - 1);
                 EnchantmentHelper.setEnchantments(enchs, weapon);
             }
         }
@@ -750,7 +752,6 @@ public class EnchantHandlers implements IEnchantHandler {
             if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDurability() != Inv.getCurrentDurability()){
                 if (Configurations.enableChargesSystem)
                     tmp = Inv.getTagCompound().getLong("HxCEnchantCharge");
-                System.out.println(Inv.getCurrentDurability());
                 int a = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Inv);
                 int b = Inv.getCurrentDurability() - a;
                 if (Inv.getCurrentDurability() > 0 && (tmp >= Inv.getCurrentDurability() || !Configurations.enableChargesSystem)) {

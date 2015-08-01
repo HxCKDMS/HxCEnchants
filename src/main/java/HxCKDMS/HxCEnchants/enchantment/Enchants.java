@@ -22,7 +22,7 @@ public class Enchants {
             Stealth, Vampirism, Venom, Vitality, Vorpal, WitherProtection,
             SpeedMine, VoidTouch, Overcharge, MeteorFall, PipeMine, EnchLeech,
             ExplosiveDischarge, FeatherFall, FlashStep, HealingAura,
-            RepulsiveAura, AuraMagnetic, GaiaAura, IcyAura, LightningArrow, Gluttony;
+            RepulsiveAura, AuraMagnetic, GaiaAura, IcyAura, LightningArrow, Gluttony, FlamingArrow;
 
     public static void load () {
         if (EnchantConfigHandler.isEnabled("AdrenalineBoost", "armor")) {
@@ -269,6 +269,12 @@ public class Enchants {
             data = EnchantConfigHandler.getData("FlashStep", "armor");
             FlashStep = new HxCEnchantment(data[0], "flashStep", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{LeadFooted});
             MinecraftForge.EVENT_BUS.register(FlashStep);
+            Enchs++;
+        }
+        if (EnchantConfigHandler.isEnabled("FlamingArrow", "weapon")) {
+            data = EnchantConfigHandler.getData("FlamingArrow", "weapon");
+            FlamingArrow = new HxCEnchantment(data[0], "flamingArrow", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
+            MinecraftForge.EVENT_BUS.register(FlamingArrow);
             Enchs++;
         }
         if (EnchantConfigHandler.isEnabled("HealingAura", "armor")) {

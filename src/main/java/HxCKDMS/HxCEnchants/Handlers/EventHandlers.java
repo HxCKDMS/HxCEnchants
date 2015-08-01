@@ -58,7 +58,7 @@ public class EventHandlers {
 
     @SubscribeEvent
     public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event) {
-        if (event.harvester != null) {
+        if (event.harvester != null && event.harvester.getHeldItem() != null) {
             EntityPlayer player = event.harvester;
             ItemStack heldItem = player.getHeldItem();
             long chrg = -1;
@@ -162,4 +162,9 @@ public class EventHandlers {
             }
         }
     }
+
+//    @SubscribeEvent
+//    public void playerTick(TickEvent.PlayerTickEvent event) {
+//        event.player.noClip = true;
+//    }
 }

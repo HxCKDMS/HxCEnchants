@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -20,11 +21,12 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 import java.util.List;
+import java.util.Random;
 
 @SuppressWarnings("all")
 public class ArrowEventHandler {
-	private boolean isExplosive, isHoming, isZeus, isPoison, isPiercing, isLightning;
-	private short ExplosionLevel, PoisonLevel, HomingLevel, ZeusLevel, PiercingLevel, LightningLevel;
+	private boolean isExplosive, isHoming, isZeus, isPoison, isPiercing, isLightning, isFlaming;
+	private short ExplosionLevel, PoisonLevel, HomingLevel, ZeusLevel, PiercingLevel, LightningLevel, FlamingLevel;
 
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
@@ -43,6 +45,8 @@ public class ArrowEventHandler {
                 PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, stack);
             if (EnchantConfigHandler.isEnabled("LightningArrow", "weapon"))
                 LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.LightningArrow.effectId, stack);
+            if (EnchantConfigHandler.isEnabled("FlamingArrow", "weapon"))
+                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.FlamingArrow.effectId, stack);
 
             isExplosive = ExplosionLevel > 0;
             isHoming = HomingLevel > 0;
@@ -50,6 +54,7 @@ public class ArrowEventHandler {
             isPoison = PoisonLevel > 0;
             isPiercing = PiercingLevel > 0;
             isLightning = LightningLevel > 0;
+            isFlaming = FlamingLevel > 0;
 
             if (Configurations.enableChargesSystem) {
                 int use = 0;
@@ -59,6 +64,7 @@ public class ArrowEventHandler {
                 if (isPoison) use += EnchantConfigHandler.getData("Poison", "weapon")[4];
                 if (isPiercing) use += EnchantConfigHandler.getData("ArrowPiercing", "weapon")[4];
                 if (isLightning) use += EnchantConfigHandler.getData("LightningArrow", "weapon")[4];
+                if (isFlaming) use += EnchantConfigHandler.getData("FlamingArrow", "weapon")[4];
 
                 long tmp = stack.getTagCompound().getLong("HxCEnchantCharge") - use;
 
@@ -68,6 +74,7 @@ public class ArrowEventHandler {
                     isExplosive = false; isHoming = false;
                     isZeus = false; isPoison = false;
                     isPiercing = false; isLightning = false;
+                    isFlaming = false;
                 }
             }
         }
@@ -121,6 +128,18 @@ public class ArrowEventHandler {
                     arrow.motionY = arrow.motionY * LightningLevel;
                     arrow.motionZ = arrow.motionZ * LightningLevel;
                     isLightning = false;
+                }
+            }
+            Random ran = new Random();
+            if (isFlaming) {
+                int x = (int)Math.round(arrow.posX), y = (int)Math.round(arrow.posY), z = (int)Math.round(arrow.posZ);
+                for (int i = x - FlamingLevel; i < x + FlamingLevel; i++) {
+                    for (int j = y - FlamingLevel; j < y + FlamingLevel; j++) {
+                        for (int k = z - FlamingLevel; k < z + FlamingLevel; k++) {
+                            if (ran.nextInt(FlamingLevel) == 0 && arrow.worldObj.isAirBlock(i,j,k))
+                                arrow.worldObj.setBlock(i, j, k, Blocks.fire);
+                        }
+                    }
                 }
             }
         }
