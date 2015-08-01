@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.Keybinds;
 
+import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
@@ -12,8 +13,9 @@ public class Keybinds {
         OverCharge = new KeyBinding("key.OverCharge", Keyboard.KEY_O, "key.categories.HxCCore");
         FlashStep = new KeyBinding("key.FlashStep", Keyboard.KEY_F, "key.categories.HxCCore");
 
-        // Register both KeyBindings to the ClientRegistry
-        ClientRegistry.registerKeyBinding(OverCharge);
-        ClientRegistry.registerKeyBinding(FlashStep);
+        if (EnchantConfigHandler.isEnabled("OverCharge", "weapon"))
+            ClientRegistry.registerKeyBinding(OverCharge);
+        if (EnchantConfigHandler.isEnabled("FlashStep", "armor"))
+            ClientRegistry.registerKeyBinding(FlashStep);
     }
 }

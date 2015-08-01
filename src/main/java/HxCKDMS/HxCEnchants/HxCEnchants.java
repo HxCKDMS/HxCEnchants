@@ -3,14 +3,16 @@ package HxCKDMS.HxCEnchants;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCCore.api.Configuration.Category;
 import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
-import HxCKDMS.HxCEnchants.Handlers.*;
+import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
+import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
+import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
+import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserBlock;
 import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.network.PacketEnchanterSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -53,10 +55,7 @@ public class HxCEnchants {
     public void init(FMLInitializationEvent event) {
         Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
-        MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
-        FMLCommonHandler.instance().bus().register(new ArmorEventHandler());
-        MinecraftForge.EVENT_BUS.register(new ToolEventHandler());
-        FMLCommonHandler.instance().bus().register(new AOEEventHandler());
+        MinecraftForge.EVENT_BUS.register(new EventHandlers());
         if (Configurations.notice) {
             MinecraftForge.EVENT_BUS.register(new OtherHandler());
         }

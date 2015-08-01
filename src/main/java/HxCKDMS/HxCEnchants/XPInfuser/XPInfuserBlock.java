@@ -27,7 +27,7 @@ public class XPInfuserBlock extends BlockContainer {
         setHardness(1.0F);
         setResistance(10.0F);
         isBlockContainer = true;
-        setBlockName("XPInfuser");
+        setUnlocalizedName("XPInfuser");
         setCreativeTab(CreativeTabs.tabDecorations);
     }
 
@@ -54,7 +54,7 @@ public class XPInfuserBlock extends BlockContainer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister){
+    public void registerIcons(IIconRegister iconRegister){
         blockIcons = new IIcon[6];
         for (int i = 0; i < 6; i++) {
             blockIcons[i] = iconRegister.registerIcon(Reference.MOD_ID + ":XPInfuser");

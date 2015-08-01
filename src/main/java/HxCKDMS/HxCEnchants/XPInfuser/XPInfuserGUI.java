@@ -38,7 +38,7 @@ public class XPInfuserGUI extends GuiContainer {
         int GUITCX = (sres.getScaledWidth() - button_width) / 2;
         int GUITCY = (sres.getScaledHeight() - 160) / 2;
 
-        addButton(new GuiButton(0, 0, 0, button_width, 20,"Infuse!"), GUITCX, GUITCY+55);
+        addButton(new GuiButton(0, 0, 0, button_width, 20, "Infuse!"), GUITCX, GUITCY + 55);
         super.initGui();
     }
 
@@ -63,7 +63,7 @@ public class XPInfuserGUI extends GuiContainer {
         for (Object button : buttonList) {
             if (button instanceof GuiButton) {
                 GuiButton btn = (GuiButton) button;
-                if (btn.func_146115_a()) {
+                if (btn.isMouseOver()) {
                     String text = "Infuse XP!";
                     List temp = Collections.singletonList(text);
                     drawHoveringText(temp, mouseX, mouseY, fontRendererObj);
@@ -130,11 +130,19 @@ public class XPInfuserGUI extends GuiContainer {
     }
 
     @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        if(state == 0)
+            dragging = false;
+
+        super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    /*@Override
     protected void mouseMovedOrUp(int x, int y, int which) {
         if(which == 0)
             dragging = false;
 
         super.mouseMovedOrUp(x, y, which);
-    }
+    }*/
 
 }
