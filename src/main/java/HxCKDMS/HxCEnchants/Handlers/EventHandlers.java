@@ -22,9 +22,10 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import static HxCKDMS.HxCEnchants.Configurations.enableChargesSystem;
 
-@SuppressWarnings("all")
+//Null pointer checked no NPE's can happen ignoring my NPE that will never be thrown because these enchants have already been configured and checked..
 public class EventHandlers {
     EnchantHandlers handler = new EnchantHandlers();
+    private int tickTimer = Configurations.updateTime;
 
     @SubscribeEvent
     public void livingHurtEvent(LivingHurtEvent event) {
@@ -40,19 +41,19 @@ public class EventHandlers {
         }
     }
 
-
     @SubscribeEvent
     public void LivingDeathEvent(LivingDeathEvent event) {
         Entity deadent = event.entity;
-        if (event.source.getSourceOfDamage() instanceof EntityPlayerMP && deadent instanceof EntityLivingBase && (!((EntityPlayerMP) event.source.getSourceOfDamage()).getDisplayName().contains("[")) && !(event.source.getSourceOfDamage() instanceof FakePlayer)){
+        if (deadent instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityPlayerMP && (!((EntityPlayerMP) event.source.getSourceOfDamage()).getDisplayName().contains("[")) && !(event.source.getSourceOfDamage() instanceof FakePlayer)){
             EntityPlayerMP Attacker = (EntityPlayerMP) event.source.getSourceOfDamage();
             ItemStack item;
             if (Attacker.getHeldItem() != null && (Attacker.getHeldItem().getItem() instanceof ItemSword || Attacker.getHeldItem().getItem() instanceof ItemAxe)) item = Attacker.getHeldItem();
             else return;
-            long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
 
-            if (item.hasTagCompound() && item.isItemEnchanted())
+            if (item.hasTagCompound() && item.isItemEnchanted()){
+				long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
                 handler.handleDeathEvent(Attacker, (EntityLivingBase)deadent, item, chrg);
+			} else return;
         }
     }
 
@@ -77,7 +78,6 @@ public class EventHandlers {
             event.newSpeed = (event.originalSpeed + event.originalSpeed*(EnchantmentHelper.getEnchantmentLevel(Enchants.SpeedMine.effectId, event.entityPlayer.getHeldItem()) / 10));
     }
 
-    private int tickTimer = Configurations.updateTime;
     @SubscribeEvent
 	public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
         if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP) {
@@ -162,9 +162,4 @@ public class EventHandlers {
             }
         }
     }
-
-//    @SubscribeEvent
-//    public void playerTick(TickEvent.PlayerTickEvent event) {
-//        event.player.noClip = true;
-//    }
 }

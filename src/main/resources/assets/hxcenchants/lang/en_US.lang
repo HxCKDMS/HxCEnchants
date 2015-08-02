@@ -48,6 +48,7 @@ enchantment.gaiaAura=Gaia's Aura
 enchantment.icyAura=Icy Aura
 enchantment.lightningArrow=Lightning Arrow
 enchantment.gluttony=Gluttony
+enchantment.flamingArrow=Flaming
 
 death.attack.Piercing=%1$s was impaled.
 death.attack.Piercing.player=%1$s was impaled by %2$s.

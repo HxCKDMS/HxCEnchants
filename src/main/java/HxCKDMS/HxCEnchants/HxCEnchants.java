@@ -31,7 +31,6 @@ import java.io.File;
 import static HxCKDMS.HxCEnchants.lib.Reference.*;
 
 @Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION, dependencies = DEPENDENCIES)
-@SuppressWarnings("unused")
 public class HxCEnchants {
     @Instance(MOD_ID)
     public static HxCEnchants instance;
@@ -56,8 +55,7 @@ public class HxCEnchants {
         Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
-//        FMLCommonHandler.instance().bus().register(new EventHandlers());
-        if (Configurations.notice) {
+        if (Configurations.notice2) {
             MinecraftForge.EVENT_BUS.register(new OtherHandler());
         }
         if (Configurations.enableChargesSystem) {

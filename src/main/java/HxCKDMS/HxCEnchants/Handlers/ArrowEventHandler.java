@@ -32,7 +32,7 @@ public class ArrowEventHandler {
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
         assert stack != null;
-        if (stack.getTagCompound() != null && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Configurations.enableChargesSystem)) {
+        if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Configurations.enableChargesSystem)) {
             if (EnchantConfigHandler.isEnabled("Zeus", "weapon"))
                 ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Zeus.effectId, stack);
             if (EnchantConfigHandler.isEnabled("ArrowSeeking", "weapon"))
@@ -124,13 +124,13 @@ public class ArrowEventHandler {
             }
             if (isLightning) {
                 if (arrow.shootingEntity != null) {
-                    arrow.motionX = arrow.motionX * LightningLevel;
-                    arrow.motionY = arrow.motionY * LightningLevel;
-                    arrow.motionZ = arrow.motionZ * LightningLevel;
+                    arrow.motionX *= LightningLevel;
+                    arrow.motionY *= LightningLevel;
+                    arrow.motionZ *= LightningLevel;
                     isLightning = false;
                 }
             }
-            Random ran = new Random();
+            Random ran = arrow.worldObj.rand;
             if (isFlaming) {
                 int x = (int)Math.round(arrow.posX), y = (int)Math.round(arrow.posY), z = (int)Math.round(arrow.posZ);
                 for (int i = x - FlamingLevel; i < x + FlamingLevel; i++) {
