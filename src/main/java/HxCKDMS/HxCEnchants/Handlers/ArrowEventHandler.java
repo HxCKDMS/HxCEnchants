@@ -86,11 +86,34 @@ public class ArrowEventHandler {
         if(event.entityLiving instanceof EntityLiving){
             EntityLivingBase ent = event.entityLiving;
             if (!event.source.isProjectile()) return;
-            if (isExplosive) ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Configurations.ExplosionDestroysTerrain);
-            if (isLightning) ent.attackEntityFrom(new DamageSource("LightningArrow"), 7);
-            if (isZeus) ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
-            if (isPoison) ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
-            if (isPiercing) ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Configurations.PiercingPercent);
+            if (isExplosive) {
+				ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Configurations.ExplosionDestroysTerrain);
+				isExplosive = false;
+			}
+            if (isLightning) {
+				ent.attackEntityFrom(new DamageSource("LightningArrow"), 7);
+				isLightning = false;
+			}
+            if (isHoming) {
+				ent.attackEntityFrom(new DamageSource("HomingArrow"), 5);
+				isHoming = false;
+			}
+			if (isFlaming) {
+				ent.attackEntityFrom(new DamageSource("FlamingArrow"), 2);
+				isFlaming = false;
+			}
+			if (isZeus) {
+				ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
+				isZeus = false;
+			}
+            if (isPoison) {
+				ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+				isPoison = false;
+			}
+            if (isPiercing) {
+				ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Configurations.PiercingPercent);
+				isPiercing = false;
+			}
         }
 	} 
 

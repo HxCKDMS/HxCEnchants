@@ -14,7 +14,7 @@ public class Configurations {
     @Config.Integer
     public static int updateTime = 10, guiVersion = 1;
     @Config.Boolean
-    public static boolean notice2 = true;
+    public static boolean notice2 = true, blacklistEnchantsFromEnchantingPlus = true;
 
     @Config.List
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
