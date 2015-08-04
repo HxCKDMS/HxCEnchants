@@ -3,7 +3,6 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -15,10 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
 import java.util.Random;
@@ -62,7 +63,7 @@ public class ArrowEventHandler {
                 if (isHoming) use += EnchantConfigHandler.getData("ArrowSeeking", "weapon")[4];
                 if (isZeus) use += EnchantConfigHandler.getData("Zeus", "weapon")[4];
                 if (isPoison) use += EnchantConfigHandler.getData("Poison", "weapon")[4];
-                if (isPiercing) use += EnchantConfigHandler.getData("ArrowPiercing", "weapon")[4];
+                if (isPiercing) use += EnchantConfigHandler.getData("Piercing", "weapon")[4];
                 if (isLightning) use += EnchantConfigHandler.getData("LightningArrow", "weapon")[4];
                 if (isFlaming) use += EnchantConfigHandler.getData("FlamingArrow", "weapon")[4];
 
@@ -86,11 +87,34 @@ public class ArrowEventHandler {
         if(event.entityLiving instanceof EntityLiving){
             EntityLivingBase ent = event.entityLiving;
             if (!event.source.isProjectile()) return;
-            if (isExplosive) ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Configurations.ExplosionDestroysTerrain);
-            if (isLightning) ent.attackEntityFrom(new DamageSource("LightningArrow"), 7);
-            if (isZeus) ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
-            if (isPoison) ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
-            if (isPiercing) ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Configurations.PiercingPercent);
+            if (isExplosive) {
+				ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Configurations.ExplosionDestroysTerrain);
+				isExplosive = false;
+			}
+            if (isLightning) {
+				ent.attackEntityFrom(new DamageSource("LightningArrow"), 7);
+				isLightning = false;
+			}
+            if (isHoming) {
+				ent.attackEntityFrom(new DamageSource("HomingArrow"), 5);
+				isHoming = false;
+			}
+			if (isFlaming) {
+				ent.attackEntityFrom(new DamageSource("FlamingArrow"), 2);
+				isFlaming = false;
+			}
+			if (isZeus) {
+				ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
+				isZeus = false;
+			}
+            if (isPoison) {
+				ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+				isPoison = false;
+			}
+            if (isPiercing) {
+				ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Configurations.PiercingPercent);
+				isPiercing = false;
+			}
         }
 	} 
 
@@ -101,7 +125,7 @@ public class ArrowEventHandler {
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
             if(isHoming) {
-                AxisAlignedBB box = arrow.boundingBox;
+                AxisAlignedBB box = arrow.getBoundingBox();
                 double size = 8 * HomingLevel;
                 List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
                 double distance = 100000;
@@ -118,7 +142,7 @@ public class ArrowEventHandler {
                     return;
 
                 double motionX = target.posX - arrow.posX;
-                double motionY = target.boundingBox.minY + target.height - arrow.posY;
+                double motionY = target.getBoundingBox().minY + target.height - arrow.posY;
                 double motionZ = target.posZ - arrow.posZ;
                 arrow.setThrowableHeading(motionX, motionY, motionZ, 2.0F, 0.0F);
             }
@@ -131,13 +155,15 @@ public class ArrowEventHandler {
                 }
             }
             Random ran = arrow.worldObj.rand;
-            if (isFlaming) {
+            if (isFlaming && FlamingLevel > 0 && FlamingLevel < 5) {
+                if (FlamingLevel < 5) {FlamingLevel/=3;}
+                if (FlamingLevel < 5) {FlamingLevel/=3;}
                 int x = (int)Math.round(arrow.posX), y = (int)Math.round(arrow.posY), z = (int)Math.round(arrow.posZ);
                 for (int i = x - FlamingLevel; i < x + FlamingLevel; i++) {
                     for (int j = y - FlamingLevel; j < y + FlamingLevel; j++) {
                         for (int k = z - FlamingLevel; k < z + FlamingLevel; k++) {
-                            if (ran.nextInt(FlamingLevel) == 0 && arrow.worldObj.isAirBlock(i,j,k))
-                                arrow.worldObj.setBlock(i, j, k, Blocks.fire);
+                            if (ran.nextInt(FlamingLevel) == 0 && arrow.worldObj.isAirBlock(new BlockPos(i,j,k)))
+                                arrow.worldObj.setBlockState(new BlockPos(i, j, k), Blocks.fire.getDefaultState());
                         }
                     }
                 }

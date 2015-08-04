@@ -9,23 +9,24 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class XPInfuserGUI extends GuiContainer {
-    private int x, y, z, xpti, xp;
+    private int xpti, xp;
+    private BlockPos pos;
     private float xp_percentage = 1;
     private boolean dragging = false;
     public XPInfuserGUI (XPInfuserContainer container, EntityPlayer player) {
         super(container);
-        this.x = container.infuserTile.xCoord;
-        this.y = container.infuserTile.yCoord;
-        this.z = container.infuserTile.zCoord;
+        this.pos = container.infuserTile.getPos();
         xp = player.experienceLevel;
     }
 
@@ -76,7 +77,7 @@ public class XPInfuserGUI extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0 && xpti != 0 && xpti <= xp) {
-            HxCEnchants.networkWrapper.sendToServer(new PacketEnchanterSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
+            HxCEnchants.networkWrapper.sendToServer(new PacketEnchanterSync(pos, xpti, mc.thePlayer.getDisplayNameString()));
             xp -= xpti; xpti = 0; xp_percentage = 1;
         }
     }
@@ -88,7 +89,7 @@ public class XPInfuserGUI extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
+    protected void mouseClicked(int x, int y, int button) throws IOException {
         if(button == 0){
             int xStart = (width - xSize) / 2;
             int yStart = (height - ySize) / 2;

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IChatComponent;
 
 public class XPInfuserTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
@@ -18,7 +19,11 @@ public class XPInfuserTile extends TileEntity implements IInventory {
     }
 
     @Override
-    public void updateEntity() {
+    public boolean shouldRenderInPass(int pass) {
+        return pass==0;
+    }
+
+    public void infuse() {
         if (xpti > 0 && !player.isEmpty()) {
             ItemStack stack = inv[0];
             if (stack != null) {
@@ -59,16 +64,6 @@ public class XPInfuserTile extends TileEntity implements IInventory {
     }
 
     @Override
-    public String getInventoryName() {
-        return "XP Infuser";
-    }
-
-    @Override
-    public boolean isCustomInventoryName() {
-        return false;
-    }
-
-    @Override
     public ItemStack decrStackSize(int slot, int amt) {
         ItemStack stack = getStackInSlot(slot);
         if (stack != null) {
@@ -100,23 +95,43 @@ public class XPInfuserTile extends TileEntity implements IInventory {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this &&
-                player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(pos) == this &&
+                player.getDistanceSq(pos.add(.5, .5, .5)) < 64;
     }
 
     @Override
-    public void openChest() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeChest() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return stack.isItemStackDamageable();
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     @Override
@@ -149,5 +164,20 @@ public class XPInfuserTile extends TileEntity implements IInventory {
             }
             tagCompound.setTag("Inventory", itemList);
         }
+    }
+
+    @Override
+    public String getCommandSenderName() {
+        return null;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return null;
     }
 }

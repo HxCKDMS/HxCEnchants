@@ -1,12 +1,15 @@
 package HxCKDMS.HxCEnchants.network;
 
 import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketEnchanterSync implements IMessage {
     private int x = 0, y = 0, z = 0, xpti = 0;
@@ -14,10 +17,10 @@ public class PacketEnchanterSync implements IMessage {
 
     public PacketEnchanterSync() {}
 
-    public PacketEnchanterSync(int x, int y, int z, int xpti, String player) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public PacketEnchanterSync(BlockPos pos, int xpti, String player) {
+        this.x = pos.getX();
+        this.y = pos.getY();
+        this.z = pos.getZ();
         this.xpti = xpti;
         this.player = player;
     }
@@ -42,15 +45,21 @@ public class PacketEnchanterSync implements IMessage {
 
     public static class handler implements IMessageHandler<PacketEnchanterSync, IMessage> {
         @Override
-        public IMessage onMessage(PacketEnchanterSync message, MessageContext ctx) {
-            TileEntity tileEntity = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.x, message.y, message.z);
+        public IMessage onMessage(final PacketEnchanterSync message, final MessageContext ctx) {
+            IThreadListener mainThread = (WorldServer)ctx.getServerHandler().playerEntity.worldObj;
+            mainThread.addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                TileEntity tileEntity = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(new BlockPos(message.x, message.y, message.z));
 
-            if (tileEntity != null && tileEntity instanceof XPInfuserTile) {
-                XPInfuserTile HxCTile = (XPInfuserTile) tileEntity;
-                HxCTile.xpti = message.xpti;
-                HxCTile.player = message.player;
-                ctx.getServerHandler().playerEntity.worldObj.markBlockForUpdate(message.x, message.y, message.z);
-            }
+                if (tileEntity != null && tileEntity instanceof XPInfuserTile) {
+                    XPInfuserTile HxCTile = (XPInfuserTile) tileEntity;
+                    HxCTile.xpti = message.xpti;
+                    HxCTile.player = message.player;
+                    HxCTile.infuse();
+                }
+                }
+            });
             return null;
         }
     }

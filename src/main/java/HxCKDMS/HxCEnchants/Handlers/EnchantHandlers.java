@@ -36,10 +36,9 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.world.BlockEvent;
@@ -155,9 +154,9 @@ public class EnchantHandlers implements IEnchantHandler {
                 player.sendPlayerAbilities();
                 NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
             }
-            if (player.capabilities.isFlying && flyLevel > 0 && !player.capabilities.isCreativeMode)
-                player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
-                        player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+//            if (player.capabilities.isFlying && flyLevel > 0 && !player.capabilities.isCreativeMode)
+//                player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
+//                        player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
         }
 
         if (isEnabled("Stealth", "armor")) {
@@ -186,15 +185,15 @@ public class EnchantHandlers implements IEnchantHandler {
                 vy = player.getLookVec().yCoord;
                 vz = player.getLookVec().zCoord;
                 for (int i = 10; i < 10 + (3 * FlashLevel); i++) {
-                    if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
+                    if (world.getBlockState(new BlockPos(x + vx * i, y + vy * i, z + vz * i)) != Blocks.air && world.getBlockState(new BlockPos(x + vx * i, (y + vy * i) + 2, z + vz * i)) == Blocks.air) {
                         player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
                         if (Configurations.enableChargesSystem)
                             boots.getTagCompound().setLong("HxCEnchantCharge", itemCharges - getData("FlashStep", "armor")[4]);
-                    } else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
+                    } else if (world.getBlockState(new BlockPos(x + vx * i, y + i, z + vz * i)) != Blocks.air && world.getBlockState(new BlockPos(x + vx * i, (y + i) + 2, z + vz * i)) == Blocks.air) {
                         player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
                         if (Configurations.enableChargesSystem)
                             boots.getTagCompound().setLong("HxCEnchantCharge", itemCharges - getData("FlashStep", "armor")[4]);
-                    } else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i)) == Blocks.air) {
+                    } else if (world.getBlockState(new BlockPos(x + vx * i, y + -i, z + vz * i)) != Blocks.air && world.getBlockState(new BlockPos(x + vx * i, (y + -i) + 2, z + vz * i)) == Blocks.air) {
                         player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
                         if (Configurations.enableChargesSystem)
                             boots.getTagCompound().setLong("HxCEnchantCharge", itemCharges - getData("FlashStep", "armor")[4]);
@@ -405,7 +404,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityLivingBase entity : list)
                     if ((Configurations.PlayerAuraDeadly || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.wither)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
+                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true, false));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - DeadlyAura[i]);
@@ -417,8 +416,8 @@ public class EnchantHandlers implements IEnchantHandler {
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>) list)
                     if ((Configurations.PlayerAuraDark || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.blindness)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true));
-                        entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true));
+                        entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true, false));
+                        entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true, false));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - DarkAura[i]);
@@ -442,9 +441,9 @@ public class EnchantHandlers implements IEnchantHandler {
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>) list)
                     if ((Configurations.PlayerAuraThick || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.moveSlowdown)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true));
-                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true));
-                        entity.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true));
+                        entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true, false));
+                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true, false));
+                        entity.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true, false));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - ThickAura[i]);
@@ -456,7 +455,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>) list)
                     if ((Configurations.PlayerAuraToxic || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.poison)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
+                        entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true, false));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - ToxicAura[i]);
@@ -467,9 +466,9 @@ public class EnchantHandlers implements IEnchantHandler {
                 short level = (short) ((GaiaAura[0] + GaiaAura[1] + GaiaAura[2] + GaiaAura[3]) / 4);
                 int ran = world.rand.nextInt(Math.round(100 / level));
                 if (ran == 0) {
-                    List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                    for (ChunkPosition pos : crops) {
-                        player.worldObj.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ).updateTick(player.worldObj, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, new Random());
+                    List<BlockPos> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
+                    for (BlockPos pos : crops) {
+                        player.worldObj.getBlockState(pos).getBlock().updateTick(player.worldObj, pos, player.worldObj.getBlockState(pos), new Random());
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - getData("GaiaAura", "armor")[4]);
@@ -482,7 +481,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>) list)
                     if ((Configurations.PlayerHealingAura || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityMob) && !entity.isDead && !entity.isPotionActive(Potion.regeneration)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 500, Math.round(level / 3), true));
+                        entity.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 500, Math.round(level / 3), true, false));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - HealingAura[i]);
@@ -492,21 +491,21 @@ public class EnchantHandlers implements IEnchantHandler {
             if (IcyAura[0] > 0 && IcyAura[1] > 0 && IcyAura[2] > 0 && IcyAura[3] > 0 && ((chrgs[0] > getData("IcyAura", "armor")[4] && chrgs[1] > getData("IcyAura", "armor")[4] && chrgs[2] > getData("IcyAura", "armor")[4] && chrgs[3] > getData("IcyAura", "armor")[4]) || !Configurations.enableChargesSystem)) {
                 short level = (short) ((IcyAura[0] + IcyAura[1] + IcyAura[2] + IcyAura[3]) / 4);
                 List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                List<ChunkPosition> blocks = getFreezablesWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
+                List<BlockPos> blocks = getFreezablesWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityLivingBase entity : (List<EntityLivingBase>) list)
                     if ((Configurations.PlayerIcyAura || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.poison)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 500, 1, true));
+                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 500, 1, true, false));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
                                 player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - IcyAura[i]);
                     }
-                for (ChunkPosition pos : blocks) {
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.lava)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.obsidian);
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.flowing_lava)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.cobblestone);
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.water)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.ice);
+                for (BlockPos pos : blocks) {
+                    if (world.getBlockState(pos) == Blocks.lava)
+                        world.setBlockState(pos, Blocks.obsidian.getDefaultState());
+                    if (world.getBlockState(pos) == Blocks.flowing_lava)
+                        world.setBlockState(pos, Blocks.cobblestone.getDefaultState());
+                    if (world.getBlockState(pos) == Blocks.water)
+                        world.setBlockState(pos, Blocks.ice.getDefaultState());
                 }
             }
 
@@ -516,7 +515,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 List exp = player.worldObj.getEntitiesWithinAABB(EntityXPOrb.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                 for (EntityItem item : (List<EntityItem>) items) {
                     double motionX = player.posX - item.posX;
-                    double motionY = player.boundingBox.minY + player.height - item.posY;
+                    double motionY = player.getBoundingBox().minY + player.height - item.posY;
                     double motionZ = player.posZ - item.posZ;
                     item.setVelocity(motionX / 8, motionY / 8, motionZ / 8);
                     if (Configurations.enableChargesSystem)
@@ -525,7 +524,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 }
                 for (EntityXPOrb xp : (List<EntityXPOrb>) exp) {
                     double motionX = player.posX - xp.posX;
-                    double motionY = player.boundingBox.minY + player.height - xp.posY;
+                    double motionY = player.getBoundingBox().minY + player.height - xp.posY;
                     double motionZ = player.posZ - xp.posZ;
                     xp.setVelocity(motionX / 2, motionY / 2, motionZ / 2);
                     if (Configurations.enableChargesSystem)
@@ -540,7 +539,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 for (EntityLivingBase ent : (List<EntityLivingBase>) list)
                     if (ent != player && !(ent instanceof EntityAnimal || ent instanceof EntityVillager || ent instanceof EntityGolem || ent instanceof EntityPlayer)) {
                         double motionX = player.posX - ent.posX;
-                        double motionY = player.boundingBox.minY + player.height - ent.posY;
+                        double motionY = player.getBoundingBox().minY + player.height - ent.posY;
                         double motionZ = player.posZ - ent.posZ;
                         ent.setVelocity(-motionX / 8, -motionY / 8, -motionZ / 8);
                         if (Configurations.enableChargesSystem)
@@ -582,9 +581,9 @@ public class EnchantHandlers implements IEnchantHandler {
             short SCurseLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.SCurse.effectId, weapon);
             if (SCurseLevel > 0) {
                 victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), getData("SCurse", "weapon")[5] * SCurseLevel);
-                player.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120 * SCurseLevel, SCurseLevel, true));
-                player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 120, Math.round(SCurseLevel /3), true));
-                player.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel * getData("SCurse", "weapon")[5], true));
+                player.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120 * SCurseLevel, SCurseLevel, true, false));
+                player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 120, Math.round(SCurseLevel /3), true, false));
+                player.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel * getData("SCurse", "weapon")[5], true, false));
                 if (Configurations.enableChargesSystem)
                     weapon.getTagCompound().setLong("HxCEnchantCharge", itemCharge - getData("SCurse", "weapon")[4]);
             }
@@ -672,21 +671,17 @@ public class EnchantHandlers implements IEnchantHandler {
             }
 
 
-            if (DivineInterventionLevel > 0 && player.prevHealth - ammount <= 1) {
+            if (DivineInterventionLevel > 0 && player.getHealth() - ammount <= 1) {
                 player.heal(5);
-                int x, y, z;
+//                int x, y, z
+                BlockPos pos;
                 if (player.getBedLocation(0) != null) {
-                    x = player.getBedLocation(0).posX;
-                    y = player.getBedLocation(0).posY;
-                    z = player.getBedLocation(0).posZ;
+                    pos = player.getBedLocation(0);
                 } else {
-                    ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
-                    x = coords.posX;
-                    y = coords.posY;
-                    z = coords.posZ;
+                    pos = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
                 }
-                if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, x, y, z);
-                else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, pos);
+                else player.playerNetServerHandler.setPlayerLocation(pos.getX(), pos.getY(), pos.getZ(), 90, 0);
                 Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
                 enchs.remove((int)getData("DivineIntervention", "armor")[0]);
                 if (DivineInterventionLevel > 1) enchs.put((int)getData("DivineIntervention", "armor")[0], DivineInterventionLevel - 1);
@@ -739,13 +734,13 @@ public class EnchantHandlers implements IEnchantHandler {
         long tmp = 0;
         for(int j = 0; j < 36; j++){
             Inv = player.inventory.getStackInSlot(j);
-            if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDurability() != Inv.getCurrentDurability()){
+            if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDamage() != Inv.getItemDamage()){
                 if (Configurations.enableChargesSystem)
                     tmp = Inv.getTagCompound().getLong("HxCEnchantCharge");
                 int a = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Inv);
-                int b = Inv.getCurrentDurability() - a;
-                if (Inv.getCurrentDurability() > 0 && (tmp >= Inv.getCurrentDurability() || !Configurations.enableChargesSystem)) {
-                    Inv.setMetadata(b);
+                int b = Inv.getItemDamage() - a;
+                if (Inv.getItemDamage() > 0 && (tmp >= Inv.getItemDamage() || !Configurations.enableChargesSystem)) {
+                    Inv.setItemDamage(b);
                     if (Configurations.enableChargesSystem)
                         Inv.getTagCompound().setLong("HxCEnchantCharge", tmp - a * getData("Repair", "other")[4]);
                 }
@@ -753,13 +748,13 @@ public class EnchantHandlers implements IEnchantHandler {
         }
         for(int j = 0; j < 4; j++){
             Armor = player.getCurrentArmor(j);
-            if (Armor != null && Armor.isItemStackDamageable() && Armor.hasTagCompound() && Armor.isItemEnchanted()){
+            if (Armor != null && Armor.isItemStackDamageable() && Armor.hasTagCompound() && Armor.isItemEnchanted() && Armor.getMaxDamage() != Armor.getItemDamage()){
                 if (Configurations.enableChargesSystem)
                     tmp = Armor.getTagCompound().getLong("HxCEnchantCharge");
                 int c = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Armor);
-                int d = Armor.getCurrentDurability() - c;
-                if (Armor.getCurrentDurability() > 0 && (tmp >= Armor.getCurrentDurability() || !Configurations.enableChargesSystem)) {
-                    Armor.setMetadata(d);
+                int d = Armor.getItemDamage() - c;
+                if (Armor.getItemDamage() > 0 && (tmp >= Armor.getItemDamage() || !Configurations.enableChargesSystem)) {
+                    Armor.setItemDamage(d);
                     if (Configurations.enableChargesSystem)
                         Armor.getTagCompound().setLong("HxCEnchantCharge", tmp - c * getData("Repair", "other")[4]);
                 }
@@ -778,30 +773,30 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    private static ArrayList<ChunkPosition> getCropsWithinAABB(World world, AxisAlignedBB box) {
-        ArrayList<ChunkPosition> crops = new ArrayList();
+    private static ArrayList<BlockPos> getCropsWithinAABB(World world, AxisAlignedBB box) {
+        ArrayList<BlockPos> crops = new ArrayList();
 
         for(int x = (int)box.minX; (double)x <= box.maxX; ++x) {
             for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
                 for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
-                    Block block = world.getBlock(x, y, z);
+                    Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
                     if(block != null && (block instanceof BlockCrops || block instanceof IGrowable || block == Blocks.cactus || block instanceof IPlantable || block == Blocks.vine))
-                        crops.add(new ChunkPosition(x, y, z));
+                        crops.add(new BlockPos(x, y, z));
                 }
             }
         }
         return crops;
     }
 
-    private static ArrayList<ChunkPosition> getFreezablesWithinAABB(World world, AxisAlignedBB box) {
-        ArrayList<ChunkPosition> blocks = new ArrayList();
+    private static ArrayList<BlockPos> getFreezablesWithinAABB(World world, AxisAlignedBB box) {
+        ArrayList<BlockPos> blocks = new ArrayList();
 
         for(int x = (int)box.minX; (double)x <= box.maxX; ++x) {
             for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
                 for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
-                    Block block = world.getBlock(x, y, z);
+                    Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
                     if(block != null && (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.water))
-                        blocks.add(new ChunkPosition(x, y, z));
+                        blocks.add(new BlockPos(x, y, z));
                 }
             }
         }

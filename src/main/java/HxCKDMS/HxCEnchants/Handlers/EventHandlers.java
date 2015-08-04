@@ -3,7 +3,6 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static HxCKDMS.HxCEnchants.Configurations.enableChargesSystem;
 
@@ -44,7 +44,7 @@ public class EventHandlers {
     @SubscribeEvent
     public void LivingDeathEvent(LivingDeathEvent event) {
         Entity deadent = event.entity;
-        if (deadent instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityPlayerMP && (!((EntityPlayerMP) event.source.getSourceOfDamage()).getDisplayName().contains("[")) && !(event.source.getSourceOfDamage() instanceof FakePlayer)){
+        if (deadent instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityPlayerMP && (!((EntityPlayer)event.source.getSourceOfDamage()).getDisplayNameString().contains("[")) && !(event.source.getSourceOfDamage() instanceof FakePlayer)){
             EntityPlayerMP Attacker = (EntityPlayerMP) event.source.getSourceOfDamage();
             ItemStack item;
             if (Attacker.getHeldItem() != null && (Attacker.getHeldItem().getItem() instanceof ItemSword || Attacker.getHeldItem().getItem() instanceof ItemAxe)) item = Attacker.getHeldItem();

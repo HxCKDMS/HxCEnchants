@@ -1,14 +1,15 @@
 package HxCKDMS.HxCEnchants.Keybinds;
+
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemSword;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 @SuppressWarnings("all")
 public class KeyInputHandler {

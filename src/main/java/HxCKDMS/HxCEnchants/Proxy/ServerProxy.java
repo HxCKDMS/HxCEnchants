@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants.Proxy;
 
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ServerProxy implements IProxy {
     @Override
