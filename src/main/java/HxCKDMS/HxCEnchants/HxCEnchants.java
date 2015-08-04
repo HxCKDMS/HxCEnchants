@@ -24,7 +24,9 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.init.Items;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.io.File;
 
@@ -60,8 +62,10 @@ public class HxCEnchants {
         }
         if (Configurations.enableChargesSystem) {
             NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
-            GameRegistry.registerBlock(new XPInfuserBlock(), "XPInfuserBlock");
+            XPInfuserBlock block = new XPInfuserBlock();
+            GameRegistry.registerBlock(block, "XPInfuserBlock");
             GameRegistry.registerTileEntity(XPInfuserTile.class, "XPInfuserTile");
+            GameRegistry.addRecipe(new ShapedOreRecipe(block, "EBE", "BDB", "EBE", 'B', Items.experience_bottle, 'E', Items.ender_eye, 'D', "gemDiamond"));
         }
     }
     

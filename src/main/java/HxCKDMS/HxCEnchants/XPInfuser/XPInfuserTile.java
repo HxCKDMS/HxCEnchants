@@ -18,7 +18,14 @@ public class XPInfuserTile extends TileEntity implements IInventory {
     }
 
     @Override
-    public void updateEntity() {
+    public void updateEntity() {}
+
+    @Override
+    public boolean canUpdate() {
+        return false;
+    }
+
+    public void infuse() {
         if (xpti > 0 && !player.isEmpty()) {
             ItemStack stack = inv[0];
             if (stack != null) {
@@ -40,6 +47,7 @@ public class XPInfuserTile extends TileEntity implements IInventory {
             }
         }
     }
+
 
     @Override
     public int getSizeInventory() {

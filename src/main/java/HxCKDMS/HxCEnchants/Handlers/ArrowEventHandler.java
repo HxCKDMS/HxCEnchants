@@ -62,7 +62,7 @@ public class ArrowEventHandler {
                 if (isHoming) use += EnchantConfigHandler.getData("ArrowSeeking", "weapon")[4];
                 if (isZeus) use += EnchantConfigHandler.getData("Zeus", "weapon")[4];
                 if (isPoison) use += EnchantConfigHandler.getData("Poison", "weapon")[4];
-                if (isPiercing) use += EnchantConfigHandler.getData("ArrowPiercing", "weapon")[4];
+                if (isPiercing) use += EnchantConfigHandler.getData("Piercing", "weapon")[4];
                 if (isLightning) use += EnchantConfigHandler.getData("LightningArrow", "weapon")[4];
                 if (isFlaming) use += EnchantConfigHandler.getData("FlamingArrow", "weapon")[4];
 
@@ -154,7 +154,9 @@ public class ArrowEventHandler {
                 }
             }
             Random ran = arrow.worldObj.rand;
-            if (isFlaming) {
+            if (isFlaming && FlamingLevel > 0 && FlamingLevel < 20) {
+                if (FlamingLevel > 5) {FlamingLevel/=3;}
+                if (FlamingLevel > 5) {FlamingLevel/=3;}
                 int x = (int)Math.round(arrow.posX), y = (int)Math.round(arrow.posY), z = (int)Math.round(arrow.posZ);
                 for (int i = x - FlamingLevel; i < x + FlamingLevel; i++) {
                     for (int j = y - FlamingLevel; j < y + FlamingLevel; j++) {

@@ -49,7 +49,7 @@ public class PacketEnchanterSync implements IMessage {
                 XPInfuserTile HxCTile = (XPInfuserTile) tileEntity;
                 HxCTile.xpti = message.xpti;
                 HxCTile.player = message.player;
-                ctx.getServerHandler().playerEntity.worldObj.markBlockForUpdate(message.x, message.y, message.z);
+                HxCTile.infuse();
             }
             return null;
         }
