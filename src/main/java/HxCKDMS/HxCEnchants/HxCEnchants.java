@@ -44,7 +44,8 @@ public class HxCEnchants {
         HxCConfig hxCConfig = new HxCConfig();
         registerNewConfigSys(hxCConfig);
         if (Configurations.enableChargesSystem) {
-            proxy.preInit(event);
+            if (!Configurations.disableKeybinds)
+                proxy.preInit(event);
             networkWrapper.registerMessage(PacketEnchanterSync.handler.class, PacketEnchanterSync.class, 0, Side.SERVER);
         }
         networkWrapper.registerMessage(PacketKeypress.handler.class, PacketKeypress.class, 1, Side.SERVER);
