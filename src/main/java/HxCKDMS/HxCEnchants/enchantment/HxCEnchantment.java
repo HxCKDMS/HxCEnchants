@@ -39,7 +39,7 @@ public class HxCEnchantment extends Enchantment {
 
     @Override
     public boolean canApplyTogether(Enchantment ench) {
-        return !bannedEnchs.contains(ench);
+        return !(bannedEnchs.contains(ench) || ench == this);
     }
 
     @Override

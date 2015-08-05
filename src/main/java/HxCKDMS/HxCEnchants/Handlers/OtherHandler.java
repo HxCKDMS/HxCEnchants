@@ -17,13 +17,15 @@ public class OtherHandler {
 
     String name = "[\u00a73DrZed\u00a7f] : ",
             a = "\u00a79This one should be 99.9% bug free!",
-            b = "\u00a73Tell me if you find the 0.1%.";
+            b = "\u00a73Tell me if you find the 0.1%.",
+            c = "\u00a73Fixed Compat with Eplus :D.";
 
     @SubscribeEvent
     public void entityJoinWorldEvent(EntityJoinWorldEvent event) {
         if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote && derp == 0) {
             ((EntityPlayer) event.entity).addChatComponentMessage(new ChatComponentText(name + a));
             ((EntityPlayer) event.entity).addChatComponentMessage(new ChatComponentText(name + b));
+            ((EntityPlayer) event.entity).addChatComponentMessage(new ChatComponentText(name + c));
             derp++;
         }
     }

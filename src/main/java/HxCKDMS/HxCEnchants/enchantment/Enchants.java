@@ -31,7 +31,7 @@ public class Enchants {
             AdrenalineBoost = new HxCEnchantment(data[0], "adrenalineBoost",data[2], EnumHxCEnchantType.ARMOR_HEAD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(AdrenalineBoost);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AdrenalineBoost.getName());
         }
         if (EnchantConfigHandler.isEnabled("AuraDark", "armor")) {
@@ -39,7 +39,7 @@ public class Enchants {
             AuraDark = new HxCEnchantment(data[0], "darkAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(AuraDark);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AuraDark.getName());
         }
         if (EnchantConfigHandler.isEnabled("AuraDeadly", "armor")) {
@@ -47,7 +47,7 @@ public class Enchants {
             AuraDeadly = new HxCEnchantment(data[0], "deadlyAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{GaiaAura, HealingAura});
             MinecraftForge.EVENT_BUS.register(AuraDeadly);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AuraDeadly.getName());
         }
         if (EnchantConfigHandler.isEnabled("AuraFiery", "armor")) {
@@ -55,7 +55,7 @@ public class Enchants {
             AuraFiery = new HxCEnchantment(data[0], "flameAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{HealingAura, GaiaAura, IcyAura});
             MinecraftForge.EVENT_BUS.register(AuraFiery);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AuraFiery.getName());
         }
         if (EnchantConfigHandler.isEnabled("AuraThick", "armor")) {
@@ -63,7 +63,7 @@ public class Enchants {
             AuraThick = new HxCEnchantment(data[0], "thickAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(AuraThick);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AuraThick.getName());
         }
         if (EnchantConfigHandler.isEnabled("AuraToxic", "armor")) {
@@ -71,7 +71,7 @@ public class Enchants {
             AuraToxic = new HxCEnchantment(data[0], "toxicAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{GaiaAura, HealingAura});
             MinecraftForge.EVENT_BUS.register(AuraToxic);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AuraToxic.getName());
         }
         if (EnchantConfigHandler.isEnabled("Regen", "armor")) {
@@ -79,7 +79,7 @@ public class Enchants {
             ArmorRegen = new HxCEnchantment(data[0], "regen", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{BattleHealing});
             MinecraftForge.EVENT_BUS.register(ArmorRegen);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", ArmorRegen.getName());
         }
         if (EnchantConfigHandler.isEnabled("ArrowExplosive", "weapon")) {
@@ -87,7 +87,7 @@ public class Enchants {
             ArrowExplosive = new HxCEnchantment(data[0], "arrowExplosive", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(ArrowExplosive);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", ArrowExplosive.getName());
         }
         if (EnchantConfigHandler.isEnabled("Zeus", "weapon")) {
@@ -95,7 +95,7 @@ public class Enchants {
             Zeus = new HxCEnchantment(data[0], "arrowZeus", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Zeus);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Zeus.getName());
         }
         if (EnchantConfigHandler.isEnabled("ArrowSeeking", "weapon")) {
@@ -103,7 +103,7 @@ public class Enchants {
             ArrowSeeking = new HxCEnchantment(data[0], "arrowSeeking", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(ArrowSeeking);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", ArrowSeeking.getName());
         }
         if (EnchantConfigHandler.isEnabled("BattleHealing", "armor")) {
@@ -111,7 +111,7 @@ public class Enchants {
             BattleHealing = new HxCEnchantment(data[0], "battleHeal", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{ArmorRegen});
             MinecraftForge.EVENT_BUS.register(BattleHealing);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", BattleHealing.getName());
         }
         if (EnchantConfigHandler.isEnabled("Bound", "other")) {
@@ -119,7 +119,7 @@ public class Enchants {
             Bound = new HxCEnchantment(data[0], "bound", data[2], EnumHxCEnchantType.ALL, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Bound);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Bound.getName());
         }
         if (EnchantConfigHandler.isEnabled("DivineIntervention", "armor")) {
@@ -127,7 +127,7 @@ public class Enchants {
             DivineIntervention = new HxCEnchantment(data[0], "divineIntervention", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(DivineIntervention);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", DivineIntervention.getName());
         }
         if (EnchantConfigHandler.isEnabled("Examine", "weapon")) {
@@ -135,7 +135,7 @@ public class Enchants {
             Examine = new HxCEnchantment(data[0], "examine", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{SoulTear});
             MinecraftForge.EVENT_BUS.register(Examine);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Examine.getName());
         }
         if (EnchantConfigHandler.isEnabled("FlameTouch", "other")) {
@@ -143,7 +143,7 @@ public class Enchants {
             FlameTouch = new HxCEnchantment(data[0], "flameTouch", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{VoidTouch});
             MinecraftForge.EVENT_BUS.register(FlameTouch);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", FlameTouch.getName());
         }
         if (EnchantConfigHandler.isEnabled("Fly" , "armor")) {
@@ -151,7 +151,7 @@ public class Enchants {
             Fly = new HxCEnchantment(data[0], "fly", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{LeadFooted, JumpBoost});
             MinecraftForge.EVENT_BUS.register(Fly);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Fly.getName());
         }
         if (EnchantConfigHandler.isEnabled("JumpBoost", "armor")) {
@@ -159,7 +159,7 @@ public class Enchants {
             JumpBoost = new HxCEnchantment(data[0], "jumpBoost", data[2], EnumHxCEnchantType.ARMOR_LEGS, data[1], data[3], new Enchantment[]{LeadFooted, Fly});
             MinecraftForge.EVENT_BUS.register(JumpBoost);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", JumpBoost.getName());
         }
         if (EnchantConfigHandler.isEnabled("LifeSteal", "weapon")) {
@@ -167,7 +167,7 @@ public class Enchants {
             LifeSteal = new HxCEnchantment(data[0], "lifeSteal", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(LifeSteal);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", LifeSteal.getName());
         }
         if (EnchantConfigHandler.isEnabled("LeadFooted", "armor")) {
@@ -175,7 +175,7 @@ public class Enchants {
             LeadFooted = new HxCEnchantment(data[0], "leadFooted", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{Swiftness, Fly, JumpBoost, FeatherFall, Enchantment.featherFalling});
             MinecraftForge.EVENT_BUS.register(LeadFooted);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", LeadFooted.getName());
         }
         if (EnchantConfigHandler.isEnabled("Poison", "weapon")) {
@@ -183,7 +183,7 @@ public class Enchants {
             Poison = new HxCEnchantment(data[0], "poison", data[2], EnumHxCEnchantType.WEAPON, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Poison);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Poison.getName());
         }
         if (EnchantConfigHandler.isEnabled("Piercing", "weapon")) {
@@ -191,7 +191,7 @@ public class Enchants {
             Piercing = new HxCEnchantment(data[0], "piercing", data[2], EnumHxCEnchantType.WEAPON, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Piercing);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Piercing.getName());
         }
         if (EnchantConfigHandler.isEnabled("Repair", "other")) {
@@ -199,7 +199,7 @@ public class Enchants {
             Repair = new HxCEnchantment(data[0], "repair", data[2], EnumHxCEnchantType.BREAKABLE, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Repair);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Repair.getName());
         }
         if (EnchantConfigHandler.isEnabled("Shroud" , "armor")){
@@ -207,7 +207,7 @@ public class Enchants {
             Shroud = new HxCEnchantment(data[0], "shroud", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Shroud);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Shroud.getName());
         }
         if (EnchantConfigHandler.isEnabled("SoulTear", "weapon")){
@@ -215,7 +215,7 @@ public class Enchants {
             SoulTear = new HxCEnchantment(data[0], "soulTear", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(SoulTear);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", SoulTear.getName());
         }
         if (EnchantConfigHandler.isEnabled("SCurse", "weapon")){
@@ -223,7 +223,7 @@ public class Enchants {
             SCurse = new HxCEnchantment(data[0], "slayersCurse", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(SCurse);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", SCurse.getName());
         }
         if (EnchantConfigHandler.isEnabled("Stealth", "armor")){
@@ -231,7 +231,7 @@ public class Enchants {
             Stealth = new HxCEnchantment(data[0], "stealth", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Stealth);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Stealth.getName());
         }
         if (EnchantConfigHandler.isEnabled("Swiftness", "armor")){
@@ -239,7 +239,7 @@ public class Enchants {
             Swiftness = new HxCEnchantment(data[0], "swiftness", data[2], EnumHxCEnchantType.ARMOR_LEGS, data[1], data[3], new Enchantment[]{LeadFooted});
             MinecraftForge.EVENT_BUS.register(Swiftness);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Swiftness.getName());
         }
         if (EnchantConfigHandler.isEnabled("Vampirism", "weapon")) {
@@ -247,7 +247,7 @@ public class Enchants {
             Vampirism = new HxCEnchantment(data[0], "vampirism", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Vampirism);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Vampirism.getName());
         }
         if (EnchantConfigHandler.isEnabled("Vitality", "armor")) {
@@ -255,7 +255,7 @@ public class Enchants {
             Vitality = new HxCEnchantment(data[0], "vitality", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Vitality);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Vitality.getName());
         }
         if (EnchantConfigHandler.isEnabled("Vorpal", "weapon")) {
@@ -263,7 +263,7 @@ public class Enchants {
             Vorpal = new HxCEnchantment(data[0], "vorpal", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Vorpal);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Vorpal.getName());
         }
         if (EnchantConfigHandler.isEnabled("WitherProtection", "armor")) {
@@ -271,7 +271,7 @@ public class Enchants {
             WitherProtection = new HxCEnchantment(data[0], "witherProt", data[2], EnumHxCEnchantType.ARMOR_HEAD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(WitherProtection);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", WitherProtection.getName());
         }
         if (EnchantConfigHandler.isEnabled("SpeedMine", "tool")) {
@@ -279,7 +279,7 @@ public class Enchants {
             SpeedMine = new HxCEnchantment(data[0], "speedMine", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(SpeedMine);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", SpeedMine.getName());
         }
         if (EnchantConfigHandler.isEnabled("VoidTouch", "tool")) {
@@ -287,7 +287,7 @@ public class Enchants {
             VoidTouch = new HxCEnchantment(data[0], "voidTouch", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{Enchantment.fortune, Enchantment.silkTouch});
             MinecraftForge.EVENT_BUS.register(VoidTouch);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", VoidTouch.getName());
         }
         if (EnchantConfigHandler.isEnabled("EnchLeech", "weapon")) {
@@ -295,7 +295,7 @@ public class Enchants {
             EnchLeech = new HxCEnchantment(data[0], "enchLeech", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(EnchLeech);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", EnchLeech.getName());
         }
         if (EnchantConfigHandler.isEnabled("PipeMine", "tool")) {
@@ -303,7 +303,7 @@ public class Enchants {
             PipeMine = new HxCEnchantment(data[0], "pipeMine", data[2], EnumHxCEnchantType.DIGGER, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(PipeMine);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", PipeMine.getName());
         }
         if (EnchantConfigHandler.isEnabled("FeatherFall", "armor")) {
@@ -311,7 +311,7 @@ public class Enchants {
             FeatherFall = new HxCEnchantment(data[0], "featherFall", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{MeteorFall});
             MinecraftForge.EVENT_BUS.register(FeatherFall);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", FeatherFall.getName());
         }
         if (EnchantConfigHandler.isEnabled("MeteorFall", "armor")) {
@@ -319,7 +319,7 @@ public class Enchants {
             MeteorFall = new HxCEnchantment(data[0], "meteorFall", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{FeatherFall, Enchantment.featherFalling, Fly});
             MinecraftForge.EVENT_BUS.register(MeteorFall);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", MeteorFall.getName());
         }
         if (EnchantConfigHandler.isEnabled("OverCharge", "weapon")) {
@@ -327,7 +327,7 @@ public class Enchants {
             Overcharge = new HxCEnchantment(data[0], "overcharge", data[2], EnumHxCEnchantType.SWORD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Overcharge);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Overcharge.getName());
         }
         if (EnchantConfigHandler.isEnabled("ExplosiveDischarge", "armor")) {
@@ -335,7 +335,7 @@ public class Enchants {
             ExplosiveDischarge = new HxCEnchantment(data[0], "explosiveDischarge", data[2], EnumHxCEnchantType.ARMOR_TORSO, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(ExplosiveDischarge);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", ExplosiveDischarge.getName());
         }
         if (EnchantConfigHandler.isEnabled("GaiaAura", "armor")) {
@@ -343,7 +343,7 @@ public class Enchants {
             GaiaAura = new HxCEnchantment(data[0], "gaiaAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraToxic, AuraFiery, IcyAura, AuraDeadly});
             MinecraftForge.EVENT_BUS.register(GaiaAura);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", GaiaAura.getName());
         }
         if (EnchantConfigHandler.isEnabled("FlashStep", "armor")) {
@@ -351,7 +351,7 @@ public class Enchants {
             FlashStep = new HxCEnchantment(data[0], "flashStep", data[2], EnumHxCEnchantType.ARMOR_FEET, data[1], data[3], new Enchantment[]{LeadFooted});
             MinecraftForge.EVENT_BUS.register(FlashStep);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", FlashStep.getName());
         }
         if (EnchantConfigHandler.isEnabled("FlamingArrow", "weapon")) {
@@ -359,7 +359,7 @@ public class Enchants {
             FlamingArrow = new HxCEnchantment(data[0], "flamingArrow", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(FlamingArrow);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", FlamingArrow.getName());
         }
         if (EnchantConfigHandler.isEnabled("HealingAura", "armor")) {
@@ -367,7 +367,7 @@ public class Enchants {
             HealingAura = new HxCEnchantment(data[0], "healingAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraToxic, AuraDeadly, AuraFiery});
             MinecraftForge.EVENT_BUS.register(HealingAura);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", HealingAura.getName());
         }
         if (EnchantConfigHandler.isEnabled("Gluttony", "armor")) {
@@ -375,7 +375,7 @@ public class Enchants {
             Gluttony = new HxCEnchantment(data[0], "gluttony", data[2], EnumHxCEnchantType.ARMOR_HEAD, data[1], data[3], new Enchantment[]{});
             MinecraftForge.EVENT_BUS.register(Gluttony);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", Gluttony.getName());
         }
         if (EnchantConfigHandler.isEnabled("RepulsiveAura", "armor")) {
@@ -383,7 +383,7 @@ public class Enchants {
             RepulsiveAura = new HxCEnchantment(data[0], "repulsiveAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraMagnetic});
             MinecraftForge.EVENT_BUS.register(RepulsiveAura);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", RepulsiveAura.getName());
         }
         if (EnchantConfigHandler.isEnabled("AuraMagnetic", "armor")) {
@@ -391,7 +391,7 @@ public class Enchants {
             AuraMagnetic = new HxCEnchantment(data[0], "auraMagnetic", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{RepulsiveAura});
             MinecraftForge.EVENT_BUS.register(AuraMagnetic);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", AuraMagnetic.getName());
         }
         if (EnchantConfigHandler.isEnabled("IcyAura", "armor")) {
@@ -399,7 +399,7 @@ public class Enchants {
             IcyAura = new HxCEnchantment(data[0], "icyAura", data[2], EnumHxCEnchantType.ARMOR, data[1], data[3], new Enchantment[]{AuraFiery});
             MinecraftForge.EVENT_BUS.register(IcyAura);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", IcyAura.getName());
         }
         if (EnchantConfigHandler.isEnabled("LightningArrow", "weapon")) {
@@ -407,7 +407,7 @@ public class Enchants {
             LightningArrow = new HxCEnchantment(data[0], "lightningArrow", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{Zeus});
             MinecraftForge.EVENT_BUS.register(LightningArrow);
             Enchs++;
-            if (Configurations.blacklistEnchantsFromEnchantingPlus)
+            if (Configurations.blacklistEnchantsFromEnchantingPlus2)
                 FMLInterModComms.sendMessage("eplus", "blacklist-enchantment", LightningArrow.getName());
         }
         if (HxCKDMS.HxCCore.Configs.Configurations.DebugMode)
