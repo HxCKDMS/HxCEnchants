@@ -127,7 +127,6 @@ public class EnchantHandlers implements IEnchantHandler {
     public void handleBootEnchant(EntityPlayerMP player, ItemStack boots, long itemCharges) {
         String UUID = player.getUniqueID().toString();
         File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-        System.out.println(EnchantmentHelper.getEnchantments(boots));
         if (isEnabled("Fly", "armor")) {
             short flyLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, boots);
             if (flyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
