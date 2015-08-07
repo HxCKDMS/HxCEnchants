@@ -93,7 +93,7 @@ public class EnchantHandlers implements IEnchantHandler {
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", vitality, 1);
             if (!ph.func_111122_c().contains(HealthBuff) && vitalityLevel != 0 && (charge > getData("Vitality", "armor")[4] || !Configurations.enableChargesSystem))
                 ph.applyModifier(HealthBuff);
-            if (ph.func_111122_c().contains(HealthBuff) && (vitalityLevel == 0 || (charge < getData("Vitality", "armor")[4]) || Configurations.enableChargesSystem))
+            if (ph.func_111122_c().contains(HealthBuff) && vitalityLevel == 0)
                 ph.removeModifier(HealthBuff);
 
             if (vitTimer <= 0 && Configurations.enableChargesSystem && vitalityLevel > 0) {
@@ -113,7 +113,7 @@ public class EnchantHandlers implements IEnchantHandler {
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 1);
             if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0 && (itemCharge > getData("Swiftness", "armor")[4] || !Configurations.enableChargesSystem))
                 ps.applyModifier(SpeedBuff);
-            if (ps.func_111122_c().contains(SpeedBuff) && (speedLevel == 0 || (itemCharge < getData("Swiftness", "armor")[4] || Configurations.enableChargesSystem)))
+            if (ps.func_111122_c().contains(SpeedBuff) && speedLevel == 0)
                 ps.removeModifier(SpeedBuff);
 
             if (swiftTimer <= 0 && Configurations.enableChargesSystem && itemCharge > getData("Swiftness", "armor")[4] && speedLevel > 0) {
@@ -132,7 +132,7 @@ public class EnchantHandlers implements IEnchantHandler {
             if (flyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
                 flyTimer--;
 
-            if (flyTimer <= 0 && Configurations.enableChargesSystem && itemCharges > getData("Fly", "armor")[4]) {
+            if (flyTimer <= 0 && Configurations.enableChargesSystem) {
                 flyTimer = 1200;
                 boots.getTagCompound().setLong("HxCEnchantCharge", itemCharges - getData("Fly", "armor")[4]);
             }
@@ -464,7 +464,7 @@ public class EnchantHandlers implements IEnchantHandler {
 
             if (GaiaAura[0] > 0 && GaiaAura[1] > 0 && GaiaAura[2] > 0 && GaiaAura[3] > 0 && ((chrgs[0] > getData("GaiaAura", "armor")[4] && chrgs[1] > getData("GaiaAura", "armor")[4] && chrgs[2] > getData("GaiaAura", "armor")[4] && chrgs[3] > getData("GaiaAura", "armor")[4]) || !Configurations.enableChargesSystem)) {
                 short level = (short) ((GaiaAura[0] + GaiaAura[1] + GaiaAura[2] + GaiaAura[3]) / 4);
-                int ran = world.rand.nextInt(Math.round(100 / level));
+                int ran = world.rand.nextInt(Math.round(80 / level));
                 if (ran == 0) {
                     List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
                     for (ChunkPosition pos : crops) {
