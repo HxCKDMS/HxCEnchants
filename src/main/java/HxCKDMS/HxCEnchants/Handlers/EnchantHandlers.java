@@ -642,12 +642,13 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerHurtEvent(EntityPlayerMP player, DamageSource source, float ammount) {
-        boolean allowABEffect = !(source.damageType.equalsIgnoreCase("wither") ||
+        boolean allowEffect = !(source.damageType.equalsIgnoreCase("wither") ||
                 source.damageType.equalsIgnoreCase("starve") ||
                 source.damageType.equalsIgnoreCase("fall") ||
                 source.damageType.equalsIgnoreCase("explosion.player") ||
                 source.damageType.equalsIgnoreCase("explosion") ||
-                source.damageType.equalsIgnoreCase("inWall"));
+                source.damageType.equalsIgnoreCase("inWall") ||
+                source.damageType.equalsIgnoreCase("poison"));
 
         ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
                 ArmourChest = player.inventory.armorItemInSlot(2);
@@ -661,7 +662,7 @@ public class EnchantHandlers implements IEnchantHandler {
             if (isEnabled("DivineIntervention", "armor"))
                 DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
 
-            if (isEnabled("ExplosiveDischarge", "armor"))
+            if (isEnabled("ExplosiveDischarge", "armor") && allowEffect)
                 ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel(Enchants.ExplosiveDischarge.effectId, ArmourChest);
 
             if (BattleHealingLevel > 0 && source.damageType.equalsIgnoreCase("generic") && (ArmourChest.getTagCompound().getLong("HxCEnchantCharge") > getData("BattleHealing", "armor")[4] || !Configurations.enableChargesSystem)) {
@@ -712,7 +713,7 @@ public class EnchantHandlers implements IEnchantHandler {
                     ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - getData("WitherProtection", "armor")[4]);
             }
 
-            if(AdrenalineBoostLevel > 0 && allowABEffect && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > getData("AdrenalineBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
+            if(AdrenalineBoostLevel > 0 && allowEffect && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > getData("AdrenalineBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, AdrenalineBoostLevel));
                 player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, AdrenalineBoostLevel));
