@@ -153,7 +153,7 @@ public class ArrowEventHandler {
                     isLightning = false;
                 }
             }
-            Random ran = arrow.worldObj.rand;
+            Random ran = new Random();
             if (isFlaming && FlamingLevel > 0 && FlamingLevel < 20) {
                 if (FlamingLevel > 5) {FlamingLevel/=3;}
                 if (FlamingLevel > 5) {FlamingLevel/=3;}
