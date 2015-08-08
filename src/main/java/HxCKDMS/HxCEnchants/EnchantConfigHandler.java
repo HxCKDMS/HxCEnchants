@@ -30,6 +30,7 @@ public class EnchantConfigHandler {
             for (int i = 1; i < tmp.length; i++) {
                 tmp2[i-1] = Short.parseShort(tmp[i].trim());
             }
+            tmp2[0] = (short)(tmp2[0] + Configurations.idShift);
             return tmp2;
         } else return null;
     }

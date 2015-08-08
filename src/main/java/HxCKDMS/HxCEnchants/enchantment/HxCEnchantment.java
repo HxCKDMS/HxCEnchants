@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
+import HxCKDMS.HxCEnchants.lib.Reference;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
@@ -14,9 +15,9 @@ public class HxCEnchantment extends Enchantment {
     private List<Enchantment> bannedEnchs;
     public EnumHxCEnchantType eType;
 
-    public HxCEnchantment(int id, ResourceLocation name, int rarity, EnumHxCEnchantType HxCType, int MaxLevel, int cost, Enchantment[] enchs) {
-        super(id, name, rarity, EnumEnchantmentType.ALL);
-        setName(name.toString());
+    public HxCEnchantment(int id, String name, int rarity, EnumHxCEnchantType HxCType, int MaxLevel, int cost, Enchantment[] enchs) {
+        super(id, new ResourceLocation(Reference.MOD_ID + ":" + name), rarity, EnumEnchantmentType.ALL);
+        setName(name);
         this.MaxLevel = MaxLevel;
         this.cost = cost;
         this.bannedEnchs = Arrays.asList(enchs);
