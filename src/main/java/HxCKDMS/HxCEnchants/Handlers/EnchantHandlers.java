@@ -92,7 +92,7 @@ public class EnchantHandlers implements IEnchantHandler {
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", vitality, 1);
             if (!ph.func_111122_c().contains(HealthBuff) && vitalityLevel != 0 && (charge > getData("Vitality", "armor")[4] || !Configurations.enableChargesSystem))
                 ph.applyModifier(HealthBuff);
-            if (ph.func_111122_c().contains(HealthBuff) && (vitalityLevel == 0 || (charge < getData("Vitality", "armor")[4]) || Configurations.enableChargesSystem))
+            if (ph.func_111122_c().contains(HealthBuff) && vitalityLevel == 0)
                 ph.removeModifier(HealthBuff);
 
             if (vitTimer <= 0 && Configurations.enableChargesSystem && vitalityLevel > 0) {
@@ -112,7 +112,7 @@ public class EnchantHandlers implements IEnchantHandler {
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 1);
             if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0 && (itemCharge > getData("Swiftness", "armor")[4] || !Configurations.enableChargesSystem))
                 ps.applyModifier(SpeedBuff);
-            if (ps.func_111122_c().contains(SpeedBuff) && (speedLevel == 0 || (itemCharge < getData("Swiftness", "armor")[4] || Configurations.enableChargesSystem)))
+            if (ps.func_111122_c().contains(SpeedBuff) && speedLevel == 0)
                 ps.removeModifier(SpeedBuff);
 
             if (swiftTimer <= 0 && Configurations.enableChargesSystem && itemCharge > getData("Swiftness", "armor")[4] && speedLevel > 0) {
