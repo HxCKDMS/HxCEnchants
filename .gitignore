@@ -1,11 +1,9 @@
 # Created by .gitignore support plugin (hsz.mobi)
 eclipse
-gradle
 HxCEnchants.ipr
 HxCEnchants.iml
 HxCEnchants.iws
 .gradle
-.gitignore
 .classpath
 .settings
 build
