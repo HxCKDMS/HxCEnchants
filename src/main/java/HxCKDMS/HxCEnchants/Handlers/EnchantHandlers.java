@@ -154,9 +154,6 @@ public class EnchantHandlers implements IEnchantHandler {
                 player.sendPlayerAbilities();
                 NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
             }
-//            if (player.capabilities.isFlying && flyLevel > 0 && !player.capabilities.isCreativeMode)
-//                player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
-//                        player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
         }
 
         if (isEnabled("Stealth", "armor")) {
