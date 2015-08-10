@@ -75,9 +75,9 @@ public class HxCEnchants {
 
     public void registerNewConfigSys(HxCConfig config) {
         config.registerCategory(new Category("General", "General Stuff"));
-        config.registerCategory(new Category("ToolEnchants", "Commands Configurations"));
-        config.registerCategory(new Category("ArmourEnchants", "Permissions System"));
-        config.registerCategory(new Category("WeaponEnchants", "Permissions System"));
+        config.registerCategory(new Category("ToolEnchants", "Tool enchants"));
+        config.registerCategory(new Category("ArmourEnchants", "Armour enchants"));
+        config.registerCategory(new Category("WeaponEnchants", "Weapon enchants"));
         config.handleConfig(Configurations.class, new File(HxCCore.HxCConfigDir, "HxCEnchants.cfg"));
     }
 }
