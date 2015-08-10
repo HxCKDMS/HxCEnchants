@@ -44,3 +44,18 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+task devJar(type: Jar) {
+	from sourceSets.main.output
+	classifier = 'dev'
+
+	manifest {
+        attributes 'FMLAT': 'accessTransformer.cfg'
+        attributes "FMLCorePluginContainsFMLMod": "true"
+        attributes "FMLCorePlugin": 'HxCKDMS.HxCCore.Asm.HxCLoader'
+    }
+}
+
+artifacts {
+	archives devJar
+}
