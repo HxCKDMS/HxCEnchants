@@ -14,11 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class XPInfuserBlock extends BlockContainer {
-    @SideOnly(Side.CLIENT)
+    //@SideOnly(Side.CLIENT)
 
     public XPInfuserBlock() {
         super(Material.rock);
