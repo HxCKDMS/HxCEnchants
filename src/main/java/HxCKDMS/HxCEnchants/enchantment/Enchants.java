@@ -92,7 +92,7 @@ public class Enchants {
         }
         if (EnchantConfigHandler.isEnabled("Zeus", "weapon")) {
             data = EnchantConfigHandler.getData("Zeus", "weapon");
-            Zeus = new HxCEnchantment(data[0], "arrowZeus", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{});
+            Zeus = new HxCEnchantment(data[0], "arrowZeus", data[2], EnumHxCEnchantType.BOW, data[1], data[3], new Enchantment[]{LightningArrow});
             MinecraftForge.EVENT_BUS.register(Zeus);
             Enchs++;
             if (Configurations.blacklistEnchantsFromEnchantingPlus2)
