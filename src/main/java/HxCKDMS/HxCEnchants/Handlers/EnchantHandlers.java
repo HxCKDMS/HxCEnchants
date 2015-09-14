@@ -308,11 +308,11 @@ public class EnchantHandlers implements IEnchantHandler {
             if (player.inventory.armorItemInSlot(3) != null)
                 H = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(3));
             if (player.inventory.armorItemInSlot(2) != null)
-                B = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(2));
+                C = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(2));
             if (player.inventory.armorItemInSlot(1) != null)
-                C = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(1));
+                L = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(1));
             if (player.inventory.armorItemInSlot(0) != null)
-                L = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(0));
+                B = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(0));
 
             if (H > 0) Regen += 1;
             if (B > 0) Regen += 1;
