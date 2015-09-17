@@ -339,9 +339,9 @@ public class EnchantHandlers implements IEnchantHandler {
             if (player.getHealth() < player.getMaxHealth() && Regen > 0) {
                 float hp = player.getMaxHealth() - player.getHealth();
                 CanRegen = getData("Regen", "armor")[4];
-                if (H > 0 && (CChrg > (hp * 2) / Regen || !Configurations.enableChargesSystem)) {
+                if (H > 0 && (HChrg > (hp * 2) / Regen || !Configurations.enableChargesSystem)) {
                     if (Configurations.enableChargesSystem)
-                        ArmourChest.getTagCompound().setLong("HxCEnchantCharge", HChrg - H * getData("Regen", "armor")[4]);
+                        ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", HChrg - H * getData("Regen", "armor")[4]);
                     player.heal(H / 2);
                 }
                 if (C > 0 && (CChrg > (hp * 2) / Regen || !Configurations.enableChargesSystem)) {
