@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
+import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
@@ -125,9 +126,9 @@ public class ArrowEventHandler {
         if (event.entity instanceof EntityArrow){
 			EntityArrow arrow = (EntityArrow) event.entity;
             if(isHoming) {
-                AxisAlignedBB box = arrow.getBoundingBox();
+                AxisAlignedBB box = AABBUtils.getAreaBoundingBox((int)arrow.posX, (int)arrow.posY, (int)arrow.posZ, 1);
                 double size = 8 * HomingLevel;
-                List<EntityLiving> possibleTargets = (List<EntityLiving>) event.entity.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
+                List<EntityLiving> possibleTargets = (List<EntityLiving>) arrow.worldObj.getEntitiesWithinAABB(EntityLiving.class, box.expand(size, size, size));
                 double distance = 100000;
                 EntityLiving target = null;
 

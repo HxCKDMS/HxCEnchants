@@ -1,11 +1,10 @@
-# Manually made by DrZed
-eclipse
-*.ipr
+.*
+!.gitignore
 *.iml
 *.iws
-.gradle
-.classpath
-.settings
-.project
-build
+*.ipr
+*.db
+*.log
+eclipse
 out
+build
