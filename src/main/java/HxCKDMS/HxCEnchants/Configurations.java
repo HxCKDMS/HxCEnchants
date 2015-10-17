@@ -19,19 +19,19 @@ public class Configurations {
     @Config.List
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
 
-    @Config.Map(description = "Enabled, ID, Weight, Cost, Charge Cost, Special", category = "Enchants")
+    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
     public static LinkedHashMap<String, String> Enchants = new LinkedHashMap<String, String>();
-    @Config.Map(description = "Enabled, ID, Weight, Cost, Charge Cost, Special", category = "WeaponEnchants")
+    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "WeaponEnchants")
     public static LinkedHashMap<String, String> WeaponEnchants = new LinkedHashMap<String, String>();
-    @Config.Map(description = "Enabled, ID, Weight, Cost, Charge Cost, Special", category = "ToolEnchants")
+    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "ToolEnchants")
     public static LinkedHashMap<String, String> ToolEnchants = new LinkedHashMap<String, String>();
-    @Config.Map(description = "Enabled, ID, Weight, Cost, Charge Cost, Special", category = "ArmourEnchants")
+    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "ArmourEnchants")
     public static LinkedHashMap<String, String> ArmorEnchants = new LinkedHashMap<String, String>();
 
     static {
         Enchants.put("Bound", "false, 400, 3, 5, 45, 0");
         Enchants.put("FlameTouch", "true, 401, 4, 2, 30, 10");
-        Enchants.put("Repair", "true, 402, 4, 1, 15, 5, 60");
+        Enchants.put("Repair", "true, 402, 4, 1, 15, 5");
 
         ArmorEnchants.put("AdrenalineBoost", "true, 410, 4, 10, 30, 50");
         ArmorEnchants.put("AuraFiery", "true, 411, 10, 5, 30, 15");
@@ -44,7 +44,7 @@ public class Configurations {
         ArmorEnchants.put("Fly", "true, 418, 1, 1, 55, 50");
         ArmorEnchants.put("JumpBoost", "true, 419, 4, 10, 10, 2");
         ArmorEnchants.put("LeadFooted", "false, 420, 1, 10, 20, 0");
-        ArmorEnchants.put("Regen", "true, 421, 4, 1, 15, 5, 60");
+        ArmorEnchants.put("Regen", "true, 421, 4, 1, 15, 5");
         ArmorEnchants.put("Shroud", "false, 422, 1, 2, 45, 0");
         ArmorEnchants.put("Stealth", "true, 423, 2, 6, 40, 25");
         ArmorEnchants.put("Swiftness", "true, 424, 4, 10, 20, 25");
@@ -63,7 +63,7 @@ public class Configurations {
 
 //        ToolEnchants.put("PipeMine", "false, 451, 4, 2, 30, 25");
         ToolEnchants.put("SpeedMine", "true, 452, 4, 2, 30, 5");
-        ToolEnchants.put("VoidTouch", "true, 453, 4, 2, 30, 5");
+        ToolEnchants.put("VoidTouch", "true, 453, 1, 2, 30, 5");
 
         WeaponEnchants.put("LightningArrow", "true, 460, 5, 1, 40, 150");
         WeaponEnchants.put("ArrowExplosive", "true, 461, 4, 2, 40, 250");

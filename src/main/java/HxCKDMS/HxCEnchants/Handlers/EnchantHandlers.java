@@ -6,12 +6,15 @@ import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Configurations;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
+import HxCKDMS.HxCEnchants.EnchantConfigHandler;
+import HxCKDMS.HxCEnchants.api.IEnchantHandler;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -42,6 +45,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.io.File;
@@ -66,7 +70,7 @@ public class EnchantHandlers implements IEnchantHandler {
     @Override
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, long itemCharge) {
         if (isEnabled("Gluttony", "armor")) {
-            short gluttony = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Gluttony.effectId, helmet);
+            short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantConfigHandler.getData("Gluttony", "armor")[0], helmet);
             LinkedHashMap<Boolean, Item> tmp = hasFood(player);
             if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && tmp.containsKey(true) && tmp.get(true) != null) {
                 player.getFoodStats().addStats(((ItemFood) Items.apple).getHealAmount(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).getSaturationModifier(new ItemStack(tmp.get(true))));
@@ -88,9 +92,9 @@ public class EnchantHandlers implements IEnchantHandler {
             long charge = chestplate.getTagCompound().getInteger("HxCEnchantCharge");
             vitTimer--;
             IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-            short vitalityLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Vitality.effectId, chestplate);
+            short vitalityLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Vitality", "armor")[0], chestplate);
             double vitality = vitalityLevel * 0.5F;
-            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", vitality, 1);
+            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", vitality, 0);
             if (!ph.func_111122_c().contains(HealthBuff) && vitalityLevel != 0 && (charge > getData("Vitality", "armor")[4] || !Configurations.enableChargesSystem))
                 ph.applyModifier(HealthBuff);
             if (ph.func_111122_c().contains(HealthBuff) && vitalityLevel == 0)
@@ -108,9 +112,9 @@ public class EnchantHandlers implements IEnchantHandler {
         if (isEnabled("Swiftness", "armor")) {
             swiftTimer--;
             IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-            short speedLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Swiftness.effectId, leggings);
+            short speedLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Swiftness", "armor")[0], leggings);
             double speedBoost = speedLevel * 0.2;
-            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 1);
+            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 0);
             if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0 && (itemCharge > getData("Swiftness", "armor")[4] || !Configurations.enableChargesSystem))
                 ps.applyModifier(SpeedBuff);
             if (ps.func_111122_c().contains(SpeedBuff) && speedLevel == 0)
@@ -128,7 +132,7 @@ public class EnchantHandlers implements IEnchantHandler {
         String UUID = player.getUniqueID().toString();
         File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
         if (isEnabled("Fly", "armor")) {
-            short flyLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Fly.effectId, boots);
+            short flyLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Fly", "armor")[0], boots);
             if (flyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
                 flyTimer--;
 
@@ -161,7 +165,7 @@ public class EnchantHandlers implements IEnchantHandler {
 
         if (isEnabled("Stealth", "armor")) {
             stealthTimer--;
-            short stealthLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Stealth.effectId, boots);
+            short stealthLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Stealth", "armor")[0], boots);
 
             if (stealthLevel > 0) {
                 Stealth(player, stealthLevel);
@@ -174,7 +178,7 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("FlashStep", "armor") && FlashButton && itemCharges >= getData("FlashStep", "armor")[4]) {
-            int FlashLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.FlashStep.effectId, boots);
+            int FlashLevel = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("FlashStep", "armor")[0], boots);
             if (FlashLevel > 0) {
                 World world = player.worldObj;
                 double vx, vy, vz, x, y, z;
@@ -206,8 +210,8 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void handleDeathEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack stack, long itemCharge) {
-        short vampireLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Vampirism.effectId, stack);
-        short examineLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Examine.effectId, stack);
+        short vampireLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Vampirism", "weapon")[0], stack);
+        short examineLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Examine", "weapon")[0], stack);
         if (examineLevel > 0 && (itemCharge > getData("Examine", "weapon")[4] || !Configurations.enableChargesSystem))
             if (victim instanceof EntityLiving) {
                 victim.worldObj.spawnEntityInWorld(new EntityXPOrb(victim.worldObj, victim.posX, victim.posY + 1, victim.posZ, examineLevel * getData("Examine", "weapon")[4]));
@@ -249,7 +253,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
             }
             boolean stored = player.getHeldItem().getTagCompound().getBoolean("StoredCharge");
-            int temp = EnchantmentHelper.getEnchantmentLevel(Enchants.Overcharge.effectId, player.getHeldItem()), RequiredCharge = getData("OverCharge", "weapon")[4];
+            int temp = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Overcharge", "weapon")[0], player.getHeldItem()), RequiredCharge = getData("OverCharge", "weapon")[4];
             if (temp > 0 && (HeldCharges >= RequiredCharge || !Configurations.enableChargesSystem) && !stored) {
                 if (OverCharge && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0) {
                     player.addChatComponentMessage(new ChatComponentText("You have just stored a charge of " + player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + "!"));
@@ -277,9 +281,9 @@ public class EnchantHandlers implements IEnchantHandler {
         if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
             int tmp = 0, tmp2 = 0;
             if (isEnabled("FeatherFall", "armor") && player.inventory.armorItemInSlot(0).getTagCompound().getLong("HxCEnchantCharge") > getData("FeatherFall", "armor")[4])
-                tmp = EnchantmentHelper.getEnchantmentLevel(Enchants.FeatherFall.effectId, player.inventory.armorItemInSlot(0));
+                tmp = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("FeatherFall", "armor")[0], player.inventory.armorItemInSlot(0));
             if (isEnabled("MeteorFall", "armor") && player.inventory.armorItemInSlot(0).getTagCompound().getLong("HxCEnchantCharge") > getData("MeteorFall", "armor")[4])
-                tmp2 = EnchantmentHelper.getEnchantmentLevel(Enchants.MeteorFall.effectId, player.inventory.armorItemInSlot(0));
+                tmp2 = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("MeteorFall", "armor")[0], player.inventory.armorItemInSlot(0));
 
             if (tmp > 0) {
                 player.motionY += (0.01f * (tmp / 2));
@@ -303,16 +307,16 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("Regen", "armor") && CanRegen <= 0) {
-            short H = 0, C = 0, L = 0, B = 0;
+            short H = 0, C = 0, L = 0, B = 0, rid = EnchantConfigHandler.getData("ArrowSeeking", "armor")[0];
             byte Regen = 0;
             if (player.inventory.armorItemInSlot(3) != null)
-                H = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(3));
+                H = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(3));
             if (player.inventory.armorItemInSlot(2) != null)
-                C = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(2));
+                C = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(2));
             if (player.inventory.armorItemInSlot(1) != null)
-                L = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(1));
+                L = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(1));
             if (player.inventory.armorItemInSlot(0) != null)
-                B = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.ArmorRegen.effectId, player.inventory.armorItemInSlot(0));
+                B = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(0));
 
             if (H > 0) Regen += 1;
             if (B > 0) Regen += 1;
@@ -375,25 +379,25 @@ public class EnchantHandlers implements IEnchantHandler {
             for (short i = 0; i < 4; i++) {
                 if (player.inventory.armorItemInSlot(i) != null) {
                     if (isEnabled("AuraDeadly", "armor"))
-                        DeadlyAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDeadly.effectId, player.inventory.armorItemInSlot(i));
+                        DeadlyAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraDeadly", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("AuraDark", "armor"))
-                        DarkAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.AuraDark.effectId, player.inventory.armorItemInSlot(i));
+                        DarkAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraDark", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("AuraFiery", "armor"))
-                        FieryAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.AuraFiery.effectId, player.inventory.armorItemInSlot(i));
+                        FieryAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraFiery", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("AuraThick", "armor"))
-                        ThickAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.AuraThick.effectId, player.inventory.armorItemInSlot(i));
+                        ThickAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraThick", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("AuraToxic", "armor"))
-                        ToxicAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.AuraToxic.effectId, player.inventory.armorItemInSlot(i));
+                        ToxicAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraToxic", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("GaiaAura", "armor"))
-                        GaiaAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.GaiaAura.effectId, player.inventory.armorItemInSlot(i));
+                        GaiaAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("GaiaAura", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("IcyAura", "armor"))
-                        IcyAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.IcyAura.effectId, player.inventory.armorItemInSlot(i));
+                        IcyAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("IcyAura", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("HealingAura", "armor"))
-                        HealingAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.HealingAura.effectId, player.inventory.armorItemInSlot(i));
+                        HealingAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("HealingAura", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("AuraMagnetic", "armor"))
-                        MagneticAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.AuraMagnetic.effectId, player.inventory.armorItemInSlot(i));
+                        MagneticAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraMagnetic", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (isEnabled("RepulsiveAura", "armor"))
-                        RepulsiveAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.RepulsiveAura.effectId, player.inventory.armorItemInSlot(i));
+                        RepulsiveAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("RepulsiveAura", "armor")[0], player.inventory.armorItemInSlot(i));
                     if (player.inventory.armorItemInSlot(i).getTagCompound() != null && Configurations.enableChargesSystem)
                         chrgs[i] = player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge");
                 }
@@ -551,9 +555,14 @@ public class EnchantHandlers implements IEnchantHandler {
     }
 
     @Override
+    public void handleAuraEvent(EntityPlayerMP player, List<Entity> ents, List<Enchantment> sharedEnchants) {
+        sharedEnchants.forEach(z -> System.out.println(z.getName()));
+    }
+
+    @Override
     public void handleAttackEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack weapon, float damage, long itemCharge) {
         if (isEnabled("LifeSteal", "weapon") && (itemCharge > getData("LifeSteal", "weapon")[4] || !Configurations.enableChargesSystem)) {
-            short lifeStealLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.LifeSteal.effectId, weapon);
+            short lifeStealLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("LifeSteal", "weapon")[0], weapon);
             if (lifeStealLevel > 0) {
                 player.heal(damage/10 * lifeStealLevel);
                 if (Configurations.enableChargesSystem)
@@ -562,7 +571,7 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("Piercing", "weapon") && (itemCharge > getData("Piercing", "weapon")[4] || !Configurations.enableChargesSystem)) {
-            short piercingLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, weapon);
+            short piercingLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("Piercing", "weapon")[0], weapon);
             if (piercingLevel > 0)
                 victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageAllowedInCreativeMode()
                         .setDamageIsAbsolute(), damage * Configurations.PiercingPercent);
@@ -571,14 +580,14 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("Vorpal", "weapon") && (itemCharge > getData("Vorpal", "weapon")[4] || !Configurations.enableChargesSystem)) {
-            short vorpalLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.Vorpal.effectId, weapon);
+            short vorpalLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("Vorpal", "weapon")[0], weapon);
             if (vorpalLevel > 0) victim.attackEntityFrom(new DamageSource("Vorpal").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), vorpalLevel * getData("Vorpal", "weapon")[4]);
             if (Configurations.enableChargesSystem)
                 weapon.getTagCompound().setLong("HxCEnchantCharge", itemCharge - getData("Vorpal", "weapon")[4]);
         }
 
         if (isEnabled("SCurse", "weapon") && (itemCharge > getData("SCurse", "weapon")[4] || !Configurations.enableChargesSystem)) {
-            short SCurseLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.SCurse.effectId, weapon);
+            short SCurseLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("SCurse", "weapon")[0], weapon);
             if (SCurseLevel > 0) {
                 victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), getData("SCurse", "weapon")[5] * SCurseLevel);
                 player.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120 * SCurseLevel, SCurseLevel, true));
@@ -590,16 +599,12 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("OverCharge", "weapon") && weapon.getTagCompound().getBoolean("StoredCharge")) {
-            int OverChage = EnchantmentHelper.getEnchantmentLevel(Enchants.Overcharge.effectId, weapon);
+            int OverChage = EnchantmentHelper.getEnchantmentLevel(getData("OverCharge", "weapon")[0], weapon);
             int storedCharge = weapon.getTagCompound().getInteger("HxCOverCharge");
             if (OverChage > 0) {
                 List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), OverChage*5));
                 int ndamage = storedCharge/list.size();
-                for (EntityLivingBase liv : list) {
-                    if (liv != player) {
-                        liv.attackEntityFrom(new DamageSource("OverCharge").setDamageIsAbsolute().setDamageAllowedInCreativeMode(), ndamage);
-                    }
-                }
+                list.stream().filter(liv -> liv != player).forEach(liv -> liv.attackEntityFrom(new DamageSource("OverCharge").setDamageIsAbsolute().setDamageAllowedInCreativeMode(), ndamage));
                 weapon.getTagCompound().setInteger("HxCOverCharge", 0);
                 weapon.getTagCompound().setBoolean("StoredCharge", false);
                 Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(weapon);
@@ -613,7 +618,7 @@ public class EnchantHandlers implements IEnchantHandler {
     @Override
     public void playerMineBlockEvent(EntityPlayer player, ItemStack tool, long itemCharge, BlockEvent.HarvestDropsEvent event) {
         if (isEnabled("FlameTouch", "tool")) {
-            int AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.FlameTouch.effectId, tool);
+            int AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel(getData("FlameTouch", "tool")[0], tool);
             if (AutoSmeltLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > getData("FlameTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
                 for (int i = 0; i < event.drops.size(); i++) {
                     ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
@@ -630,7 +635,7 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("VoidTouch", "tool")) {
-            short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel(Enchants.VoidTouch.effectId, tool);
+            short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("VoidTouch", "tool")[0], tool);
             if (voidLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > getData("VoidTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
                 for(String block : Configurations.VoidedItems)
                     event.drops.remove(new ItemStack(Block.getBlockFromName(block)));
@@ -641,7 +646,7 @@ public class EnchantHandlers implements IEnchantHandler {
     }
 
     @Override
-    public void playerHurtEvent(EntityPlayerMP player, DamageSource source, float ammount) {
+    public void playerHurtEvent(EntityPlayerMP player, DamageSource source, float ammount, LivingHurtEvent event) {
         boolean allowEffect = !(source.damageType.equalsIgnoreCase("wither") ||
                 source.damageType.equalsIgnoreCase("starve") ||
                 source.damageType.equalsIgnoreCase("fall") ||
@@ -657,13 +662,13 @@ public class EnchantHandlers implements IEnchantHandler {
 
         if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted()) {
             if (isEnabled("BattleHealing", "armor"))
-                BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.BattleHealing.effectId, ArmourChest);
+                BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel(getData("BattleHealing", "armor")[0], ArmourChest);
 
             if (isEnabled("DivineIntervention", "armor"))
-                DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.DivineIntervention.effectId, ArmourChest);
+                DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel(getData("DivineIntervention", "armor")[0], ArmourChest);
 
             if (isEnabled("ExplosiveDischarge", "armor") && allowEffect)
-                ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel(Enchants.ExplosiveDischarge.effectId, ArmourChest);
+                ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel(getData("ExplosiveDischarge", "armor")[0], ArmourChest);
 
             if (BattleHealingLevel > 0 && source.damageType.equalsIgnoreCase("generic") && (ArmourChest.getTagCompound().getLong("HxCEnchantCharge") > getData("BattleHealing", "armor")[4] || !Configurations.enableChargesSystem)) {
                 player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
@@ -702,13 +707,13 @@ public class EnchantHandlers implements IEnchantHandler {
 
         if (ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted()) {
             if (isEnabled("AdrenalineBoost", "armor"))
-                AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.AdrenalineBoost.effectId, ArmourHelm);
+                AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel(getData("AdrenalineBoost", "armor")[0], ArmourHelm);
 
             if (isEnabled("WitherProtection", "armor"))
-                WitherProt = EnchantmentHelper.getEnchantmentLevel(Enchants.WitherProtection.effectId, ArmourHelm);
+                WitherProt = EnchantmentHelper.getEnchantmentLevel(getData("WitherProtection", "armor")[0], ArmourHelm);
 
             if (WitherProt > 0 && source.damageType.equalsIgnoreCase("wither") && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > getData("WitherProtection", "armor")[4] || !Configurations.enableChargesSystem)) {
-                player.removePotionEffect(Potion.wither.getId());
+                event.setCanceled(true);
                 if (Configurations.enableChargesSystem)
                     ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") - getData("WitherProtection", "armor")[4]);
             }
@@ -742,7 +747,7 @@ public class EnchantHandlers implements IEnchantHandler {
             if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDurability() != Inv.getCurrentDurability()){
                 if (Configurations.enableChargesSystem)
                     tmp = Inv.getTagCompound().getLong("HxCEnchantCharge");
-                int a = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Inv);
+                int a = EnchantmentHelper.getEnchantmentLevel(getData("Repair", "other")[0], Inv);
                 int b = Inv.getCurrentDurability() - a;
                 if (Inv.getCurrentDurability() > 0 && (tmp >= Inv.getCurrentDurability() || !Configurations.enableChargesSystem)) {
                     Inv.setMetadata(b);
@@ -756,7 +761,7 @@ public class EnchantHandlers implements IEnchantHandler {
             if (Armor != null && Armor.isItemStackDamageable() && Armor.hasTagCompound() && Armor.isItemEnchanted()){
                 if (Configurations.enableChargesSystem)
                     tmp = Armor.getTagCompound().getLong("HxCEnchantCharge");
-                int c = EnchantmentHelper.getEnchantmentLevel(Enchants.Repair.effectId, Armor);
+                int c = EnchantmentHelper.getEnchantmentLevel(getData("Repair", "other")[0], Armor);
                 int d = Armor.getCurrentDurability() - c;
                 if (Armor.getCurrentDurability() > 0 && (tmp >= Armor.getCurrentDurability() || !Configurations.enableChargesSystem)) {
                     Armor.setMetadata(d);

@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.XPInfuser;
+package HxCKDMS.HxCEnchants.Blocks.XPInfuser;
 
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;

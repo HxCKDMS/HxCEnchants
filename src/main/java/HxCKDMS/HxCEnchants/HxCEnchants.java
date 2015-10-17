@@ -8,10 +8,10 @@ import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
-import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserBlock;
-import HxCKDMS.HxCEnchants.XPInfuser.XPInfuserTile;
+import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
+import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
-import HxCKDMS.HxCEnchants.network.PacketEnchanterSync;
+import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -48,7 +48,7 @@ public class HxCEnchants {
         if (Configurations.enableChargesSystem) {
             if (Configurations.EnableKeybinds)
                 proxy.preInit(event);
-            networkWrapper.registerMessage(PacketEnchanterSync.handler.class, PacketEnchanterSync.class, 0, Side.SERVER);
+            networkWrapper.registerMessage(PacketInfuserSync.handler.class, PacketInfuserSync.class, 0, Side.SERVER);
         }
         networkWrapper.registerMessage(PacketKeypress.handler.class, PacketKeypress.class, 1, Side.SERVER);
     }

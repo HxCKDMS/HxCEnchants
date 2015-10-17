@@ -1,9 +1,10 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
+import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +21,10 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import static HxCKDMS.HxCEnchants.Configurations.enableChargesSystem;
 
 //Null pointer checked no NPE's can happen ignoring my NPE that will never be thrown because these enchants have already been configured and checked..
@@ -30,7 +35,7 @@ public class EventHandlers {
     @SubscribeEvent
     public void livingHurtEvent(LivingHurtEvent event) {
         if (event.entityLiving instanceof EntityPlayerMP) {
-            handler.playerHurtEvent((EntityPlayerMP)event.entityLiving, event.source, event.ammount);
+            handler.playerHurtEvent((EntityPlayerMP)event.entityLiving, event.source, event.ammount, event);
         }
         if (event.source.getSourceOfDamage() instanceof EntityPlayerMP && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem() != null && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem().hasTagCompound() && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem().isItemEnchanted()) {
             EntityPlayerMP player = (EntityPlayerMP)event.source.getSourceOfDamage();
@@ -53,7 +58,7 @@ public class EventHandlers {
             if (item.hasTagCompound() && item.isItemEnchanted()){
 				long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
                 handler.handleDeathEvent(Attacker, (EntityLivingBase)deadent, item, chrg);
-			} else return;
+			}
         }
     }
 
@@ -74,11 +79,12 @@ public class EventHandlers {
 
     @SubscribeEvent
     public void PlayerEvent(PlayerEvent.BreakSpeed event) {
-        if (EnchantConfigHandler.isEnabled("SpeedMine", "tool") && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel(Enchants.SpeedMine.effectId, event.entityPlayer.getHeldItem()) > 0)
-            event.newSpeed = (event.originalSpeed + event.originalSpeed*(EnchantmentHelper.getEnchantmentLevel(Enchants.SpeedMine.effectId, event.entityPlayer.getHeldItem()) / 10));
+        if (EnchantConfigHandler.isEnabled("SpeedMine", "tool") && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("SpeedMine", "other")[0], event.entityPlayer.getHeldItem()) > 0)
+            event.newSpeed = (event.originalSpeed + event.originalSpeed*(EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("SpeedMine", "other")[0], event.entityPlayer.getHeldItem()) / 10));
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unchecked")
 	public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
         if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
@@ -113,13 +119,34 @@ public class EventHandlers {
                     handler.handleLeggingEnchant(player, ArmourLegs, LChrg);
                 }
 
-
                 if (ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted()) {
                     handler.handleBootEnchant(player, ArmourBoots, BChrg);
                 }
 
                 if (ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted()) {
                     handler.handleHelmetEnchant(player, ArmourHelm, HChrg);
+                }
+
+                List ents = player.worldObj.getEntitiesWithinAABB(Entity.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), 10));
+                if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted() &&
+                        ArmourLegs != null && ArmourLegs.hasTagCompound() && ArmourLegs.isItemEnchanted() &&
+                        ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted() &&
+                        ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted() &&
+                        !ents.isEmpty()) {
+                    List<Enchantment> sharedEnchants = new ArrayList<>();
+                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>)EnchantmentHelper.getEnchantments(ArmourBoots);
+                    ((LinkedHashMap<Integer, Integer>) EnchantmentHelper.getEnchantments(ArmourLegs)).forEach(enchs::putIfAbsent);
+                    ((LinkedHashMap<Integer, Integer>) EnchantmentHelper.getEnchantments(ArmourChest)).forEach(enchs::putIfAbsent);
+                    ((LinkedHashMap<Integer, Integer>) EnchantmentHelper.getEnchantments(ArmourHelm)).forEach(enchs::putIfAbsent);
+                    enchs.keySet().forEach(ench -> {
+                                if (EnchantmentHelper.getEnchantments(ArmourBoots).containsKey(ench) &&
+                                        EnchantmentHelper.getEnchantments(ArmourLegs).containsKey(ench) &&
+                                        EnchantmentHelper.getEnchantments(ArmourChest).containsKey(ench) &&
+                                        EnchantmentHelper.getEnchantments(ArmourHelm).containsKey(ench))
+                                    sharedEnchants.add(Enchantment.enchantmentsList[ench]);
+                            });
+                    if (sharedEnchants != null && !sharedEnchants.isEmpty())
+                        handler.handleAuraEvent(player, ents, sharedEnchants);
                 }
             }
         }
@@ -129,7 +156,7 @@ public class EventHandlers {
 	public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {
 		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).hasTagCompound() && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).isItemEnchanted()) {
             ItemStack boots = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
-            int JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel(Enchants.JumpBoost.effectId, boots);
+            int JumpBoostLevel = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("JumpBoost", "armor")[0], boots);
             if (JumpBoostLevel > 0 && (boots.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("JumpBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
                 double JumpBuff = player.motionY + 0.1 * JumpBoostLevel;
@@ -148,9 +175,9 @@ public class EventHandlers {
                 ItemStack boots = player.inventory.armorItemInSlot(0);
                 int meh = 0, meh2 = 0;
                 if (EnchantConfigHandler.isEnabled("FeatherFall", "armor"))
-                    meh = EnchantmentHelper.getEnchantmentLevel(Enchants.FeatherFall.effectId, boots);
+                    meh = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("FeatherFall", "armor")[0], boots);
                 if (EnchantConfigHandler.isEnabled("MeteorFall", "armor"))
-                    meh2 = EnchantmentHelper.getEnchantmentLevel(Enchants.MeteorFall.effectId, boots);
+                    meh2 = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("MeteorFall", "armor")[0], boots);
 
                 if (meh < 4 && meh > 0)event.distance /= meh;
                 else if (meh > 4) event.distance = 0;

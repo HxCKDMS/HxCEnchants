@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.XPInfuser;
+package HxCKDMS.HxCEnchants.Blocks.XPInfuser;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

@@ -1,9 +1,9 @@
-package HxCKDMS.HxCEnchants.XPInfuser;
+package HxCKDMS.HxCEnchants.Blocks.HxCEnchanter;
 
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
-import HxCKDMS.HxCEnchants.network.PacketEnchanterSync;
+import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -17,15 +17,15 @@ import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class XPInfuserGUI extends GuiContainer {
+public class HxCEnchanterGUI extends GuiContainer {
     private int x, y, z, xpti, xp;
     private float xp_percentage = 1;
     private boolean dragging = false;
-    public XPInfuserGUI (XPInfuserContainer container, EntityPlayer player) {
+    public HxCEnchanterGUI(HxCEnchanterContainer container, EntityPlayer player) {
         super(container);
-        this.x = container.infuserTile.xCoord;
-        this.y = container.infuserTile.yCoord;
-        this.z = container.infuserTile.zCoord;
+        this.x = container.enchanterTile.xCoord;
+        this.y = container.enchanterTile.yCoord;
+        this.z = container.enchanterTile.zCoord;
         xp = player.experienceLevel;
     }
 
@@ -38,7 +38,7 @@ public class XPInfuserGUI extends GuiContainer {
         int GUITCX = (sres.getScaledWidth() - button_width) / 2;
         int GUITCY = (sres.getScaledHeight() - 160) / 2;
 
-        addButton(new GuiButton(0, 0, 0, button_width, 20, "Infuse!"), GUITCX, GUITCY + 55);
+        addButton(new GuiButton(0, 0, 0, button_width, 20, "Enchant!"), GUITCX, GUITCY + 55);
         super.initGui();
     }
 
@@ -46,7 +46,7 @@ public class XPInfuserGUI extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/XPInfuserGUI" + Configurations.guiVersion + ".png"));
+        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/XPEnchanterGUI" + Configurations.guiVersion + ".png"));
         int xStart = (width - xSize) / 2;
         int yStart = (height - ySize) / 2;
         drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
@@ -70,13 +70,13 @@ public class XPInfuserGUI extends GuiContainer {
                 }
             }
         }
-        drawString(fontRendererObj, "XP to infuse : " + xpti, width / 2 - 35, yStart - 10, Color.white.getRGB());
+        drawString(fontRendererObj, "XP to enchant with : " + xpti, width / 2 - 35, yStart - 10, Color.white.getRGB());
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0 && xpti != 0 && xpti <= xp) {
-            HxCEnchants.networkWrapper.sendToServer(new PacketEnchanterSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
+            HxCEnchants.networkWrapper.sendToServer(new PacketInfuserSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
             xp -= xpti; xpti = 0; xp_percentage = 1;
         }
     }

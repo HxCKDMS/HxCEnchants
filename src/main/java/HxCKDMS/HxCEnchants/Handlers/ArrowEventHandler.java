@@ -2,7 +2,6 @@ package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -34,19 +33,19 @@ public class ArrowEventHandler {
         assert stack != null;
         if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Configurations.enableChargesSystem)) {
             if (EnchantConfigHandler.isEnabled("Zeus", "weapon"))
-                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Zeus.effectId, stack);
+                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Zeus", "weapon")[0], stack);
             if (EnchantConfigHandler.isEnabled("ArrowSeeking", "weapon"))
-                HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowSeeking.effectId, stack);
+                HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("ArrowSeeking", "weapon")[0], stack);
             if (EnchantConfigHandler.isEnabled("ArrowExplosive", "weapon"))
-                ExplosionLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.ArrowExplosive.effectId, stack);
+                ExplosionLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("ArrowExplosive", "weapon")[0], stack);
             if (EnchantConfigHandler.isEnabled("Poison", "weapon"))
-                PoisonLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Poison.effectId, stack);
+                PoisonLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Poison", "weapon")[0], stack);
             if (EnchantConfigHandler.isEnabled("Piercing", "weapon"))
-                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.Piercing.effectId, stack);
+                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Piercing", "weapon")[0], stack);
             if (EnchantConfigHandler.isEnabled("LightningArrow", "weapon"))
-                LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.LightningArrow.effectId, stack);
+                LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("LightningArrow", "weapon")[0], stack);
             if (EnchantConfigHandler.isEnabled("FlamingArrow", "weapon"))
-                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel(Enchants.FlamingArrow.effectId, stack);
+                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("FlamingArrow", "weapon")[0], stack);
 
             isExplosive = ExplosionLevel > 0;
             isHoming = HomingLevel > 0;
