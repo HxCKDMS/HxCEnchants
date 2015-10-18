@@ -3,6 +3,7 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
+import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -21,7 +22,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -133,7 +133,7 @@ public class EventHandlers {
                         ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted() &&
                         ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted() &&
                         !ents.isEmpty()) {
-                    List<Enchantment> sharedEnchants = new ArrayList<>();
+                    LinkedHashMap<Enchantment, Integer> sharedEnchants = new LinkedHashMap<>();
                     LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>)EnchantmentHelper.getEnchantments(ArmourBoots);
                     ((LinkedHashMap<Integer, Integer>) EnchantmentHelper.getEnchantments(ArmourLegs)).forEach(enchs::putIfAbsent);
                     ((LinkedHashMap<Integer, Integer>) EnchantmentHelper.getEnchantments(ArmourChest)).forEach(enchs::putIfAbsent);
@@ -142,8 +142,17 @@ public class EventHandlers {
                                 if (EnchantmentHelper.getEnchantments(ArmourBoots).containsKey(ench) &&
                                         EnchantmentHelper.getEnchantments(ArmourLegs).containsKey(ench) &&
                                         EnchantmentHelper.getEnchantments(ArmourChest).containsKey(ench) &&
-                                        EnchantmentHelper.getEnchantments(ArmourHelm).containsKey(ench))
-                                    sharedEnchants.add(Enchantment.enchantmentsList[ench]);
+                                        EnchantmentHelper.getEnchantments(ArmourHelm).containsKey(ench)) {
+                                    int tmpz = 0;
+                                    tmpz += (int)EnchantmentHelper.getEnchantments(ArmourBoots).get(ench);
+                                    tmpz += (int)EnchantmentHelper.getEnchantments(ArmourLegs).get(ench);
+                                    tmpz += (int)EnchantmentHelper.getEnchantments(ArmourChest).get(ench);
+                                    tmpz += (int)EnchantmentHelper.getEnchantments(ArmourHelm).get(ench);
+
+                                    if (Enchantment.enchantmentsList[ench] instanceof HxCEnchantment) {
+                                        sharedEnchants.put(Enchantment.enchantmentsList[ench], tmpz);
+                                    }
+                                }
                             });
                     if (sharedEnchants != null && !sharedEnchants.isEmpty())
                         handler.handleAuraEvent(player, ents, sharedEnchants);

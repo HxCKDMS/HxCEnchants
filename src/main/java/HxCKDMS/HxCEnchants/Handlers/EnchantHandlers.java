@@ -32,9 +32,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -61,12 +59,6 @@ public class EnchantHandlers implements IEnchantHandler {
     FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
 
     public static boolean OverCharge = false, FlashButton = false;
-    private short[] DeadlyAura = new short[4], FieryAura = new short[4],
-            ToxicAura = new short[4], ThickAura = new short[4],
-            DarkAura = new short[4], GaiaAura = new short[4],
-            IcyAura = new short[4], HealingAura = new short[4],
-            MagneticAura = new short[4], RepulsiveAura = new short[4];
-    
     @Override
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, long itemCharge) {
         if (isEnabled("Gluttony", "armor")) {
@@ -247,13 +239,13 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerTickEvent(EntityPlayerMP player) {
-        if (isEnabled("OverCharge", "weapon") && player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null) {
+        if (isEnabled("OverCharge", "weapon") && (player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemAxe) && player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null) {
             long HeldCharges = 0;
             if (Configurations.enableChargesSystem) {
                 HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
             }
             boolean stored = player.getHeldItem().getTagCompound().getBoolean("StoredCharge");
-            int temp = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Overcharge", "weapon")[0], player.getHeldItem()), RequiredCharge = getData("OverCharge", "weapon")[4];
+            int temp = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("OverCharge", "weapon")[0], player.getHeldItem()), RequiredCharge = getData("OverCharge", "weapon")[4];
             if (temp > 0 && (HeldCharges >= RequiredCharge || !Configurations.enableChargesSystem) && !stored) {
                 if (OverCharge && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0) {
                     player.addChatComponentMessage(new ChatComponentText("You have just stored a charge of " + player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + "!"));
@@ -365,144 +357,91 @@ public class EnchantHandlers implements IEnchantHandler {
                 }
             }
         }
+    }
 
-        if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(1) != null &&
-                player.inventory.armorItemInSlot(2) != null && player.inventory.armorItemInSlot(3) != null &&
-                player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(1).hasTagCompound() &&
-                player.inventory.armorItemInSlot(2).hasTagCompound() && player.inventory.armorItemInSlot(3).hasTagCompound() &&
-                player.inventory.armorItemInSlot(0).isItemEnchanted() && player.inventory.armorItemInSlot(1).isItemEnchanted() &&
-                player.inventory.armorItemInSlot(2).isItemEnchanted() && player.inventory.armorItemInSlot(3).isItemEnchanted()) {
-
-            World world = player.getEntityWorld();
-            long[] chrgs = new long[]{0, 0, 0, 0};
-
-            for (short i = 0; i < 4; i++) {
-                if (player.inventory.armorItemInSlot(i) != null) {
-                    if (isEnabled("AuraDeadly", "armor"))
-                        DeadlyAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraDeadly", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("AuraDark", "armor"))
-                        DarkAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraDark", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("AuraFiery", "armor"))
-                        FieryAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraFiery", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("AuraThick", "armor"))
-                        ThickAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraThick", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("AuraToxic", "armor"))
-                        ToxicAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraToxic", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("GaiaAura", "armor"))
-                        GaiaAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("GaiaAura", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("IcyAura", "armor"))
-                        IcyAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("IcyAura", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("HealingAura", "armor"))
-                        HealingAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("HealingAura", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("AuraMagnetic", "armor"))
-                        MagneticAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("AuraMagnetic", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (isEnabled("RepulsiveAura", "armor"))
-                        RepulsiveAura[i] = (short) EnchantmentHelper.getEnchantmentLevel(getData("RepulsiveAura", "armor")[0], player.inventory.armorItemInSlot(i));
-                    if (player.inventory.armorItemInSlot(i).getTagCompound() != null && Configurations.enableChargesSystem)
-                        chrgs[i] = player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge");
+    @Override
+    public void handleAuraEvent(EntityPlayerMP player, List<Entity> ents, LinkedHashMap<Enchantment, Integer> sharedEnchants) {
+        sharedEnchants.forEach((x, y) -> System.out.println(x.getName() + " : " + y));
+        World world = player.getEntityWorld();
+        for (Entity entity : ents) {
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("AuraDeadly", "armor")[0]])) {
+                if (entity instanceof EntityLivingBase && (Configurations.PlayerAuraDeadly || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.wither)) {
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
+                    if (Configurations.enableChargesSystem)
+                        for (short i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
                 }
             }
-
-            if (DeadlyAura[0] > 0 && DeadlyAura[1] > 0 && DeadlyAura[2] > 0 && DeadlyAura[3] > 0 && ((chrgs[0] > getData("AuraDeadly", "armor")[4] && chrgs[1] > getData("AuraDeadly", "armor")[4] && chrgs[2] > getData("AuraDeadly", "armor")[4] && chrgs[3] > getData("AuraDeadly", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((DeadlyAura[0] + DeadlyAura[1] + DeadlyAura[2] + DeadlyAura[3]) / 4);
-                List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : list)
-                    if ((Configurations.PlayerAuraDeadly || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.wither)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
+            
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("AuraDark", "armor")[0]])) {
+                    if (entity instanceof EntityLivingBase && (Configurations.PlayerAuraDark || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.blindness)) {
+                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true));
+                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true));
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - DeadlyAura[i]);
+                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
                     }
             }
 
-            if (DarkAura[0] > 0 && DarkAura[1] > 0 && DarkAura[2] > 0 && DarkAura[3] > 0 && ((chrgs[0] > getData("AuraDark", "armor")[4] && chrgs[1] > getData("AuraDark", "armor")[4] && chrgs[2] > getData("AuraDark", "armor")[4] && chrgs[3] > getData("AuraDark", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((DarkAura[0] + DarkAura[1] + DarkAura[2] + DarkAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
-                    if ((Configurations.PlayerAuraDark || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.blindness)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true));
-                        entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true));
-                        if (Configurations.enableChargesSystem)
-                            for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - DarkAura[i]);
-                    }
-            }
-
-            if (FieryAura[0] > 0 && FieryAura[1] > 0 && FieryAura[2] > 0 && FieryAura[3] > 0 && ((chrgs[0] > getData("AuraFiery", "armor")[4] && chrgs[1] > getData("AuraFiery", "armor")[4] && chrgs[2] > getData("AuraFiery", "armor")[4] && chrgs[3] > getData("AuraFiery", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((FieryAura[0] + FieryAura[1] + FieryAura[2] + FieryAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
-                    if ((Configurations.PlayerAuraFiery || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isBurning()) {
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("AuraFiery", "armor")[0]])) {
+                    if (entity instanceof EntityLivingBase && (Configurations.PlayerAuraFiery || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isBurning()) {
                         entity.setFire(100);
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - FieryAura[i]);
+                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
                     }
             }
 
-            if (ThickAura[0] > 0 && ThickAura[1] > 0 && ThickAura[2] > 0 && ThickAura[3] > 0 && ((chrgs[0] > getData("AuraThick", "armor")[4] && chrgs[1] > getData("AuraThick", "armor")[4] && chrgs[2] > getData("AuraThick", "armor")[4] && chrgs[3] > getData("AuraThick", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((ThickAura[0] + ThickAura[1] + ThickAura[2] + ThickAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
-                    if ((Configurations.PlayerAuraThick || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.moveSlowdown)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true));
-                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true));
-                        entity.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true));
-                        if (Configurations.enableChargesSystem)
-                            for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - ThickAura[i]);
-                    }
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("AuraThick", "armor")[0]])) {
+                if (entity instanceof EntityLivingBase && (Configurations.PlayerAuraThick || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.moveSlowdown)) {
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true));
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true));
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true));
+                    if (Configurations.enableChargesSystem)
+                        for (short i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
+                }
             }
 
-            if (ToxicAura[0] > 0 && ToxicAura[1] > 0 && ToxicAura[2] > 0 && ToxicAura[3] > 0 && ((chrgs[0] > getData("AuraToxic", "armor")[4] && chrgs[1] > getData("AuraToxic", "armor")[4] && chrgs[2] > getData("AuraToxic", "armor")[4] && chrgs[3] > getData("AuraToxic", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((ToxicAura[0] + ToxicAura[1] + ToxicAura[2] + ToxicAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
-                    if ((Configurations.PlayerAuraToxic || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.poison)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
-                        if (Configurations.enableChargesSystem)
-                            for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - ToxicAura[i]);
-                    }
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("AuraToxic", "armor")[0]])) {
+                if (entity instanceof EntityLivingBase && (Configurations.PlayerAuraToxic || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.poison)) {
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
+                    if (Configurations.enableChargesSystem)
+                        for (short i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
+                }
             }
 
-            if (GaiaAura[0] > 0 && GaiaAura[1] > 0 && GaiaAura[2] > 0 && GaiaAura[3] > 0 && ((chrgs[0] > getData("GaiaAura", "armor")[4] && chrgs[1] > getData("GaiaAura", "armor")[4] && chrgs[2] > getData("GaiaAura", "armor")[4] && chrgs[3] > getData("GaiaAura", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((GaiaAura[0] + GaiaAura[1] + GaiaAura[2] + GaiaAura[3]) / 4);
-                int ran = world.rand.nextInt(Math.round(80 / level));
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])) {
+                int ran = world.rand.nextInt(Math.round(80 / sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])));
                 if (ran == 0) {
-                    List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
+                    List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])/4));
                     for (ChunkPosition pos : crops) {
                         player.worldObj.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ).updateTick(player.worldObj, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, new Random());
                         if (Configurations.enableChargesSystem)
                             for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - getData("GaiaAura", "armor")[4]);
+                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
                     }
                 }
             }
 
-            if (HealingAura[0] > 0 && HealingAura[1] > 0 && HealingAura[2] > 0 && HealingAura[3] > 0 && ((chrgs[0] > getData("HealingAura", "armor")[4] && chrgs[1] > getData("HealingAura", "armor")[4] && chrgs[2] > getData("HealingAura", "armor")[4] && chrgs[3] > getData("HealingAura", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((HealingAura[0] + HealingAura[1] + HealingAura[2] + HealingAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
-                    if ((Configurations.PlayerHealingAura || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityMob) && !entity.isDead && !entity.isPotionActive(Potion.regeneration)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 500, Math.round(level / 3), true));
-                        if (Configurations.enableChargesSystem)
-                            for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - HealingAura[i]);
-                    }
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("HealingAura", "armor")[0]])) {
+                if (entity instanceof EntityLivingBase && (Configurations.PlayerHealingAura || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityMob) && !entity.isDead && !((EntityLivingBase) entity).isPotionActive(Potion.regeneration)) {
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 500, Math.round(sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])/4/3), true));
+                    if (Configurations.enableChargesSystem)
+                        for (short i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
+                }
             }
 
-            if (IcyAura[0] > 0 && IcyAura[1] > 0 && IcyAura[2] > 0 && IcyAura[3] > 0 && ((chrgs[0] > getData("IcyAura", "armor")[4] && chrgs[1] > getData("IcyAura", "armor")[4] && chrgs[2] > getData("IcyAura", "armor")[4] && chrgs[3] > getData("IcyAura", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((IcyAura[0] + IcyAura[1] + IcyAura[2] + IcyAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                List<ChunkPosition> blocks = getFreezablesWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase entity : (List<EntityLivingBase>) list)
-                    if ((Configurations.PlayerIcyAura || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !entity.isPotionActive(Potion.poison)) {
-                        entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 500, 1, true));
-                        if (Configurations.enableChargesSystem)
-                            for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - IcyAura[i]);
-                    }
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("IcyAura", "armor")[0]])) {
+                List<ChunkPosition> blocks = getFreezablesWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])/4));
+                if (entity instanceof EntityLivingBase && (Configurations.PlayerIcyAura || !(entity instanceof EntityPlayer)) && entity != player && !(entity instanceof EntityGolem) && !entity.isDead && !(entity instanceof EntityAnimal) && !((EntityLivingBase)entity).isPotionActive(Potion.poison)) {
+                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 500, 1, true));
+                    if (Configurations.enableChargesSystem)
+                        for (short i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
+                }
                 for (ChunkPosition pos : blocks) {
                     if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.lava)
                         world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.obsidian);
@@ -513,50 +452,32 @@ public class EnchantHandlers implements IEnchantHandler {
                 }
             }
 
-            if (MagneticAura[0] > 0 && MagneticAura[1] > 0 && MagneticAura[2] > 0 && MagneticAura[3] > 0 && ((chrgs[0] > getData("AuraMagnetic", "armor")[4] && chrgs[1] > getData("AuraMagnetic", "armor")[4] && chrgs[2] > getData("AuraMagnetic", "armor")[4] && chrgs[3] > getData("AuraMagnetic", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((MagneticAura[0] + MagneticAura[1] + MagneticAura[2] + MagneticAura[3]) / 4);
-                List items = player.worldObj.getEntitiesWithinAABB(EntityItem.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                List exp = player.worldObj.getEntitiesWithinAABB(EntityXPOrb.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityItem item : (List<EntityItem>) items) {
-                    double motionX = player.posX - item.posX;
-                    double motionY = player.boundingBox.minY + player.height - item.posY;
-                    double motionZ = player.posZ - item.posZ;
-                    item.setVelocity(motionX / 8, motionY / 8, motionZ / 8);
-                    if (Configurations.enableChargesSystem)
-                        for (short i = 0; i < 4; i++)
-                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - MagneticAura[i]);
-                }
-                for (EntityXPOrb xp : (List<EntityXPOrb>) exp) {
-                    double motionX = player.posX - xp.posX;
-                    double motionY = player.boundingBox.minY + player.height - xp.posY;
-                    double motionZ = player.posZ - xp.posZ;
-                    xp.setVelocity(motionX / 2, motionY / 2, motionZ / 2);
-                    if (Configurations.enableChargesSystem)
-                        for (short i = 0; i < 4; i++)
-                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - MagneticAura[i]);
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("AuraMagnetic", "armor")[0]])) {
+                if (entity instanceof EntityXPOrb || entity instanceof EntityItem) {
+                    double motionX = player.posX - entity.posX;
+                    double motionY = player.boundingBox.minY + player.height - entity.posY;
+                    double motionZ = player.posZ - entity.posZ;
+                    entity.setVelocity(motionX / 4, motionY / 4, motionZ / 4);
+                    if (Configurations.enableChargesSystem) {
+                        for (short i = 0; i < 4; i++) {
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
+                        }
+                    }
                 }
             }
 
-            if (RepulsiveAura[0] > 0 && RepulsiveAura[1] > 0 && RepulsiveAura[2] > 0 && RepulsiveAura[3] > 0 && ((chrgs[0] > getData("RepulsiveAura", "armor")[4] && chrgs[1] > getData("RepulsiveAura", "armor")[4] && chrgs[2] > getData("RepulsiveAura", "armor")[4] && chrgs[3] > getData("RepulsiveAura", "armor")[4]) || !Configurations.enableChargesSystem)) {
-                short level = (short) ((RepulsiveAura[0] + RepulsiveAura[1] + RepulsiveAura[2] + RepulsiveAura[3]) / 4);
-                List list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), level));
-                for (EntityLivingBase ent : (List<EntityLivingBase>) list)
-                    if (ent != player && !(ent instanceof EntityAnimal || ent instanceof EntityVillager || ent instanceof EntityGolem || ent instanceof EntityPlayer)) {
-                        double motionX = player.posX - ent.posX;
-                        double motionY = player.boundingBox.minY + player.height - ent.posY;
-                        double motionZ = player.posZ - ent.posZ;
-                        ent.setVelocity(-motionX / 8, -motionY / 8, -motionZ / 8);
-                        if (Configurations.enableChargesSystem)
-                            for (short i = 0; i < 4; i++)
-                                player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", chrgs[i] - RepulsiveAura[i]);
-                    }
+            if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("RepulsiveAura", "armor")[0]])) {
+                if (entity instanceof EntityLivingBase && entity != player && !(entity instanceof EntityAnimal || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityPlayer)) {
+                    double motionX = player.posX - entity.posX;
+                    double motionY = player.boundingBox.minY + player.height - entity.posY;
+                    double motionZ = player.posZ - entity.posZ;
+                    entity.setVelocity(-motionX / 8, -motionY / 8, -motionZ / 8);
+                    if (Configurations.enableChargesSystem)
+                        for (short i = 0; i < 4; i++)
+                            player.inventory.armorItemInSlot(i).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(i).getTagCompound().getLong("HxCEnchantCharge") - getData("GaiaAura", "armor")[4]);
+                }
             }
         }
-    }
-
-    @Override
-    public void handleAuraEvent(EntityPlayerMP player, List<Entity> ents, List<Enchantment> sharedEnchants) {
-        sharedEnchants.forEach(z -> System.out.println(z.getName()));
     }
 
     @Override
