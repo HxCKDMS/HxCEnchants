@@ -617,9 +617,9 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerMineBlockEvent(EntityPlayer player, ItemStack tool, long itemCharge, BlockEvent.HarvestDropsEvent event) {
-        if (isEnabled("FlameTouch", "tool")) {
-            int AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel(getData("FlameTouch", "tool")[0], tool);
-            if (AutoSmeltLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > getData("FlameTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
+        if (isEnabled("FlameTouch", "other")) {
+            int AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel(getData("FlameTouch", "other")[0], tool);
+            if (AutoSmeltLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > getData("FlameTouch", "other")[4] || !Configurations.enableChargesSystem)) {
                 for (int i = 0; i < event.drops.size(); i++) {
                     ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
 
@@ -628,19 +628,19 @@ public class EnchantHandlers implements IEnchantHandler {
                         drop.stackSize *= AutoSmeltLevel;
                         event.drops.set(i, drop);
                         if (Configurations.enableChargesSystem)
-                            tool.getTagCompound().setLong("HxCEnchantCharge", tool.getTagCompound().getLong("HxCEnchantCharge") - (getData("FlameTouch", "tool")[4] * AutoSmeltLevel));
+                            tool.getTagCompound().setLong("HxCEnchantCharge", tool.getTagCompound().getLong("HxCEnchantCharge") - (getData("FlameTouch", "other")[4] * AutoSmeltLevel));
                     }
                 }
             }
         }
 
-        if (isEnabled("VoidTouch", "tool")) {
-            short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("VoidTouch", "tool")[0], tool);
-            if (voidLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > getData("VoidTouch", "tool")[4] || !Configurations.enableChargesSystem)) {
+        if (isEnabled("VoidTouch", "other")) {
+            short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel(getData("VoidTouch", "other")[0], tool);
+            if (voidLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > getData("VoidTouch", "other")[4] || !Configurations.enableChargesSystem)) {
                 for(String block : Configurations.VoidedItems)
                     event.drops.remove(new ItemStack(Block.getBlockFromName(block)));
                 if (Configurations.enableChargesSystem)
-                    tool.getTagCompound().setLong("HxCEnchantCharge", tool.getTagCompound().getLong("HxCEnchantCharge") - (getData("VoidTouch", "tool")[4] * voidLevel));
+                    tool.getTagCompound().setLong("HxCEnchantCharge", tool.getTagCompound().getLong("HxCEnchantCharge") - (getData("VoidTouch", "other")[4] * voidLevel));
             }
         }
     }

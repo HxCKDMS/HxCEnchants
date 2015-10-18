@@ -60,16 +60,14 @@ public class XPInfuserGUI extends GuiContainer {
         drawRect(width / 2 - 105, 60, width / 2 - 35, height / 2 + 5, new Color(50, 170, 170, 70).getRGB());
         drawCenteredString(fontRendererObj, I18n.format("XP Infuser"), width / 2, 25, Color.WHITE.getRGB());
         super.drawScreen(mouseX, mouseY, f);
-        for (Object button : buttonList) {
-            if (button instanceof GuiButton) {
-                GuiButton btn = (GuiButton) button;
-                if (btn.isMouseOver()) {
-                    String text = "Infuse XP!";
-                    List temp = Collections.singletonList(text);
-                    drawHoveringText(temp, mouseX, mouseY, fontRendererObj);
-                }
+        buttonList.stream().filter(button -> button instanceof GuiButton).forEach(button -> {
+            GuiButton btn = (GuiButton) button;
+            if (btn.isMouseOver()) {
+                String text = "Infuse XP!";
+                List temp = Collections.singletonList(text);
+                drawHoveringText(temp, mouseX, mouseY, fontRendererObj);
             }
-        }
+        });
         drawString(fontRendererObj, "XP to infuse : " + xpti, width / 2 - 35, yStart - 10, Color.white.getRGB());
     }
 
@@ -136,13 +134,4 @@ public class XPInfuserGUI extends GuiContainer {
 
         super.mouseReleased(mouseX, mouseY, state);
     }
-
-    /*@Override
-    protected void mouseMovedOrUp(int x, int y, int which) {
-        if(which == 0)
-            dragging = false;
-
-        super.mouseMovedOrUp(x, y, which);
-    }*/
-
 }

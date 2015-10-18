@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.Blocks.HxCEnchanter;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -31,13 +32,15 @@ public class HxCEnchanterTile extends TileEntity implements IInventory {
             if (stack != null) {
                 EntityPlayer p = worldObj.getPlayerEntityByName(player);
                 assert p.experienceLevel >= xpte;
-                NBTTagCompound tagCompound;
-                if (stack.getTagCompound() != null) {
-                    tagCompound = stack.getTagCompound();
-                } else {
-                    tagCompound = new NBTTagCompound();
+                for (int i = 0; i < Math.round(xpte/8); i++) {
+                    int re = worldObj.rand.nextInt(Enchantment.enchantmentsList.length);
+                    if (Enchantment.enchantmentsList[re] == null) {
+                        i--;
+                    } else {
+                        int lvl = Enchantment.enchantmentsList[re].getMaxLevel() - (worldObj.rand.nextInt(Enchantment.enchantmentsList[re].getMaxLevel() - 1));
+                        stack.addEnchantment(Enchantment.enchantmentsList[re], lvl);
+                    }
                 }
-                stack.setTagCompound(tagCompound);
                 p.addExperienceLevel(-xpte);
                 xpte = 0;
             }

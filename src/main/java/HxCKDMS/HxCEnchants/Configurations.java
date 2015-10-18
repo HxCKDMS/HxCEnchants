@@ -14,16 +14,16 @@ public class Configurations {
     @Config.Integer
     public static int updateTime = 10, guiVersion = 1;
     @Config.Boolean
-    public static boolean notice2 = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true;
+    public static boolean notice = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true;
 
     @Config.List
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
 
     @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
     public static LinkedHashMap<String, String> Enchants = new LinkedHashMap<String, String>();
-    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "WeaponEnchants")
+    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
     public static LinkedHashMap<String, String> WeaponEnchants = new LinkedHashMap<String, String>();
-    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "ArmourEnchants")
+    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
     public static LinkedHashMap<String, String> ArmorEnchants = new LinkedHashMap<String, String>();
 
     static {

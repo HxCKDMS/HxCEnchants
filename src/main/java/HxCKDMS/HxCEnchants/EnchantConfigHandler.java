@@ -6,8 +6,6 @@ public class EnchantConfigHandler {
             case("armor") : return Boolean.parseBoolean(Configurations.ArmorEnchants.get(name).split(", ")[0]);
             case("weapon") : return Boolean.parseBoolean(Configurations.WeaponEnchants.get(name).split(", ")[0]);
             case("other") : return Boolean.parseBoolean(Configurations.Enchants.get(name).split(", ")[0]);
-            case("tool") : return Boolean.parseBoolean(Configurations.Enchants.get(name).split(", ")[0]);
-            case("tools") : return Boolean.parseBoolean(Configurations.Enchants.get(name).split(", ")[0]);
             default : return false;
         }
     }
@@ -20,10 +18,6 @@ public class EnchantConfigHandler {
             case("weapon") : tmp = Configurations.WeaponEnchants.get(name).split(", ");
                 break;
             case("other") : tmp = Configurations.Enchants.get(name).split(", ");
-                break;
-            case("tools") : tmp = Configurations.Enchants.get(name).split(", ");
-                break;
-            case("tool") : tmp = Configurations.Enchants.get(name).split(", ");
                 break;
             default : tmp = null;
                 break;

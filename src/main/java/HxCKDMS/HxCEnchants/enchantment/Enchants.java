@@ -70,8 +70,8 @@ public class Enchants {
             enchant.registerEnchant("examine", EnumHxCEnchantType.SWORD, data[0], data[1], data[2], data[3], data[4], Arrays.asList((int) EnchantConfigHandler.getData("SoulTear", "weapon")[0]));
         }
         if (EnchantConfigHandler.isEnabled("FlameTouch", "other")) {
-            data = EnchantConfigHandler.getData("FlameTouch", "tool");
-            enchant.registerEnchant("flameTouch", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList((int) EnchantConfigHandler.getData("VoidTouch", "tool")[0]));
+            data = EnchantConfigHandler.getData("FlameTouch", "other");
+            enchant.registerEnchant("flameTouch", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList((int) EnchantConfigHandler.getData("VoidTouch", "other")[0]));
         }
         if (EnchantConfigHandler.isEnabled("Fly" , "armor")) {
             data = EnchantConfigHandler.getData("Fly" , "armor");
@@ -138,11 +138,11 @@ public class Enchants {
             enchant.registerEnchant("witherProt", EnumHxCEnchantType.ARMOR_HEAD, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
         }
         if (EnchantConfigHandler.isEnabled("SpeedMine", "other")) {
-            data = EnchantConfigHandler.getData("SpeedMine", "tool");
+            data = EnchantConfigHandler.getData("SpeedMine", "other");
             enchant.registerEnchant("speedMine", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
         }
         if (EnchantConfigHandler.isEnabled("VoidTouch", "other")) {
-            data = EnchantConfigHandler.getData("VoidTouch", "tool");
+            data = EnchantConfigHandler.getData("VoidTouch", "other");
             enchant.registerEnchant("voidTouch", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList(Enchantment.fortune.effectId, Enchantment.silkTouch.effectId));
         }
         if (EnchantConfigHandler.isEnabled("EnchLeech", "weapon")) {
@@ -150,7 +150,7 @@ public class Enchants {
             enchant.registerEnchant("enchLeech", EnumHxCEnchantType.SWORD, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
         }
 //        if (EnchantConfigHandler.isEnabled("PipeMine", "other")) {
-//            data = EnchantConfigHandler.getData("PipeMine", "tool");
+//            data = EnchantConfigHandler.getData("PipeMine", "other");
 //            enchant.registerEnchant("pipeMine", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
 //        }
         if (EnchantConfigHandler.isEnabled("FeatherFall", "armor")) {

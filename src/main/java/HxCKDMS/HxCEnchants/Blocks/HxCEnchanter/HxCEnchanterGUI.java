@@ -3,7 +3,7 @@ package HxCKDMS.HxCEnchants.Blocks.HxCEnchanter;
 import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
-import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
+import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -13,12 +13,10 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class HxCEnchanterGUI extends GuiContainer {
-    private int x, y, z, xpti, xp;
+    private int x, y, z, xpte, xp;
     private float xp_percentage = 1;
     private boolean dragging = false;
     public HxCEnchanterGUI(HxCEnchanterContainer container, EntityPlayer player) {
@@ -46,7 +44,7 @@ public class HxCEnchanterGUI extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/XPEnchanterGUI" + Configurations.guiVersion + ".png"));
+        mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID + ":gui/HxCEnchanterGUI" + Configurations.guiVersion + ".png"));
         int xStart = (width - xSize) / 2;
         int yStart = (height - ySize) / 2;
         drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
@@ -58,26 +56,16 @@ public class HxCEnchanterGUI extends GuiContainer {
         int yStart = (height - ySize) / 2;
         drawDefaultBackground();
         drawRect(width / 2 - 105, 60, width / 2 - 35, height / 2 + 5, new Color(50, 170, 170, 70).getRGB());
-        drawCenteredString(fontRendererObj, I18n.format("XP Infuser"), width / 2, 25, Color.WHITE.getRGB());
+        drawCenteredString(fontRendererObj, I18n.format("HxCEnchanter"), width / 2, 25, Color.WHITE.getRGB());
         super.drawScreen(mouseX, mouseY, f);
-        for (Object button : buttonList) {
-            if (button instanceof GuiButton) {
-                GuiButton btn = (GuiButton) button;
-                if (btn.isMouseOver()) {
-                    String text = "Infuse XP!";
-                    List temp = Collections.singletonList(text);
-                    drawHoveringText(temp, mouseX, mouseY, fontRendererObj);
-                }
-            }
-        }
-        drawString(fontRendererObj, "XP to enchant with : " + xpti, width / 2 - 35, yStart - 10, Color.white.getRGB());
+        drawString(fontRendererObj, "XP to enchant with : " + xpte, width / 2 - 35, yStart - 10, Color.white.getRGB());
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == 0 && xpti != 0 && xpti <= xp) {
-            HxCEnchants.networkWrapper.sendToServer(new PacketInfuserSync(x, y, z, xpti, mc.thePlayer.getDisplayName()));
-            xp -= xpti; xpti = 0; xp_percentage = 1;
+        if (button.id == 0 && xpte != 0 && xpte <= xp) {
+            HxCEnchants.networkWrapper.sendToServer(new PacketHxCEnchanterSync(x, y, z, xpte, mc.thePlayer.getDisplayName()));
+            xp -= xpte; xpte = 0; xp_percentage = 1;
         }
     }
 
@@ -98,7 +86,7 @@ public class HxCEnchanterGUI extends GuiContainer {
 
                 if(y >= yStart + 7 && y <= yStart + 27) {
                     xp_percentage = percent;
-                    xpti = xp - Math.round(xp * xp_percentage);
+                    xpte = xp - Math.round(xp * xp_percentage);
                 }
             }
         }
@@ -123,7 +111,7 @@ public class HxCEnchanterGUI extends GuiContainer {
                 if(percent < 0) percent = 0;
 
                 xp_percentage = percent;
-                xpti = xp - Math.round(xp * xp_percentage);
+                xpte = xp - Math.round(xp * xp_percentage);
             }
         }
         super.mouseClickMove(x, y, lastButtonClicked, timeSinceClicked);
@@ -136,13 +124,4 @@ public class HxCEnchanterGUI extends GuiContainer {
 
         super.mouseReleased(mouseX, mouseY, state);
     }
-
-    /*@Override
-    protected void mouseMovedOrUp(int x, int y, int which) {
-        if(which == 0)
-            dragging = false;
-
-        super.mouseMovedOrUp(x, y, which);
-    }*/
-
 }

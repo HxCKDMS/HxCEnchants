@@ -3,6 +3,8 @@ package HxCKDMS.HxCEnchants;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCCore.api.Configuration.Category;
 import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
+import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
+import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
@@ -24,6 +26,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -57,17 +60,21 @@ public class HxCEnchants {
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
-        if (Configurations.notice2) {
+        if (Configurations.notice) {
             MinecraftForge.EVENT_BUS.register(new OtherHandler());
         }
         Enchants.load();
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
         if (Configurations.enableChargesSystem) {
-            NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
             XPInfuserBlock block = new XPInfuserBlock();
             GameRegistry.registerBlock(block, "XPInfuserBlock");
             GameRegistry.registerTileEntity(XPInfuserTile.class, "XPInfuserTile");
-            GameRegistry.addRecipe(new ShapedOreRecipe(block, "EBE", "BDB", "EBE", 'B', Items.experience_bottle, 'E', Items.ender_eye, 'D', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(block, "EBE", "BDB", "EBE", 'B', Items.experience_bottle, 'E', Items.ender_eye, 'D', Blocks.diamond_block));
         }
+        HxCEnchanterBlock block = new HxCEnchanterBlock();
+        GameRegistry.registerBlock(block, "HxCEnchanter");
+        GameRegistry.registerTileEntity(HxCEnchanterTile.class, "HxCEnchanterTile");
+        GameRegistry.addRecipe(new ShapedOreRecipe(block, "DED", "BOB", "OOO", 'B', Items.enchanted_book, 'E', Items.ender_eye, 'O', Blocks.obsidian, 'D', "gemDiamond"));
     }
     
     @EventHandler
@@ -75,9 +82,7 @@ public class HxCEnchants {
 
     public void registerNewConfigSys(HxCConfig config) {
         config.registerCategory(new Category("General", "General Stuff"));
-        config.registerCategory(new Category("ToolEnchants", "Tool enchants"));
-        config.registerCategory(new Category("ArmourEnchants", "Armour enchants"));
-        config.registerCategory(new Category("WeaponEnchants", "Weapon enchants"));
+        config.registerCategory(new Category("Enchants", "All Enchants"));
         config.handleConfig(Configurations.class, new File(HxCCore.HxCConfigDir, "HxCEnchants.cfg"));
     }
 }
