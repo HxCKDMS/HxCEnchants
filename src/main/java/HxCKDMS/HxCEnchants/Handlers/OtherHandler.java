@@ -9,7 +9,7 @@ public class OtherHandler {
     int derp = 0;
     String name = "[\u00a73DrZed\u00a7f] : ",
             a = "\u00a79I've fixed a few enchants, and changed the system",
-            b = "\u00a73I've tested this build a little, but it MAY have a bug or two.",
+            b = "\u00a73I've tested this build a little, but MAY have a bug..",
             c = "\u00a79Cleaned up the mod so it should be faster!.";
 
     @SubscribeEvent

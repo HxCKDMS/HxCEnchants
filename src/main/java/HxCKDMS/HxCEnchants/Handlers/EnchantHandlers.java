@@ -57,7 +57,7 @@ import static HxCKDMS.HxCEnchants.lib.Reference.*;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class EnchantHandlers implements IEnchantHandler {
-    private int ShouldRepair = 60, CanRegen = 60, flyTimer = 1200, swiftTimer = 600, vitTimer = 600, stealthTimer = 600;
+    private int repairTimer = 60, regenTimer = 60, flyTimer = 1200, swiftTimer = 600, vitTimer = 600, stealthTimer = 600;
     FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
 
     public static boolean OverCharge = false, FlashButton = false;
@@ -300,14 +300,14 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void delayedPlayerTickEvent(EntityPlayerMP player) {
-        ShouldRepair--; CanRegen--;
-        if (isEnabled("Repair", "other") && ShouldRepair <= 0) {
+        repairTimer--; regenTimer--;
+        if (isEnabled("Repair", "other") && repairTimer <= 0) {
             RepairItems(player);
-            ShouldRepair = (getData("Repair", "other")[5]);
+            repairTimer = Configurations.repairTimer;
         }
 
-        if (isEnabled("Regen", "armor") && CanRegen <= 0) {
-            short H = 0, C = 0, L = 0, B = 0, rid = EnchantConfigHandler.getData("ArrowSeeking", "armor")[0];
+        if (isEnabled("Regen", "armor") && regenTimer <= 0) {
+            short H = 0, C = 0, L = 0, B = 0, rid = EnchantConfigHandler.getData("Regen", "armor")[0];
             byte Regen = 0;
             if (player.inventory.armorItemInSlot(3) != null)
                 H = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(3));
@@ -342,7 +342,7 @@ public class EnchantHandlers implements IEnchantHandler {
 
             if (player.getHealth() < player.getMaxHealth() && Regen > 0) {
                 float hp = player.getMaxHealth() - player.getHealth();
-                CanRegen = getData("Regen", "armor")[4];
+                regenTimer = Configurations.regenTimer;
                 if (H > 0 && (HChrg > (hp * 2) / Regen || !Configurations.enableChargesSystem)) {
                     if (Configurations.enableChargesSystem)
                         ArmourHelm.getTagCompound().setLong("HxCEnchantCharge", HChrg - H * getData("Regen", "armor")[4]);
