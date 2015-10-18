@@ -1,13 +1,13 @@
-package HxCKDMS.HxCEnchants.enchantment;
+package HxCKDMS.HxCEnchants.api;
 
-import HxCKDMS.HxCEnchants.api.HxCEnchant;
+import HxCKDMS.HxCEnchants.enchantment.EnumHxCEnchantType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class HxCEnchantment extends Enchantment implements HxCEnchant {
+public class HxCEnchantment extends Enchantment {
     private int MaxLevel, cost;
     private List<Integer> bannedEnchs;
     public EnumHxCEnchantType eType;
@@ -38,7 +38,6 @@ public class HxCEnchantment extends Enchantment implements HxCEnchant {
         return MaxLevel;
     }
 
-    @Override
     public long getChargeRequirement() {
         return charge;
     }
@@ -51,10 +50,5 @@ public class HxCEnchantment extends Enchantment implements HxCEnchant {
     @Override
     public boolean canApply(ItemStack stack) {
         return eType.canEnchantItem(stack.getItem());
-    }
-
-    @Override
-    public void registerEnchant(String name, EnumHxCEnchantType type, int defaultID, int maxLevel, int rarity, int cost, long requiredCharge, List<Integer> bannedEnchantIds) {
-        Enchants.hxcEnchants.add(new HxCEnchantment(defaultID, name, rarity, type, maxLevel, cost, requiredCharge, bannedEnchantIds));
     }
 }

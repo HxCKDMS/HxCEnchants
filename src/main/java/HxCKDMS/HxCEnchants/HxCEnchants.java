@@ -55,12 +55,12 @@ public class HxCEnchants {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        Enchants.load();
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
         if (Configurations.notice2) {
             MinecraftForge.EVENT_BUS.register(new OtherHandler());
         }
+        Enchants.load();
         if (Configurations.enableChargesSystem) {
             NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
             XPInfuserBlock block = new XPInfuserBlock();

@@ -23,8 +23,6 @@ public class Configurations {
     public static LinkedHashMap<String, String> Enchants = new LinkedHashMap<String, String>();
     @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "WeaponEnchants")
     public static LinkedHashMap<String, String> WeaponEnchants = new LinkedHashMap<String, String>();
-    @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "ToolEnchants")
-    public static LinkedHashMap<String, String> ToolEnchants = new LinkedHashMap<String, String>();
     @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "ArmourEnchants")
     public static LinkedHashMap<String, String> ArmorEnchants = new LinkedHashMap<String, String>();
 
@@ -32,6 +30,9 @@ public class Configurations {
         Enchants.put("Bound", "false, 400, 3, 5, 45, 0");
         Enchants.put("FlameTouch", "true, 401, 4, 2, 30, 10");
         Enchants.put("Repair", "true, 402, 4, 1, 15, 5");
+//        Enchants.put("PipeMine", "false, 451, 4, 2, 30, 25");
+        Enchants.put("SpeedMine", "true, 452, 4, 2, 30, 5");
+        Enchants.put("VoidTouch", "true, 453, 1, 2, 30, 5");
 
         ArmorEnchants.put("AdrenalineBoost", "true, 410, 4, 10, 30, 50");
         ArmorEnchants.put("AuraFiery", "true, 411, 10, 5, 30, 15");
@@ -60,10 +61,6 @@ public class Configurations {
         ArmorEnchants.put("IcyAura", "true, 434, 10, 1, 40, 15");
         ArmorEnchants.put("Gluttony", "true, 435, 20, 1, 40, 20");
         ArmorEnchants.put("ExplosiveDischarge", "true, 436, 10, 1, 40, 120");
-
-//        ToolEnchants.put("PipeMine", "false, 451, 4, 2, 30, 25");
-        ToolEnchants.put("SpeedMine", "true, 452, 4, 2, 30, 5");
-        ToolEnchants.put("VoidTouch", "true, 453, 1, 2, 30, 5");
 
         WeaponEnchants.put("LightningArrow", "true, 460, 5, 1, 40, 150");
         WeaponEnchants.put("ArrowExplosive", "true, 461, 4, 2, 40, 250");
