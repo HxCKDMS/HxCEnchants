@@ -1,6 +1,7 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
+import HxCKDMS.HxCEnchants.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import net.minecraft.enchantment.Enchantment;
@@ -161,7 +162,7 @@ public class Enchants {
             data = EnchantConfigHandler.getData("MeteorFall", "armor");
             enchant.registerEnchant("meteorFall", EnumHxCEnchantType.ARMOR_FEET, data[0], data[1], data[2], data[3], data[4], Arrays.asList((int) EnchantConfigHandler.getData("FeatherFall", "armor")[0], Enchantment.featherFalling.effectId, (int) EnchantConfigHandler.getData("Fly", "armor")[0]));
         }
-        if (EnchantConfigHandler.isEnabled("OverCharge", "weapon")) {
+        if (Configurations.enableChargesSystem && EnchantConfigHandler.isEnabled("OverCharge", "weapon")) {
             data = EnchantConfigHandler.getData("OverCharge", "weapon");
             enchant.registerEnchant("overcharge", EnumHxCEnchantType.SWORD, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
         }

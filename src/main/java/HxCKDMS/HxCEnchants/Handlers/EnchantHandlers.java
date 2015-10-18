@@ -245,7 +245,8 @@ public class EnchantHandlers implements IEnchantHandler {
                 HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
             }
             boolean stored = player.getHeldItem().getTagCompound().getBoolean("StoredCharge");
-            int temp = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("OverCharge", "weapon")[0], player.getHeldItem()), RequiredCharge = getData("OverCharge", "weapon")[4];
+            int temp = EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("OverCharge", "weapon")[0], player.getHeldItem()),
+                    RequiredCharge = getData("OverCharge", "weapon")[4];
             if (temp > 0 && (HeldCharges >= RequiredCharge || !Configurations.enableChargesSystem) && !stored) {
                 if (OverCharge && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0) {
                     player.addChatComponentMessage(new ChatComponentText("You have just stored a charge of " + player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + "!"));
