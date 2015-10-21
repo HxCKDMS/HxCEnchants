@@ -18,7 +18,7 @@ public interface IEnchantHandler {
     void handleChestplateEnchant(EntityPlayerMP player, ItemStack chestplate, long itemCharge);
     void handleLeggingEnchant(EntityPlayerMP player, ItemStack leggings, long itemCharge);
     void handleBootEnchant(EntityPlayerMP player, ItemStack boots, long itemCharge);
-    void handleAttackEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack weapon, float damage, long itemCharge);
+    void handleAttackEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack weapon, float damage, LivingHurtEvent event, LinkedHashMap<Enchantment, Integer> enchants);
     void handleDeathEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack weapon, long itemCharge);
     void playerTickEvent(EntityPlayerMP player);
     void delayedPlayerTickEvent(EntityPlayerMP player);

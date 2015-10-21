@@ -17,3 +17,18 @@
 * Charms will be added in v3.
 * Plans are in the works for displaying charges on HUD.
 * Every aspect? of the enchants can be configed.
+
+------------------------
+
+"Earth Eater" enchant =
+level 1 : Width = 0 Height = 3 Depth = 0
+level 2 : Width = 1 Height = 3 Depth = 0
+level 3 : Width = 1 Height = 3 Depth = 1
+level 4 : Width = 2 Height = 4 Depth = 1
+level 5 : Width = 2 Height = 4 Depth = 2
+level 6 : Width = 2 Height = 5 Depth = 2
+level 7 : Width = 3 Height = 5 Depth = 2
+level 8 : Width = 3 Height = 5 Depth = 3
+level 9 : Width = 4 Height = 6 Depth = 3
+level 10 : Width = 4 Height = 6 Depth = 4
+

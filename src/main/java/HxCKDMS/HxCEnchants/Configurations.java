@@ -30,7 +30,7 @@ public class Configurations {
         Enchants.put("Bound", "false, 400, 3, 5, 45, 0");
         Enchants.put("FlameTouch", "true, 401, 4, 2, 30, 10");
         Enchants.put("Repair", "true, 402, 4, 1, 15, 5");
-//        Enchants.put("PipeMine", "false, 451, 4, 2, 30, 25");
+        Enchants.put("EarthEater", "false, 451, 10, 2, 30, 25");
         Enchants.put("SpeedMine", "true, 452, 4, 2, 30, 5");
         Enchants.put("VoidTouch", "true, 453, 1, 2, 30, 5");
 

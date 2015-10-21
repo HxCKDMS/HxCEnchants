@@ -150,10 +150,10 @@ public class Enchants {
             data = EnchantConfigHandler.getData("EnchLeech", "weapon");
             enchant.registerEnchant("enchLeech", EnumHxCEnchantType.SWORD, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
         }
-//        if (EnchantConfigHandler.isEnabled("PipeMine", "other")) {
-//            data = EnchantConfigHandler.getData("PipeMine", "other");
-//            enchant.registerEnchant("pipeMine", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
-//        }
+        if (EnchantConfigHandler.isEnabled("EarthEater", "other")) {
+            data = EnchantConfigHandler.getData("EarthEater", "other");
+            enchant.registerEnchant("earthEater", EnumHxCEnchantType.DIGGER, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
+        }
         if (EnchantConfigHandler.isEnabled("FeatherFall", "armor")) {
             data = EnchantConfigHandler.getData("FeatherFall", "armor");
             enchant.registerEnchant("featherFall", EnumHxCEnchantType.ARMOR_FEET, data[0], data[1], data[2], data[3], data[4], Arrays.asList((int) EnchantConfigHandler.getData("MeteorFall", "armor")[0]));
