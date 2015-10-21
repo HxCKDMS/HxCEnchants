@@ -19,27 +19,20 @@
 * Every aspect? of the enchants can be configed.
 
 ------------------------
-
 "Earth Eater" enchant =
+------------------------
 
-level 1 : Width = 0 Height = 3 Depth = 0
-
-level 2 : Width = 1 Height = 3 Depth = 0
-
-level 3 : Width = 1 Height = 3 Depth = 1
-
-level 4 : Width = 2 Height = 4 Depth = 1
-
-level 5 : Width = 2 Height = 4 Depth = 2
-
-level 6 : Width = 2 Height = 5 Depth = 2
-
-level 7 : Width = 3 Height = 5 Depth = 2
-
-level 8 : Width = 3 Height = 5 Depth = 3
-
-level 9 : Width = 4 Height = 6 Depth = 3
-
-level 10 : Width = 4 Height = 6 Depth = 4
+Level | Width | Height | Depth
+------|-------|--------|-------
+: 1 : | : = 0 : | : 3 : | : 0 :
+: 2 : | : = 1 : | : 3 : | : 0 :
+: 3 : | : = 1 : | : 3 : | : 1 :
+: 4 : | : = 2 : | : 4 : | : 1 :
+: 5 : | : = 2 : | : 4 : | : 2 :
+: 6 : | : = 2 : | : 5 : | : 2 :
+: 7 : | : = 3 : | : 5 : | : 2 :
+: 8 : | : = 3 : | : 5 : | : 3 :
+: 9 : | : = 4 : | : 6 : | : 3 :
+: 10 : | : = 4 : | : 6 : | : 4 :
 
 
