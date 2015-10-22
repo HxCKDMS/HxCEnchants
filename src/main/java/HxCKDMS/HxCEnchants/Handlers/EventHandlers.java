@@ -24,7 +24,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static HxCKDMS.HxCEnchants.Configurations.enableChargesSystem;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
@@ -61,7 +60,7 @@ public class EventHandlers {
 
             if (item.hasTagCompound() && item.isItemEnchanted()){
 				long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
-                handler.handleDeathEvent(Attacker, (EntityLivingBase)deadent, item, chrg);
+                handler.handleDeathEvent(Attacker, (EntityLivingBase)deadent, item);
 			}
         }
     }
@@ -73,10 +72,10 @@ public class EventHandlers {
             ItemStack heldItem = player.getHeldItem();
             long chrg = -1;
             if (heldItem.hasTagCompound() && heldItem.isItemEnchanted()) {
-                if (enableChargesSystem)
-                    chrg = heldItem.getTagCompound().getLong("HxCEnchantCharge");
-
-                handler.playerMineBlockEvent(player, heldItem, chrg, event);
+                LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+                LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(heldItem);
+                enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
+                handler.playerMineBlockEvent(player, heldItem, event, enchants);
             }
         }
     }
@@ -91,15 +90,15 @@ public class EventHandlers {
             if (enchs.keySet().contains(pml)) {
                 int l = enchs.get(pml), X, Ym, Z, YM;
                 switch (l) {
-                    case 1 : X = 0; Ym = 1; YM = 1; Z = 0;break;
-                    case 2 : X = 1; Ym = 1; YM = 1; Z = 0;break;
-                    case 3 : X = 1; Ym = 1; YM = 1; Z = 1;break;
-                    case 4 : X = 2; Ym = 1; YM = 2; Z = 1;break;
-                    case 5 : X = 2; Ym = 1; YM = 2; Z = 2;break;
-                    case 6 : X = 2; Ym = 1; YM = 3; Z = 2;break;
-                    case 7 : X = 3; Ym = 1; YM = 3; Z = 2;break;
-                    case 8 : X = 3; Ym = 1; YM = 3; Z = 3;break;
-                    case 9 : X = 4; Ym = 1; YM = 4; Z = 3;break;
+                    case 1 : X = 0; Ym = 1; YM = 1; Z = 0; break;
+                    case 2 : X = 1; Ym = 1; YM = 1; Z = 0; break;
+                    case 3 : X = 1; Ym = 1; YM = 1; Z = 1; break;
+                    case 4 : X = 2; Ym = 1; YM = 2; Z = 1; break;
+                    case 5 : X = 2; Ym = 1; YM = 2; Z = 2; break;
+                    case 6 : X = 2; Ym = 1; YM = 3; Z = 2; break;
+                    case 7 : X = 3; Ym = 1; YM = 3; Z = 2; break;
+                    case 8 : X = 3; Ym = 1; YM = 3; Z = 3; break;
+                    case 9 : X = 4; Ym = 1; YM = 4; Z = 3; break;
                     case 10 : X = 4; Ym = 1;YM = 4; Z = 4; break;
                     default : X = 5; Ym = 1;YM = 5; Z = 5; break;
                 }
@@ -155,32 +154,32 @@ public class EventHandlers {
                         ArmourLegs = player.inventory.armorItemInSlot(1),
                         ArmourBoots = player.inventory.armorItemInSlot(0);
 
-                long HChrg = -1, CChrg = -1, LChrg = -1, BChrg = -1;
-                if (Configurations.enableChargesSystem) {
-                    if (ArmourHelm != null && ArmourHelm.getTagCompound() != null)
-                        HChrg = ArmourHelm.getTagCompound().getLong("HxCEnchantCharge");
-                    if (ArmourChest != null && ArmourChest.getTagCompound() != null)
-                        CChrg = ArmourChest.getTagCompound().getLong("HxCEnchantCharge");
-                    if (ArmourLegs != null && ArmourLegs.getTagCompound() != null)
-                        LChrg = ArmourLegs.getTagCompound().getLong("HxCEnchantCharge");
-                    if (ArmourBoots != null && ArmourBoots.getTagCompound() != null)
-                        BChrg = ArmourBoots.getTagCompound().getLong("HxCEnchantCharge");
-                }
-
                 if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted()) {
-                    handler.handleChestplateEnchant(player, ArmourChest, CChrg);
+                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourChest);
+                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
+                    handler.handleChestplateEnchant(player, ArmourChest, enchants);
                 }
 
                 if (ArmourLegs != null && ArmourLegs.hasTagCompound() && ArmourLegs.isItemEnchanted()) {
-                    handler.handleLeggingEnchant(player, ArmourLegs, LChrg);
+                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourLegs);
+                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
+                    handler.handleLeggingEnchant(player, ArmourLegs, enchants);
                 }
 
                 if (ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted()) {
-                    handler.handleBootEnchant(player, ArmourBoots, BChrg);
+                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourBoots);
+                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
+                    handler.handleBootEnchant(player, ArmourBoots, enchants);
                 }
 
                 if (ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted()) {
-                    handler.handleHelmetEnchant(player, ArmourHelm, HChrg);
+                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourHelm);
+                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
+                    handler.handleHelmetEnchant(player, ArmourHelm, enchants);
                 }
 
                 List ents = player.worldObj.getEntitiesWithinAABB(Entity.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), 10));
@@ -218,14 +217,12 @@ public class EventHandlers {
 	@SubscribeEvent
 	public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {
 		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).hasTagCompound() && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).isItemEnchanted()) {
-            ItemStack boots = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
-            int JumpBoostLevel = getEnchantmentLevel((int) EnchantConfigHandler.getData("JumpBoost", "armor")[0], boots);
-            if (JumpBoostLevel > 0 && (boots.getTagCompound().getLong("HxCEnchantCharge") > EnchantConfigHandler.getData("JumpBoost", "armor")[4] || !Configurations.enableChargesSystem)) {
+            ItemStack legs = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
+            int JumpBoostLevel = getEnchantmentLevel((int) EnchantConfigHandler.getData("JumpBoost", "armor")[0], legs);
+            if (JumpBoostLevel > 0) {
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
                 double JumpBuff = player.motionY + 0.1 * JumpBoostLevel;
                 player.motionY += JumpBuff;
-                if (Configurations.enableChargesSystem)
-                    boots.getTagCompound().setLong("HxCEnchantCharge", boots.getTagCompound().getLong("HxCEnchantCharge") - EnchantConfigHandler.getData("JumpBoost", "armor")[4]);
             }
 		}
 	}
@@ -236,17 +233,17 @@ public class EventHandlers {
             EntityPlayer player = (EntityPlayer)event.entityLiving;
             if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted()) {
                 ItemStack boots = player.inventory.armorItemInSlot(0);
-                int meh = 0, meh2 = 0;
+                int featherFall = 0, meteorFall = 0;
                 if (EnchantConfigHandler.isEnabled("FeatherFall", "armor"))
-                    meh = getEnchantmentLevel((int) EnchantConfigHandler.getData("FeatherFall", "armor")[0], boots);
+                    featherFall = getEnchantmentLevel((int) EnchantConfigHandler.getData("FeatherFall", "armor")[0], boots);
                 if (EnchantConfigHandler.isEnabled("MeteorFall", "armor"))
-                    meh2 = getEnchantmentLevel((int) EnchantConfigHandler.getData("MeteorFall", "armor")[0], boots);
+                    meteorFall = getEnchantmentLevel((int) EnchantConfigHandler.getData("MeteorFall", "armor")[0], boots);
 
-                if (meh < 4 && meh > 0)event.distance /= meh;
-                else if (meh > 4) event.distance = 0;
+                if (featherFall < 4 && featherFall > 0)event.distance /= featherFall;
+                else if (featherFall > 4) event.distance = 0;
 
-                if (meh2 > 0 && event.distance > 10) {
-                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, event.distance / 2 * meh2, false);
+                if (meteorFall > 0 && event.distance > 10) {
+                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, event.distance / 5 * meteorFall, false);
                     event.distance = 0;
                 }
             }
