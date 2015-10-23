@@ -5,14 +5,15 @@ import HxCKDMS.HxCCore.api.Configuration.Category;
 import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
+import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
+import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
-import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
-import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
+import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
 import cpw.mods.fml.common.Mod;
@@ -26,12 +27,15 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static HxCKDMS.HxCEnchants.lib.Reference.*;
 
@@ -40,6 +44,8 @@ public class HxCEnchants {
     @Instance(MOD_ID)
     public static HxCEnchants instance;
     public static SimpleNetworkWrapper networkWrapper = new SimpleNetworkWrapper(CHANNEL_NAME);
+
+    public static List<Enchantment> KnownRegisteredEnchants = new ArrayList<>();
 
     @SidedProxy(serverSide = SERVER_PROXY_CLASS, clientSide = CLIENT_PROXY_CLASS)
     public static IProxy proxy;
@@ -53,6 +59,7 @@ public class HxCEnchants {
                 proxy.preInit(event);
             networkWrapper.registerMessage(PacketInfuserSync.handler.class, PacketInfuserSync.class, 0, Side.SERVER);
         }
+        networkWrapper.registerMessage(PacketHxCEnchanterSync.handler.class, PacketHxCEnchanterSync.class, 0, Side.SERVER);
         networkWrapper.registerMessage(PacketKeypress.handler.class, PacketKeypress.class, 1, Side.SERVER);
     }
 
@@ -78,7 +85,11 @@ public class HxCEnchants {
     }
     
     @EventHandler
-    public void postInit(FMLPostInitializationEvent event){}
+    public void postInit(FMLPostInitializationEvent event) {
+        for (int i = 0; i < Enchantment.enchantmentsList.length; i++)
+            if (Enchantment.enchantmentsList[i] != null)
+                KnownRegisteredEnchants.add(Enchantment.enchantmentsList[i]);
+    }
 
     public void registerNewConfigSys(HxCConfig config) {
         config.registerCategory(new Category("General", "General Stuff"));

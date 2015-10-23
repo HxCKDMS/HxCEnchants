@@ -66,7 +66,9 @@ death.attack.Deadly=%1$s got too close to a powerful being.
 death.attack.Deadly.player=%1$s couldn't stand %2$s's massive power.
 
 tile.XPInfuser.name=XP Infuser
+tile.HxCEnchanter.name=HxCEnchanter
 
+enchantment.level.0=
 enchantment.level.11=XI
 enchantment.level.12=XII
 enchantment.level.13=XIII

@@ -8,11 +8,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.LinkedHashMap;
+
 public class HxCEnchanterTile extends TileEntity implements IInventory {
     private ItemStack[] inv;
 
     public int xpte = 0;
     public String player = "";
+    public LinkedHashMap<Enchantment, Integer> enchs = new LinkedHashMap<>();
 
     public HxCEnchanterTile(){
         inv = new ItemStack[1];
@@ -32,15 +35,16 @@ public class HxCEnchanterTile extends TileEntity implements IInventory {
             if (stack != null) {
                 EntityPlayer p = worldObj.getPlayerEntityByName(player);
                 assert p.experienceLevel >= xpte;
-                for (int i = 0; i < Math.round(xpte/8); i++) {
-                    int re = worldObj.rand.nextInt(Enchantment.enchantmentsList.length);
-                    if (Enchantment.enchantmentsList[re] == null) {
-                        i--;
-                    } else {
-                        int lvl = Enchantment.enchantmentsList[re].getMaxLevel() - (worldObj.rand.nextInt(Enchantment.enchantmentsList[re].getMaxLevel() - 1));
-                        stack.addEnchantment(Enchantment.enchantmentsList[re], lvl);
-                    }
-                }
+                enchs.forEach(stack::addEnchantment);
+//                for (int i = 0; i < Math.round(xpte/8); i++) {
+//                    int re = worldObj.rand.nextInt(Enchantment.enchantmentsList.length);
+//                    if (Enchantment.enchantmentsList[re] == null) {
+//                        i--;
+//                    } else {
+//                        int lvl = Enchantment.enchantmentsList[re].getMaxLevel() - (worldObj.rand.nextInt(Enchantment.enchantmentsList[re].getMaxLevel() - 1));
+//                        stack.addEnchantment(Enchantment.enchantmentsList[re], lvl);
+//                    }
+//                }
                 p.addExperienceLevel(-xpte);
                 xpte = 0;
             }

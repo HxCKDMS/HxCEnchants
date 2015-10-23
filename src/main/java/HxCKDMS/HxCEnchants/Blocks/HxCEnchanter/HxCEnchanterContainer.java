@@ -10,7 +10,7 @@ public class HxCEnchanterContainer extends Container {
     protected HxCEnchanterTile enchanterTile;
     public HxCEnchanterContainer(EntityPlayer player, HxCEnchanterTile te){
         enchanterTile = te;
-        addSlotToContainer(new Slot(enchanterTile, 0, 80, 35));
+        addSlotToContainer(new Slot(enchanterTile, 0, 12, 36));
         bindPlayerInventory(player.inventory);
     }
 

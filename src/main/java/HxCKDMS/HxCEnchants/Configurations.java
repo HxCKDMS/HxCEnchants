@@ -12,7 +12,7 @@ public class Configurations {
     @Config.Float
     public static float PiercingPercent = 0.15f;
     @Config.Integer
-    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45;
+    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3;
     @Config.Boolean
     public static boolean notice = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true;
 
