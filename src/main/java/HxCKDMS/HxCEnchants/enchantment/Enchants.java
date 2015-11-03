@@ -206,6 +206,10 @@ public class Enchants {
             data = EnchantConfigHandler.getData("LightningArrow", "weapon");
             enchant.registerEnchant("lightningArrow", EnumHxCEnchantType.BOW, data[0], data[1], data[2], data[3], data[4], Arrays.asList((int) EnchantConfigHandler.getData("Zeus", "weapon")[0]));
         }
+        if (EnchantConfigHandler.isEnabled("ChargedAura", "armor")) {
+            data = EnchantConfigHandler.getData("ChargedAura", "armor");
+            enchant.registerEnchant("chargedAura", EnumHxCEnchantType.ARMOR, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
+        }
         HxCEnch.hxcEnchants.forEach(z -> MinecraftForge.EVENT_BUS.register(z));
         LogHelper.info(HxCEnch.hxcEnchants.size() + " enchantments have been registered.", Reference.MOD_NAME);
     }

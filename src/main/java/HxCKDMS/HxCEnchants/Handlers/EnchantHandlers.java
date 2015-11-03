@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -386,6 +387,12 @@ public class EnchantHandlers implements IEnchantHandler {
                     }
                 }
 
+                if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("ChargedAura", "armor")[0]])) {
+                    if (!(entity instanceof EntityPlayer) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal)) {
+                        world.addWeatherEffect(new EntityLightningBolt(world, entity.posX, entity.posY, entity.posZ));
+                    }
+                }
+
                 if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("RepulsiveAura", "armor")[0]])) {
                     if (!(entity instanceof EntityAnimal || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityPlayer)) {
                         double motionX = player.posX - entity.posX;
@@ -410,11 +417,13 @@ public class EnchantHandlers implements IEnchantHandler {
                 List<ChunkPosition> blocks = getFreezablesWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])/4));
                 for (ChunkPosition pos : blocks) {
                     if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.lava)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.obsidian);
+                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.obsidian, 0, 3);
                     if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.flowing_lava)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.stone);
+                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.stone, 0, 3);
                     if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.water)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.ice);
+                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.ice, 0, 3);
+                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.fire)
+                        world.setBlockToAir(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
                 }
             }
 
@@ -671,7 +680,7 @@ public class EnchantHandlers implements IEnchantHandler {
             for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
                 for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
                     Block block = world.getBlock(x, y, z);
-                    if(block != null && (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.water))
+                    if(block != null && (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.water || block == Blocks.fire))
                         blocks.add(new ChunkPosition(x, y, z));
                 }
             }

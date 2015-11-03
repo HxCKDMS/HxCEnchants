@@ -85,8 +85,8 @@ public class HxCEnchanterGUI extends GuiContainer {
             shelvesNeeded = tmp[0];
             xpneeded = cost((ItemStack) HxCContainer.getInventory().get(0));
         }
-        if (row > enchs.size()-5)
-            row = enchs.size()-5;
+        if (row > enchs.size()-6)
+            row = enchs.size()-6;
         int yStart = (height - ySize) / 2;
         drawDefaultBackground();
         drawRect(width / 2 - 105, 60, width / 2 - 35, height / 2 + 5, new Color(50, 170, 170, 70).getRGB());

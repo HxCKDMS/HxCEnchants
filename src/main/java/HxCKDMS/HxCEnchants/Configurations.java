@@ -61,6 +61,7 @@ public class Configurations {
         ArmorEnchants.put("IcyAura", "true, 434, 10, 1, 40, 15");
         ArmorEnchants.put("Gluttony", "true, 435, 20, 1, 40, 20");
         ArmorEnchants.put("ExplosiveDischarge", "true, 436, 10, 1, 40, 120");
+        ArmorEnchants.put("ChargedAura", "true, 437, 10, 1, 40, 20");
 
         WeaponEnchants.put("LightningArrow", "true, 460, 5, 1, 40, 150");
         WeaponEnchants.put("ArrowExplosive", "true, 461, 4, 2, 40, 250");
