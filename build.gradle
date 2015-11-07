@@ -19,12 +19,12 @@ apply plugin: 'forge'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "1.7.10-2.2.1"
+version = "1.7.10-2.2.2"
 group= "HxCKDMS.HxCEnchants"
 archivesBaseName = "HxCEnchants"
 
 minecraft {
-    mappings = "snapshot_20140925"
+    mappings = "stable_12"
     version = "1.7.10-10.13.4.1448-1.7.10"
     runDir = "eclipse"
 }

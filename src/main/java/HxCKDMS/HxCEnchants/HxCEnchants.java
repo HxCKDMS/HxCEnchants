@@ -54,13 +54,12 @@ public class HxCEnchants {
     public void preinit(FMLPreInitializationEvent event) {
         HxCConfig hxCConfig = new HxCConfig();
         registerNewConfigSys(hxCConfig);
-        if (Configurations.enableChargesSystem) {
+        if (Configurations.enableChargesSystem)
             if (Configurations.EnableKeybinds)
                 proxy.preInit(event);
-            networkWrapper.registerMessage(PacketInfuserSync.handler.class, PacketInfuserSync.class, 0, Side.SERVER);
-        }
         networkWrapper.registerMessage(PacketHxCEnchanterSync.handler.class, PacketHxCEnchanterSync.class, 0, Side.SERVER);
         networkWrapper.registerMessage(PacketKeypress.handler.class, PacketKeypress.class, 1, Side.SERVER);
+        networkWrapper.registerMessage(PacketInfuserSync.handler.class, PacketInfuserSync.class, 2, Side.SERVER);
     }
 
     @EventHandler
