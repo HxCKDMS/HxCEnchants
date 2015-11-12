@@ -117,30 +117,12 @@ public class EnchantHandlers implements IEnchantHandler {
     public void handleBootEnchant(EntityPlayerMP player, ItemStack boots, LinkedHashMap<Enchantment, Integer> enchants) {
         String UUID = player.getUniqueID().toString();
         File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-        if (enchants.containsKey(Enchantment.enchantmentsList[getData("Fly", "armor")[0]])) {
-            short flyLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Fly", "armor")[0], boots);
-            if (flyLevel > 0 && player.capabilities.isFlying && !player.capabilities.isCreativeMode)
-                flyTimer--;
-
-            boolean flyhbt = false;
-            try {
-                flyhbt = NBTFileIO.getBoolean(CustomPlayerData, "EFlyHasChanged");
-            } catch (Exception ignored) {}
-
-            if (!player.capabilities.allowFlying) {
-                player.capabilities.allowFlying = true;
-                player.sendPlayerAbilities();
-                NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", true);
-            }
-            if (flyhbt) {
-                player.capabilities.allowFlying = false;
-                player.capabilities.isFlying = false;
-                player.sendPlayerAbilities();
-                NBTFileIO.setBoolean(CustomPlayerData, "EFlyHasChanged", false);
-            }
-            if (player.capabilities.isFlying && flyLevel > 0 && !player.capabilities.isCreativeMode)
-                player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d,
-                        player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
+        if (enchants.containsKey(Enchantment.enchantmentsList[getData("Fly", "armor")[0]]) &! NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
+            NBTFileIO.setBoolean(CustomPlayerData, "fly", true);
+            NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", true);
+        } else if (NBTFileIO.getBoolean(CustomPlayerData, "flightEnc") &! enchants.containsKey(Enchantment.enchantmentsList[getData("Fly", "armor")[0]])) {
+            NBTFileIO.setBoolean(CustomPlayerData, "fly", false);
+            NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
         }
 
         if (enchants.containsKey(Enchantment.enchantmentsList[getData("Stealth", "armor")[0]])) {
