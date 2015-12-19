@@ -12,7 +12,7 @@ public class Configurations {
     @Config.Float
     public static float PiercingPercent = 0.15f;
     @Config.Integer
-    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3;
+    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3, GaiasAuraSpeed = 2;
     @Config.Boolean
     public static boolean notice = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true;
 
@@ -20,11 +20,11 @@ public class Configurations {
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
 
     @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
-    public static LinkedHashMap<String, String> Enchants = new LinkedHashMap<String, String>();
+    public static LinkedHashMap<String, String> Enchants = new LinkedHashMap<>();
     @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
-    public static LinkedHashMap<String, String> WeaponEnchants = new LinkedHashMap<String, String>();
+    public static LinkedHashMap<String, String> WeaponEnchants = new LinkedHashMap<>();
     @Config.Map(description = "Enabled, ID, Level, Weight, Cost, Charge Cost", category = "Enchants")
-    public static LinkedHashMap<String, String> ArmorEnchants = new LinkedHashMap<String, String>();
+    public static LinkedHashMap<String, String> ArmorEnchants = new LinkedHashMap<>();
 
     static {
         Enchants.put("Bound", "false, 400, 3, 5, 45, 0");

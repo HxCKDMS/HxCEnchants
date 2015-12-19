@@ -386,7 +386,7 @@ public class EnchantHandlers implements IEnchantHandler {
             }
 
             if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])) {
-                int ran = world.rand.nextInt(Math.round(80 / sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])));
+                int ran = world.rand.nextInt(Math.round(100 / (GaiasAuraSpeed * sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]]))));
                 if (ran == 0) {
                     List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])/4));
                     for (ChunkPosition pos : crops) {
