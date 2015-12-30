@@ -237,9 +237,8 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (player.inventory.armorItemInSlot(1) != null && player.inventory.armorItemInSlot(1).hasTagCompound() && player.inventory.armorItemInSlot(1).isItemEnchanted()) {
-            int tmp = 0;
             if (isEnabled("Swiftness", "armor")) {
-                tmp = EnchantmentHelper.getEnchantmentLevel((int) EnchantConfigHandler.getData("Swiftness", "armor")[0], player.inventory.armorItemInSlot(1));
+                int tmp = EnchantmentHelper.getEnchantmentLevel((int) EnchantConfigHandler.getData("Swiftness", "armor")[0], player.inventory.armorItemInSlot(1));
 
                 if (tmp == 0) {
                     IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
