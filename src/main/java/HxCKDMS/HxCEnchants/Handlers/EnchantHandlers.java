@@ -9,6 +9,7 @@ import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import HxCKDMS.HxCEnchants.api.IEnchantHandler;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
@@ -45,6 +46,7 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.io.File;
@@ -53,7 +55,8 @@ import java.util.*;
 import static HxCKDMS.HxCEnchants.Configurations.*;
 import static HxCKDMS.HxCEnchants.EnchantConfigHandler.getData;
 import static HxCKDMS.HxCEnchants.EnchantConfigHandler.isEnabled;
-import static HxCKDMS.HxCEnchants.lib.Reference.*;
+import static HxCKDMS.HxCEnchants.lib.Reference.HealthUUID;
+import static HxCKDMS.HxCEnchants.lib.Reference.SpeedUUID;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class EnchantHandlers implements IEnchantHandler {
@@ -128,10 +131,6 @@ public class EnchantHandlers implements IEnchantHandler {
         } else if (NBTFileIO.getBoolean(CustomPlayerData, "flightEnc") &! enchants.containsKey(Enchantment.enchantmentsList[getData("Fly", "armor")[0]])) {
             NBTFileIO.setBoolean(CustomPlayerData, "fly", false);
             NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
-        }
-
-        if (enchants.containsKey(Enchantment.enchantmentsList[getData("Stealth", "armor")[0]])) {
-            Stealth(player, enchants.get(Enchantment.enchantmentsList[getData("Stealth", "armor")[0]]));
         }
 
         if (FlashButton && enchants.containsKey(Enchantment.enchantmentsList[getData("FlashStep", "armor")[0]])) {
@@ -644,15 +643,17 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
     }
-    
-    private void Stealth (EntityPlayerMP player, int StealthLevel) {
-        int px = Math.round((float)player.posX); int py = Math.round((float)player.posY); int pz = Math.round((float) player.posZ);
-        List list  = player.worldObj.getEntitiesWithinAABB(EntityMob.class, AABBUtils.getAreaBoundingBox(px, py, pz, 24));
-        for (EntityMob entity : (List<EntityMob>) list) {
-            IAttributeInstance fr = entity.getEntityAttribute(SharedMonsterAttributes.followRange);
-            AttributeModifier StealthBuff = new AttributeModifier(StealthUUID, "StealthDeBuff", (fr.getBaseValue()-StealthLevel), 1);
-            fr.removeModifier(StealthBuff);
-            fr.applyModifier(StealthBuff);
+
+    @SubscribeEvent
+    public void setAttackTarget(LivingSetAttackTargetEvent event) {
+        if (event.target instanceof EntityPlayer && ((EntityPlayer) event.target).inventory != null &&
+                ((EntityPlayer) event.target).inventory.armorItemInSlot(0) != null &&
+                ((EntityPlayer) event.target).inventory.armorItemInSlot(0).hasTagCompound() &&
+                ((EntityPlayer) event.target).inventory.armorItemInSlot(0).isItemEnchanted()) {
+            int a = EnchantmentHelper.getEnchantmentLevel(getData("Stealth", "armor")[0], ((EntityPlayer) event.target).inventory.armorItemInSlot(0));
+            if (a > 0) {
+                event.setCanceled(true);
+            }
         }
     }
 
