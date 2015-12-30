@@ -10,9 +10,9 @@ public class Configurations {
     @Config.Boolean
     public static boolean ExplosionDestroysTerrain = false, PlayerAuraDeadly = true, PlayerAuraFiery = true, PlayerAuraThick = true, PlayerAuraDark = true, PlayerAuraToxic = true,  enableChargesSystem = true, PlayerIcyAura = true, PlayerRepulsiveAura = true, PlayerHealingAura = true;
     @Config.Float
-    public static float PiercingPercent = 0.15f;
+    public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f;
     @Config.Integer
-    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3, GaiasAuraSpeed = 2;
+    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3;
     @Config.Boolean
     public static boolean notice = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true;
 
@@ -62,6 +62,7 @@ public class Configurations {
         ArmorEnchants.put("Gluttony", "true, 435, 20, 1, 40, 20");
         ArmorEnchants.put("ExplosiveDischarge", "true, 436, 10, 1, 40, 120");
         ArmorEnchants.put("ChargedAura", "true, 437, 10, 1, 40, 20");
+        ArmorEnchants.put("Nightvision", "true, 438, 1, 1, 30, 10");
 
         WeaponEnchants.put("LightningArrow", "true, 460, 5, 1, 40, 150");
         WeaponEnchants.put("ArrowExplosive", "true, 461, 4, 2, 40, 250");

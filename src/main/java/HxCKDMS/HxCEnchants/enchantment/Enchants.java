@@ -210,6 +210,10 @@ public class Enchants {
             data = EnchantConfigHandler.getData("ChargedAura", "armor");
             enchant.registerEnchant("chargedAura", EnumHxCEnchantType.ARMOR, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
         }
+        if (EnchantConfigHandler.isEnabled("Nightvision", "armor")) {
+            data = EnchantConfigHandler.getData("Nightvision", "armor");
+            enchant.registerEnchant("nightvision", EnumHxCEnchantType.ARMOR_HEAD, data[0], data[1], data[2], data[3], data[4], Arrays.asList());
+        }
         HxCEnch.hxcEnchants.forEach(z -> MinecraftForge.EVENT_BUS.register(z));
         LogHelper.info(HxCEnch.hxcEnchants.size() + " enchantments have been registered.", Reference.MOD_NAME);
     }

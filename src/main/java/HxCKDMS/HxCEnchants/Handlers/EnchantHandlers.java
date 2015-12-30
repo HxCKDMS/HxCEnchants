@@ -76,6 +76,11 @@ public class EnchantHandlers implements IEnchantHandler {
                 }
             }
         }
+        if (enchants.containsKey(Enchantment.enchantmentsList[getData("Nightvision", "armor")[0]])) {
+            short vision = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantConfigHandler.getData("Nightvision", "armor")[0], helmet);
+            if (vision > 0)
+                player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 600, 1, true));
+        }
     }
 
     @Override
@@ -398,12 +403,11 @@ public class EnchantHandlers implements IEnchantHandler {
             }
 
             if (sharedEnchants.keySet().contains(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])) {
-                int ran = world.rand.nextInt(Math.round(100 / (GaiasAuraSpeed * sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]]))));
+                int ran = world.rand.nextInt(Math.round(250 / (GaiasAuraSpeed * sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]]))));
                 if (ran == 0) {
                     List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(Enchantment.enchantmentsList[getData("GaiaAura", "armor")[0]])/4));
-                    for (ChunkPosition pos : crops) {
+                    for (ChunkPosition pos : crops)
                         player.worldObj.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ).updateTick(player.worldObj, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, new Random());
-                    }
                 }
             }
 
