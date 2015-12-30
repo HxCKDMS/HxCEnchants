@@ -60,7 +60,7 @@ import static HxCKDMS.HxCEnchants.lib.Reference.SpeedUUID;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class EnchantHandlers implements IEnchantHandler {
-    private int repairTimer = 60, regenTimer = 60, flyTimer = 1200, swiftTimer = 600, vitTimer = 600, stealthTimer = 600;
+    private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
     FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
 
     public static boolean OverCharge = false, FlashButton = false;
