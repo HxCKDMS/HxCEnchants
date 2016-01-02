@@ -50,6 +50,7 @@ enchantment.lightningArrow=Lightning Arrow
 enchantment.gluttony=Gluttony
 enchantment.flamingArrow=Flaming
 enchantment.chargedAura=Electro-static Aura
+enchantment.nightVision=Nightvision
 
 death.attack.Piercing=%1$s was impaled.
 death.attack.Piercing.player=%1$s was impaled by %2$s.

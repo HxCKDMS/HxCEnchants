@@ -112,7 +112,7 @@ public class EnchantHandlers implements IEnchantHandler {
         if (enchants.containsKey(Enchantment.enchantmentsList[getData("Swiftness", "armor")[0]])) {
             IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
             short speedLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Swiftness", "armor")[0], leggings);
-            double speedBoost = speedLevel * 0.0387;
+            double speedBoost = speedLevel * SpeedTweak;
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 0);
             if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0)
                 ps.applyModifier(SpeedBuff);
@@ -240,15 +240,28 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
 
-        if (player.inventory.armorItemInSlot(1) != null && player.inventory.armorItemInSlot(1).hasTagCompound() && player.inventory.armorItemInSlot(1).isItemEnchanted()) {
-            if (isEnabled("Swiftness", "armor")) {
-                int tmp = EnchantmentHelper.getEnchantmentLevel((int) EnchantConfigHandler.getData("Swiftness", "armor")[0], player.inventory.armorItemInSlot(1));
+        if (isEnabled("Swiftness", "armor")) {
+            if (player.inventory.armorItemInSlot(1) == null) {
+                IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+                AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", 0, 0);
+                ps.removeModifier(SpeedBuff);
+            }
+        }
 
-                if (tmp == 0) {
-                    IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-                    AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", 0, 0);
-                    ps.removeModifier(SpeedBuff);
-                }
+        if (isEnabled("Vitality", "armor")) {
+            if (player.inventory.armorItemInSlot(2) == null) {
+                IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+                AttributeModifier VitBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", 0, 0);
+                ph.removeModifier(VitBuff);
+            }
+        }
+
+        if (isEnabled("Flight", "armor")) {
+            String UUID = player.getUniqueID().toString();
+            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+            if (player.inventory.armorItemInSlot(0) == null && NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
+                NBTFileIO.setBoolean(CustomPlayerData, "fly", false);
+                NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
             }
         }
     }

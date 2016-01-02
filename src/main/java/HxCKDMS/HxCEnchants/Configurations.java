@@ -10,7 +10,7 @@ public class Configurations {
     @Config.Boolean
     public static boolean ExplosionDestroysTerrain = false, PlayerAuraDeadly = true, PlayerAuraFiery = true, PlayerAuraThick = true, PlayerAuraDark = true, PlayerAuraToxic = true,  enableChargesSystem = true, PlayerIcyAura = true, PlayerRepulsiveAura = true, PlayerHealingAura = true;
     @Config.Float
-    public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f;
+    public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f, SpeedTweak = 0.0387f;
     @Config.Integer
     public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3;
     @Config.Boolean
