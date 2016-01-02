@@ -112,7 +112,7 @@ public class EnchantHandlers implements IEnchantHandler {
         if (enchants.containsKey(Enchantment.enchantmentsList[getData("Swiftness", "armor")[0]])) {
             IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
             short speedLevel = (short) EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Swiftness", "armor")[0], leggings);
-            double speedBoost = speedLevel * 0.2;
+            double speedBoost = speedLevel * 0.0387;
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 0);
             if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0)
                 ps.applyModifier(SpeedBuff);
