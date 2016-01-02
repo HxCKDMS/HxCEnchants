@@ -256,7 +256,7 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
 
-        if (isEnabled("Flight", "armor")) {
+        if (isEnabled("Fly", "armor")) {
             String UUID = player.getUniqueID().toString();
             File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
             if (player.inventory.armorItemInSlot(0) == null && NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
