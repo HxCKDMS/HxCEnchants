@@ -1,3 +1,10 @@
+##//'';.For texture pack authors to be able to customize the button in gui
+EnchanterGUI.xMin=75
+EnchanterGUI.xMax=125
+EnchanterGUI.yMin=85
+EnchanterGUI.yMax=96
+EnchanterGUI.enchantButton=Enchant!
+
 enchantment.fly=Flight
 enchantment.swiftness=Swiftness
 enchantment.vitality=Vitality
@@ -50,6 +57,7 @@ enchantment.lightningArrow=Lightning Arrow
 enchantment.gluttony=Gluttony
 enchantment.flamingArrow=Flaming
 enchantment.chargedAura=Electro-static Aura
+enchantment.nightvision=Nightvision
 
 death.attack.Piercing=%1$s was impaled.
 death.attack.Piercing.player=%1$s was impaled by %2$s.

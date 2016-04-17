@@ -3,16 +3,19 @@ package HxCKDMS.HxCEnchants;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCCore.api.Configuration.Category;
 import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
+import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
 import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
 import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserTile;
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
+import HxCKDMS.HxCEnchants.network.CatalystsGrabber;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
@@ -33,7 +36,11 @@ import net.minecraft.init.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,12 +90,25 @@ public class HxCEnchants {
         GameRegistry.registerTileEntity(HxCEnchanterTile.class, "HxCEnchanterTile");
         GameRegistry.addRecipe(new ShapedOreRecipe(block, "DED", "BOB", "OOO", 'B', Items.enchanted_book, 'E', Items.ender_eye, 'O', Blocks.obsidian, 'D', "gemDiamond"));
     }
-    
+    public static int enchnum = 0;
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         for (int i = 0; i < Enchantment.enchantmentsList.length; i++)
-            if (Enchantment.enchantmentsList[i] != null)
+            if (Enchantment.enchantmentsList[i] != null) {
                 KnownRegisteredEnchants.add(Enchantment.enchantmentsList[i]);
+                enchnum++;
+            }
+        try {
+            URL e = new URL("https://github.com/HxCKDMS/HxCLib/blob/master/HxCEnchantsCatalysts");
+            InputStream inputStream = e.openStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            CatalystsGrabber.load(bufferedReader);
+        } catch (Exception var4) {
+            LogHelper.error("Can not resolve HxCEnchantsCatalysts", "HxCKDMS Core");
+            if(HxCKDMS.HxCCore.Configs.Configurations.DebugMode) {
+                var4.printStackTrace();
+            }
+        }
     }
 
     public void registerNewConfigSys(HxCConfig config) {
