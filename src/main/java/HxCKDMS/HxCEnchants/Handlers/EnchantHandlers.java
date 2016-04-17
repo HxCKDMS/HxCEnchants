@@ -4,7 +4,7 @@ import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCCore.api.Utils.Teleporter;
-import HxCKDMS.HxCEnchants.Configurations;
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import HxCKDMS.HxCEnchants.api.IEnchantHandler;
@@ -52,7 +52,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.io.File;
 import java.util.*;
 
-import static HxCKDMS.HxCEnchants.Configurations.*;
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
 import static HxCKDMS.HxCEnchants.EnchantConfigHandler.getData;
 import static HxCKDMS.HxCEnchants.EnchantConfigHandler.isEnabled;
 import static HxCKDMS.HxCEnchants.lib.Reference.HealthUUID;

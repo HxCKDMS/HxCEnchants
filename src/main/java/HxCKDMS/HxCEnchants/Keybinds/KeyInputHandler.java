@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants.Keybinds;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
-import HxCKDMS.HxCEnchants.Configurations;
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;

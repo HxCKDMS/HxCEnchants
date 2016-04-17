@@ -1,5 +1,7 @@
 package HxCKDMS.HxCEnchants;
 
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
+
 public class EnchantConfigHandler {
     public static boolean isEnabled(String name, String type) {
         switch(type) {

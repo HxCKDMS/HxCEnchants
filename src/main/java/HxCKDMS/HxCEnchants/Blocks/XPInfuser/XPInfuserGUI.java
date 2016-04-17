@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants.Blocks.XPInfuser;
 
-import HxCKDMS.HxCEnchants.Configurations;
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketInfuserSync;

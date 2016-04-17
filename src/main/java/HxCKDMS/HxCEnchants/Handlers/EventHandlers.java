@@ -1,7 +1,7 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCCore.api.Utils.AABBUtils;
-import HxCKDMS.HxCEnchants.Configurations;
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;

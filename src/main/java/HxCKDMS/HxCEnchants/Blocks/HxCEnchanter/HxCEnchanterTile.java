@@ -18,7 +18,7 @@ public class HxCEnchanterTile extends TileEntity implements IInventory {
     public LinkedHashMap<Enchantment, Integer> enchs = new LinkedHashMap<>();
 
     public HxCEnchanterTile(){
-        inv = new ItemStack[1];
+        inv = new ItemStack[2];
     }
 
     @Override

@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants;
+package HxCKDMS.HxCEnchants.Configurations;
 
 import HxCKDMS.HxCCore.api.Configuration.Config;
 
@@ -14,7 +14,7 @@ public class Configurations {
     @Config.Integer
     public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3;
     @Config.Boolean
-    public static boolean notice = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true;
+    public static boolean notice = true, blacklistEnchantsFromEnchantingPlus2 = false, EnableKeybinds = true, EnableCoordinatesInGUIs = false;
 
     @Config.List
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});

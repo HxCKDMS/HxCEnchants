@@ -1,8 +1,6 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 public class OtherHandler {
@@ -13,10 +11,10 @@ public class OtherHandler {
 
     @SubscribeEvent
     public void entityJoinWorldEvent(EntityJoinWorldEvent event) {
-        if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote && derp == 0) {
+        /*if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote && derp == 0) {
             ((EntityPlayer) event.entity).addChatComponentMessage(new ChatComponentText(name + a));
             ((EntityPlayer) event.entity).addChatComponentMessage(new ChatComponentText(name + b));
             derp++;
-        }
+        }*/
     }
 }
