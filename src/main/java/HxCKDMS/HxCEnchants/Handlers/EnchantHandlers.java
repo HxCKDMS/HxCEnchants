@@ -35,6 +35,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -188,7 +189,19 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerTickEvent(EntityPlayerMP player) {
-        if (isEnabled("OverCharge", "weapon") && player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemAxe) && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null) {
+        if (player.getHeldItem() != null && player.getHeldItem().isItemStackDamageable() && player.getHeldItem().isItemEnchanted() && player.isSneaking() && player.experienceTotal > 1) {
+            player.addExperienceLevel(-1);
+
+            if (player.getHeldItem().hasTagCompound()) {
+                player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge") + 20);
+            } else {
+                NBTTagCompound tg = new NBTTagCompound();
+                tg.setLong("HxCEnchantCharge", 1);
+                player.getHeldItem().setTagCompound(tg);
+            }
+        }
+
+        if (player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemAxe) && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null && isEnabled("OverCharge")) {
             long HeldCharges = 0;
             if (enableChargesSystem) {
                 HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
@@ -239,7 +252,7 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
 
-        if (isEnabled("Swiftness", "armor")) {
+        if (player.inventory.armorItemInSlot(1) != null && isEnabled("Swiftness")) {
             if (player.inventory.armorItemInSlot(1) == null) {
                 IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
                 AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", 0, 0);
@@ -247,7 +260,7 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
 
-        if (isEnabled("Vitality", "armor")) {
+        if (player.inventory.armorItemInSlot(0) != null && isEnabled("Vitality")) {
             if (player.inventory.armorItemInSlot(2) == null) {
                 IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
                 AttributeModifier VitBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", 0, 0);
@@ -255,7 +268,7 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
 
-        if (isEnabled("Fly", "armor")) {
+        if (isEnabled("Fly")) {
             String UUID = player.getUniqueID().toString();
             File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
             if (player.inventory.armorItemInSlot(0) == null && NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
@@ -266,24 +279,18 @@ public class EnchantHandlers implements IEnchantHandler {
     }
     
     private static boolean isEnabled(String name) {
-        System.out.println("Checking is enabled : " + name);
-        return EnabledEnchants.get(name);
-    }
-    
-    private static boolean isEnabled(String name, String ignored) {
-        System.out.println("Checking is enabled : " + name);
         return EnabledEnchants.get(name);
     }
 
     @Override
     public void delayedPlayerTickEvent(EntityPlayerMP player) {
         repairTimer--; regenTimer--;
-        if (isEnabled("Repair", "other") && repairTimer <= 0) {
+        if (isEnabled("Repair") && repairTimer <= 0) {
             RepairItems(player);
             repairTimer = Configurations.repairTimer;
         }
 
-        if (isEnabled("Regen", "armor") && regenTimer <= 0) {
+        if (isEnabled("Regen") && regenTimer <= 0) {
             short H = 0, C = 0, L = 0, B = 0, rid = EnchantIDs.get("Regen");
             byte Regen = 0;
             if (player.inventory.armorItemInSlot(3) != null)
@@ -377,8 +384,13 @@ public class EnchantHandlers implements IEnchantHandler {
 
                 if (sharedEnchants.keySet().contains(enchantmentsList[EnchantIDs.get("AuraFiery")])) {
                     if ((AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !entity.isBurning()) {
-                        entity.setFire(100);
+                        entity.setFire(sharedEnchants.get(enchantmentsList[EnchantIDs.get("AuraFiery")]) * 2);
                     }
+                    getMeltablesWithinAABB(world, AABBUtils.getAreaBoundingBox((int) player.posX, (int) player.posY, (int) player.posZ, sharedEnchants.get(enchantmentsList[EnchantIDs.get("AuraFiery")]))).forEach(meltable -> {
+                        if (world.getBlock(meltable.chunkPosX, meltable.chunkPosY, meltable.chunkPosZ) == Blocks.ice)
+                            world.setBlock(meltable.chunkPosX, meltable.chunkPosY, meltable.chunkPosZ, Blocks.water);
+                        else world.setBlockToAir(meltable.chunkPosX, meltable.chunkPosY, meltable.chunkPosZ);
+                    });
                 }
 
                 if (sharedEnchants.keySet().contains(enchantmentsList[EnchantIDs.get("AuraThick")])) {
@@ -483,15 +495,24 @@ public class EnchantHandlers implements IEnchantHandler {
 
         if (enchants.containsKey(enchantmentsList[EnchantIDs.get("Vorpal")])) {
             victim.attackEntityFrom(new DamageSource("Vorpal").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(),
-                    enchants.get(enchantmentsList[EnchantIDs.get("Vorpal")]) * 2);
+                    enchants.get(enchantmentsList[EnchantIDs.get("Vorpal")]) * 0.35f * damage);
         }
 
         if (enchants.containsKey(enchantmentsList[EnchantIDs.get("SCurse")])) {
             int SCurseLevel = enchants.get(enchantmentsList[EnchantIDs.get("SCurse")]);
-            victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), SCurseLevel*2);
+            victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), damage * (0.2f * SCurseLevel));
             player.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120 * SCurseLevel, SCurseLevel, true));
             player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 120, Math.round(SCurseLevel /3), true));
             player.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel, true));
+        }
+
+        if (enchants.containsKey(enchantmentsList[EnchantIDs.get("VoidTouch")])) {
+            short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("VoidTouch"), weapon);
+            if (voidLevel > 0 && (weapon.getTagCompound().getLong("HxCEnchantCharge") > EnchantChargeNeeded.get("VoidTouch") || !enableChargesSystem)) {
+                victim.attackEntityFrom(new DamageSource("Void").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), damage * (0.2f * voidLevel));
+                if (enableChargesSystem)
+                    weapon.getTagCompound().setLong("HxCEnchantCharge", weapon.getTagCompound().getLong("HxCEnchantCharge") - (EnchantChargeNeeded.get("VoidTouch") * voidLevel));
+            }
         }
 
         if (enchants.containsKey(enchantmentsList[EnchantIDs.get("OverCharge")]) && weapon.getTagCompound().getBoolean("StoredCharge")) {
@@ -499,7 +520,7 @@ public class EnchantHandlers implements IEnchantHandler {
             int storedCharge = weapon.getTagCompound().getInteger("HxCOverCharge");
             if (OverCharge > 0) {
                 List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), OverCharge*5));
-                int ndamage = storedCharge/list.size();
+                int ndamage = (int)((damage * 0.3f * list.size()) + storedCharge/list.size());
                 list.stream().filter(liv -> liv != player).forEach(liv -> liv.attackEntityFrom(new DamageSource("OverCharge").setDamageIsAbsolute().setDamageAllowedInCreativeMode(), ndamage));
                 weapon.getTagCompound().setInteger("HxCOverCharge", 0);
                 weapon.getTagCompound().setBoolean("StoredCharge", false);
@@ -513,7 +534,7 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerMineBlockEvent(EntityPlayer player, ItemStack tool, BlockEvent.HarvestDropsEvent event, LinkedHashMap<Enchantment, Integer> enchants) {
-        if (isEnabled("FlameTouch", "other")) {
+        if (isEnabled("FlameTouch")) {
             int AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("FlameTouch"), tool);
             if (AutoSmeltLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > EnchantChargeNeeded.get("FlameTouch") || !enableChargesSystem)) {
                 for (int i = 0; i < event.drops.size(); i++) {
@@ -530,7 +551,7 @@ public class EnchantHandlers implements IEnchantHandler {
             }
         }
 
-        if (isEnabled("VoidTouch", "other")) {
+        if (isEnabled("VoidTouch")) {
             short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("VoidTouch"), tool);
             if (voidLevel > 0 && (tool.getTagCompound().getLong("HxCEnchantCharge") > EnchantChargeNeeded.get("VoidTouch") || !enableChargesSystem)) {
                 for(String block : VoidedItems)
@@ -557,13 +578,13 @@ public class EnchantHandlers implements IEnchantHandler {
         int AdrenalineBoostLevel = 0, BattleHealingLevel = 0, WitherProt = 0, DivineInterventionLevel = 0, ExplosiveDischarge = 0;
 
         if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted()) {
-            if (isEnabled("BattleHealing", "armor"))
+            if (isEnabled("BattleHealing"))
                 BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("BattleHealing"), ArmourChest);
 
-            if (isEnabled("DivineIntervention", "armor"))
+            if (isEnabled("DivineIntervention"))
                 DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("DivineIntervention"), ArmourChest);
 
-            if (isEnabled("ExplosiveDischarge", "armor") && allowEffect)
+            if (isEnabled("ExplosiveDischarge") && allowEffect)
                 ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ExplosiveDischarge"), ArmourChest);
 
             if (BattleHealingLevel > 0 && source.damageType.equalsIgnoreCase("generic") && (ArmourChest.getTagCompound().getLong("HxCEnchantCharge") > EnchantChargeNeeded.get("BattleHealing") || !enableChargesSystem)) {
@@ -602,10 +623,10 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted()) {
-            if (isEnabled("AdrenalineBoost", "armor"))
+            if (isEnabled("AdrenalineBoost"))
                 AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("AdrenalineBoost"), ArmourHelm);
 
-            if (isEnabled("WitherProtection", "armor"))
+            if (isEnabled("WitherProtection"))
                 WitherProt = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("WitherProtection"), ArmourHelm);
 
             if (WitherProt > 0 && source.damageType.equalsIgnoreCase("wither") && (ArmourHelm.getTagCompound().getLong("HxCEnchantCharge") > EnchantChargeNeeded.get("WitherProtection") || !enableChargesSystem)) {
@@ -704,6 +725,21 @@ public class EnchantHandlers implements IEnchantHandler {
                 for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
                     Block block = world.getBlock(x, y, z);
                     if(block != null && (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.water || block == Blocks.fire))
+                        blocks.add(new ChunkPosition(x, y, z));
+                }
+            }
+        }
+        return blocks;
+    }
+
+    private static ArrayList<ChunkPosition> getMeltablesWithinAABB(World world, AxisAlignedBB box) {
+        ArrayList<ChunkPosition> blocks = new ArrayList();
+
+        for(int x = (int)box.minX; (double)x <= box.maxX; ++x) {
+            for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
+                for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
+                    Block block = world.getBlock(x, y, z);
+                    if(block != null && (block == Blocks.ice || block == Blocks.snow || block == Blocks.snow_layer))
                         blocks.add(new ChunkPosition(x, y, z));
                 }
             }

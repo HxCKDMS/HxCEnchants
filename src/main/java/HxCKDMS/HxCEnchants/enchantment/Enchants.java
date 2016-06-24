@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.enchantment;
 
+import HxCKDMS.HxCCore.Configs.Configurations;
 import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,6 +18,8 @@ public class Enchants {
                     enchant.registerEnchant(StringUtils.uncapitalize(ench), (byte) 0, EnchantIDs.get(ench), EnchantLevels.get(ench), EnchantWeight.get(ench), EnchantCost.get(ench), EnchantChargeNeeded.get(ench), Reference.ENCH_INCOMPATS.get(ench));
                 else
                     enchant.registerEnchant(StringUtils.uncapitalize(ench), (byte) 0, EnchantIDs.get(ench), EnchantLevels.get(ench), EnchantWeight.get(ench), EnchantCost.get(ench), EnchantChargeNeeded.get(ench));
+            if (Configurations.DebugMode)
+                LogHelper.info("Registered : " + ench, Reference.MOD_NAME);
         }
         HxCEnch.hxcEnchants.forEach(z -> MinecraftForge.EVENT_BUS.register(z));
         LogHelper.info(HxCEnch.hxcEnchants.size() + " enchantments have been registered.", Reference.MOD_NAME);

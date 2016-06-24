@@ -68,7 +68,7 @@ public class Configurations {
         EnabledEnchants.put("Nightvision", true);
         EnabledEnchants.put("LightningArrow", true);
         EnabledEnchants.put("ArrowExplosive", true);
-        EnabledEnchants.put("Zeus", true);
+        EnabledEnchants.put("ArrowZeus", true);
         EnabledEnchants.put("ArrowSeeking", true);
         EnabledEnchants.put("LifeSteal", true);
         EnabledEnchants.put("Piercing", true);
@@ -118,7 +118,7 @@ public class Configurations {
         EnchantIDs.put("Nightvision", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("LightningArrow", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("ArrowExplosive", (short) (StartingID+EnchantIDs.size()));
-        EnchantIDs.put("Zeus", (short) (StartingID+EnchantIDs.size()));
+        EnchantIDs.put("ArrowZeus", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("ArrowSeeking", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("LifeSteal", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("Piercing", (short) (StartingID+EnchantIDs.size()));
@@ -168,7 +168,7 @@ public class Configurations {
         EnchantLevels.put("Nightvision", (byte) 1);
         EnchantLevels.put("LightningArrow", (byte) 5);
         EnchantLevels.put("ArrowExplosive", (byte) 4);
-        EnchantLevels.put("Zeus", (byte) 1);
+        EnchantLevels.put("ArrowZeus", (byte) 1);
         EnchantLevels.put("ArrowSeeking", (byte) 4);
         EnchantLevels.put("LifeSteal", (byte) 5);
         EnchantLevels.put("Piercing", (byte) 5);
@@ -218,7 +218,7 @@ public class Configurations {
         EnchantWeight.put("Nightvision", (byte) 1);
         EnchantWeight.put("LightningArrow", (byte) 1);
         EnchantWeight.put("ArrowExplosive", (byte) 2);
-        EnchantWeight.put("Zeus", (byte) 5);
+        EnchantWeight.put("ArrowZeus", (byte) 5);
         EnchantWeight.put("ArrowSeeking", (byte) 1);
         EnchantWeight.put("LifeSteal", (byte) 7);
         EnchantWeight.put("Piercing", (byte) 1);
@@ -268,7 +268,7 @@ public class Configurations {
         EnchantCost.put("Nightvision", (byte) 30);
         EnchantCost.put("LightningArrow", (byte) 40);
         EnchantCost.put("ArrowExplosive", (byte) 40);
-        EnchantCost.put("Zeus", (byte) 30);
+        EnchantCost.put("ArrowZeus", (byte) 30);
         EnchantCost.put("ArrowSeeking", (byte) 45);
         EnchantCost.put("LifeSteal", (byte) 35);
         EnchantCost.put("Piercing", (byte) 40);

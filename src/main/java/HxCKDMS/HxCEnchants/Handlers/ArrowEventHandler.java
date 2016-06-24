@@ -85,27 +85,30 @@ public class ArrowEventHandler {
             EntityLivingBase ent = event.entityLiving;
             if (!event.source.isProjectile()) return;
             if (isExplosive) {
-				ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, ExplosionDestroysTerrain);
+				ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, event.ammount * ExplosionLevel, ExplosionDestroysTerrain);
 				isExplosive = false;
 			}
             if (isLightning) {
-				ent.attackEntityFrom(new DamageSource("LightningArrow"), 7);
+				ent.attackEntityFrom(new DamageSource("LightningArrow"), event.ammount * 0.6f);
 				isLightning = false;
 			}
             if (isHoming) {
-				ent.attackEntityFrom(new DamageSource("HomingArrow"), 5);
+				ent.attackEntityFrom(new DamageSource("HomingArrow"), event.ammount * 0.3f);
 				isHoming = false;
 			}
 			if (isFlaming) {
-				ent.attackEntityFrom(new DamageSource("FlamingArrow"), 2);
+				ent.attackEntityFrom(new DamageSource("FlamingArrow"), event.ammount * 0.2f);
+                ent.setFire(3 * FlamingLevel);
 				isFlaming = false;
 			}
 			if (isZeus) {
 				ent.worldObj.addWeatherEffect(new EntityLightningBolt(ent.worldObj, ent.posX, ent.posY+1, ent.posZ));
+                ent.attackEntityFrom(new DamageSource("Zeus"), event.ammount * 0.2f);
 				isZeus = false;
 			}
             if (isPoison) {
 				ent.addPotionEffect(new PotionEffect(Potion.poison.getId(), PoisonLevel * 120, PoisonLevel));
+                ent.attackEntityFrom(new DamageSource("Venom"), event.ammount * 0.1f);
 				isPoison = false;
 			}
             if (isPiercing) {

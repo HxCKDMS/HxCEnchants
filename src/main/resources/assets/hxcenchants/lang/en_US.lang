@@ -62,6 +62,14 @@ death.attack.Piercing=%1$s was impaled.
 death.attack.Piercing.player=%1$s was impaled by %2$s.
 death.attack.Piercing.player.item=%1$s was impaled by %2$s using %3$s.
 
+death.attack.Venom=%1$s was poisoned.
+death.attack.Venom.player=%1$s was poisoned by %2$s.
+death.attack.Venom.player.item=%1$s was poisoned by %2$s using %3$s.
+
+death.attack.Zeus=%1$s hath been smitten.
+death.attack.Zeus.player=%1$s hath been smitten by %2$s.
+death.attack.Zeus.player.item=%1$s hath been smitten by %2$s using %3$s.
+
 death.attack.Vorpal=%1$s was sliced to bits.
 death.attack.Vorpal.player=%1$s was sliced to bits by %2$s.
 death.attack.Vorpal.player.item=%1$s was sliced to bits by %2$s using %3$s.
