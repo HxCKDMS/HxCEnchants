@@ -2,7 +2,6 @@ package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
-import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -24,13 +23,15 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.EnabledEnchants;
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.EnchantIDs;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
 //Null pointer checked no NPE's can happen ignoring my NPE that will never be thrown because these enchants have already been configured and checked..
 @SuppressWarnings({"unchecked", "ConstantConditions", "unused"})
 public class EventHandlers {
-    EnchantHandlers handler = new EnchantHandlers();
+    private EnchantHandlers handler = new EnchantHandlers();
     private int tickTimer = Configurations.updateTime;
 
     @SubscribeEvent
@@ -84,24 +85,16 @@ public class EventHandlers {
     public void breakBlockEvent(BlockEvent.BreakEvent event) {
         EntityPlayer player = event.getPlayer();
         if (player.getHeldItem() != null && player.getHeldItem().hasTagCompound() && player.getHeldItem().isItemEnchanted()) {
-            ItemStack item = player.getHeldItem(); int pml = (int) EnchantConfigHandler.getData("EarthEater", "other")[0];
+            ItemStack item = player.getHeldItem(); int pml = (int) EnchantIDs.get("EarthEater");
             Block block = event.block;
             LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(item);
             if (enchs.keySet().contains(pml)) {
-                int l = enchs.get(pml), X, Ym, Z, YM;
-                switch (l) {
-                    case 1 : X = 0; Ym = 1; YM = 1; Z = 0; break;
-                    case 2 : X = 1; Ym = 1; YM = 1; Z = 0; break;
-                    case 3 : X = 1; Ym = 1; YM = 1; Z = 1; break;
-                    case 4 : X = 2; Ym = 1; YM = 2; Z = 1; break;
-                    case 5 : X = 2; Ym = 1; YM = 2; Z = 2; break;
-                    case 6 : X = 2; Ym = 1; YM = 3; Z = 2; break;
-                    case 7 : X = 3; Ym = 1; YM = 3; Z = 2; break;
-                    case 8 : X = 3; Ym = 1; YM = 3; Z = 3; break;
-                    case 9 : X = 4; Ym = 1; YM = 4; Z = 3; break;
-                    case 10 : X = 4; Ym = 1;YM = 4; Z = 4; break;
-                    default : X = 5; Ym = 1;YM = 5; Z = 5; break;
-                }
+                int l = enchs.get(pml), X, Ym = 1, Z, YM;
+
+                Z = Math.round(l/2.2f);
+                X = Math.round(l/1.6f);
+                YM = Math.round(l/2);
+
                 float rot = player.getRotationYawHead();
 
                 if (player.rotationPitch > 45 && player.rotationPitch < -45) {
@@ -135,8 +128,8 @@ public class EventHandlers {
 
     @SubscribeEvent
     public void PlayerEvent(PlayerEvent.BreakSpeed event) {
-        if (EnchantConfigHandler.isEnabled("SpeedMine", "other") && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && getEnchantmentLevel((int) EnchantConfigHandler.getData("SpeedMine", "other")[0], event.entityPlayer.getHeldItem()) > 0)
-            event.newSpeed = (event.originalSpeed + event.originalSpeed*(getEnchantmentLevel((int) EnchantConfigHandler.getData("SpeedMine", "other")[0], event.entityPlayer.getHeldItem()) / 10));
+        if (Configurations.EnabledEnchants.get("SpeedMine") && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && getEnchantmentLevel((int) EnchantIDs.get("SpeedMine"), event.entityPlayer.getHeldItem()) > 0)
+            event.newSpeed = (event.originalSpeed + event.originalSpeed*(getEnchantmentLevel((int) EnchantIDs.get("SpeedMine"), event.entityPlayer.getHeldItem()) / 10));
     }
 
     @SubscribeEvent
@@ -218,7 +211,7 @@ public class EventHandlers {
 	public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {
 		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).hasTagCompound() && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).isItemEnchanted()) {
             ItemStack legs = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
-            int JumpBoostLevel = getEnchantmentLevel((int) EnchantConfigHandler.getData("JumpBoost", "armor")[0], legs);
+            int JumpBoostLevel = getEnchantmentLevel((int) EnchantIDs.get("JumpBoost"), legs);
             if (JumpBoostLevel > 0) {
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
                 double JumpBuff = player.motionY + 0.1 * JumpBoostLevel;
@@ -234,10 +227,10 @@ public class EventHandlers {
             if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted()) {
                 ItemStack boots = player.inventory.armorItemInSlot(0);
                 int featherFall = 0, meteorFall = 0;
-                if (EnchantConfigHandler.isEnabled("FeatherFall", "armor"))
-                    featherFall = getEnchantmentLevel((int) EnchantConfigHandler.getData("FeatherFall", "armor")[0], boots);
-                if (EnchantConfigHandler.isEnabled("MeteorFall", "armor"))
-                    meteorFall = getEnchantmentLevel((int) EnchantConfigHandler.getData("MeteorFall", "armor")[0], boots);
+                if (EnabledEnchants.get("FeatherFall"))
+                    featherFall = getEnchantmentLevel((int) EnchantIDs.get("FeatherFall"), boots);
+                if (EnabledEnchants.get("MeteorFall"))
+                    meteorFall = getEnchantmentLevel((int) EnchantIDs.get("MeteorFall"), boots);
 
                 if (featherFall < 4 && featherFall > 0)event.distance /= featherFall;
                 else if (featherFall > 4) event.distance = 0;

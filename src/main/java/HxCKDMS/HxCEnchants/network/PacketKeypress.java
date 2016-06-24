@@ -27,7 +27,7 @@ public class PacketKeypress implements IMessage {
         @Override
         public IMessage onMessage(PacketKeypress message, MessageContext ctx) {
             if (message.keyid == 1) EnchantHandlers.FlashButton = true;
-            if (message.keyid == 2) EnchantHandlers.OverCharge = true;
+            else if (message.keyid == 2) EnchantHandlers.OverCharge = true;
             return null;
         }
     }

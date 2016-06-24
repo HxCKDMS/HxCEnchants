@@ -1,7 +1,5 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
-import HxCKDMS.HxCEnchants.Configurations.Configurations;
-import HxCKDMS.HxCEnchants.EnchantConfigHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -22,6 +20,7 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import java.util.List;
 import java.util.Random;
 
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
 @SuppressWarnings("all")
 public class ArrowEventHandler {
 	private boolean isExplosive, isHoming, isZeus, isPoison, isPiercing, isLightning, isFlaming;
@@ -31,21 +30,21 @@ public class ArrowEventHandler {
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
         assert stack != null;
-        if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !Configurations.enableChargesSystem)) {
-            if (EnchantConfigHandler.isEnabled("Zeus", "weapon"))
-                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Zeus", "weapon")[0], stack);
-            if (EnchantConfigHandler.isEnabled("ArrowSeeking", "weapon"))
-                HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("ArrowSeeking", "weapon")[0], stack);
-            if (EnchantConfigHandler.isEnabled("ArrowExplosive", "weapon"))
-                ExplosionLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("ArrowExplosive", "weapon")[0], stack);
-            if (EnchantConfigHandler.isEnabled("Poison", "weapon"))
-                PoisonLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Poison", "weapon")[0], stack);
-            if (EnchantConfigHandler.isEnabled("Piercing", "weapon"))
-                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("Piercing", "weapon")[0], stack);
-            if (EnchantConfigHandler.isEnabled("LightningArrow", "weapon"))
-                LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("LightningArrow", "weapon")[0], stack);
-            if (EnchantConfigHandler.isEnabled("FlamingArrow", "weapon"))
-                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int)EnchantConfigHandler.getData("FlamingArrow", "weapon")[0], stack);
+        if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !enableChargesSystem)) {
+            if (EnabledEnchants.get("Zeus"))
+                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Zeus"), stack);
+            if (EnabledEnchants.get("ArrowSeeking"))
+                HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowSeeking"), stack);
+            if (EnabledEnchants.get("ArrowExplosive"))
+                ExplosionLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowExplosive"), stack);
+            if (EnabledEnchants.get("Poison"))
+                PoisonLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Poison"), stack);
+            if (EnabledEnchants.get("Piercing"))
+                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Piercing"), stack);
+            if (EnabledEnchants.get("LightningArrow"))
+                LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("LightningArrow"), stack);
+            if (EnabledEnchants.get("FlamingArrow"))
+                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("FlamingArrow"), stack);
 
             isExplosive = ExplosionLevel > 0;
             isHoming = HomingLevel > 0;
@@ -55,15 +54,15 @@ public class ArrowEventHandler {
             isLightning = LightningLevel > 0;
             isFlaming = FlamingLevel > 0;
 
-            if (Configurations.enableChargesSystem) {
+            if (enableChargesSystem) {
                 int use = 0;
-                if (isExplosive) use += EnchantConfigHandler.getData("ArrowExplosive", "weapon")[4];
-                if (isHoming) use += EnchantConfigHandler.getData("ArrowSeeking", "weapon")[4];
-                if (isZeus) use += EnchantConfigHandler.getData("Zeus", "weapon")[4];
-                if (isPoison) use += EnchantConfigHandler.getData("Poison", "weapon")[4];
-                if (isPiercing) use += EnchantConfigHandler.getData("Piercing", "weapon")[4];
-                if (isLightning) use += EnchantConfigHandler.getData("LightningArrow", "weapon")[4];
-                if (isFlaming) use += EnchantConfigHandler.getData("FlamingArrow", "weapon")[4];
+                if (isExplosive) use += EnchantChargeNeeded.get("ArrowExplosive");
+                if (isHoming) use += EnchantChargeNeeded.get("ArrowSeeking");
+                if (isZeus) use += EnchantChargeNeeded.get("Zeus");
+                if (isPoison) use += EnchantChargeNeeded.get("Poison");
+                if (isPiercing) use += EnchantChargeNeeded.get("Piercing");
+                if (isLightning) use += EnchantChargeNeeded.get("LightningArrow");
+                if (isFlaming) use += EnchantChargeNeeded.get("FlamingArrow");
 
                 long tmp = stack.getTagCompound().getLong("HxCEnchantCharge") - use;
 
@@ -86,7 +85,7 @@ public class ArrowEventHandler {
             EntityLivingBase ent = event.entityLiving;
             if (!event.source.isProjectile()) return;
             if (isExplosive) {
-				ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, Configurations.ExplosionDestroysTerrain);
+				ent.worldObj.createExplosion(ent, ent.posX, ent.posY, ent.posZ, 2.0F * ExplosionLevel, ExplosionDestroysTerrain);
 				isExplosive = false;
 			}
             if (isLightning) {
@@ -110,7 +109,7 @@ public class ArrowEventHandler {
 				isPoison = false;
 			}
             if (isPiercing) {
-				ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * Configurations.PiercingPercent);
+				ent.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(), event.ammount * PiercingPercent);
 				isPiercing = false;
 			}
         }

@@ -18,20 +18,4 @@
 * Plans are in the works for displaying charges on HUD.
 * Every aspect? of the enchants can be configed.
 
-"Earth Eater"
-------------------------
-
-Level | Width | Height | Depth
-:----:|:-----:|:------:|:-----:
-1|0|3|0
-2|1|3|0
-3|1|3|1
-4|2|4|1
-5|2|4|2
-6|2|5|2
-7|3|5|2
-8|3|5|3
-9|4|6|3
-10|4|6|4
-
 
