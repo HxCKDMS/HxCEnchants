@@ -498,6 +498,10 @@ public class EnchantHandlers implements IEnchantHandler {
                     enchants.get(enchantmentsList[EnchantIDs.get("Vorpal")]) * 0.35f * damage);
         }
 
+        if (enchants.containsKey(enchantmentsList[EnchantIDs.get("BloodRazor")])) {
+            event.ammount += (victim.getMaxHealth() * (0.05f * enchants.get(enchantmentsList[EnchantIDs.get("BloodRazor")])));
+        }
+
         if (enchants.containsKey(enchantmentsList[EnchantIDs.get("SCurse")])) {
             int SCurseLevel = enchants.get(enchantmentsList[EnchantIDs.get("SCurse")]);
             victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), damage * (0.2f * SCurseLevel));

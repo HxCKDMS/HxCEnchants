@@ -20,13 +20,12 @@ public class HxCEnchantment extends Enchantment {
     private static EnumHxCEnchantType[] HxCTypes = new EnumHxCEnchantType[]{ALL, ARMOR, ARMOR_FEET, ARMOR_LEGS, ARMOR_TORSO, ARMOR_HEAD, WEAPON, DIGGER, FISHING_ROD, BREAKABLE, BOW, SWORD};
 
     public HxCEnchantment(int id, String name, int rarity, byte HxCType, int MaxLevel, int cost, long chargeReq, List<Short> enchs) {
-        super(id, rarity, null);
+        super(id, rarity, Types[HxCType]);
         setName(name);
         this.MaxLevel = MaxLevel;
         this.cost = cost;
         this.bannedEnchs = enchs;
         this.eType = HxCTypes[HxCType];
-        this.type = Types[HxCType];
         this.charge = chargeReq;
     }
 

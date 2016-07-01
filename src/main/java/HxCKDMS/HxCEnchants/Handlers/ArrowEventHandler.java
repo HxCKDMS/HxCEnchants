@@ -31,8 +31,8 @@ public class ArrowEventHandler {
         ItemStack stack = event.bow;
         assert stack != null;
         if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !enableChargesSystem)) {
-            if (EnabledEnchants.get("Zeus"))
-                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Zeus"), stack);
+            if (EnabledEnchants.get("ArrowZeus"))
+                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowZeus"), stack);
             if (EnabledEnchants.get("ArrowSeeking"))
                 HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowSeeking"), stack);
             if (EnabledEnchants.get("ArrowExplosive"))
@@ -58,7 +58,7 @@ public class ArrowEventHandler {
                 int use = 0;
                 if (isExplosive) use += EnchantChargeNeeded.get("ArrowExplosive");
                 if (isHoming) use += EnchantChargeNeeded.get("ArrowSeeking");
-                if (isZeus) use += EnchantChargeNeeded.get("Zeus");
+                if (isZeus) use += EnchantChargeNeeded.get("ArrowZeus");
                 if (isPoison) use += EnchantChargeNeeded.get("Poison");
                 if (isPiercing) use += EnchantChargeNeeded.get("Piercing");
                 if (isLightning) use += EnchantChargeNeeded.get("LightningArrow");

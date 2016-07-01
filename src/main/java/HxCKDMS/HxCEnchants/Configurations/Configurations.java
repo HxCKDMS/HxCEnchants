@@ -81,6 +81,7 @@ public class Configurations {
         EnabledEnchants.put("EnchLeech", true);
         EnabledEnchants.put("Examine", true);
         EnabledEnchants.put("FlamingArrow", true);
+        EnabledEnchants.put("BloodRazor", true);
 
         EnchantIDs.put("Bound", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("FlameTouch", (short) (StartingID+EnchantIDs.size()));
@@ -131,6 +132,7 @@ public class Configurations {
         EnchantIDs.put("EnchLeech", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("Examine", (short) (StartingID+EnchantIDs.size()));
         EnchantIDs.put("FlamingArrow", (short) (StartingID+EnchantIDs.size()));
+        EnchantIDs.put("BloodRazor", (short) (StartingID+EnchantIDs.size()));
 
         EnchantLevels.put("Bound", (byte) 3);
         EnchantLevels.put("FlameTouch", (byte) 4);
@@ -181,6 +183,7 @@ public class Configurations {
         EnchantLevels.put("EnchLeech", (byte) 4);
         EnchantLevels.put("Examine", (byte) 10);
         EnchantLevels.put("FlamingArrow", (byte) 3);
+        EnchantLevels.put("BloodRazor", (byte) 5);
 
         EnchantWeight.put("Bound", (byte) 5);
         EnchantWeight.put("FlameTouch", (byte) 2);
@@ -231,6 +234,7 @@ public class Configurations {
         EnchantWeight.put("EnchLeech", (byte) 2);
         EnchantWeight.put("Examine", (byte) 1);
         EnchantWeight.put("FlamingArrow", (byte) 7);
+        EnchantWeight.put("BloodRazor", (byte) 2);
 
         EnchantCost.put("Bound", (byte) 45);
         EnchantCost.put("FlameTouch", (byte) 30);
@@ -281,6 +285,7 @@ public class Configurations {
         EnchantCost.put("EnchLeech", (byte) 30);
         EnchantCost.put("Examine", (byte) 55);
         EnchantCost.put("FlamingArrow", (byte) 20);
+        EnchantCost.put("BloodRazor", (byte) 30);
 
         EnchantChargeNeeded.put("Bound", 0);
         EnchantChargeNeeded.put("FlameTouch", 30);
@@ -331,5 +336,6 @@ public class Configurations {
         EnchantChargeNeeded.put("EnchLeech", 30);
         EnchantChargeNeeded.put("Examine", 55);
         EnchantChargeNeeded.put("FlamingArrow", 20);
+        EnchantChargeNeeded.put("BloodRazor", 50);
     }
 }

@@ -13,7 +13,6 @@ import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.enchantment.Enchants;
-import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
@@ -53,7 +52,8 @@ public class HxCEnchants {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        HxCConfig hxCConfig = new HxCConfig(Configurations.class, Reference.MOD_NAME, HxCCore.HxCConfigDir, "cfg");
+        HxCConfig hxCConfig = new HxCConfig(Configurations.class, "HxCEnchants", HxCCore.HxCConfigDir, "cfg");
+        hxCConfig.initConfiguration();
         if (enableChargesSystem)
             if (EnableKeybinds) {
                 proxy.preInit(event);

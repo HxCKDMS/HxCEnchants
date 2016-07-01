@@ -19,7 +19,7 @@ apply plugin: 'forge'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "1.7.10-2.3.0"
+version = "1.7.10-2.3.1"
 group= "HxCKDMS.HxCEnchants"
 archivesBaseName = "HxCEnchants"
 

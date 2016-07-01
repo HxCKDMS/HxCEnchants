@@ -9,7 +9,7 @@ import static HxCKDMS.HxCEnchants.Configurations.Configurations.EnchantIDs;
 public class Reference {
     public static final String MOD_ID = "HxCEnchants";
     public static final String MOD_NAME = "HxC Enchants";
-    public static final String VERSION = "2.3.0";
+    public static final String VERSION = "2.3.1";
     public static final String CHANNEL_NAME = MOD_ID;
     public static final String DEPENDENCIES = "required-after:HxCCore@[1.12.0,)";
     public static final String CLIENT_PROXY_CLASS = "HxCKDMS.HxCEnchants.Proxy.ClientProxy";
@@ -75,7 +75,7 @@ public class Reference {
         ENCH_TYPE.put("Nightvision", (byte) 5);
         ENCH_TYPE.put("LightningArrow", (byte) 10);
         ENCH_TYPE.put("ArrowExplosive", (byte) 10);
-        ENCH_TYPE.put("Zeus", (byte) 10);
+        ENCH_TYPE.put("ArrowZeus", (byte) 10);
         ENCH_TYPE.put("ArrowSeeking", (byte) 10);
         ENCH_TYPE.put("LifeSteal", (byte) 11);
         ENCH_TYPE.put("Piercing", (byte) 6);
