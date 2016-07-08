@@ -200,7 +200,8 @@ public class EventHandlers {
                                     sharedEnchants.put(Enchantment.enchantmentsList[ench], tmpz);
                                 }
                             });
-                    if (sharedEnchants != null && !sharedEnchants.isEmpty())
+                    ents.removeIf(ent -> ent == player);
+                    if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
                         handler.handleAuraEvent(player, ents, sharedEnchants);
                 }
             }

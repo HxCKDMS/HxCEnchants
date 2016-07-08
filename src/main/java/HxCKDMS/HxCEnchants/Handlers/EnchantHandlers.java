@@ -189,14 +189,14 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void playerTickEvent(EntityPlayerMP player) {
-        if (player.getHeldItem() != null && player.getHeldItem().isItemStackDamageable() && player.getHeldItem().isItemEnchanted() && player.isSneaking() && player.experienceTotal > 1) {
+        if (player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.isSneaking() && player.experienceLevel > 0) {
             player.addExperienceLevel(-1);
 
             if (player.getHeldItem().hasTagCompound()) {
                 player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge") + 20);
             } else {
                 NBTTagCompound tg = new NBTTagCompound();
-                tg.setLong("HxCEnchantCharge", 1);
+                tg.setLong("HxCEnchantCharge", 20);
                 player.getHeldItem().setTagCompound(tg);
             }
         }
@@ -357,12 +357,12 @@ public class EnchantHandlers implements IEnchantHandler {
             final int[] tcr = {0};
             sharedEnchants.forEach((enchantment, level) -> {
                 if (enchantment instanceof HxCEnchantment)
-                    tcr[0] += (((HxCEnchantment)enchantment).getChargeRequirement() * level);
+                    tcr[0] += (((HxCEnchantment)enchantment).getChargeRequirement());
             });
             for (int i = 0; i < 4; i++) {
-                long c = player.getCurrentArmor(i).getTagCompound().getLong("HxCCharge");
+                long c = player.getCurrentArmor(i).getTagCompound().getLong("HxCEnchantCharge");
                 if (tcr[0] > c) return;
-                else player.getCurrentArmor(i).getTagCompound().setLong("HxCCharge", c - tcr[0]);
+                else player.getCurrentArmor(i).getTagCompound().setLong("HxCEnchantCharge", c - tcr[0]);
             }
         }
 
@@ -477,7 +477,7 @@ public class EnchantHandlers implements IEnchantHandler {
             final long[] cr = new long[]{0, weapon.getTagCompound().getLong("HxCCharge")};
             enchants.forEach((enchant, level) -> {
                 if (enchant instanceof HxCEnchantment) {
-                    cr[0] += (((HxCEnchantment)enchant).getChargeRequirement() * level);
+                    cr[0] += (((HxCEnchantment)enchant).getChargeRequirement());
                 }
             });
             if (cr[0] > cr[1]) return;
