@@ -474,14 +474,14 @@ public class EnchantHandlers implements IEnchantHandler {
     @Override
     public void handleAttackEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack weapon, float damage, LivingHurtEvent event, LinkedHashMap<Enchantment, Integer> enchants) {
         if (enableChargesSystem) {
-            final long[] cr = new long[]{0, weapon.getTagCompound().getLong("HxCCharge")};
+            final long[] cr = new long[]{0, weapon.getTagCompound().getLong("HxCEnchantCharge")};
             enchants.forEach((enchant, level) -> {
                 if (enchant instanceof HxCEnchantment) {
                     cr[0] += (((HxCEnchantment)enchant).getChargeRequirement());
                 }
             });
             if (cr[0] > cr[1]) return;
-            else weapon.getTagCompound().setLong("HxCCharge", cr[1] - cr[0]);
+            else weapon.getTagCompound().setLong("HxCEnchantCharge", cr[1] - cr[0]);
         }
 
         if (enchants.containsKey(enchantmentsList[EnchantIDs.get("LifeSteal")])) {
