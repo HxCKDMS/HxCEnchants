@@ -103,6 +103,7 @@ public class EventHandlers {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {
                                 for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
                                             player.worldObj.canMineBlock(player, x, y, z))
                                         player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
                                 }
@@ -114,6 +115,7 @@ public class EventHandlers {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {
                                 for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
                                             player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
                                         player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
                                 }
@@ -125,6 +127,7 @@ public class EventHandlers {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {
                                 for (int z = event.z - (depth); z <= event.z; z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
                                             player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
                                         player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
                                 }
@@ -136,6 +139,7 @@ public class EventHandlers {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {
                                 for (int z = event.z; z <= event.z + (depth); z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
                                             player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
                                         player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
                                 }
@@ -150,12 +154,14 @@ public class EventHandlers {
                             if (player.rotationPitch > 45) {
                                 for (int y = event.y; y <= event.y + (depth); y++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
                                             player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
                                         player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
                                 }
                             } else {
                                 for (int y = event.y - (depth); y <= event.y; y++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
                                             player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
                                         player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
                                 }
