@@ -85,40 +85,81 @@ public class EventHandlers {
     public void breakBlockEvent(BlockEvent.BreakEvent event) {
         EntityPlayer player = event.getPlayer();
         if (player.getHeldItem() != null && player.getHeldItem().hasTagCompound() && player.getHeldItem().isItemEnchanted()) {
-            ItemStack item = player.getHeldItem(); int pml = (int) EnchantIDs.get("EarthEater");
+            ItemStack item = player.getHeldItem(); int worldeater = (int) EnchantIDs.get("EarthEater");
             Block block = event.block;
             LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(item);
-            if (enchs.keySet().contains(pml)) {
-                int l = enchs.get(pml), X, Ym = 1, Z, YM;
+            if (enchs.keySet().contains(worldeater)) {
+                int l = enchs.get(worldeater), width, depth, height;
 
-                Z = Math.round(l/2.2f);
-                X = Math.round(l/1.6f);
-                YM = Math.round(l/2);
+                height = Math.round(l / Configurations.EarthEaterHeightModifier);
+                width = Math.round(l / Configurations.EarthEaterWidthModifier);
+                depth = Math.round(l / Configurations.EarthEaterDepthModifier);
 
                 float rot = player.getRotationYawHead();
-
-                if (player.rotationPitch > 45 && player.rotationPitch < -45) {
-                                              /* west || east */
-                    if ((rot < 135 && rot > 45) || (rot < -45 && rot > -135)) {
-                        int tmp = Z;
-                        Z = X;
-                        X = tmp;
+                if (player.rotationPitch < 45 && player.rotationPitch > -45) {
+                    if ((rot > 45 && rot < 135) || (rot < -45 && rot > -135)) {
+//                        System.out.println("West");
+                        for (int x = event.x - (depth); x <= event.x; x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.worldObj.canMineBlock(player, x, y, z))
+                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                }
+                            }
+                        }
+                    } else if ((rot > 225 && rot < 315) || (rot < -225 && rot > -315)) {
+//                        System.out.println("East");
+                        for (int x = event.x; x <= event.x + (depth); x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
+                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                }
+                            }
+                        }
+                    } else if ((rot < 225 && rot > 135) || (rot < -225 && rot > -135)) {
+//                        System.out.println("North");
+                        for (int x = event.x- (width/2); x <= event.x + (width/2); x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z - (depth); z <= event.z; z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
+                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                }
+                            }
+                        }
+                    } else {
+//                        System.out.println("South");
+                        for (int x = event.x- (width/2); x <= event.x + (width/2); x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z; z <= event.z + (depth); z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
+                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                }
+                            }
+                        }
                     }
                 } else {
-                    int tmp = Z;
-                    Z = X;
-                    if (player.rotationPitch > 45) {
-                        Ym += tmp;
-                    } else {
-                        YM += tmp;
-                    }
-                }
-
-                for (int a = event.x - X; a <= event.x + X; a++) {
-                    for (int b = event.y - Ym; b <= event.y + YM; b++) {
-                        for (int c = event.z - Z; c <= event.z + Z; c++) {
-                            if (player.worldObj.getBlock(a, b, c).getMaterial() == block.getMaterial() && player.canHarvestBlock(player.worldObj.getBlock(a, b, c)))
-                                player.worldObj.breakBlock(a, b, c, !player.capabilities.isCreativeMode);
+                    int xMod = ((rot > 45 && rot < 135) || (rot > -45 && rot < -135) ? (height/2) : (width/2));
+                    int zMod = ((rot > 45 && rot < 135) || (rot > -45 && rot < -135) ? (width/2) : (height/2));
+                    for (int x = event.x - xMod; x <= event.x + xMod; x++) {
+                        for (int z = event.z - zMod; z <= event.z + zMod; z++) {
+                            if (player.rotationPitch > 45) {
+                                for (int y = event.y; y <= event.y + (depth); y++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
+                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                }
+                            } else {
+                                for (int y = event.y - (depth); y <= event.y; y++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
+                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                }
+                            }
                         }
                     }
                 }

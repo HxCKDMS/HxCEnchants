@@ -1,5 +1,6 @@
 package HxCKDMS.HxCEnchants.Blocks.XPInfuser;
 
+import HxCKDMS.HxCEnchants.HxCEnchants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -30,16 +31,12 @@ public class XPInfuserTile extends TileEntity implements IInventory {
             ItemStack stack = inv[0];
             if (stack != null) {
                 EntityPlayer p = worldObj.getPlayerEntityByName(player);
-                int chr;
-                if (xpti <= 15) chr = (xpti * xpti) + (6 * xpti);
-                else if (xpti <= 30) chr = (int) Math.round(2.5 * (xpti * xpti) - (40.5 * xpti) + 360);
-                else chr = (int) Math.round(4.5 * (xpti * xpti) - (162.5 * xpti) + 2220);
                 if (stack.getTagCompound() != null) {
                     NBTTagCompound tagCompound = stack.getTagCompound();
-                    tagCompound.setLong("HxCEnchantCharge", tagCompound.getLong("HxCEnchantCharge") + chr);
+                    tagCompound.setLong("HxCEnchantCharge", tagCompound.getLong("HxCEnchantCharge") + HxCEnchants.xpAtLevel(xpti));
                 } else {
                     NBTTagCompound tagCompound = new NBTTagCompound();
-                    tagCompound.setLong("HxCEnchantCharge", chr);
+                    tagCompound.setLong("HxCEnchantCharge", HxCEnchants.xpAtLevel(xpti));
                     stack.setTagCompound(tagCompound);
                 }
                 p.addExperienceLevel(-xpti);

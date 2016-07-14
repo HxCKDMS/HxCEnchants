@@ -5,6 +5,7 @@ import HxCKDMS.HxCCore.api.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
+import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import HxCKDMS.HxCEnchants.api.IEnchantHandler;
 import cpw.mods.fml.common.Loader;
@@ -193,10 +194,10 @@ public class EnchantHandlers implements IEnchantHandler {
             player.addExperienceLevel(-1);
 
             if (player.getHeldItem().hasTagCompound()) {
-                player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge") + 20);
+                player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge") + HxCEnchants.xpFromLevel(player.experienceLevel));
             } else {
                 NBTTagCompound tg = new NBTTagCompound();
-                tg.setLong("HxCEnchantCharge", 20);
+                tg.setLong("HxCEnchantCharge", HxCEnchants.xpFromLevel(player.experienceLevel));
                 player.getHeldItem().setTagCompound(tg);
             }
         }

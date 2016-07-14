@@ -12,6 +12,8 @@ public class Configurations {
     public static boolean ExplosionDestroysTerrain = false, AurasAffectPlayers = true,  enableChargesSystem = true, enableCustomBlocks;
     public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f, SpeedTweak = 0.0387f;
     public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3;
+    @Config.comment(value = "Enchant Level / this (Level/2 default)")
+    public static float EarthEaterDepthModifier = 2.0f, EarthEaterHeightModifier = 1.75f, EarthEaterWidthModifier = 1.5f;
     public static short StartingID=400;
     public static boolean notice = true, blacklistEnchantsFromEnchantingPlus = false, EnableKeybinds = true, EnableCoordinatesInGUIs = false;
 
@@ -334,7 +336,7 @@ public class Configurations {
         EnchantChargeNeeded.put("Vorpal", 55);
         EnchantChargeNeeded.put("OverCharge", 30);
         EnchantChargeNeeded.put("EnchLeech", 30);
-        EnchantChargeNeeded.put("Examine", 55);
+        EnchantChargeNeeded.put("Examine", 3);
         EnchantChargeNeeded.put("FlamingArrow", 20);
         EnchantChargeNeeded.put("BloodRazor", 50);
     }
