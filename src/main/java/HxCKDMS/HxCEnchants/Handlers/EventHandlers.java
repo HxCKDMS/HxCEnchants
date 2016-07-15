@@ -104,8 +104,10 @@ public class EventHandlers {
                                 for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
                                             player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
-                                            player.worldObj.canMineBlock(player, x, y, z))
-                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
                                 }
                             }
                         }
@@ -116,8 +118,10 @@ public class EventHandlers {
                                 for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
                                             player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
-                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
-                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
                                 }
                             }
                         }
@@ -128,8 +132,10 @@ public class EventHandlers {
                                 for (int z = event.z - (depth); z <= event.z; z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
                                             player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
-                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
-                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
                                 }
                             }
                         }
@@ -140,8 +146,10 @@ public class EventHandlers {
                                 for (int z = event.z; z <= event.z + (depth); z++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
                                             player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
-                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
-                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
                                 }
                             }
                         }
@@ -151,19 +159,23 @@ public class EventHandlers {
                     int zMod = ((rot > 45 && rot < 135) || (rot > -45 && rot < -135) ? (width/2) : (height/2));
                     for (int x = event.x - xMod; x <= event.x + xMod; x++) {
                         for (int z = event.z - zMod; z <= event.z + zMod; z++) {
-                            if (player.rotationPitch > 45) {
+                            if (player.rotationPitch < -45) {
                                 for (int y = event.y; y <= event.y + (depth); y++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
                                             player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
-                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
-                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
                                 }
                             } else {
                                 for (int y = event.y - (depth); y <= event.y; y++) {
                                     if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
                                             player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
-                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0)
-                                        player.worldObj.breakBlock(x, y, z, !player.capabilities.isCreativeMode);
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
                                 }
                             }
                         }
