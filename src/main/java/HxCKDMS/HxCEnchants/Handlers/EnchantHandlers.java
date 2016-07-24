@@ -83,7 +83,7 @@ public class EnchantHandlers implements IEnchantHandler {
         if (enchants.containsKey(enchantmentsList[EnchantIDs.get("Nightvision")])) {
             short vision = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Nightvision"), helmet);
             if (vision > 0)
-                player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 600, 0, true));
+                player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 600, 1, true));
         }
     }
 
