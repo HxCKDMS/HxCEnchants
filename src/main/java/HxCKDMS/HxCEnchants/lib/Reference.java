@@ -88,6 +88,7 @@ public class Reference {
         ENCH_TYPE.put("EnchLeech", (byte) 11);
         ENCH_TYPE.put("Examine", (byte) 11);
         ENCH_TYPE.put("FlamingArrow", (byte) 10);
+        ENCH_TYPE.put("BloodRazor", (byte) 6);
     }
 
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba"),
