@@ -8,7 +8,6 @@ import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import HxCKDMS.HxCEnchants.api.IEnchantHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -39,10 +38,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
+import net.minecraft.util.*;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -62,12 +58,11 @@ import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class EnchantHandlers implements IEnchantHandler {
     private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
-    FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
+    private FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
 
-    public static boolean OverCharge = false, FlashButton = false;
     @Override
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, LinkedHashMap<Enchantment, Integer> enchants) {
-        if (enchants.containsKey(enchantmentsList[EnchantIDs.get("Gluttony")]) && !Loader.isModLoaded("HungerOverhaul")) {
+        if (enchants.containsKey(enchantmentsList[EnchantIDs.get("Gluttony")])) {
             short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Gluttony"), helmet);
             LinkedHashMap<Boolean, Item> tmp = hasFood(player);
             if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && tmp.containsKey(true) && tmp.get(true) != null) {
@@ -133,29 +128,6 @@ public class EnchantHandlers implements IEnchantHandler {
             NBTFileIO.setBoolean(CustomPlayerData, "fly", false);
             NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
         }
-
-        if (FlashButton && enchants.containsKey(enchantmentsList[EnchantIDs.get("FlashStep")])) {
-            int FlashLevel = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("FlashStep"), boots);
-            if (FlashLevel > 0) {
-                World world = player.worldObj;
-                double vx, vy, vz, x, y, z;
-                x = player.posX;
-                y = player.posY;
-                z = player.posZ;
-                vx = player.getLookVec().xCoord;
-                vy = player.getLookVec().yCoord;
-                vz = player.getLookVec().zCoord;
-                for (int i = 10; i < 10 + (3 * FlashLevel); i++) {
-                    if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i)) == Blocks.air)
-                        player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + vy * i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
-                    else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i)) == Blocks.air)
-                      player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
-                    else if (world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i), (int) Math.round(z + vz * i)) != Blocks.air && world.getBlock((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i)) == Blocks.air)
-                      player.playerNetServerHandler.setPlayerLocation((int) Math.round(x + vx * i), (int) Math.round(y + -i) + 2, (int) Math.round(z + vz * i), player.cameraYaw, player.cameraPitch);
-                }
-            }
-            FlashButton = false;
-        }
         player.sendPlayerAbilities();
     }
 
@@ -168,7 +140,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 victim.worldObj.spawnEntityInWorld(new EntityXPOrb(victim.worldObj, victim.posX, victim.posY + 1, victim.posZ, examineLevel * EnchantChargeNeeded.get("Examine")));
             }
 
-        if (vampireLevel > 0 && !Loader.isModLoaded("HungerOverhaul")) {
+        if (vampireLevel > 0) {
             if (victim instanceof EntityAnimal)
                 player.getFoodStats().addStats(1, 0.3F);
             else if (victim instanceof EntityPlayerMP)
@@ -188,9 +160,8 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    @Override
-    public void playerTickEvent(EntityPlayerMP player) {
-        if (player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.isSneaking() && player.experienceLevel > 0) {
+    public static void chargeItem(EntityPlayerMP player) {
+        if (enableChargesSystem && player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.experienceLevel > 0) {
             player.addExperienceLevel(-1);
 
             if (player.getHeldItem().hasTagCompound()) {
@@ -201,39 +172,45 @@ public class EnchantHandlers implements IEnchantHandler {
                 player.getHeldItem().setTagCompound(tg);
             }
         }
+    }
 
-        if (player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemAxe) && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null && isEnabled("OverCharge")) {
-            long HeldCharges = 0;
-            if (enableChargesSystem) {
-                HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
-            }
-            boolean stored = player.getHeldItem().getTagCompound().getBoolean("StoredCharge");
-            int temp = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("OverCharge"), player.getHeldItem()),
-                    RequiredCharge = EnchantChargeNeeded.get("OverCharge");
-            if (temp > 0 && (HeldCharges >= RequiredCharge || !enableChargesSystem) && !stored) {
-                if (OverCharge && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0) {
-                    player.addChatComponentMessage(new ChatComponentText("You have just stored a charge of " + player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + "!"));
-                    player.getHeldItem().getTagCompound().setBoolean("StoredCharge", true);
-                    OverCharge = false;
-                    if (enableChargesSystem)
-                        player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
-                }
-
-                if (!OverCharge && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") != 0 && HeldCharges >= RequiredCharge * 2) {
-                    player.getHeldItem().getTagCompound().setInteger("HxCOverCharge", player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + 1);
-                    if (enableChargesSystem)
-                        player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
-                }
-
-                if (OverCharge && player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") == 0 && HeldCharges >= RequiredCharge * 2) {
-                    OverCharge = false;
-                    player.getHeldItem().getTagCompound().setInteger("HxCOverCharge", player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + 1);
-                    if (enableChargesSystem)
-                        player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
+    public static void flash(EntityPlayerMP player) {
+        if (player.getCurrentArmor(0) != null && player.getCurrentArmor(0).isItemEnchanted()) {
+            int FlashLevel = EnchantmentHelper.getEnchantmentLevel((int) Configurations.EnchantIDs.get("FlashStep"), player.getCurrentArmor(0));
+            if (FlashLevel > 0) {
+                World world = player.worldObj;
+                Vec3 vec3 = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+                Vec3 vec31 = player.getLook(1.0f);
+                Vec3 vec32 = vec3.addVector(vec31.xCoord * 200, vec31.yCoord * 200, vec31.zCoord * 200);
+                MovingObjectPosition rayTrace = HxCCore.server.worldServerForDimension(player.dimension).rayTraceBlocks(vec3, vec32);
+                if (rayTrace != null) {
+                    if (rayTrace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ) {
+                        for (int i = 0; i < 5; i++) {
+                            if (world.getBlock(rayTrace.blockX, rayTrace.blockY + i, rayTrace.blockZ) == Blocks.air) {
+                                player.playerNetServerHandler.setPlayerLocation(rayTrace.blockX, rayTrace.blockY + i, rayTrace.blockZ, player.cameraYaw, player.cameraPitch);
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
 
+    public static void overcharge(EntityPlayerMP player) {
+        if (player.getHeldItem() != null && enableChargesSystem && (player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemAxe) && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null && isEnabled("OverCharge")) {
+            long HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
+            int temp = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("OverCharge"), player.getHeldItem()),
+                    RequiredCharge = EnchantChargeNeeded.get("OverCharge");
+            if (temp > 0 && (HeldCharges >= RequiredCharge)) {
+                player.getHeldItem().getTagCompound().setInteger("HxCOverCharge", player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + 1);
+                player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
+            }
+        }
+    }
+
+    @Override
+    public void playerTickEvent(EntityPlayerMP player) {
         if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
             int tmp = 0, tmp2 = 0;
             if (isEnabled("FeatherFall"))
@@ -242,12 +219,12 @@ public class EnchantHandlers implements IEnchantHandler {
                 tmp2 = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("MeteorFall"), player.inventory.armorItemInSlot(0));
 
             if (tmp > 0) {
-                player.motionY += (0.01f * (tmp / 2));
+                player.addVelocity(0, 0.01f * (float) tmp, 0);
                 if (enableChargesSystem)
                     player.inventory.armorItemInSlot(0).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(0).getTagCompound().getLong("HxCEnchantCharge") - EnchantChargeNeeded.get("FeatherFall"));
             }
             if (tmp2 > 0) {
-                player.motionY -= (0.02f * tmp2);
+                player.addVelocity(0, 0.02f * (float) -tmp2, 0);;
                 if (enableChargesSystem)
                     player.inventory.armorItemInSlot(0).getTagCompound().setLong("HxCEnchantCharge", player.inventory.armorItemInSlot(0).getTagCompound().getLong("HxCEnchantCharge") - EnchantChargeNeeded.get("MeteorFall"));
             }
@@ -277,6 +254,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
             }
         }
+        player.sendPlayerAbilities();
     }
     
     private static boolean isEnabled(String name) {
@@ -350,6 +328,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 }
             }
         }
+        player.sendPlayerAbilities();
     }
 
     @Override

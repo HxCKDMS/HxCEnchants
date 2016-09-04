@@ -97,7 +97,7 @@ public class EventHandlers {
 
                 float rot = player.getRotationYawHead();
                 if (player.rotationPitch < 45 && player.rotationPitch > -45) {
-                    if ((rot > 45 && rot < 135) || (rot < -45 && rot > -135)) {
+                    if ((rot > 45 && rot < 135) || (rot > -45 && rot < -135)) {
 //                        System.out.println("West");
                         for (int x = event.x - (depth); x <= event.x; x++) {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {
@@ -111,7 +111,7 @@ public class EventHandlers {
                                 }
                             }
                         }
-                    } else if ((rot > 225 && rot < 315) || (rot < -225 && rot > -315)) {
+                    } else if ((rot > 225 && rot < 315) || (rot > -225 && rot < -315)) {
 //                        System.out.println("East");
                         for (int x = event.x; x <= event.x + (depth); x++) {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {
@@ -125,7 +125,7 @@ public class EventHandlers {
                                 }
                             }
                         }
-                    } else if ((rot < 225 && rot > 135) || (rot < -225 && rot > -135)) {
+                    } else if ((rot < 225 && rot > 135) || (rot > -225 && rot < -135)) {
 //                        System.out.println("North");
                         for (int x = event.x- (width/2); x <= event.x + (width/2); x++) {
                             for (int y = event.y - 1; y <= event.y + (height-1); y++) {

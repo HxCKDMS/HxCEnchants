@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.usecustomenum;
 import static net.minecraft.enchantment.EnumEnchantmentType.*;
 import static HxCKDMS.HxCEnchants.enchantment.EnumHxCEnchantType.*;
 
@@ -55,6 +56,6 @@ public class HxCEnchantment extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
-        return eType.canEnchantItem(stack.getItem());
+        return usecustomenum ? eType.canEnchantItem(stack.getItem()) : type.canEnchantItem(stack.getItem());
     }
 }
