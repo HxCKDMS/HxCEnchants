@@ -18,7 +18,6 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 import java.util.List;
-import java.util.Random;
 
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
 @SuppressWarnings("all")
@@ -148,21 +147,20 @@ public class ArrowEventHandler {
             }
             if (isLightning) {
                 if (arrow.shootingEntity != null) {
-                    arrow.motionX *= LightningLevel;
-                    arrow.motionY *= LightningLevel;
-                    arrow.motionZ *= LightningLevel;
+                    arrow.motionX *= (LightningLevel/10)+1;
+                    arrow.motionY *= (LightningLevel/10)+1;
+                    arrow.motionZ *= (LightningLevel/10)+1;
                     isLightning = false;
                 }
             }
-            Random ran = new Random();
             if (isFlaming && FlamingLevel > 0 && FlamingLevel < 20) {
-                if (FlamingLevel > 5) {FlamingLevel/=3;}
-                if (FlamingLevel > 5) {FlamingLevel/=3;}
-                int x = (int)Math.round(arrow.posX), y = (int)Math.round(arrow.posY), z = (int)Math.round(arrow.posZ);
+                FlamingLevel = (short)Math.round(FlamingLevel/3);
+                int x = (int) arrow.posX, y = (int) arrow.posY, z = (int) arrow.posZ;
                 for (int i = x - FlamingLevel; i < x + FlamingLevel; i++) {
                     for (int j = y - FlamingLevel; j < y + FlamingLevel; j++) {
                         for (int k = z - FlamingLevel; k < z + FlamingLevel; k++) {
-                            if (ran.nextInt(FlamingLevel) == 0 && arrow.worldObj.isAirBlock(i,j,k))
+                            System.out.println(String.format("X: %1$s Y: %2$s Z: %3$s", i, j, k));
+                            if (x > 0 && y > 0 && z > 0 && arrow.worldObj.rand.nextInt(FlamingLevel) == 0 && arrow.worldObj.isAirBlock(i,j,k) && arrow.worldObj.getBlock(i, j-1, k) != Blocks.air)
                                 arrow.worldObj.setBlock(i, j, k, Blocks.fire);
                         }
                     }

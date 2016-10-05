@@ -27,7 +27,7 @@ public class HxCEnchanterBlock extends BlockContainer {
         setHardness(1.0F);
         setResistance(10.0F);
         isBlockContainer = true;
-        setUnlocalizedName("HxCEnchanter");
+        setBlockName("HxCEnchanter");
         setCreativeTab(CreativeTabs.tabDecorations);
     }
 
@@ -54,7 +54,7 @@ public class HxCEnchanterBlock extends BlockContainer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister){
+    public void registerBlockIcons(IIconRegister iconRegister){
         blockIcons = new IIcon[6];
         for (int i = 0; i < 6; i++) {
             blockIcons[i] = iconRegister.registerIcon(Reference.MOD_ID + ":HxCEnchanter");

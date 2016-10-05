@@ -1,32 +1,26 @@
 package HxCKDMS.HxCEnchants.api;
 
-import HxCKDMS.HxCEnchants.enchantment.EnumHxCEnchantType;
+import HxCKDMS.HxCEnchants.lib.Reference;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.usecustomenum;
-import static net.minecraft.enchantment.EnumEnchantmentType.*;
-import static HxCKDMS.HxCEnchants.enchantment.EnumHxCEnchantType.*;
 
 @SuppressWarnings("unchecked")
 public class HxCEnchantment extends Enchantment {
-    private int MaxLevel, cost;
-    private List<Short> bannedEnchs;
-    public EnumHxCEnchantType eType;
-    private long charge;
-    private static EnumEnchantmentType[] Types = new EnumEnchantmentType[]{all, armor, armor_feet, armor_legs, armor_torso, armor_head, weapon, digger, fishing_rod, breakable, bow, weapon};
-    private static EnumHxCEnchantType[] HxCTypes = new EnumHxCEnchantType[]{ALL, ARMOR, ARMOR_FEET, ARMOR_LEGS, ARMOR_TORSO, ARMOR_HEAD, WEAPON, DIGGER, FISHING_ROD, BREAKABLE, BOW, SWORD};
-
-    public HxCEnchantment(int id, String name, int rarity, byte HxCType, int MaxLevel, int cost, long chargeReq, List<Short> enchs) {
-        super(id, rarity, Types[HxCType]);
+    public int MaxLevel, cost;
+    public List<Short> bannedEnchs;
+    private EnumHxCEnchantType eType;
+    public long charge;
+    public HxCEnchantment(int id, String name, byte rarity, byte HxCType, byte MaxLevel, byte cost, long chargeReq, List<Short> enchs) {
+        super(id, rarity, Reference.Types.get(HxCType));
         setName(name);
         this.MaxLevel = MaxLevel;
         this.cost = cost;
         this.bannedEnchs = enchs;
-        this.eType = HxCTypes[HxCType];
+        this.eType = Reference.HxCTypes.get(HxCType);
         this.charge = chargeReq;
     }
 

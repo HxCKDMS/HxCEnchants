@@ -1,11 +1,12 @@
 package HxCKDMS.HxCEnchants.Configurations;
 
 import HxCKDMS.HxCCore.api.Configuration.Config;
-import HxCKDMS.HxCCore.api.Configuration.Config.*;
+import HxCKDMS.HxCEnchants.api.HxCEnchantmentDummy;
+import HxCKDMS.HxCEnchants.lib.Reference;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+
 @Config
 @SuppressWarnings("all")
 public class Configurations {
@@ -19,18 +20,18 @@ public class Configurations {
 
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
 
-    @comment("If false, the enchant won't even exist in the game.")
+    @Config.ignore
     public static LinkedHashMap<String, Boolean> EnabledEnchants = new LinkedHashMap<>();
-    @comment("If deleted will regenerate starting at chosen ID.")
+    @Config.ignore
     public static LinkedHashMap<String, Short> EnchantIDs = new LinkedHashMap<>();
-    @comment("Max level is 120")
+    @Config.ignore
     public static LinkedHashMap<String, Byte> EnchantLevels = new LinkedHashMap<>();
-    @comment("The odds of getting the enchant")
+    @Config.ignore
     public static LinkedHashMap<String, Byte> EnchantWeight = new LinkedHashMap<>();
-    @comment("The cost of the enchant")
+    @Config.ignore
     public static LinkedHashMap<String, Byte> EnchantCost = new LinkedHashMap<>();
-    @comment("The charge cost of the enchant")
-    public static LinkedHashMap<String, Integer> EnchantChargeNeeded = new LinkedHashMap<>();
+    @Config.ignore
+    public static LinkedHashMap<String, Long> EnchantChargeNeeded = new LinkedHashMap<>();
 
     //Enabled, ID, Level, Weight, Cost, Charge Cost
     static {
@@ -289,55 +290,61 @@ public class Configurations {
         EnchantCost.put("FlamingArrow", (byte) 20);
         EnchantCost.put("BloodRazor", (byte) 30);
 
-        EnchantChargeNeeded.put("Bound", 0);
-        EnchantChargeNeeded.put("FlameTouch", 30);
-        EnchantChargeNeeded.put("Repair", 25);
-        EnchantChargeNeeded.put("EarthEater", 30);
-        EnchantChargeNeeded.put("SpeedMine", 30);
-        EnchantChargeNeeded.put("VoidTouch", 30);
-        EnchantChargeNeeded.put("AdrenalineBoost", 30);
-        EnchantChargeNeeded.put("AuraFiery", 30);
-        EnchantChargeNeeded.put("AuraDeadly", 50);
-        EnchantChargeNeeded.put("AuraDark", 20);
-        EnchantChargeNeeded.put("AuraThick", 20);
-        EnchantChargeNeeded.put("AuraToxic", 35);
-        EnchantChargeNeeded.put("BattleHealing", 40);
-        EnchantChargeNeeded.put("DivineIntervention", 45);
-        EnchantChargeNeeded.put("Fly", 50);
-        EnchantChargeNeeded.put("JumpBoost", 10);
-        EnchantChargeNeeded.put("Regen", 15);
-        EnchantChargeNeeded.put("Shroud", 45);
-        EnchantChargeNeeded.put("Stealth", 40);
-        EnchantChargeNeeded.put("Swiftness", 20);
-        EnchantChargeNeeded.put("Vitality", 30);
-        EnchantChargeNeeded.put("WitherProtection", 40);
-        EnchantChargeNeeded.put("MeteorFall", 40);
-        EnchantChargeNeeded.put("FeatherFall", 40);
-        EnchantChargeNeeded.put("FlashStep", 40);
-        EnchantChargeNeeded.put("HealingAura", 40);
-        EnchantChargeNeeded.put("RepulsiveAura", 40);
-        EnchantChargeNeeded.put("AuraMagnetic", 40);
-        EnchantChargeNeeded.put("GaiaAura", 40);
-        EnchantChargeNeeded.put("IcyAura", 40);
-        EnchantChargeNeeded.put("Gluttony", 40);
-        EnchantChargeNeeded.put("ExplosiveDischarge", 40);
-        EnchantChargeNeeded.put("ChargedAura", 40);
-        EnchantChargeNeeded.put("Nightvision", 0);
-        EnchantChargeNeeded.put("LightningArrow", 40);
-        EnchantChargeNeeded.put("ArrowExplosive", 40);
-        EnchantChargeNeeded.put("ArrowZeus", 30);
-        EnchantChargeNeeded.put("ArrowSeeking", 45);
-        EnchantChargeNeeded.put("LifeSteal", 35);
-        EnchantChargeNeeded.put("Piercing", 40);
-        EnchantChargeNeeded.put("Poison", 25);
-        EnchantChargeNeeded.put("SoulTear", 30);
-        EnchantChargeNeeded.put("SCurse", 55);
-        EnchantChargeNeeded.put("Vampirism", 45);
-        EnchantChargeNeeded.put("Vorpal", 55);
-        EnchantChargeNeeded.put("OverCharge", 30);
-        EnchantChargeNeeded.put("EnchLeech", 30);
-        EnchantChargeNeeded.put("Examine", 3);
-        EnchantChargeNeeded.put("FlamingArrow", 20);
-        EnchantChargeNeeded.put("BloodRazor", 50);
+        EnchantChargeNeeded.put("Bound", 0l);
+        EnchantChargeNeeded.put("FlameTouch", 30l);
+        EnchantChargeNeeded.put("Repair", 25l);
+        EnchantChargeNeeded.put("EarthEater", 30l);
+        EnchantChargeNeeded.put("SpeedMine", 30l);
+        EnchantChargeNeeded.put("VoidTouch", 30l);
+        EnchantChargeNeeded.put("AdrenalineBoost", 30l);
+        EnchantChargeNeeded.put("AuraFiery", 30l);
+        EnchantChargeNeeded.put("AuraDeadly", 50l);
+        EnchantChargeNeeded.put("AuraDark", 20l);
+        EnchantChargeNeeded.put("AuraThick", 20l);
+        EnchantChargeNeeded.put("AuraToxic", 35l);
+        EnchantChargeNeeded.put("BattleHealing", 40l);
+        EnchantChargeNeeded.put("DivineIntervention", 45l);
+        EnchantChargeNeeded.put("Fly", 50l);
+        EnchantChargeNeeded.put("JumpBoost", 10l);
+        EnchantChargeNeeded.put("Regen", 15l);
+        EnchantChargeNeeded.put("Shroud", 45l);
+        EnchantChargeNeeded.put("Stealth", 40l);
+        EnchantChargeNeeded.put("Swiftness", 20l);
+        EnchantChargeNeeded.put("Vitality", 30l);
+        EnchantChargeNeeded.put("WitherProtection", 40l);
+        EnchantChargeNeeded.put("MeteorFall", 40l);
+        EnchantChargeNeeded.put("FeatherFall", 40l);
+        EnchantChargeNeeded.put("FlashStep", 40l);
+        EnchantChargeNeeded.put("HealingAura", 40l);
+        EnchantChargeNeeded.put("RepulsiveAura", 40l);
+        EnchantChargeNeeded.put("AuraMagnetic", 40l);
+        EnchantChargeNeeded.put("GaiaAura", 40l);
+        EnchantChargeNeeded.put("IcyAura", 40l);
+        EnchantChargeNeeded.put("Gluttony", 40l);
+        EnchantChargeNeeded.put("ExplosiveDischarge", 40l);
+        EnchantChargeNeeded.put("ChargedAura", 40l);
+        EnchantChargeNeeded.put("Nightvision", 0l);
+        EnchantChargeNeeded.put("LightningArrow", 40l);
+        EnchantChargeNeeded.put("ArrowExplosive", 40l);
+        EnchantChargeNeeded.put("ArrowZeus", 30l);
+        EnchantChargeNeeded.put("ArrowSeeking", 45l);
+        EnchantChargeNeeded.put("LifeSteal", 35l);
+        EnchantChargeNeeded.put("Piercing", 40l);
+        EnchantChargeNeeded.put("Poison", 25l);
+        EnchantChargeNeeded.put("SoulTear", 30l);
+        EnchantChargeNeeded.put("SCurse", 55l);
+        EnchantChargeNeeded.put("Vampirism", 45l);
+        EnchantChargeNeeded.put("Vorpal", 55l);
+        EnchantChargeNeeded.put("OverCharge", 30l);
+        EnchantChargeNeeded.put("EnchLeech", 30l);
+        EnchantChargeNeeded.put("Examine", 3l);
+        EnchantChargeNeeded.put("FlamingArrow", 20l);
+        EnchantChargeNeeded.put("BloodRazor", 50l);
     }
+
+    public static HashMap<String, HxCEnchantmentDummy> enchants = new HashMap<String, HxCEnchantmentDummy>(){{
+        EnabledEnchants.keySet().forEach(enc -> {
+            putIfAbsent(enc, new HxCEnchantmentDummy(StartingID + size(), StringUtils.uncapitalize(enc), EnchantWeight.get(enc), Reference.ENCH_TYPE.get(enc), EnchantLevels.get(enc), EnchantCost.get(enc), EnchantChargeNeeded.get(enc), (Reference.ENCH_INCOMPATS.containsKey(enc) ? Reference.ENCH_INCOMPATS.get(enc) : Collections.emptyList())));
+        });
+    }};
 }

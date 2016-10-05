@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants.Blocks.XPInfuser;
 
-import HxCKDMS.HxCEnchants.HxCEnchants;
+import HxCKDMS.HxCEnchants.api.EnchantingUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -33,10 +33,10 @@ public class XPInfuserTile extends TileEntity implements IInventory {
                 EntityPlayer p = worldObj.getPlayerEntityByName(player);
                 if (stack.getTagCompound() != null) {
                     NBTTagCompound tagCompound = stack.getTagCompound();
-                    tagCompound.setLong("HxCEnchantCharge", tagCompound.getLong("HxCEnchantCharge") + HxCEnchants.xpAtLevel(xpti));
+                    tagCompound.setLong("HxCEnchantCharge", tagCompound.getLong("HxCEnchantCharge") + EnchantingUtils.xpAtLevel(xpti));
                 } else {
                     NBTTagCompound tagCompound = new NBTTagCompound();
-                    tagCompound.setLong("HxCEnchantCharge", HxCEnchants.xpAtLevel(xpti));
+                    tagCompound.setLong("HxCEnchantCharge", EnchantingUtils.xpAtLevel(xpti));
                     stack.setTagCompound(tagCompound);
                 }
                 p.addExperienceLevel(-xpti);
@@ -69,7 +69,7 @@ public class XPInfuserTile extends TileEntity implements IInventory {
     }
 
     @Override
-    public boolean isCustomInventoryName() {
+    public boolean hasCustomInventoryName() {
         return false;
     }
 
@@ -110,12 +110,12 @@ public class XPInfuserTile extends TileEntity implements IInventory {
     }
 
     @Override
-    public void openChest() {
+    public void openInventory() {
 
     }
 
     @Override
-    public void closeChest() {
+    public void closeInventory() {
 
     }
 

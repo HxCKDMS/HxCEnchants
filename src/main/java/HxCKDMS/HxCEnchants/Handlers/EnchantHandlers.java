@@ -5,7 +5,7 @@ import HxCKDMS.HxCCore.api.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
-import HxCKDMS.HxCEnchants.HxCEnchants;
+import HxCKDMS.HxCEnchants.api.EnchantingUtils;
 import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import HxCKDMS.HxCEnchants.api.IEnchantHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -58,7 +58,7 @@ import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class EnchantHandlers implements IEnchantHandler {
     private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
-    private FurnaceRecipes furnaceRecipes = FurnaceRecipes.instance();
+    private FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
     @Override
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, LinkedHashMap<Enchantment, Integer> enchants) {
@@ -66,7 +66,7 @@ public class EnchantHandlers implements IEnchantHandler {
             short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Gluttony"), helmet);
             LinkedHashMap<Boolean, Item> tmp = hasFood(player);
             if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && tmp.containsKey(true) && tmp.get(true) != null) {
-                player.getFoodStats().addStats(((ItemFood) Items.apple).getHealAmount(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).getSaturationModifier(new ItemStack(tmp.get(true))));
+                player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
                 for (short slot = 0; slot < player.inventory.mainInventory.length; slot++) {
                     if (player.inventory.mainInventory[slot] != null && player.inventory.mainInventory[slot].getItem() instanceof ItemFood && player.inventory.mainInventory[slot].getItem() == tmp.get(true)) {
                         player.inventory.decrStackSize(slot, 1);
@@ -137,7 +137,7 @@ public class EnchantHandlers implements IEnchantHandler {
         short examineLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Examine"), stack);
         if (examineLevel > 0)
             if (victim instanceof EntityLiving) {
-                victim.worldObj.spawnEntityInWorld(new EntityXPOrb(victim.worldObj, victim.posX, victim.posY + 1, victim.posZ, examineLevel * EnchantChargeNeeded.get("Examine")));
+                victim.worldObj.spawnEntityInWorld(new EntityXPOrb(victim.worldObj, victim.posX, victim.posY + 1, victim.posZ, (int)(examineLevel * EnchantChargeNeeded.get("Examine"))));
             }
 
         if (vampireLevel > 0) {
@@ -160,15 +160,15 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    public static void chargeItem(EntityPlayerMP player) {
+    public static void chargeItem(EntityPlayer player) {
         if (enableChargesSystem && player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.experienceLevel > 0) {
             player.addExperienceLevel(-1);
 
             if (player.getHeldItem().hasTagCompound()) {
-                player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge") + HxCEnchants.xpFromLevel(player.experienceLevel));
+                player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge") + EnchantingUtils.xpFromLevel(player.experienceLevel));
             } else {
                 NBTTagCompound tg = new NBTTagCompound();
-                tg.setLong("HxCEnchantCharge", HxCEnchants.xpFromLevel(player.experienceLevel));
+                tg.setLong("HxCEnchantCharge", EnchantingUtils.xpFromLevel(player.experienceLevel));
                 player.getHeldItem().setTagCompound(tg);
             }
         }
@@ -200,8 +200,8 @@ public class EnchantHandlers implements IEnchantHandler {
     public static void overcharge(EntityPlayerMP player) {
         if (player.getHeldItem() != null && enableChargesSystem && (player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemAxe) && player.getHeldItem().isItemEnchanted() && player.getHeldItem().getTagCompound() != null && isEnabled("OverCharge")) {
             long HeldCharges = player.getHeldItem().getTagCompound().getLong("HxCEnchantCharge");
-            int temp = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("OverCharge"), player.getHeldItem()),
-                    RequiredCharge = EnchantChargeNeeded.get("OverCharge");
+            int temp = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("OverCharge"), player.getHeldItem());
+            long RequiredCharge = EnchantChargeNeeded.get("OverCharge");
             if (temp > 0 && (HeldCharges >= RequiredCharge)) {
                 player.getHeldItem().getTagCompound().setInteger("HxCOverCharge", player.getHeldItem().getTagCompound().getInteger("HxCOverCharge") + 1);
                 player.getHeldItem().getTagCompound().setLong("HxCEnchantCharge", HeldCharges - RequiredCharge);
@@ -645,13 +645,13 @@ public class EnchantHandlers implements IEnchantHandler {
         long tmp = 0;
         for(int j = 0; j < 36; j++){
             Inv = player.inventory.getStackInSlot(j);
-            if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDurability() != Inv.getCurrentDurability()){
+            if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDamage() != Inv.getItemDamageForDisplay()){
                 if (enableChargesSystem)
                     tmp = Inv.getTagCompound().getLong("HxCEnchantCharge");
                 int a = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Repair"), Inv);
-                int b = Inv.getCurrentDurability() - a;
-                if (Inv.getCurrentDurability() > 0 && (tmp >= Inv.getCurrentDurability() || !enableChargesSystem)) {
-                    Inv.setMetadata(b);
+                int b = Inv.getItemDamageForDisplay() - a;
+                if (Inv.getItemDamageForDisplay() > 0 && (tmp >= Inv.getItemDamageForDisplay() || !enableChargesSystem)) {
+                    Inv.setItemDamage(b);
                     if (enableChargesSystem)
                         Inv.getTagCompound().setLong("HxCEnchantCharge", tmp - a * EnchantChargeNeeded.get("Repair"));
                 }
@@ -663,9 +663,9 @@ public class EnchantHandlers implements IEnchantHandler {
                 if (enableChargesSystem)
                     tmp = Armor.getTagCompound().getLong("HxCEnchantCharge");
                 int c = EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Repair"), Armor);
-                int d = Armor.getCurrentDurability() - c;
-                if (Armor.getCurrentDurability() > 0 && (tmp >= Armor.getCurrentDurability() || !enableChargesSystem)) {
-                    Armor.setMetadata(d);
+                int d = Armor.getItemDamageForDisplay() - c;
+                if (Armor.getItemDamageForDisplay() > 0 && (tmp >= Armor.getItemDamageForDisplay() || !enableChargesSystem)) {
+                    Armor.setItemDamage(d);
                     if (enableChargesSystem)
                         Armor.getTagCompound().setLong("HxCEnchantCharge", tmp - c * EnchantChargeNeeded.get("Repair"));
                 }

@@ -1,4 +1,4 @@
-package HxCKDMS.HxCEnchants.enchantment;
+package HxCKDMS.HxCEnchants.api;
 
 import net.minecraft.item.*;
 

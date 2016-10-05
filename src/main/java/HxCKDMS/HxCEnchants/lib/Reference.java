@@ -1,10 +1,14 @@
 package HxCKDMS.HxCEnchants.lib;
 
+import HxCKDMS.HxCEnchants.api.EnumHxCEnchantType;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 
 import java.util.*;
 
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.EnchantIDs;
+import static HxCKDMS.HxCEnchants.api.EnumHxCEnchantType.*;
+import static net.minecraft.enchantment.EnumEnchantmentType.*;
 
 public class Reference {
     public static final String MOD_ID = "HxCEnchants";
@@ -16,6 +20,8 @@ public class Reference {
     public static final String SERVER_PROXY_CLASS = "HxCKDMS.HxCEnchants.Proxy.ServerProxy";
     public static final HashMap<String, List<Short>> ENCH_INCOMPATS = new HashMap<>();
     public static final HashMap<String, Byte> ENCH_TYPE = new HashMap<>();
+    public static final List<EnumEnchantmentType> Types = Arrays.asList(all, armor, armor_feet, armor_legs, armor_torso, armor_head, weapon, digger, fishing_rod, breakable, bow, weapon);
+    public static final List<EnumHxCEnchantType> HxCTypes = Arrays.asList(ALL, ARMOR, ARMOR_FEET, ARMOR_LEGS, ARMOR_TORSO, ARMOR_HEAD, WEAPON, DIGGER, FISHING_ROD, BREAKABLE, BOW, SWORD);
 
     static {
         ENCH_INCOMPATS.put("AuraDeadly", Arrays.asList(EnchantIDs.get("GaiaAura"), EnchantIDs.get("HealingAura")));

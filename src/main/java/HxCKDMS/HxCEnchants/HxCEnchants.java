@@ -1,7 +1,9 @@
 package HxCKDMS.HxCEnchants;
 
 import HxCKDMS.HxCCore.HxCCore;
+import HxCKDMS.HxCCore.api.Configuration.Handlers.SpecialHandlers;
 import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
+import HxCKDMS.HxCCore.lib.References;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
 import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
@@ -12,7 +14,7 @@ import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
-import HxCKDMS.HxCEnchants.enchantment.Enchants;
+import HxCKDMS.HxCEnchants.api.HxCEnchantmentDummy;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
@@ -45,6 +47,7 @@ public class HxCEnchants {
     public static HxCEnchants instance;
     public static SimpleNetworkWrapper networkWrapper = new SimpleNetworkWrapper(CHANNEL_NAME);
 
+    public HxCConfig hxCConfig;
     public static List<Enchantment> KnownRegisteredEnchants = new ArrayList<>();
 
     @SidedProxy(serverSide = SERVER_PROXY_CLASS, clientSide = CLIENT_PROXY_CLASS)
@@ -52,7 +55,8 @@ public class HxCEnchants {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        HxCConfig hxCConfig = new HxCConfig(Configurations.class, "HxCEnchants", HxCCore.HxCConfigDir, "cfg");
+        SpecialHandlers.registerSpecialClass(HxCEnchantmentDummy.class);
+        hxCConfig = new HxCConfig(Configurations.class, "HxCEnchants", HxCCore.HxCConfigDir, "cfg", References.MOD_ID);
         hxCConfig.initConfiguration();
         if (enableChargesSystem)
             if (EnableKeybinds) {
@@ -71,7 +75,7 @@ public class HxCEnchants {
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
         if (notice)
             MinecraftForge.EVENT_BUS.register(new OtherHandler());
-        Enchants.load();
+//        Enchants.load();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
         if (enableChargesSystem && enableCustomBlocks) {
             XPInfuserBlock block = new XPInfuserBlock();
@@ -108,15 +112,5 @@ public class HxCEnchants {
             }
         }*/
     }
-    public static long xpAtLevel(int level) {
-        if (level <= 15) return (level * level) + (6 * level);
-        else if (level <= 30) return Math.round(2.5 * (level * level) - (40.5 * level) + 360);
-        else return Math.round(4.5 * (level * level) - (162.5 * level) + 2220);
-    }
 
-    public static long xpFromLevel(int level) {
-        if (level <= 15) return (level * 2) + 7;
-        else if (level <= 30) return (level * 5) - 38;
-        else return (level * 9) - 158;
-    }
 }

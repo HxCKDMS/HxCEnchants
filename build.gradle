@@ -24,7 +24,6 @@ group= "HxCKDMS.HxCEnchants"
 archivesBaseName = "HxCEnchants"
 
 minecraft {
-    mappings = "stable_12"
     version = "1.7.10-10.13.4.1558-1.7.10"
     runDir = "eclipse"
 }

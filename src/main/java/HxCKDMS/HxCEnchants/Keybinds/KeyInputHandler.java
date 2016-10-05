@@ -18,11 +18,11 @@ public class KeyInputHandler {
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         try {
             if (Configurations.EnabledEnchants.get("OverCharge") && Keybinds.OverCharge.isPressed() && mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemSword || mc.thePlayer.getHeldItem().getItem() instanceof ItemAxe) && mc.thePlayer.getHeldItem().hasTagCompound() && EnchantmentHelper.getEnchantmentLevel((int) Configurations.EnchantIDs.get("Overcharge"), mc.thePlayer.getHeldItem()) > 0)
-                HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(2));
+                HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(2, mc.thePlayer.getDisplayName()));
             if (Configurations.EnabledEnchants.get("FlashStep") && Keybinds.FlashStep.isPressed() && mc.thePlayer.inventory.armorItemInSlot(0) != null && mc.thePlayer.inventory.armorItemInSlot(0).hasTagCompound() && (mc.thePlayer.inventory.armorItemInSlot(0).getTagCompound().getInteger("HxCEnchantCharge") >= Configurations.EnchantChargeNeeded.get("FlashStep") || !Configurations.enableChargesSystem))
-                HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(1));
+                HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(1, mc.thePlayer.getDisplayName()));
             if (Configurations.enableChargesSystem && Keybinds.charge.isPressed())
-                HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(3));
+                HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(3, mc.thePlayer.getDisplayName()));
         } catch (Exception e) {
             LogHelper.warn("Something happened in Key handler. " + e.getMessage(), Reference.MOD_NAME);
         }

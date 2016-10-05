@@ -15,7 +15,14 @@ public class PacketKeypress implements IMessage {
 
     public PacketKeypress() {}
 
-    public PacketKeypress(int id) { this.keyid = id;}
+    public PacketKeypress(int id) {
+        this.keyid = id;
+    }
+
+    public PacketKeypress(int id, String name) {
+        this.keyid = id;
+        this.name = name;
+    }
 
     @Override
     public void toBytes(ByteBuf byteBuf) {
@@ -32,12 +39,22 @@ public class PacketKeypress implements IMessage {
     public static class handler implements IMessageHandler<PacketKeypress, IMessage> {
         @Override
         public IMessage onMessage(PacketKeypress message, MessageContext ctx) {
-            EntityPlayerMP p = null;
-            if (!message.name.isEmpty()) p = (EntityPlayerMP)HxCCore.server.getEntityWorld().getPlayerEntityByName(message.name);
-            if (message.keyid == 1) EnchantHandlers.flash(p);
-            else if (message.keyid == 2) EnchantHandlers.overcharge(p);
-            else if (message.keyid == 3) EnchantHandlers.chargeItem(p);
-            return null;
+            if (message.name.isEmpty()) return null;
+
+            EntityPlayerMP p = (EntityPlayerMP)HxCCore.server.getEntityWorld().getPlayerEntityByName(message.name);
+
+            switch (message.keyid) {
+                case 1 :
+                    EnchantHandlers.flash(p);
+                    return null;
+                case 2 :
+                    EnchantHandlers.overcharge(p);
+                    return null;
+                case 3 :
+                    EnchantHandlers.chargeItem(p);
+                    return null;
+                default: return null;
+            }
         }
     }
 }
