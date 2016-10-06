@@ -12,7 +12,6 @@ import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
-import HxCKDMS.HxCEnchants.Handlers.OtherHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.api.HxCEnchantmentDummy;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
@@ -74,8 +73,6 @@ public class HxCEnchants {
         Configurations.enchants.values().forEach(HxCEnchantmentDummy::init);
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
-        if (notice)
-            MinecraftForge.EVENT_BUS.register(new OtherHandler());
 //        Enchants.load();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
         if (enableChargesSystem && enableCustomBlocks) {
