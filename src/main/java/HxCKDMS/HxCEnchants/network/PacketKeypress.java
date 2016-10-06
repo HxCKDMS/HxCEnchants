@@ -15,10 +15,6 @@ public class PacketKeypress implements IMessage {
 
     public PacketKeypress() {}
 
-    public PacketKeypress(int id) {
-        this.keyid = id;
-    }
-
     public PacketKeypress(int id, String name) {
         this.keyid = id;
         this.name = name;

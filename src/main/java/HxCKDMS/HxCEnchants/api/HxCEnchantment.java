@@ -10,8 +10,8 @@ import static HxCKDMS.HxCEnchants.Configurations.Configurations.usecustomenum;
 
 @SuppressWarnings("unchecked")
 public class HxCEnchantment extends Enchantment {
-    public int MaxLevel, cost;
-    public List<Short> bannedEnchs;
+    private int MaxLevel, cost;
+    private List<Short> bannedEnchs;
     private EnumHxCEnchantType eType;
     public long charge;
     public HxCEnchantment(int id, String name, byte rarity, byte HxCType, byte MaxLevel, byte cost, long chargeReq, List<Short> enchs) {

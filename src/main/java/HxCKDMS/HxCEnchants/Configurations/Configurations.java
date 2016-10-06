@@ -16,7 +16,7 @@ public class Configurations {
     @Config.comment(value = "Enchant Level / this (Level/2 default)")
     public static float EarthEaterDepthModifier = 2.0f, EarthEaterHeightModifier = 1.75f, EarthEaterWidthModifier = 1.5f;
     public static short StartingID = 400;
-    public static boolean notice = true, usecustomenum = true, blacklistEnchantsFromEnchantingPlus = false, EnableKeybinds = true, EnableCoordinatesInGUIs = false;
+    public static boolean usecustomenum = true, blacklistEnchantsFromEnchantingPlus = false, EnableKeybinds = true, EnableCoordinatesInGUIs = false;
 
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
 

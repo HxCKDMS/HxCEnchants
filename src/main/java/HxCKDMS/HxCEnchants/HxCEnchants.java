@@ -71,6 +71,7 @@ public class HxCEnchants {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        Configurations.enchants.values().forEach(HxCEnchantmentDummy::init);
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
         if (notice)
