@@ -1,8 +1,8 @@
 package HxCKDMS.HxCEnchants.Blocks.HxCEnchanter;
 
-import HxCKDMS.HxCCore.api.Utils.AABBUtils;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
+import HxCKDMS.HxCEnchants.api.AABBUtils;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import net.minecraft.client.gui.inventory.GuiContainer;

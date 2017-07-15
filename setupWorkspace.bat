@@ -1,1 +1,1 @@
-gradle clean setupCiWorkspace setupDecompWorkspace --refresh-dependencies getAssets eclipse idea
+gradle -Dorg.gradle.jvmargs=-Xmx3072m setupDecompWorkspace clean setupDecompWorkspace --refresh-dependencies getAssets idea  --stacktrace

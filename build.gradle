@@ -19,13 +19,13 @@ apply plugin: 'forge'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "1.7.10-2.5.0"
-group= "HxCKDMS.HxCEnchants"
-archivesBaseName = "HxCEnchants"
+version = "1.7.10-3.0.0"
+group= "hxckdms.hxcenchants"
+archivesBaseName = "hxcenchants"
 
 minecraft {
     version = "1.7.10-10.13.4.1558-1.7.10"
-    runDir = "eclipse"
+    runDir = "run"
 }
 
 processResources

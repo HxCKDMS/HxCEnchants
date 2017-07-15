@@ -1,11 +1,11 @@
 package HxCKDMS.HxCEnchants.network;
 
-import HxCKDMS.HxCCore.HxCCore;
 import HxCKDMS.HxCEnchants.Handlers.EnchantHandlers;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import hxckdms.hxccore.libraries.GlobalVariables;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -37,7 +37,7 @@ public class PacketKeypress implements IMessage {
         public IMessage onMessage(PacketKeypress message, MessageContext ctx) {
             if (message.name.isEmpty()) return null;
 
-            EntityPlayerMP p = (EntityPlayerMP)HxCCore.server.getEntityWorld().getPlayerEntityByName(message.name);
+            EntityPlayerMP p = (EntityPlayerMP) GlobalVariables.server.getEntityWorld().getPlayerEntityByName(message.name);
 
             switch (message.keyid) {
                 case 1 :

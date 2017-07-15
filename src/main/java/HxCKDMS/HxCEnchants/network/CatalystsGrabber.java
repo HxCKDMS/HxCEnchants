@@ -1,8 +1,5 @@
 package HxCKDMS.HxCEnchants.network;
 
-import HxCKDMS.HxCCore.Configs.Configurations;
-import HxCKDMS.HxCCore.api.Utils.LogHelper;
-
 import java.io.BufferedReader;
 
 public class CatalystsGrabber {
@@ -23,12 +20,7 @@ public class CatalystsGrabber {
 
                     }
                 }
-            } catch (Exception var4) {
-                LogHelper.error("Something went wrong in loading HxCEnchantsCatalysts report this to DrZed on github @ http://github.com/HxCLib/issues", "HxCKDMS Core");
-                if (Configurations.DebugMode) {
-                    var4.printStackTrace();
-                }
-            }
+            } catch (Exception var4) {}
         }
     }
 }

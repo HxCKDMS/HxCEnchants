@@ -1,11 +1,12 @@
 package HxCKDMS.HxCEnchants.Keybinds;
-import HxCKDMS.HxCCore.api.Utils.LogHelper;
+
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.HxCEnchants;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import hxckdms.hxcutils.LogHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemAxe;

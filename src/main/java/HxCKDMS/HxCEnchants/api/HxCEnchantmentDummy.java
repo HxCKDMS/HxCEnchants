@@ -1,7 +1,5 @@
 package HxCKDMS.HxCEnchants.api;
 
-import HxCKDMS.HxCCore.Configs.Configurations;
-import HxCKDMS.HxCCore.api.Utils.LogHelper;
 import HxCKDMS.HxCEnchants.lib.Reference;
 
 import java.util.Collections;
@@ -38,7 +36,7 @@ public class HxCEnchantmentDummy {
     }
 
     public void init() {
-        if (Configurations.DebugMode) LogHelper.info(String.format("%1$s %2$s %3$s %4$s %5$s %6$s %7$s %8$s", this.id, this.name, this.rarity, this.HxCType, this.MaxLevel, this.cost, this.charge, this.bannedEnchs), Reference.MOD_ID);
-        real = new HxCEnchantment(this.id, this.name, this.rarity, this.HxCType, this.MaxLevel, this.cost, this.charge, this.bannedEnchs);
+//        if (Configurations.DebugMode) LogHelper.info(String.format("%1$s %2$s %3$s %4$s %5$s %6$s %7$s %8$s", this.id, this.name, this.rarity, this.HxCType, this.MaxLevel, this.cost, this.charge, this.bannedEnchs), Reference.MOD_ID);
+//        real = new HxCEnchantment(this.id, this.name, this.rarity, this.HxCType, this.MaxLevel, this.cost, this.charge, this.bannedEnchs);
     }
 }

@@ -1,9 +1,5 @@
 package HxCKDMS.HxCEnchants;
 
-import HxCKDMS.HxCCore.HxCCore;
-import HxCKDMS.HxCCore.api.Configuration.Handlers.SpecialHandlers;
-import HxCKDMS.HxCCore.api.Configuration.HxCConfig;
-import HxCKDMS.HxCCore.lib.References;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
 import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
@@ -13,7 +9,7 @@ import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
-import HxCKDMS.HxCEnchants.api.HxCEnchantmentDummy;
+import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
 import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
@@ -28,6 +24,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import hxckdms.hxcconfig.HxCConfig;
+import hxckdms.hxccore.libraries.GlobalVariables;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -54,9 +52,10 @@ public class HxCEnchants {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        SpecialHandlers.registerSpecialClass(HxCEnchantmentDummy.class);
-        hxCConfig = new HxCConfig(Configurations.class, "HxCEnchants", HxCCore.HxCConfigDir, "cfg", References.MOD_ID);
+        hxCConfig = new HxCConfig(Configurations.class, "HxCEnchants", GlobalVariables.modConfigDir, "cfg", Reference.MOD_ID);
         hxCConfig.initConfiguration();
+        if (!(new Configurations()).init())
+            hxCConfig.initConfiguration();
         if (enableChargesSystem)
             if (EnableKeybinds) {
                 proxy.preInit(event);
@@ -70,7 +69,7 @@ public class HxCEnchants {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        Configurations.enchants.values().forEach(HxCEnchantmentDummy::init);
+//        Configurations.enchants.values().forEach(HxCEnchantmentDummy::init);
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
 //        Enchants.load();

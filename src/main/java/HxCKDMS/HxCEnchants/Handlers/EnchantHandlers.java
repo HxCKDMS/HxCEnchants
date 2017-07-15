@@ -1,14 +1,14 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
-import HxCKDMS.HxCCore.HxCCore;
-import HxCKDMS.HxCCore.api.Handlers.NBTFileIO;
-import HxCKDMS.HxCCore.api.Utils.AABBUtils;
-import HxCKDMS.HxCCore.api.Utils.Teleporter;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
+import HxCKDMS.HxCEnchants.api.AABBUtils;
 import HxCKDMS.HxCEnchants.api.EnchantingUtils;
 import HxCKDMS.HxCEnchants.api.HxCEnchantment;
 import HxCKDMS.HxCEnchants.api.IEnchantHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import hxckdms.hxccore.libraries.GlobalVariables;
+import hxckdms.hxccore.utilities.HxCPlayerInfoHandler;
+import hxckdms.hxccore.utilities.TeleportHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
@@ -47,7 +47,6 @@ import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
-import java.io.File;
 import java.util.*;
 
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
@@ -119,14 +118,13 @@ public class EnchantHandlers implements IEnchantHandler {
 
     @Override
     public void handleBootEnchant(EntityPlayerMP player, ItemStack boots, LinkedHashMap<Enchantment, Integer> enchants) {
-        String UUID = player.getUniqueID().toString();
-        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-        if (enchants.containsKey(enchantmentsList[EnchantIDs.get("Fly")]) &! NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
-            NBTFileIO.setBoolean(CustomPlayerData, "fly", true);
-            NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", true);
-        } else if (NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
-            NBTFileIO.setBoolean(CustomPlayerData, "fly", false);
-            NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
+        NBTTagCompound c = HxCPlayerInfoHandler.getTagCompound(player, "backLocation");
+        if (enchants.containsKey(enchantmentsList[EnchantIDs.get("Fly")]) &! c.getBoolean("flightEnc")) {
+            c.setBoolean("fly", true);
+            c.setBoolean("flightEnc", true);
+        } else if (c.getBoolean("flightEnc")) {
+            c.setBoolean("fly", false);
+            c.setBoolean("flightEnc", false);
         }
         player.sendPlayerAbilities();
     }
@@ -182,7 +180,7 @@ public class EnchantHandlers implements IEnchantHandler {
                 Vec3 vec3 = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
                 Vec3 vec31 = player.getLook(1.0f);
                 Vec3 vec32 = vec3.addVector(vec31.xCoord * 200, vec31.yCoord * 200, vec31.zCoord * 200);
-                MovingObjectPosition rayTrace = HxCCore.server.worldServerForDimension(player.dimension).rayTraceBlocks(vec3, vec32);
+                MovingObjectPosition rayTrace = GlobalVariables.server.worldServerForDimension(player.dimension).rayTraceBlocks(vec3, vec32);
                 if (rayTrace != null) {
                     if (rayTrace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ) {
                         for (int i = 0; i < 5; i++) {
@@ -247,11 +245,10 @@ public class EnchantHandlers implements IEnchantHandler {
         }
 
         if (isEnabled("Fly")) {
-            String UUID = player.getUniqueID().toString();
-            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
-            if (player.inventory.armorItemInSlot(0) == null && NBTFileIO.getBoolean(CustomPlayerData, "flightEnc")) {
-                NBTFileIO.setBoolean(CustomPlayerData, "fly", false);
-                NBTFileIO.setBoolean(CustomPlayerData, "flightEnc", false);
+            NBTTagCompound c = HxCPlayerInfoHandler.getTagCompound(player, "backLocation");
+            if (player.inventory.armorItemInSlot(0) == null && c.getBoolean("flightEnc")) {
+                c.setBoolean("fly", false);
+                c.setBoolean("flightEnc", false);
             }
         }
         player.sendPlayerAbilities();
@@ -586,12 +583,12 @@ public class EnchantHandlers implements IEnchantHandler {
                     y = player.getBedLocation(0).posY;
                     z = player.getBedLocation(0).posZ;
                 } else {
-                    ChunkCoordinates coords = HxCCore.server.worldServerForDimension(0).getSpawnPoint();
+                    ChunkCoordinates coords = GlobalVariables.server.worldServerForDimension(0).getSpawnPoint();
                     x = coords.posX;
                     y = coords.posY;
                     z = coords.posZ;
                 }
-                if (player.dimension != 0) Teleporter.transferPlayerToDimension(player, 0, x, y, z);
+                if (player.dimension != 0) TeleportHelper.teleportEntityToDimension(player, x, y, z, 0);
                 else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
                 Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
                 enchs.remove((int) EnchantIDs.get("DivineIntervention"));
