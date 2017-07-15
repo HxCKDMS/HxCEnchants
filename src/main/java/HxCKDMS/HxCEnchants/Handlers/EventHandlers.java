@@ -23,10 +23,9 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static HxCKDMS.HxCEnchants.Configurations.Configurations.EnabledEnchants;
-import static HxCKDMS.HxCEnchants.Configurations.Configurations.EnchantIDs;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.enchantments;
 
 //Null pointer checked no NPE's can happen ignoring my NPE that will never be thrown because these enchants have already been configured and checked..
 @SuppressWarnings({"unchecked", "ConstantConditions", "unused"})
@@ -85,7 +84,7 @@ public class EventHandlers {
     public void breakBlockEvent(BlockEvent.BreakEvent event) {
         EntityPlayer player = event.getPlayer();
         if (player.getHeldItem() != null && player.getHeldItem().hasTagCompound() && player.getHeldItem().isItemEnchanted()) {
-            ItemStack item = player.getHeldItem(); int worldeater = (int) EnchantIDs.get("EarthEater");
+            ItemStack item = player.getHeldItem(); int worldeater = enchantments.get("EarthEater").id;
             Block block = event.block;
             LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(item);
             if (enchs.keySet().contains(worldeater)) {
@@ -187,8 +186,8 @@ public class EventHandlers {
 
     @SubscribeEvent
     public void PlayerEvent(PlayerEvent.BreakSpeed event) {
-        if (Configurations.EnabledEnchants.get("SpeedMine") && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && getEnchantmentLevel((int) EnchantIDs.get("SpeedMine"), event.entityPlayer.getHeldItem()) > 0)
-            event.newSpeed = (event.originalSpeed + event.originalSpeed*(getEnchantmentLevel((int) EnchantIDs.get("SpeedMine"), event.entityPlayer.getHeldItem()) / 10));
+        if (Configurations.enchantments.get("SpeedMine").enabled && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && getEnchantmentLevel(enchantments.get("SpeedMine").id, event.entityPlayer.getHeldItem()) > 0)
+            event.newSpeed = (event.originalSpeed + event.originalSpeed*(getEnchantmentLevel(enchantments.get("SpeedMine").id, event.entityPlayer.getHeldItem()) / 10));
     }
 
     @SubscribeEvent
@@ -271,7 +270,7 @@ public class EventHandlers {
 	public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {
 		if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).hasTagCompound() && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).isItemEnchanted()) {
             ItemStack legs = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
-            int JumpBoostLevel = getEnchantmentLevel((int) EnchantIDs.get("JumpBoost"), legs);
+            int JumpBoostLevel = getEnchantmentLevel(enchantments.get("JumpBoost").id, legs);
             if (JumpBoostLevel > 0) {
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
                 double JumpBuff = player.motionY + 0.1 * JumpBoostLevel;
@@ -287,10 +286,10 @@ public class EventHandlers {
             if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted()) {
                 ItemStack boots = player.inventory.armorItemInSlot(0);
                 int featherFall = 0, meteorFall = 0;
-                if (EnabledEnchants.get("FeatherFall"))
-                    featherFall = getEnchantmentLevel((int) EnchantIDs.get("FeatherFall"), boots);
-                if (EnabledEnchants.get("MeteorFall"))
-                    meteorFall = getEnchantmentLevel((int) EnchantIDs.get("MeteorFall"), boots);
+                if (enchantments.get("FeatherFall").enabled)
+                    featherFall = getEnchantmentLevel(enchantments.get("FeatherFall").id, boots);
+                if (enchantments.get("MeteorFall").enabled)
+                    meteorFall = getEnchantmentLevel(enchantments.get("MeteorFall").id, boots);
 
                 if (featherFall < 4 && featherFall > 0)event.distance /= featherFall;
                 else if (featherFall > 4) event.distance = 0;

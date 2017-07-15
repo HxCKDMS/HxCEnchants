@@ -18,9 +18,9 @@ public class KeyInputHandler {
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         try {
-            if (Configurations.EnabledEnchants.get("OverCharge") && Keybinds.OverCharge.isPressed() && mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemSword || mc.thePlayer.getHeldItem().getItem() instanceof ItemAxe) && mc.thePlayer.getHeldItem().hasTagCompound() && EnchantmentHelper.getEnchantmentLevel((int) Configurations.EnchantIDs.get("Overcharge"), mc.thePlayer.getHeldItem()) > 0)
+            if (Configurations.enchantments.get("OverCharge").enabled && Keybinds.OverCharge.isPressed() && mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemSword || mc.thePlayer.getHeldItem().getItem() instanceof ItemAxe) && mc.thePlayer.getHeldItem().hasTagCompound() && EnchantmentHelper.getEnchantmentLevel((int) Configurations.enchantments.get("Overcharge").id, mc.thePlayer.getHeldItem()) > 0)
                 HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(2, mc.thePlayer.getDisplayName()));
-            if (Configurations.EnabledEnchants.get("FlashStep") && Keybinds.FlashStep.isPressed() && mc.thePlayer.inventory.armorItemInSlot(0) != null && mc.thePlayer.inventory.armorItemInSlot(0).hasTagCompound() && (mc.thePlayer.inventory.armorItemInSlot(0).getTagCompound().getInteger("HxCEnchantCharge") >= Configurations.EnchantChargeNeeded.get("FlashStep") || !Configurations.enableChargesSystem))
+            if (Configurations.enchantments.get("FlashStep").enabled && Keybinds.FlashStep.isPressed() && mc.thePlayer.inventory.armorItemInSlot(0) != null && mc.thePlayer.inventory.armorItemInSlot(0).hasTagCompound() && (mc.thePlayer.inventory.armorItemInSlot(0).getTagCompound().getInteger("HxCEnchantCharge") >= Configurations.enchantments.get("FlashStep").charge || !Configurations.enableChargesSystem))
                 HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(1, mc.thePlayer.getDisplayName()));
             if (Configurations.enableChargesSystem && Keybinds.charge.isPressed())
                 HxCEnchants.networkWrapper.sendToServer(new PacketKeypress(3, mc.thePlayer.getDisplayName()));

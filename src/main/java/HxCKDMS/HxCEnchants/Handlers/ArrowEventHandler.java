@@ -30,20 +30,20 @@ public class ArrowEventHandler {
         ItemStack stack = event.bow;
         assert stack != null;
         if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !enableChargesSystem)) {
-            if (EnabledEnchants.get("ArrowZeus"))
-                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowZeus"), stack);
-            if (EnabledEnchants.get("ArrowSeeking"))
-                HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowSeeking"), stack);
-            if (EnabledEnchants.get("ArrowExplosive"))
-                ExplosionLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("ArrowExplosive"), stack);
-            if (EnabledEnchants.get("Poison"))
-                PoisonLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Poison"), stack);
-            if (EnabledEnchants.get("Piercing"))
-                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("Piercing"), stack);
-            if (EnabledEnchants.get("LightningArrow"))
-                LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("LightningArrow"), stack);
-            if (EnabledEnchants.get("FlamingArrow"))
-                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) EnchantIDs.get("FlamingArrow"), stack);
+            if (enchantments.get("ArrowZeus").enabled)
+                ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("ArrowZeus").id, stack);
+            if (enchantments.get("ArrowSeeking").enabled)
+                HomingLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("ArrowSeeking").id, stack);
+            if (enchantments.get("ArrowExplosive").enabled)
+                ExplosionLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("ArrowExplosive").id, stack);
+            if (enchantments.get("Poison").enabled)
+                PoisonLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("Poison").id, stack);
+            if (enchantments.get("Piercing").enabled)
+                PiercingLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("Piercing").id, stack);
+            if (enchantments.get("LightningArrow").enabled)
+                LightningLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("LightningArrow").id, stack);
+            if (enchantments.get("FlamingArrow").enabled)
+                FlamingLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("FlamingArrow").id, stack);
 
             isExplosive = ExplosionLevel > 0;
             isHoming = HomingLevel > 0;
@@ -55,13 +55,13 @@ public class ArrowEventHandler {
 
             if (enableChargesSystem) {
                 int use = 0;
-                if (isExplosive) use += EnchantChargeNeeded.get("ArrowExplosive");
-                if (isHoming) use += EnchantChargeNeeded.get("ArrowSeeking");
-                if (isZeus) use += EnchantChargeNeeded.get("ArrowZeus");
-                if (isPoison) use += EnchantChargeNeeded.get("Poison");
-                if (isPiercing) use += EnchantChargeNeeded.get("Piercing");
-                if (isLightning) use += EnchantChargeNeeded.get("LightningArrow");
-                if (isFlaming) use += EnchantChargeNeeded.get("FlamingArrow");
+                if (isExplosive) use += enchantments.get("ArrowExplosive").charge;
+                if (isHoming) use += enchantments.get("ArrowSeeking").charge;
+                if (isZeus) use += enchantments.get("ArrowZeus").charge;
+                if (isPoison) use += enchantments.get("Poison").charge;
+                if (isPiercing) use += enchantments.get("Piercing").charge;
+                if (isLightning) use += enchantments.get("LightningArrow").charge;
+                if (isFlaming) use += enchantments.get("FlamingArrow").charge;
 
                 long tmp = stack.getTagCompound().getLong("HxCEnchantCharge") - use;
 

@@ -15,9 +15,9 @@ public class Keybinds {
         FlashStep = new KeyBinding("key.FlashStep", Keyboard.KEY_F, "key.categories.HxCCore");
         charge = new KeyBinding("key.charge", Keyboard.KEY_G, "key.categories.HxCCore");
 
-        if (Configurations.EnabledEnchants.get("OverCharge"))
+        if (Configurations.enchantments.get("OverCharge").enabled)
             ClientRegistry.registerKeyBinding(OverCharge);
-        if (Configurations.EnabledEnchants.get("FlashStep"))
+        if (Configurations.enchantments.get("FlashStep").enabled)
             ClientRegistry.registerKeyBinding(FlashStep);
         if (Configurations.enableChargesSystem)
             ClientRegistry.registerKeyBinding(charge);
