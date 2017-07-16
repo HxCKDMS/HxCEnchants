@@ -44,9 +44,6 @@ public class PacketKeypress implements IMessage {
                     EnchantHandlers.flash(p);
                     return null;
                 case 2 :
-                    EnchantHandlers.overcharge(p);
-                    return null;
-                case 3 :
                     EnchantHandlers.chargeItem(p);
                     return null;
                 default: return null;

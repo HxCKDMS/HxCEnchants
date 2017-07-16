@@ -2,8 +2,6 @@ package HxCKDMS.HxCEnchants;
 
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
-import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserBlock;
-import HxCKDMS.HxCEnchants.Blocks.XPInfuser.XPInfuserTile;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
 import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
@@ -11,7 +9,6 @@ import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.lib.Reference;
 import HxCKDMS.HxCEnchants.network.PacketHxCEnchanterSync;
-import HxCKDMS.HxCEnchants.network.PacketInfuserSync;
 import HxCKDMS.HxCEnchants.network.PacketKeypress;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -57,15 +54,16 @@ public class HxCEnchants {
         if (!(new Configurations()).init())
             hxCConfig.initConfiguration();
 
-        if (enableChargesSystem)
-            if (EnableKeybinds) {
-                proxy.preInit(event);
-                networkWrapper.registerMessage(PacketKeypress.handler.class, PacketKeypress.class, 1, Side.SERVER);
-            }
+        if (EnableKeybinds) {
+            proxy.preInit(event);
+            networkWrapper.registerMessage(PacketKeypress.handler.class, PacketKeypress.class, 1, Side.SERVER);
+        }
+        if (!EnableKeybinds) {
+            enchantments.get("FlashStep").enabled = false;
+            enchantments.get("OverCharge").enabled = false;
+        }
         if (enableCustomBlocks)
             networkWrapper.registerMessage(PacketHxCEnchanterSync.handler.class, PacketHxCEnchanterSync.class, 0, Side.SERVER);
-        if (enableChargesSystem && enableCustomBlocks)
-            networkWrapper.registerMessage(PacketInfuserSync.handler.class, PacketInfuserSync.class, 2, Side.SERVER);
     }
 
     @EventHandler
@@ -76,12 +74,6 @@ public class HxCEnchants {
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
 //        Enchants.load();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
-        if (enableChargesSystem && enableCustomBlocks) {
-            XPInfuserBlock block = new XPInfuserBlock();
-            GameRegistry.registerBlock(block, "XPInfuserBlock");
-            GameRegistry.registerTileEntity(XPInfuserTile.class, "XPInfuserTile");
-            GameRegistry.addRecipe(new ShapedOreRecipe(block, "EBE", "BDB", "EBE", 'B', Items.experience_bottle, 'E', Items.ender_eye, 'D', Blocks.diamond_block));
-        }
         if (enableCustomBlocks) {
             HxCEnchanterBlock block = new HxCEnchanterBlock();
             GameRegistry.registerBlock(block, "HxCEnchanter");
