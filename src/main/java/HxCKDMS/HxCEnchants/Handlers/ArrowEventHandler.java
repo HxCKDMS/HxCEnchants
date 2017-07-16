@@ -29,7 +29,7 @@ public class ArrowEventHandler {
 	public void ArrowLooseEvent(ArrowLooseEvent event) {
         ItemStack stack = event.bow;
         assert stack != null;
-        if (stack.hasTagCompound() && (stack.getTagCompound().getLong("HxCEnchantCharge") > 0 || !enableChargesSystem)) {
+        if (stack.hasTagCompound()) {
             if (enchantments.get("ArrowZeus").enabled)
                 ZeusLevel = (short)EnchantmentHelper.getEnchantmentLevel(enchantments.get("ArrowZeus").id, stack);
             if (enchantments.get("ArrowSeeking").enabled)
@@ -52,28 +52,6 @@ public class ArrowEventHandler {
             isPiercing = PiercingLevel > 0;
             isLightning = LightningLevel > 0;
             isFlaming = FlamingLevel > 0;
-
-            if (enableChargesSystem) {
-                int use = 0;
-                if (isExplosive) use += enchantments.get("ArrowExplosive").charge;
-                if (isHoming) use += enchantments.get("ArrowSeeking").charge;
-                if (isZeus) use += enchantments.get("ArrowZeus").charge;
-                if (isPoison) use += enchantments.get("Poison").charge;
-                if (isPiercing) use += enchantments.get("Piercing").charge;
-                if (isLightning) use += enchantments.get("LightningArrow").charge;
-                if (isFlaming) use += enchantments.get("FlamingArrow").charge;
-
-                long tmp = stack.getTagCompound().getLong("HxCEnchantCharge") - use;
-
-                if (tmp >= 0)
-                    stack.getTagCompound().setLong("HxCEnchantCharge", tmp);
-                else {
-                    isExplosive = false; isHoming = false;
-                    isZeus = false; isPoison = false;
-                    isPiercing = false; isLightning = false;
-                    isFlaming = false;
-                }
-            }
         }
     }
 

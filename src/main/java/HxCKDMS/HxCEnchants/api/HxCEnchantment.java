@@ -13,15 +13,13 @@ public class HxCEnchantment extends Enchantment {
     private int MaxLevel, cost;
     private List<Short> bannedEnchs;
     private EnumHxCEnchantType eType;
-    public long charge;
-    public HxCEnchantment(int id, String name, byte rarity, byte HxCType, byte MaxLevel, byte cost, long chargeReq, List<Short> enchs) {
+    public HxCEnchantment(int id, String name, byte rarity, byte HxCType, byte MaxLevel, byte cost, List<Short> enchs) {
         super(id, rarity, Reference.Types.get(HxCType));
         setName(name);
         this.MaxLevel = MaxLevel;
         this.cost = cost;
         this.bannedEnchs = enchs;
         this.eType = Reference.HxCTypes.get(HxCType);
-        this.charge = chargeReq;
     }
 
     @Override
@@ -37,10 +35,6 @@ public class HxCEnchantment extends Enchantment {
     @Override
     public int getMaxLevel() {
         return MaxLevel;
-    }
-
-    public long getChargeRequirement() {
-        return charge;
     }
 
     @Override
