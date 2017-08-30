@@ -12,7 +12,7 @@ import java.util.List;
 @Config
 @SuppressWarnings("all")
 public class Configurations {
-    public static boolean ExplosionDestroysTerrain = false, AurasAffectPlayers = true,  enableCustomBlocks;
+    public static boolean ExplosionDestroysTerrain = false, AurasAffectPlayers = true,  enableCustomBlocks, AutosmeltMultipliesWithOres = true, AutosmeltWithFortune = true;
     public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f, SpeedTweak = 0.0387f;
     public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3, AuraUpdateDelay = 3000;
     @Config.comment(value = "Enchant Level / this (Level/2 default)")
@@ -30,8 +30,8 @@ public class Configurations {
     public boolean init() {
         if (enchantments.size() > 0) return true;
 
-        enchantments.put("Bound", new DummyEnchant("Bound", false, StartingID + enchantments.size(),  (byte) 3, (byte) 5, (byte) 45, (byte) 0));
-        enchantments.put("FlameTouch", new DummyEnchant("FlameTouch", true, StartingID + enchantments.size(),  (byte) 4, (byte) 2, (byte) 30, (byte) 7));
+//        enchantments.put("Bound", new DummyEnchant("Bound", false, StartingID + enchantments.size(),  (byte) 3, (byte) 5, (byte) 45, (byte) 0));
+        enchantments.put("FlameTouch", new DummyEnchant("FlameTouch", true, StartingID + enchantments.size(),  (byte) 2, (byte) 2, (byte) 30, (byte) 7));
         enchantments.put("Repair", new DummyEnchant("Repair", true, StartingID + enchantments.size(),  (byte) 4, (byte) 1, (byte) 15, (byte) 9));
         enchantments.put("EarthEater", new DummyEnchant("EarthEater", true, StartingID + enchantments.size(), (byte) 10, (byte) 2, (byte) 30, (byte) 7));
         enchantments.put("SpeedMine", new DummyEnchant("SpeedMine", true, StartingID + enchantments.size(),  (byte) 4, (byte) 2, (byte) 30, (byte) 7));
@@ -47,8 +47,8 @@ public class Configurations {
         enchantments.put("Fly", new DummyEnchant("Fly", true, StartingID + enchantments.size(),  (byte) 1, (byte) 1, (byte) 55, (byte) 2));
         enchantments.put("JumpBoost", new DummyEnchant("JumpBoost", true, StartingID + enchantments.size(),  (byte) 4, (byte) 10, (byte) 10, (byte) 3));
         enchantments.put("Regen", new DummyEnchant("Regen", true, StartingID + enchantments.size(),  (byte) 4, (byte) 1, (byte) 15, (byte) 1));
-        enchantments.put("Shroud", new DummyEnchant("Shroud", true, StartingID + enchantments.size(),  (byte) 1, (byte) 2, (byte) 45, (byte) 1));
-        enchantments.put("Stealth", new DummyEnchant("Stealth", true, StartingID + enchantments.size(),  (byte) 2, (byte) 6, (byte) 40, (byte) 2));
+//        enchantments.put("Shroud", new DummyEnchant("Shroud", true, StartingID + enchantments.size(),  (byte) 1, (byte) 2, (byte) 45, (byte) 1));
+//        enchantments.put("Stealth", new DummyEnchant("Stealth", true, StartingID + enchantments.size(),  (byte) 2, (byte) 6, (byte) 40, (byte) 2));
         enchantments.put("Swiftness", new DummyEnchant("Swiftness", true, StartingID + enchantments.size(),  (byte) 4, (byte) 10, (byte) 20, (byte) 3));
         enchantments.put("Vitality", new DummyEnchant("Vitality", true, StartingID + enchantments.size(),  (byte) 4, (byte) 4, (byte) 30, (byte) 1));
         enchantments.put("WitherProtection", new DummyEnchant("WitherProtection", true, StartingID + enchantments.size(),  (byte) 4, (byte) 8, (byte) 40, (byte) 5));
@@ -71,7 +71,7 @@ public class Configurations {
         enchantments.put("LifeSteal", new DummyEnchant("LifeSteal", true, StartingID + enchantments.size(),  (byte) 5, (byte) 7, (byte) 35, (byte) 11));
         enchantments.put("Piercing", new DummyEnchant("Piercing", true, StartingID + enchantments.size(),  (byte) 5, (byte) 1, (byte) 40, (byte) 6));
         enchantments.put("Poison", new DummyEnchant("Poison", true, StartingID + enchantments.size(),  (byte) 4, (byte) 10, (byte) 25, (byte) 6));
-        enchantments.put("SoulTear", new DummyEnchant("SoulTear", true, StartingID + enchantments.size(),  (byte) 4, (byte) 2, (byte) 30, (byte) 11));
+//        enchantments.put("SoulTear", new DummyEnchant("SoulTear", true, StartingID + enchantments.size(),  (byte) 4, (byte) 2, (byte) 30, (byte) 11));
         enchantments.put("SCurse", new DummyEnchant("SCurse", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 55, (byte) 11));
         enchantments.put("Vampirism", new DummyEnchant("Vampirism", true, StartingID + enchantments.size(),  (byte) 5, (byte) 3, (byte) 45, (byte) 11));
         enchantments.put("Vorpal", new DummyEnchant("Vorpal", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 55, (byte) 11));

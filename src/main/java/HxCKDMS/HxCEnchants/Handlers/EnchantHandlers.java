@@ -3,7 +3,6 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.api.AABBUtils;
 import HxCKDMS.HxCEnchants.api.EnchantingUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import hxckdms.hxccore.libraries.GlobalVariables;
 import hxckdms.hxccore.utilities.HxCPlayerInfoHandler;
 import hxckdms.hxccore.utilities.TeleportHelper;
@@ -23,18 +22,21 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.*;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
 import static HxCKDMS.HxCEnchants.lib.Reference.HealthUUID;
@@ -49,16 +51,16 @@ public class EnchantHandlers {
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, LinkedHashMap<Enchantment, Integer> enchants) {
         if (enchants.containsKey(enchantmentsList[enchantments.get("Gluttony").id])) {
             short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Gluttony").id, helmet);
-            LinkedHashMap<Boolean, Item> tmp = hasFood(player);
-            if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && tmp.containsKey(true) && tmp.get(true) != null) {
-                player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
-                for (short slot = 0; slot < player.inventory.mainInventory.length; slot++) {
-                    if (player.inventory.mainInventory[slot] != null && player.inventory.mainInventory[slot].getItem() instanceof ItemFood && player.inventory.mainInventory[slot].getItem() == tmp.get(true)) {
-                        player.inventory.decrStackSize(slot, 1);
-                        break;
-                    }
-                }
-            }
+//            LinkedHashMap<Boolean, Item> tmp = hasFood(player);
+//            if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && tmp.containsKey(true) && tmp.get(true) != null) {
+//                player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
+//                for (short slot = 0; slot < player.inventory.mainInventory.length; slot++) {
+//                    if (player.inventory.mainInventory[slot] != null && player.inventory.mainInventory[slot].getItem() instanceof ItemFood && player.inventory.mainInventory[slot].getItem() == tmp.get(true)) {
+//                        player.inventory.decrStackSize(slot, 1);
+//                        break;
+//                    }
+//                }
+//            }
         }
         if (enchants.containsKey(enchantmentsList[enchantments.get("Nightvision").id])) {
             short vision = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Nightvision").id, helmet);
@@ -222,7 +224,7 @@ public class EnchantHandlers {
     public void delayedPlayerTickEvent(EntityPlayerMP player) {
         repairTimer--; regenTimer--;
         if (isEnabled("Repair") && repairTimer <= 0) {
-            RepairItems(player);
+//            RepairItems(player);
             repairTimer = Configurations.repairTimer;
         }
 
@@ -383,50 +385,4 @@ public class EnchantHandlers {
         }
     }
 
-    private LinkedHashMap<Boolean, Item> hasFood(EntityPlayerMP player) {
-        LinkedHashMap<Boolean, Item> meh = new LinkedHashMap<>();
-        for (ItemStack item : player.inventory.mainInventory)
-            if (item != null && item.getItem() instanceof ItemFood)
-                meh.put(true, item.getItem());
-        return meh;
-    }
-
-    private void RepairItems(EntityPlayerMP player){
-        ItemStack Inv;
-        ItemStack Armor;
-        long tmp = 0;
-        for(int j = 0; j < 36; j++){
-            Inv = player.inventory.getStackInSlot(j);
-            if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDamage() != Inv.getItemDamageForDisplay()){
-                int a = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Repair").id, Inv);
-                int b = Inv.getItemDamageForDisplay() - a;
-                if (Inv.getItemDamageForDisplay() > 0 && tmp >= Inv.getItemDamageForDisplay()) {
-                    Inv.setItemDamage(b);
-                }
-            }
-        }
-        for(int j = 0; j < 4; j++){
-            Armor = player.getCurrentArmor(j);
-            if (Armor != null && Armor.isItemStackDamageable() && Armor.hasTagCompound() && Armor.isItemEnchanted()){
-                int c = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Repair").id, Armor);
-                int d = Armor.getItemDamageForDisplay() - c;
-                if (Armor.getItemDamageForDisplay() > 0 && (tmp >= Armor.getItemDamageForDisplay())) {
-                    Armor.setItemDamage(d);
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void setAttackTarget(LivingSetAttackTargetEvent event) {
-        if (event.target instanceof EntityPlayer && ((EntityPlayer) event.target).inventory != null &&
-                ((EntityPlayer) event.target).inventory.armorItemInSlot(0) != null &&
-                ((EntityPlayer) event.target).inventory.armorItemInSlot(0).hasTagCompound() &&
-                ((EntityPlayer) event.target).inventory.armorItemInSlot(0).isItemEnchanted()) {
-            int a = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Stealth").id, ((EntityPlayer) event.target).inventory.armorItemInSlot(0));
-            if (a > 0) {
-                event.setCanceled(true);
-            }
-        }
-    }
 }

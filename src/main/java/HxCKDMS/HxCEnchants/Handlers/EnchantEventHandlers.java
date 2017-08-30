@@ -20,6 +20,8 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.Potion;
@@ -50,7 +52,10 @@ public class EnchantEventHandlers {
 
                         if (smelted != null) {
                             ItemStack drop = smelted.copy();
-                            drop.stackSize *= AutoSmeltLevel;
+                            if (AutosmeltMultipliesWithOres && event.drops.get(i).getDisplayName().contains("Ore"))
+                                drop.stackSize *= AutoSmeltLevel;
+                            if (AutosmeltWithFortune && EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, tool) > 0)
+                                drop.stackSize += event.world.rand.nextInt(EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, tool));
                             event.drops.set(i, drop);
 
                             event.world.spawnEntityInWorld(new EntityXPOrb(event.world, event.x, event.y, event.z, (int) FurnaceRecipes.smelting().func_151398_b(drop)));
@@ -257,6 +262,40 @@ public class EnchantEventHandlers {
             }
         }
         return blocks;
+    }
+
+    private LinkedHashMap<Boolean, Item> hasFood(EntityPlayerMP player) {
+        LinkedHashMap<Boolean, Item> meh = new LinkedHashMap<>();
+        for (ItemStack item : player.inventory.mainInventory)
+            if (item != null && item.getItem() instanceof ItemFood)
+                meh.put(true, item.getItem());
+        return meh;
+    }
+
+    private void RepairItems(EntityPlayerMP player){
+        ItemStack Inv;
+        ItemStack Armor;
+        long tmp = 0;
+        for(int j = 0; j < 36; j++){
+            Inv = player.inventory.getStackInSlot(j);
+            if (Inv != null && Inv.isItemStackDamageable() && Inv.hasTagCompound() && Inv.isItemEnchanted() && Inv.getMaxDamage() != Inv.getItemDamageForDisplay()){
+                int a = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Repair").id, Inv);
+                int b = Inv.getItemDamageForDisplay() - a;
+                if (Inv.getItemDamageForDisplay() > 0 && tmp >= Inv.getItemDamageForDisplay()) {
+                    Inv.setItemDamage(b);
+                }
+            }
+        }
+        for(int j = 0; j < 4; j++){
+            Armor = player.getCurrentArmor(j);
+            if (Armor != null && Armor.isItemStackDamageable() && Armor.hasTagCompound() && Armor.isItemEnchanted()){
+                int c = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Repair").id, Armor);
+                int d = Armor.getItemDamageForDisplay() - c;
+                if (Armor.getItemDamageForDisplay() > 0 && (tmp >= Armor.getItemDamageForDisplay())) {
+                    Armor.setItemDamage(d);
+                }
+            }
+        }
     }
 
     //Generic check if enchant is enabled function incase of it changing just change one part and done not go and replace all
