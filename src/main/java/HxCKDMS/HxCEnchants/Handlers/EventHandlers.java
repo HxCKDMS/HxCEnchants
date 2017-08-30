@@ -28,7 +28,7 @@ import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.enchantments;
 
 //Null pointer checked no NPE's can happen ignoring my NPE that will never be thrown because these enchants have already been configured and checked..
-@SuppressWarnings({"unchecked", "ConstantConditions", "unused"})
+@SuppressWarnings("all")
 public class EventHandlers {
     private EnchantHandlers handler = new EnchantHandlers();
     private int tickTimer = Configurations.updateTime;
@@ -75,7 +75,7 @@ public class EventHandlers {
                 LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
                 LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(heldItem);
                 enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
-                handler.playerMineBlockEvent(player, heldItem, event, enchants);
+//                handler.playerMineBlockEvent(player, heldItem, event, enchants);
             }
         }
     }
@@ -259,8 +259,8 @@ public class EventHandlers {
                                 }
                             });
                     ents.removeIf(ent -> ent == player);
-                    if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
-                        handler.handleAuraEvent(player, ents, sharedEnchants);
+//                    if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
+//                        handler.handleAuraEvent(player, ents, sharedEnchants);
                 }
             }
         }

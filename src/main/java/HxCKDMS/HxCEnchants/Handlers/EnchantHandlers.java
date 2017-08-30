@@ -3,27 +3,19 @@ package HxCKDMS.HxCEnchants.Handlers;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.api.AABBUtils;
 import HxCKDMS.HxCEnchants.api.EnchantingUtils;
-import HxCKDMS.HxCEnchants.api.IEnchantHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import hxckdms.hxccore.libraries.GlobalVariables;
 import hxckdms.hxccore.utilities.HxCPlayerInfoHandler;
 import hxckdms.hxccore.utilities.TeleportHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.IGrowable;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -38,13 +30,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
-import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.*;
 
@@ -53,12 +41,11 @@ import static HxCKDMS.HxCEnchants.lib.Reference.HealthUUID;
 import static HxCKDMS.HxCEnchants.lib.Reference.SpeedUUID;
 import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 
-@SuppressWarnings({"unchecked", "ConstantConditions", "all"})
-public class EnchantHandlers implements IEnchantHandler {
+@SuppressWarnings("all")
+public class EnchantHandlers {
     private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
     private FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
-    @Override
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, LinkedHashMap<Enchantment, Integer> enchants) {
         if (enchants.containsKey(enchantmentsList[enchantments.get("Gluttony").id])) {
             short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Gluttony").id, helmet);
@@ -80,7 +67,6 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    @Override
     public void handleChestplateEnchant(EntityPlayerMP player, ItemStack chestplate, LinkedHashMap<Enchantment, Integer> enchants) {
         if (enchants.containsKey(enchantmentsList[enchantments.get("Vitality").id])) {
             vitTimer--;
@@ -99,7 +85,6 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    @Override
     public void handleLeggingEnchant(EntityPlayerMP player, ItemStack leggings, LinkedHashMap<Enchantment, Integer> enchants) {
         if (enchants.containsKey(enchantmentsList[enchantments.get("Swiftness").id])) {
             IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
@@ -113,7 +98,6 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    @Override
     public void handleBootEnchant(EntityPlayerMP player, ItemStack boots, LinkedHashMap<Enchantment, Integer> enchants) {
         NBTTagCompound c = HxCPlayerInfoHandler.getTagCompound(player, "backLocation");
         if (enchants.containsKey(enchantmentsList[enchantments.get("Fly").id]) &! c.getBoolean("flightEnc")) {
@@ -126,7 +110,6 @@ public class EnchantHandlers implements IEnchantHandler {
         player.sendPlayerAbilities();
     }
 
-    @Override
     public void handleDeathEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack stack) {
         short vampireLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Vampirism").id, stack);
         short examineLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Examine").id, stack);
@@ -192,7 +175,6 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    @Override
     public void playerTickEvent(EntityPlayerMP player) {
         if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
             int tmp = 0, tmp2 = 0;
@@ -233,12 +215,10 @@ public class EnchantHandlers implements IEnchantHandler {
         }
         player.sendPlayerAbilities();
     }
-    
-    private static boolean isEnabled(String name) {
-        return enchantments.get(name).enabled;
+    private boolean isEnabled(String n) {
+        return false;
     }
 
-    @Override
     public void delayedPlayerTickEvent(EntityPlayerMP player) {
         repairTimer--; regenTimer--;
         if (isEnabled("Repair") && repairTimer <= 0) {
@@ -277,114 +257,6 @@ public class EnchantHandlers implements IEnchantHandler {
         player.sendPlayerAbilities();
     }
 
-    @Override
-    public void handleAuraEvent(EntityPlayerMP player, List<Entity> ents, LinkedHashMap<Enchantment, Integer> sharedEnchants) {
-        World world = player.getEntityWorld();
-        for (Entity entity : ents) {
-            if (entity instanceof EntityLivingBase && entity != player && !entity.isDead) {
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("AuraDeadly").id])) {
-                    if ((AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.wither)) {
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.wither.getId(), 100, 1, true));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("AuraDark").id])) {
-                    if ((AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.blindness)) {
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.blindness.getId(), 100, 1, true));
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.confusion.getId(), 100, 1, true));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("AuraFiery").id])) {
-                    if ((AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !entity.isBurning()) {
-                        entity.setFire(sharedEnchants.get(enchantmentsList[enchantments.get("AuraFiery").id]) * 2);
-                    }
-                    getMeltablesWithinAABB(world, AABBUtils.getAreaBoundingBox((int) player.posX, (int) player.posY, (int) player.posZ, sharedEnchants.get(enchantmentsList[enchantments.get("AuraFiery").id]))).forEach(meltable -> {
-                        if (world.getBlock(meltable.chunkPosX, meltable.chunkPosY, meltable.chunkPosZ) == Blocks.ice)
-                            world.setBlock(meltable.chunkPosX, meltable.chunkPosY, meltable.chunkPosZ, Blocks.water);
-                        else world.setBlockToAir(meltable.chunkPosX, meltable.chunkPosY, meltable.chunkPosZ);
-                    });
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("AuraThick").id])) {
-                    if ((AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.moveSlowdown)) {
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 100, 1, true));
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 100, 1, true));
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.weakness.getId(), 100, 1, true));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("AuraToxic").id])) {
-                    if (entity instanceof EntityLivingBase && (AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.poison)) {
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.poison.getId(), 500, 1, true));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("HealingAura").id])) {
-                    if ((!(entity instanceof EntityPlayer)) && !(entity instanceof EntityMob) && !((EntityLivingBase) entity).isPotionActive(Potion.regeneration)) {
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 500, Math.round(sharedEnchants.get(enchantmentsList[enchantments.get("GaiaAura").id])/4/3), true));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("IcyAura").id])) {
-                    if ((AurasAffectPlayers || !(entity instanceof EntityPlayer)) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal) && !((EntityLivingBase) entity).isPotionActive(Potion.moveSlowdown)) {
-                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 500, 1, true));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("ChargedAura").id])) {
-                    if (!(entity instanceof EntityPlayer) && !(entity instanceof EntityGolem) && !(entity instanceof EntityAnimal)) {
-                        world.addWeatherEffect(new EntityLightningBolt(world, entity.posX, entity.posY, entity.posZ));
-                    }
-                }
-
-                if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("RepulsiveAura").id])) {
-                    if (!(entity instanceof EntityAnimal || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityPlayer)) {
-                        double motionX = player.posX - entity.posX;
-                        double motionY = player.boundingBox.minY + player.height - entity.posY;
-                        double motionZ = player.posZ - entity.posZ;
-                        entity.setVelocity(-motionX / 8, -motionY / 8, -motionZ / 8);
-                    }
-                }
-            }
-
-            if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("GaiaAura").id])) {
-                int ran = world.rand.nextInt(Math.round(250 / (GaiasAuraSpeed * sharedEnchants.get(enchantmentsList[enchantments.get("GaiaAura").id]))));
-                if (ran == 0) {
-                    List<ChunkPosition> crops = getCropsWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(enchantmentsList[enchantments.get("GaiaAura").id])/4));
-                    for (ChunkPosition pos : crops)
-                        player.worldObj.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ).updateTick(player.worldObj, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, new Random());
-                }
-            }
-
-            if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("IcyAura").id])) {
-                List<ChunkPosition> blocks = getFreezablesWithinAABB(player.worldObj, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), sharedEnchants.get(enchantmentsList[enchantments.get("GaiaAura").id])/4));
-                for (ChunkPosition pos : blocks) {
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.lava)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.obsidian, 0, 3);
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.flowing_lava)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.stone, 0, 3);
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.water)
-                        world.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blocks.ice, 0, 3);
-                    if (world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blocks.fire)
-                        world.setBlockToAir(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
-                }
-            }
-
-            if (sharedEnchants.keySet().contains(enchantmentsList[enchantments.get("AuraMagnetic").id])) {
-                if (entity instanceof EntityItem) {
-                    double motionX = player.posX - entity.posX;
-                    double motionY = player.boundingBox.minY + player.height - entity.posY;
-                    double motionZ = player.posZ - entity.posZ;
-                    entity.setVelocity(motionX / 4, motionY / 4, motionZ / 4);
-                } else if (entity instanceof EntityXPOrb) {
-                    new PlayerPickupXpEvent(player, (EntityXPOrb) entity);
-                }
-            }
-        }
-    }
-
-    @Override
     public void handleAttackEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack weapon, float damage, LivingHurtEvent event, LinkedHashMap<Enchantment, Integer> enchants) {
         if (enchants.containsKey(enchantmentsList[enchantments.get("LifeSteal").id])) {
             player.heal(damage/10 * enchants.get(enchantmentsList[enchantments.get("LifeSteal").id]));
@@ -435,33 +307,6 @@ public class EnchantHandlers implements IEnchantHandler {
         }
     }
 
-    @Override
-    public void playerMineBlockEvent(EntityPlayer player, ItemStack tool, BlockEvent.HarvestDropsEvent event, LinkedHashMap<Enchantment, Integer> enchants) {
-        if (isEnabled("FlameTouch")) {
-            int AutoSmeltLevel = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("FlameTouch").id, tool);
-            if (AutoSmeltLevel > 0) {
-                for (int i = 0; i < event.drops.size(); i++) {
-                    ItemStack smelted = furnaceRecipes.getSmeltingResult(event.drops.get(i));
-
-                    if (smelted != null) {
-                        ItemStack drop = smelted.copy();
-                        drop.stackSize *= AutoSmeltLevel;
-                        event.drops.set(i, drop);
-                    }
-                }
-            }
-        }
-
-        if (isEnabled("VoidTouch")) {
-            short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("VoidTouch").id, tool);
-            if (voidLevel > 0) {
-                for(String block : VoidedItems)
-                    event.drops.remove(new ItemStack(Block.getBlockFromName(block)));
-            }
-        }
-    }
-
-    @Override
     public void playerHurtEvent(EntityPlayerMP player, DamageSource source, float ammount, LivingHurtEvent event) {
         boolean allowEffect = !(source.damageType.equalsIgnoreCase("wither") ||
                 source.damageType.equalsIgnoreCase("starve") ||
@@ -583,50 +428,5 @@ public class EnchantHandlers implements IEnchantHandler {
                 event.setCanceled(true);
             }
         }
-    }
-
-    private static ArrayList<ChunkPosition> getCropsWithinAABB(World world, AxisAlignedBB box) {
-        ArrayList<ChunkPosition> crops = new ArrayList();
-
-        for(int x = (int)box.minX; (double)x <= box.maxX; ++x) {
-            for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
-                for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
-                    Block block = world.getBlock(x, y, z);
-                    if(block != null && (block instanceof BlockCrops || block instanceof IGrowable || block == Blocks.cactus || block instanceof IPlantable || block == Blocks.vine))
-                        crops.add(new ChunkPosition(x, y, z));
-                }
-            }
-        }
-        return crops;
-    }
-
-    private static ArrayList<ChunkPosition> getFreezablesWithinAABB(World world, AxisAlignedBB box) {
-        ArrayList<ChunkPosition> blocks = new ArrayList();
-
-        for(int x = (int)box.minX; (double)x <= box.maxX; ++x) {
-            for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
-                for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
-                    Block block = world.getBlock(x, y, z);
-                    if(block != null && (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.water || block == Blocks.fire))
-                        blocks.add(new ChunkPosition(x, y, z));
-                }
-            }
-        }
-        return blocks;
-    }
-
-    private static ArrayList<ChunkPosition> getMeltablesWithinAABB(World world, AxisAlignedBB box) {
-        ArrayList<ChunkPosition> blocks = new ArrayList();
-
-        for(int x = (int)box.minX; (double)x <= box.maxX; ++x) {
-            for(int y = (int)box.minY; (double)y <= box.maxY; ++y) {
-                for(int z = (int)box.minZ; (double)z <= box.maxZ; ++z) {
-                    Block block = world.getBlock(x, y, z);
-                    if(block != null && (block == Blocks.ice || block == Blocks.snow || block == Blocks.snow_layer))
-                        blocks.add(new ChunkPosition(x, y, z));
-                }
-            }
-        }
-        return blocks;
     }
 }

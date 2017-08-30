@@ -4,7 +4,7 @@ import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterBlock;
 import HxCKDMS.HxCEnchants.Blocks.HxCEnchanter.HxCEnchanterTile;
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.Handlers.ArrowEventHandler;
-import HxCKDMS.HxCEnchants.Handlers.EventHandlers;
+import HxCKDMS.HxCEnchants.Handlers.EnchantEventHandlers;
 import HxCKDMS.HxCEnchants.Handlers.GUIHandler;
 import HxCKDMS.HxCEnchants.Proxy.IProxy;
 import HxCKDMS.HxCEnchants.lib.Reference;
@@ -22,6 +22,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import hxckdms.hxcconfig.HxCConfig;
+import hxckdms.hxcconfig.handlers.SpecialHandlers;
 import hxckdms.hxccore.libraries.GlobalVariables;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -50,9 +51,9 @@ public class HxCEnchants {
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         hxCConfig = new HxCConfig(Configurations.class, "HxCEnchants", GlobalVariables.modConfigDir, "cfg", Reference.MOD_ID);
+        SpecialHandlers.registerSpecialClass(Configurations.DummyEnchant.class);
         hxCConfig.initConfiguration();
-        if (!(new Configurations()).init())
-            hxCConfig.initConfiguration();
+        (new Configurations()).init();
 
         if (EnableKeybinds) {
             proxy.preInit(event);
@@ -71,7 +72,7 @@ public class HxCEnchants {
         Configurations.enchantments.values().forEach(Configurations.DummyEnchant::init);
 //        Configurations.enchants.values().forEach(HxCEnchantmentDummy::init);
         MinecraftForge.EVENT_BUS.register(new ArrowEventHandler());
-        MinecraftForge.EVENT_BUS.register(new EventHandlers());
+        MinecraftForge.EVENT_BUS.register(new EnchantEventHandlers());
 //        Enchants.load();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GUIHandler());
         if (enableCustomBlocks) {
