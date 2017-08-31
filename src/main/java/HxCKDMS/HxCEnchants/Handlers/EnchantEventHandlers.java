@@ -10,6 +10,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -20,6 +23,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -36,10 +40,13 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.util.*;
 
 import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
+import static HxCKDMS.HxCEnchants.lib.Reference.HealthUUID;
+import static HxCKDMS.HxCEnchants.lib.Reference.SpeedUUID;
 import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
 public class EnchantEventHandlers {
+    private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
     @SubscribeEvent
     public void playerMineBlockEvent(BlockEvent.HarvestDropsEvent event) {
         if (event.harvester != null) {
@@ -63,6 +70,7 @@ public class EnchantEventHandlers {
                     }
                 }
             }
+
             if (isEnabled("VoidTouch")) {
                 short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel(enchantments.get("VoidTouch").id, tool);
                 if (voidLevel > 0 && event.drops.size() > 0) {
@@ -84,46 +92,95 @@ public class EnchantEventHandlers {
     @SubscribeEvent
     @SuppressWarnings("all")
     public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
+        vitTimer--;
         auraDelayTimer--;
 
-        if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP && auraDelayTimer <= 0) {
-            auraDelayTimer = AuraUpdateDelay * 100;
+        if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
             ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
                     ArmourChest = player.inventory.armorItemInSlot(2),
                     ArmourLegs = player.inventory.armorItemInSlot(1),
                     ArmourBoots = player.inventory.armorItemInSlot(0);
 
-            List ents = player.worldObj.getEntitiesWithinAABB(Entity.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), 10));
-            if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted() &&
-                    ArmourLegs != null && ArmourLegs.hasTagCompound() && ArmourLegs.isItemEnchanted() &&
-                    ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted() &&
-                    ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted() &&
-                    !ents.isEmpty()) {
+            if (isEnabled("Swiftness")) {
+                IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+                short speedLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Swiftness").id, ArmourLegs);
+                double speedBoost = speedLevel * SpeedTweak;
+                AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 0);
+                if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0)
+                    ps.applyModifier(SpeedBuff);
+                if (ps.func_111122_c().contains(SpeedBuff) && speedLevel <= 0)
+                    ps.removeModifier(SpeedBuff);
+            }
 
-                LinkedHashMap<Enchantment, Integer> sharedEnchants = new LinkedHashMap<>();
-                LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourBoots);
-                ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourLegs)).forEach(enchs::putIfAbsent);
-                ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourChest)).forEach(enchs::putIfAbsent);
-                ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourHelm)).forEach(enchs::putIfAbsent);
+            if (isEnabled("Nightvision") && (!player.worldObj.isDaytime() || !player.worldObj.canBlockSeeTheSky((int) player.posX, (int) player.posY, (int) player.posZ))) {
+                short vision = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Nightvision").id, ArmourHelm);
+                if (vision > 0)
+                    player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 600, 1, true));
+            }
 
-                enchs.keySet().forEach(ench -> {
-                    if (getEnchantments(ArmourBoots).containsKey(ench) &&
-                            getEnchantments(ArmourLegs).containsKey(ench) &&
-                            getEnchantments(ArmourChest).containsKey(ench) &&
-                            getEnchantments(ArmourHelm).containsKey(ench)) {
-
-                        int tmpz = (int) getEnchantments(ArmourBoots).get(ench);
-                        tmpz += (int) getEnchantments(ArmourLegs).get(ench);
-                        tmpz += (int) getEnchantments(ArmourChest).get(ench);
-                        tmpz += (int) getEnchantments(ArmourHelm).get(ench);
-
-                        sharedEnchants.put(Enchantment.enchantmentsList[ench], tmpz);
+            if (isEnabled("Gluttony")) {
+                short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Gluttony").id, ArmourHelm);
+                LinkedHashMap<Boolean, Item> tmp = hasFood(player);
+                if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony) + 6 && tmp.containsKey(true) && tmp.get(true) != null) {
+                    player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
+                    for (short slot = 0; slot < player.inventory.mainInventory.length; slot++) {
+                        if (player.inventory.mainInventory[slot] != null && player.inventory.mainInventory[slot].getItem() instanceof ItemFood && player.inventory.mainInventory[slot].getItem() == tmp.get(true)) {
+                            player.inventory.decrStackSize(slot, 1);
+                            break;
+                        }
                     }
-                });
-                ents.removeIf(ent -> ent == player);
-                if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
-                    handleAuraEvent(player, ents, sharedEnchants);
+                }
+            }
+
+            if (vitTimer <= 0 && isEnabled("Vitality")) {
+                IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+                short vitalityLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Vitality").id, ArmourChest);
+                double vitality = vitalityLevel * VitalityPerLevel;
+                AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", vitality, 0);
+                if (!ph.func_111122_c().contains(HealthBuff) && vitalityLevel != 0)
+                    ph.applyModifier(HealthBuff);
+                if (ph.func_111122_c().contains(HealthBuff) && vitalityLevel <= 0)
+                    ph.removeModifier(HealthBuff);
+
+                vitTimer = 600;
+            }
+
+
+            if (auraDelayTimer <= 0) {
+                auraDelayTimer = AuraUpdateDelay * 100;
+
+                List ents = player.worldObj.getEntitiesWithinAABB(Entity.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), 10));
+                if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted() &&
+                        ArmourLegs != null && ArmourLegs.hasTagCompound() && ArmourLegs.isItemEnchanted() &&
+                        ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted() &&
+                        ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted() &&
+                        !ents.isEmpty()) {
+
+                    LinkedHashMap<Enchantment, Integer> sharedEnchants = new LinkedHashMap<>();
+                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourBoots);
+                    ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourLegs)).forEach(enchs::putIfAbsent);
+                    ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourChest)).forEach(enchs::putIfAbsent);
+                    ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourHelm)).forEach(enchs::putIfAbsent);
+
+                    enchs.keySet().forEach(ench -> {
+                        if (getEnchantments(ArmourBoots).containsKey(ench) &&
+                                getEnchantments(ArmourLegs).containsKey(ench) &&
+                                getEnchantments(ArmourChest).containsKey(ench) &&
+                                getEnchantments(ArmourHelm).containsKey(ench)) {
+
+                            int tmpz = (int) getEnchantments(ArmourBoots).get(ench);
+                            tmpz += (int) getEnchantments(ArmourLegs).get(ench);
+                            tmpz += (int) getEnchantments(ArmourChest).get(ench);
+                            tmpz += (int) getEnchantments(ArmourHelm).get(ench);
+
+                            sharedEnchants.put(Enchantment.enchantmentsList[ench], tmpz);
+                        }
+                    });
+                    ents.removeIf(ent -> ent == player);
+                    if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
+                        handleAuraEvent(player, ents, sharedEnchants);
+                }
             }
         }
     }

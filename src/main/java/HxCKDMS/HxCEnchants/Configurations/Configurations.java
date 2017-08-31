@@ -13,7 +13,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public class Configurations {
     public static boolean ExplosionDestroysTerrain = false, AurasAffectPlayers = true,  enableCustomBlocks, AutosmeltMultipliesWithOres = true, AutosmeltWithFortune = true;
-    public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f, SpeedTweak = 0.0387f;
+    public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f, SpeedTweak = 0.0287f, VitalityPerLevel = 5.0f;
     public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3, AuraUpdateDelay = 3000;
     @Config.comment(value = "Enchant Level / this (Level/2 default)")
     public static float EarthEaterDepthModifier = 2.0f, EarthEaterHeightModifier = 1.75f, EarthEaterWidthModifier = 1.5f;
@@ -29,7 +29,7 @@ public class Configurations {
 //ALL, ARMOR, ARMOR_FEET, ARMOR_LEGS, ARMOR_TORSO, ARMOR_HEAD, WEAPON, DIGGER, FISHING_ROD, BREAKABLE, BOW, SWORD
     public boolean init() {
         if (enchantments.size() > 0) return true;
-
+//TODO new planned enchants include Devourer gains damage from kills, Decapitating, Reaping deals killing blows at cost of hunger
 //        enchantments.put("Bound", new DummyEnchant("Bound", false, StartingID + enchantments.size(),  (byte) 3, (byte) 5, (byte) 45, (byte) 0));
         enchantments.put("FlameTouch", new DummyEnchant("FlameTouch", true, StartingID + enchantments.size(),  (byte) 2, (byte) 2, (byte) 30, (byte) 7));
         enchantments.put("Repair", new DummyEnchant("Repair", true, StartingID + enchantments.size(),  (byte) 4, (byte) 1, (byte) 15, (byte) 9));
@@ -60,7 +60,7 @@ public class Configurations {
         enchantments.put("AuraMagnetic", new DummyEnchant("AuraMagnetic", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 40, (byte) 1));
         enchantments.put("GaiaAura", new DummyEnchant("GaiaAura", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 40, (byte) 1));
         enchantments.put("IcyAura", new DummyEnchant("IcyAura", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 40, (byte) 1));
-        enchantments.put("Gluttony", new DummyEnchant("Gluttony", true, StartingID + enchantments.size(), (byte) 20, (byte) 1, (byte) 40, (byte) 5));
+        enchantments.put("Gluttony", new DummyEnchant("Gluttony", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 40, (byte) 5));
         enchantments.put("ExplosiveDischarge", new DummyEnchant("ExplosiveDischarge", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 40, (byte) 4));
         enchantments.put("ChargedAura", new DummyEnchant("ChargedAura", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 40, (byte) 1));
         enchantments.put("Nightvision", new DummyEnchant("Nightvision", true, StartingID + enchantments.size(),  (byte) 1, (byte) 1, (byte) 30,  (byte) 5));
@@ -86,8 +86,8 @@ public class Configurations {
         enchantments.get("Regen").setIncompats(Arrays.asList((short) enchantments.get("BattleHealing").id));
         enchantments.get("ArrowZeus").setIncompats(Arrays.asList((short) enchantments.get("LightningArrow").id));
         enchantments.get("BattleHealing").setIncompats(Arrays.asList((short) enchantments.get("Regen").id));
-        enchantments.get("Examine").setIncompats(Arrays.asList((short) enchantments.get("SoulTear").id));
-        enchantments.get("SoulTear").setIncompats(Arrays.asList((short) enchantments.get("Examine").id));
+//        enchantments.get("Examine").setIncompats(Arrays.asList((short) enchantments.get("SoulTear").id));
+//        enchantments.get("SoulTear").setIncompats(Arrays.asList((short) enchantments.get("Examine").id));
         enchantments.get("FlameTouch").setIncompats(Arrays.asList((short) enchantments.get("VoidTouch").id, (short) Enchantment.silkTouch.effectId));
         enchantments.get("Fly").setIncompats(Arrays.asList((short) enchantments.get("JumpBoost").id));
         enchantments.get("JumpBoost").setIncompats(Arrays.asList((short) enchantments.get("Fly").id));

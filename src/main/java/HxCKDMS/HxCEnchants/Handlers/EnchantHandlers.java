@@ -49,55 +49,15 @@ public class EnchantHandlers {
     private FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
 
     public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, LinkedHashMap<Enchantment, Integer> enchants) {
-        if (enchants.containsKey(enchantmentsList[enchantments.get("Gluttony").id])) {
-            short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Gluttony").id, helmet);
-//            LinkedHashMap<Boolean, Item> tmp = hasFood(player);
-//            if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony / 2) + 5 && tmp.containsKey(true) && tmp.get(true) != null) {
-//                player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
-//                for (short slot = 0; slot < player.inventory.mainInventory.length; slot++) {
-//                    if (player.inventory.mainInventory[slot] != null && player.inventory.mainInventory[slot].getItem() instanceof ItemFood && player.inventory.mainInventory[slot].getItem() == tmp.get(true)) {
-//                        player.inventory.decrStackSize(slot, 1);
-//                        break;
-//                    }
-//                }
-//            }
-        }
-        if (enchants.containsKey(enchantmentsList[enchantments.get("Nightvision").id])) {
-            short vision = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Nightvision").id, helmet);
-            if (vision > 0)
-                player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 600, 1, true));
-        }
+
     }
 
     public void handleChestplateEnchant(EntityPlayerMP player, ItemStack chestplate, LinkedHashMap<Enchantment, Integer> enchants) {
-        if (enchants.containsKey(enchantmentsList[enchantments.get("Vitality").id])) {
-            vitTimer--;
-            IAttributeInstance ph = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-            short vitalityLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Vitality").id, chestplate);
-            double vitality = vitalityLevel * 0.5F;
-            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthBuffedChestplate", vitality, 0);
-            if (!ph.func_111122_c().contains(HealthBuff) && vitalityLevel != 0)
-                ph.applyModifier(HealthBuff);
-            if (ph.func_111122_c().contains(HealthBuff) && vitalityLevel == 0)
-                ph.removeModifier(HealthBuff);
 
-            if (vitTimer <= 0 && vitalityLevel > 0) {
-                vitTimer = 600;
-            }
-        }
     }
 
     public void handleLeggingEnchant(EntityPlayerMP player, ItemStack leggings, LinkedHashMap<Enchantment, Integer> enchants) {
-        if (enchants.containsKey(enchantmentsList[enchantments.get("Swiftness").id])) {
-            IAttributeInstance ps = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-            short speedLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Swiftness").id, leggings);
-            double speedBoost = speedLevel * SpeedTweak;
-            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "SpeedBuffedPants", speedBoost, 0);
-            if (!ps.func_111122_c().contains(SpeedBuff) && speedLevel != 0)
-                ps.applyModifier(SpeedBuff);
-            if (ps.func_111122_c().contains(SpeedBuff) && speedLevel == 0)
-                ps.removeModifier(SpeedBuff);
-        }
+
     }
 
     public void handleBootEnchant(EntityPlayerMP player, ItemStack boots, LinkedHashMap<Enchantment, Integer> enchants) {
