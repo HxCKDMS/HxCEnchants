@@ -14,7 +14,7 @@ import java.util.List;
 public class Configurations {
     public static boolean ExplosionDestroysTerrain = false, AurasAffectPlayers = true,  enableCustomBlocks, AutosmeltMultipliesWithOres = true, AutosmeltWithFortune = true;
     public static float PiercingPercent = 0.15f, GaiasAuraSpeed = 2.5f, SpeedTweak = 0.0287f, VitalityPerLevel = 5.0f;
-    public static int updateTime = 10, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3, AuraUpdateDelay = 3000;
+    public static int updateTime = 1000, guiVersion = 1, repairTimer = 120, regenTimer = 45, tableRange = 3, AuraUpdateDelay = 3000;
     @Config.comment(value = "Enchant Level / this (Level/2 default)")
     public static float EarthEaterDepthModifier = 2.0f, EarthEaterHeightModifier = 1.75f, EarthEaterWidthModifier = 1.5f;
     public static short StartingID = 400;

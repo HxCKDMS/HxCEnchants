@@ -1,7 +1,11 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
+import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.api.AABBUtils;
+import HxCKDMS.HxCEnchants.api.EnchantingUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import hxckdms.hxccore.libraries.GlobalVariables;
+import hxckdms.hxccore.utilities.HxCPlayerInfoHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockReed;
@@ -9,6 +13,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -16,23 +21,28 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -46,7 +56,7 @@ import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
 public class EnchantEventHandlers {
-    private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
+    private int repairTimer = 60, regenTimer = 60, vitTimer = 600, flightCheckDelay = updateTime;
     @SubscribeEvent
     public void playerMineBlockEvent(BlockEvent.HarvestDropsEvent event) {
         if (event.harvester != null) {
@@ -94,6 +104,7 @@ public class EnchantEventHandlers {
     public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
         vitTimer--;
         auraDelayTimer--;
+        flightCheckDelay--;
 
         if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
@@ -146,6 +157,18 @@ public class EnchantEventHandlers {
                 vitTimer = 600;
             }
 
+            if (isEnabled("Fly") && flightCheckDelay <= 0) {
+                if (EnchantmentHelper.getEnchantmentLevel(enchantments.get("Fly").id, ArmourBoots) > 0 && !HxCPlayerInfoHandler.getBoolean(player, "flightEnc")) {
+                    player.capabilities.allowFlying = true;
+                    HxCPlayerInfoHandler.setBoolean(player, "flightEnc", true);
+                } else if (EnchantmentHelper.getEnchantmentLevel(enchantments.get("Fly").id, ArmourBoots) < 1 && HxCPlayerInfoHandler.getBoolean(player, "flightEnc")) {
+                    player.capabilities.allowFlying = false;
+                    player.capabilities.isFlying = false;
+                    HxCPlayerInfoHandler.setBoolean(player, "flightEnc", false);
+                }
+                player.sendPlayerAbilities();
+                flightCheckDelay = updateTime;
+            }
 
             if (auraDelayTimer <= 0) {
                 auraDelayTimer = AuraUpdateDelay * 100;
@@ -180,6 +203,45 @@ public class EnchantEventHandlers {
                     ents.removeIf(ent -> ent == player);
                     if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
                         handleAuraEvent(player, ents, sharedEnchants);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void LivingDeathEvent(LivingDeathEvent event) {
+        Entity deadent = event.entity;
+        if (deadent instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityPlayerMP && (!((EntityPlayerMP) event.source.getSourceOfDamage()).getDisplayName().contains("[")) && !(event.source.getSourceOfDamage() instanceof FakePlayer)){
+            EntityPlayerMP Attacker = (EntityPlayerMP) event.source.getSourceOfDamage();
+            ItemStack item;
+            if (Attacker.getHeldItem() != null && (Attacker.getHeldItem().getItem() instanceof ItemSword || Attacker.getHeldItem().getItem() instanceof ItemAxe)) item = Attacker.getHeldItem();
+            else return;
+
+            if (item.hasTagCompound() && item.isItemEnchanted()){
+                short vampireLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Vampirism").id, item);
+                short examineLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Examine").id, item);
+                if (examineLevel > 0)
+                    if (deadent instanceof EntityLiving) {
+                        deadent.worldObj.spawnEntityInWorld(new EntityXPOrb(deadent.worldObj, deadent.posX, deadent.posY + 1, deadent.posZ, examineLevel));
+                    }
+
+                if (vampireLevel > 0) {
+                    if (deadent instanceof EntityAnimal)
+                        Attacker.getFoodStats().addStats(1, 0.3F);
+                    else if (deadent instanceof EntityPlayerMP)
+                        Attacker.getFoodStats().addStats(10, 0.5F);
+                    else if (deadent instanceof EntityVillager)
+                        Attacker.getFoodStats().addStats(5, 0.5F);
+                    else if (((EntityLivingBase) deadent).isEntityUndead())
+                        Attacker.getFoodStats().addStats(0, 0);
+                    else if (deadent instanceof EntitySlime)
+                        Attacker.getFoodStats().addStats(1, 0.1F);
+                    else if (deadent instanceof EntityEnderman)
+                        Attacker.getFoodStats().addStats(2, 0.2F);
+                    else if (deadent instanceof EntityMob)
+                        Attacker.getFoodStats().addStats(3, 0.2F);
+
+                    else Attacker.getFoodStats().addStats(1, 0.1F);
                 }
             }
         }
@@ -350,6 +412,43 @@ public class EnchantEventHandlers {
                 int d = Armor.getItemDamageForDisplay() - c;
                 if (Armor.getItemDamageForDisplay() > 0 && (tmp >= Armor.getItemDamageForDisplay())) {
                     Armor.setItemDamage(d);
+                }
+            }
+        }
+    }
+
+    public static void chargeItem(EntityPlayer player) {
+        if (player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.experienceLevel > 0) {
+            player.addExperienceLevel(-1);
+
+            if (player.getHeldItem().hasTagCompound()) {
+                player.getHeldItem().getTagCompound().setLong("Charge", player.getHeldItem().getTagCompound().getLong("Charge") + EnchantingUtils.xpFromLevel(player.experienceLevel));
+            } else {
+                NBTTagCompound tg = new NBTTagCompound();
+                tg.setLong("Charge", EnchantingUtils.xpFromLevel(player.experienceLevel));
+                player.getHeldItem().setTagCompound(tg);
+            }
+        }
+    }
+
+    public static void flash(EntityPlayerMP player) {
+        if (player.getCurrentArmor(0) != null && player.getCurrentArmor(0).isItemEnchanted()) {
+            int FlashLevel = EnchantmentHelper.getEnchantmentLevel((int) Configurations.enchantments.get("FlashStep").id, player.getCurrentArmor(0));
+            if (FlashLevel > 0) {
+                World world = player.worldObj;
+                Vec3 vec3 = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+                Vec3 vec31 = player.getLook(1.0f);
+                Vec3 vec32 = vec3.addVector(vec31.xCoord * 200, vec31.yCoord * 200, vec31.zCoord * 200);
+                MovingObjectPosition rayTrace = GlobalVariables.server.worldServerForDimension(player.dimension).rayTraceBlocks(vec3, vec32);
+                if (rayTrace != null) {
+                    if (rayTrace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ) {
+                        for (int i = 0; i < 5; i++) {
+                            if (world.getBlock(rayTrace.blockX, rayTrace.blockY + i, rayTrace.blockZ) == Blocks.air) {
+                                player.playerNetServerHandler.setPlayerLocation(rayTrace.blockX, rayTrace.blockY + i, rayTrace.blockZ, player.cameraYaw, player.cameraPitch);
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -1,19 +1,12 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
-import HxCKDMS.HxCEnchants.api.AABBUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -21,11 +14,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.enchantments;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
-import static HxCKDMS.HxCEnchants.Configurations.Configurations.enchantments;
 
 //Null pointer checked no NPE's can happen ignoring my NPE that will never be thrown because these enchants have already been configured and checked..
 @SuppressWarnings("all")
@@ -46,22 +38,6 @@ public class EventHandlers {
             LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(item);
             enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
             handler.handleAttackEvent(player, event.entityLiving, item, event.ammount, event, enchants);
-        }
-    }
-
-    @SubscribeEvent
-    public void LivingDeathEvent(LivingDeathEvent event) {
-        Entity deadent = event.entity;
-        if (deadent instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityPlayerMP && (!((EntityPlayerMP) event.source.getSourceOfDamage()).getDisplayName().contains("[")) && !(event.source.getSourceOfDamage() instanceof FakePlayer)){
-            EntityPlayerMP Attacker = (EntityPlayerMP) event.source.getSourceOfDamage();
-            ItemStack item;
-            if (Attacker.getHeldItem() != null && (Attacker.getHeldItem().getItem() instanceof ItemSword || Attacker.getHeldItem().getItem() instanceof ItemAxe)) item = Attacker.getHeldItem();
-            else return;
-
-            if (item.hasTagCompound() && item.isItemEnchanted()){
-				long chrg = item.getTagCompound().getLong("HxCEnchantCharge");
-                handler.handleDeathEvent(Attacker, (EntityLivingBase)deadent, item);
-			}
         }
     }
 
@@ -190,81 +166,6 @@ public class EventHandlers {
             event.newSpeed = (event.originalSpeed + event.originalSpeed*(getEnchantmentLevel(enchantments.get("SpeedMine").id, event.entityPlayer.getHeldItem()) / 10));
     }
 
-    @SubscribeEvent
-	public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
-        if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
-            handler.playerTickEvent(player);
-            tickTimer--;
-            if (tickTimer <= 0) {
-                tickTimer = Configurations.updateTime;
-                handler.delayedPlayerTickEvent(player);
-
-                ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
-                        ArmourChest = player.inventory.armorItemInSlot(2),
-                        ArmourLegs = player.inventory.armorItemInSlot(1),
-                        ArmourBoots = player.inventory.armorItemInSlot(0);
-
-                if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted()) {
-                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
-                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourChest);
-                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
-                    handler.handleChestplateEnchant(player, ArmourChest, enchants);
-                }
-
-                if (ArmourLegs != null && ArmourLegs.hasTagCompound() && ArmourLegs.isItemEnchanted()) {
-                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
-                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourLegs);
-                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
-                    handler.handleLeggingEnchant(player, ArmourLegs, enchants);
-                }
-
-                if (ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted()) {
-                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
-                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourBoots);
-                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
-                    handler.handleBootEnchant(player, ArmourBoots, enchants);
-                }
-
-                if (ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted()) {
-                    LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
-                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourHelm);
-                    enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
-                    handler.handleHelmetEnchant(player, ArmourHelm, enchants);
-                }
-
-                List ents = player.worldObj.getEntitiesWithinAABB(Entity.class, AABBUtils.getAreaBoundingBox((short) Math.round(player.posX), (short) Math.round(player.posY), (short) Math.round(player.posZ), 10));
-                if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted() &&
-                        ArmourLegs != null && ArmourLegs.hasTagCompound() && ArmourLegs.isItemEnchanted() &&
-                        ArmourBoots != null && ArmourBoots.hasTagCompound() && ArmourBoots.isItemEnchanted() &&
-                        ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted() &&
-                        !ents.isEmpty()) {
-                    LinkedHashMap<Enchantment, Integer> sharedEnchants = new LinkedHashMap<>();
-                    LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(ArmourBoots);
-                    ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourLegs)).forEach(enchs::putIfAbsent);
-                    ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourChest)).forEach(enchs::putIfAbsent);
-                    ((LinkedHashMap<Integer, Integer>) getEnchantments(ArmourHelm)).forEach(enchs::putIfAbsent);
-                    enchs.keySet().forEach(ench -> {
-                                if (getEnchantments(ArmourBoots).containsKey(ench) &&
-                                        getEnchantments(ArmourLegs).containsKey(ench) &&
-                                        getEnchantments(ArmourChest).containsKey(ench) &&
-                                        getEnchantments(ArmourHelm).containsKey(ench)) {
-
-                                    int tmpz =  (int) getEnchantments(ArmourBoots).get(ench);
-                                    tmpz += (int) getEnchantments(ArmourLegs).get(ench);
-                                    tmpz += (int) getEnchantments(ArmourChest).get(ench);
-                                    tmpz += (int) getEnchantments(ArmourHelm).get(ench);
-
-                                    sharedEnchants.put(Enchantment.enchantmentsList[ench], tmpz);
-                                }
-                            });
-                    ents.removeIf(ent -> ent == player);
-//                    if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
-//                        handler.handleAuraEvent(player, ents, sharedEnchants);
-                }
-            }
-        }
-	}
 
 	@SubscribeEvent
 	public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {

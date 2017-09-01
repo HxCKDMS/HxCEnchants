@@ -1,6 +1,6 @@
 package HxCKDMS.HxCEnchants.network;
 
-import HxCKDMS.HxCEnchants.Handlers.EnchantHandlers;
+import HxCKDMS.HxCEnchants.Handlers.EnchantEventHandlers;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -41,10 +41,10 @@ public class PacketKeypress implements IMessage {
 
             switch (message.keyid) {
                 case 1 :
-                    EnchantHandlers.flash(p);
+                    EnchantEventHandlers.flash(p);
                     return null;
                 case 2 :
-                    EnchantHandlers.chargeItem(p);
+                    EnchantEventHandlers.chargeItem(p);
                     return null;
                 default: return null;
             }

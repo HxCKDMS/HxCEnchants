@@ -2,26 +2,16 @@ package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
 import HxCKDMS.HxCEnchants.api.AABBUtils;
-import HxCKDMS.HxCEnchants.api.EnchantingUtils;
 import hxckdms.hxccore.libraries.GlobalVariables;
 import hxckdms.hxccore.utilities.HxCPlayerInfoHandler;
 import hxckdms.hxccore.utilities.TeleportHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,9 +19,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.LinkedHashMap;
@@ -47,95 +34,6 @@ import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 public class EnchantHandlers {
     private int repairTimer = 60, regenTimer = 60, vitTimer = 600;
     private FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
-
-    public void handleHelmetEnchant(EntityPlayerMP player, ItemStack helmet, LinkedHashMap<Enchantment, Integer> enchants) {
-
-    }
-
-    public void handleChestplateEnchant(EntityPlayerMP player, ItemStack chestplate, LinkedHashMap<Enchantment, Integer> enchants) {
-
-    }
-
-    public void handleLeggingEnchant(EntityPlayerMP player, ItemStack leggings, LinkedHashMap<Enchantment, Integer> enchants) {
-
-    }
-
-    public void handleBootEnchant(EntityPlayerMP player, ItemStack boots, LinkedHashMap<Enchantment, Integer> enchants) {
-        NBTTagCompound c = HxCPlayerInfoHandler.getTagCompound(player, "backLocation");
-        if (enchants.containsKey(enchantmentsList[enchantments.get("Fly").id]) &! c.getBoolean("flightEnc")) {
-            c.setBoolean("fly", true);
-            c.setBoolean("flightEnc", true);
-        } else if (c.getBoolean("flightEnc")) {
-            c.setBoolean("fly", false);
-            c.setBoolean("flightEnc", false);
-        }
-        player.sendPlayerAbilities();
-    }
-
-    public void handleDeathEvent(EntityPlayerMP player, EntityLivingBase victim, ItemStack stack) {
-        short vampireLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Vampirism").id, stack);
-        short examineLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Examine").id, stack);
-        if (examineLevel > 0)
-            if (victim instanceof EntityLiving) {
-                victim.worldObj.spawnEntityInWorld(new EntityXPOrb(victim.worldObj, victim.posX, victim.posY + 1, victim.posZ, examineLevel));
-            }
-
-        if (vampireLevel > 0) {
-            if (victim instanceof EntityAnimal)
-                player.getFoodStats().addStats(1, 0.3F);
-            else if (victim instanceof EntityPlayerMP)
-                player.getFoodStats().addStats(10, 0.5F);
-            else if (victim instanceof EntityVillager)
-                player.getFoodStats().addStats(5, 0.5F);
-            else if (victim.isEntityUndead())
-                player.getFoodStats().addStats(0, 0);
-            else if (victim instanceof EntitySlime)
-                player.getFoodStats().addStats(1, 0.1F);
-            else if (victim instanceof EntityEnderman)
-                player.getFoodStats().addStats(2, 0.2F);
-            else if (victim instanceof EntityMob)
-                player.getFoodStats().addStats(3, 0.2F);
-
-            else player.getFoodStats().addStats(1, 0.1F);
-        }
-    }
-
-    public static void chargeItem(EntityPlayer player) {
-        if (player.getHeldItem() != null && player.getHeldItem().isItemEnchanted() && player.experienceLevel > 0) {
-            player.addExperienceLevel(-1);
-
-            if (player.getHeldItem().hasTagCompound()) {
-                player.getHeldItem().getTagCompound().setLong("Charge", player.getHeldItem().getTagCompound().getLong("Charge") + EnchantingUtils.xpFromLevel(player.experienceLevel));
-            } else {
-                NBTTagCompound tg = new NBTTagCompound();
-                tg.setLong("Charge", EnchantingUtils.xpFromLevel(player.experienceLevel));
-                player.getHeldItem().setTagCompound(tg);
-            }
-        }
-    }
-
-    public static void flash(EntityPlayerMP player) {
-        if (player.getCurrentArmor(0) != null && player.getCurrentArmor(0).isItemEnchanted()) {
-            int FlashLevel = EnchantmentHelper.getEnchantmentLevel((int) Configurations.enchantments.get("FlashStep").id, player.getCurrentArmor(0));
-            if (FlashLevel > 0) {
-                World world = player.worldObj;
-                Vec3 vec3 = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
-                Vec3 vec31 = player.getLook(1.0f);
-                Vec3 vec32 = vec3.addVector(vec31.xCoord * 200, vec31.yCoord * 200, vec31.zCoord * 200);
-                MovingObjectPosition rayTrace = GlobalVariables.server.worldServerForDimension(player.dimension).rayTraceBlocks(vec3, vec32);
-                if (rayTrace != null) {
-                    if (rayTrace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK ) {
-                        for (int i = 0; i < 5; i++) {
-                            if (world.getBlock(rayTrace.blockX, rayTrace.blockY + i, rayTrace.blockZ) == Blocks.air) {
-                                player.playerNetServerHandler.setPlayerLocation(rayTrace.blockX, rayTrace.blockY + i, rayTrace.blockZ, player.cameraYaw, player.cameraPitch);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     public void playerTickEvent(EntityPlayerMP player) {
         if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
