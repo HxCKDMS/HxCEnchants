@@ -6,6 +6,7 @@ import HxCKDMS.HxCEnchants.api.EnchantingUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import hxckdms.hxccore.libraries.GlobalVariables;
 import hxckdms.hxccore.utilities.HxCPlayerInfoHandler;
+import hxckdms.hxccore.utilities.TeleportHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockReed;
@@ -36,14 +37,13 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -55,8 +55,10 @@ import static HxCKDMS.HxCEnchants.lib.Reference.SpeedUUID;
 import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
+@SuppressWarnings("all")
 public class EnchantEventHandlers {
     private int repairTimer = 60, regenTimer = 60, vitTimer = 600, flightCheckDelay = updateTime;
+
     @SubscribeEvent
     public void playerMineBlockEvent(BlockEvent.HarvestDropsEvent event) {
         if (event.harvester != null) {
@@ -99,6 +101,7 @@ public class EnchantEventHandlers {
     }
 
     private int auraDelayTimer = AuraUpdateDelay;
+
     @SubscribeEvent
     @SuppressWarnings("all")
     public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
@@ -125,13 +128,13 @@ public class EnchantEventHandlers {
             }
 
             if (isEnabled("Nightvision") && (!player.worldObj.isDaytime() || !player.worldObj.canBlockSeeTheSky((int) player.posX, (int) player.posY, (int) player.posZ))) {
-                short vision = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Nightvision").id, ArmourHelm);
+                short vision = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Nightvision").id, ArmourHelm);
                 if (vision > 0)
                     player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 600, 1, true));
             }
 
             if (isEnabled("Gluttony")) {
-                short gluttony = (short)EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Gluttony").id, ArmourHelm);
+                short gluttony = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("Gluttony").id, ArmourHelm);
                 LinkedHashMap<Boolean, Item> tmp = hasFood(player);
                 if (gluttony > 0 && !tmp.isEmpty() && player.getFoodStats().getFoodLevel() <= (gluttony) + 6 && tmp.containsKey(true) && tmp.get(true) != null) {
                     player.getFoodStats().addStats(((ItemFood) Items.apple).func_150905_g(new ItemStack(tmp.get(true))), ((ItemFood) Items.apple).func_150906_h(new ItemStack(tmp.get(true))));
@@ -207,6 +210,147 @@ public class EnchantEventHandlers {
             }
         }
     }
+
+    @SubscribeEvent
+    public void livingHurtEvent(LivingHurtEvent event) {
+        if (event.entityLiving instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
+            float ammount = event.ammount;
+            boolean allowEffect = !(event.source.damageType.equalsIgnoreCase("wither") ||
+                    event.source.damageType.equalsIgnoreCase("starve") ||
+                    event.source.damageType.equalsIgnoreCase("fall") ||
+                    event.source.damageType.equalsIgnoreCase("explosion.player") ||
+                    event.source.damageType.equalsIgnoreCase("explosion") ||
+                    event.source.damageType.equalsIgnoreCase("inWall") ||
+                    event.source.damageType.equalsIgnoreCase("poison"));
+
+            ItemStack ArmourHelm = player.inventory.armorItemInSlot(3),
+                    ArmourChest = player.inventory.armorItemInSlot(2);
+
+            int AdrenalineBoostLevel = 0, BattleHealingLevel = 0, WitherProt = 0, DivineInterventionLevel = 0, ExplosiveDischarge = 0;
+
+            if (ArmourChest != null && ArmourChest.hasTagCompound() && ArmourChest.isItemEnchanted()) {
+                if (isEnabled("BattleHealing"))
+                    BattleHealingLevel = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("BattleHealing").id, ArmourChest);
+
+                if (isEnabled("DivineIntervention"))
+                    DivineInterventionLevel = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("DivineIntervention").id, ArmourChest);
+
+                if (isEnabled("ExplosiveDischarge") && allowEffect)
+                    ExplosiveDischarge = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("ExplosiveDischarge").id, ArmourChest);
+
+                if (BattleHealingLevel > 0 && allowEffect) {
+                    player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), BattleHealingLevel * 60, BattleHealingLevel));
+                }
+
+
+                if (DivineInterventionLevel > 0 && player.prevHealth - ammount <= 1) {
+                    player.heal(5);
+                    int x, y, z;
+                    if (player.getBedLocation(0) != null) {
+                        x = player.getBedLocation(0).posX;
+                        y = player.getBedLocation(0).posY;
+                        z = player.getBedLocation(0).posZ;
+                    } else {
+                        ChunkCoordinates coords = GlobalVariables.server.worldServerForDimension(0).getSpawnPoint();
+                        x = coords.posX;
+                        y = coords.posY;
+                        z = coords.posZ;
+                    }
+                    if (player.dimension != 0) TeleportHelper.teleportEntityToDimension(player, x, y, z, 0);
+                    else player.playerNetServerHandler.setPlayerLocation(x, y, z, 90, 0);
+                    Map<Integer, Integer> enchs = EnchantmentHelper.getEnchantments(ArmourChest);
+                    enchs.remove((int) enchantments.get("DivineIntervention").id);
+                    if (DivineInterventionLevel > 1) enchs.put((int) enchantments.get("DivineIntervention").id, DivineInterventionLevel - 1);
+                    EnchantmentHelper.setEnchantments(enchs, ArmourChest);
+                }
+
+                if (ExplosiveDischarge > 0) {
+                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 2f * ExplosiveDischarge, false);
+                }
+            }
+
+            if (ArmourHelm != null && ArmourHelm.hasTagCompound() && ArmourHelm.isItemEnchanted()) {
+                if (isEnabled("AdrenalineBoost"))
+                    AdrenalineBoostLevel = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("AdrenalineBoost").id, ArmourHelm);
+
+                if (isEnabled("WitherProtection"))
+                    WitherProt = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("WitherProtection").id, ArmourHelm);
+
+                if (WitherProt > 0 && event.source.damageType.equalsIgnoreCase("wither")) {
+                    event.ammount = 0;
+                }
+
+                if(AdrenalineBoostLevel > 0 && allowEffect) {
+                    player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 60, AdrenalineBoostLevel/2));
+                    player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 60, AdrenalineBoostLevel/2));
+                    player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, AdrenalineBoostLevel/2));
+                    player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, AdrenalineBoostLevel/2));
+                    player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 60, AdrenalineBoostLevel/2));
+                }
+            }
+        }
+
+        if (event.source.getSourceOfDamage() instanceof EntityPlayerMP && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem() != null && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem().hasTagCompound() && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem().isItemEnchanted()) {
+            EntityPlayerMP player = (EntityPlayerMP)event.source.getSourceOfDamage();
+            ItemStack weapon = player.getHeldItem();
+            LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+            LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(weapon);
+            enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
+
+            float damage = event.ammount;
+            EntityLivingBase victim = event.entityLiving;
+            if (enchants.containsKey(enchantmentsList[enchantments.get("LifeSteal").id])) {
+                player.heal(damage/10 * enchants.get(enchantmentsList[enchantments.get("LifeSteal").id]));
+            }
+
+            if (enchants.containsKey(enchantmentsList[enchantments.get("Piercing").id])) {
+                victim.attackEntityFrom(new DamageSource("Piercing").setDamageBypassesArmor().setDamageAllowedInCreativeMode()
+                        .setDamageIsAbsolute(), damage * (PiercingPercent * enchants.get(enchantmentsList[enchantments.get("Piercing").id])));
+            }
+
+            if (enchants.containsKey(enchantmentsList[enchantments.get("Vorpal").id])) {
+                victim.attackEntityFrom(new DamageSource("Vorpal").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(),
+                        enchants.get(enchantmentsList[enchantments.get("Vorpal").id]) * 0.35f * damage);
+            }
+
+            if (enchants.containsKey(enchantmentsList[enchantments.get("BloodRazor").id])) {
+                event.ammount += (victim.getMaxHealth() * (0.05f * enchants.get(enchantmentsList[enchantments.get("BloodRazor").id])));
+            }
+
+            if (enchants.containsKey(enchantmentsList[enchantments.get("SCurse").id])) {
+                int SCurseLevel = enchants.get(enchantmentsList[enchantments.get("SCurse").id]);
+                victim.attackEntityFrom(new DamageSource("scurse").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), damage * (0.2f * SCurseLevel));
+                player.addPotionEffect(new PotionEffect(Potion.digSlowdown.getId(), 120 * SCurseLevel, SCurseLevel, true));
+                player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 120, Math.round(SCurseLevel /3), true));
+                player.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 120 * SCurseLevel, SCurseLevel, true));
+            }
+
+            if (enchants.containsKey(enchantmentsList[enchantments.get("VoidTouch").id])) {
+                short voidLevel = (short) EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("VoidTouch").id, weapon);
+                if (voidLevel > 0) {
+                    victim.attackEntityFrom(new DamageSource("Void").setDamageBypassesArmor().setDamageAllowedInCreativeMode().setDamageIsAbsolute(), damage * (0.2f * voidLevel));
+                }
+            }
+
+            if (enchants.containsKey(enchantmentsList[enchantments.get("OverCharge").id]) && weapon.getTagCompound().getInteger("Charge") > 0) {
+                int OverCharge = enchants.get(enchantmentsList[enchantments.get("OverCharge").id]);
+                int storedCharge = weapon.getTagCompound().getInteger("Charge");
+                if (OverCharge > 0) {
+                    List<EntityLivingBase> list = player.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AABBUtils.getAreaBoundingBox((int)Math.round(player.posX), (int)Math.round(player.posY), (int)Math.round(player.posZ), OverCharge*5));
+                    int ndamage = (int) ((damage * 0.3f * ((list.size()) + (storedCharge/15)) / list.size()));
+                    list.stream().filter(liv -> liv != player).forEach(liv -> liv.attackEntityFrom(new DamageSource("OverCharge").setDamageIsAbsolute().setDamageAllowedInCreativeMode(), ndamage));
+                    weapon.getTagCompound().setInteger("Charge", 0);
+                    Map<Integer, Integer> enchas = EnchantmentHelper.getEnchantments(weapon);
+                    if (overChargeDecays) enchas.remove((int) enchantments.get("OverCharge").id);
+                    if (OverCharge > 1 && overChargeDecays) enchas.put((int) enchantments.get("OverCharge").id, OverCharge - 1);
+                    EnchantmentHelper.setEnchantments(enchas, weapon);
+                }
+            }
+        }
+    }
+
+
 
     @SubscribeEvent
     public void LivingDeathEvent(LivingDeathEvent event) {

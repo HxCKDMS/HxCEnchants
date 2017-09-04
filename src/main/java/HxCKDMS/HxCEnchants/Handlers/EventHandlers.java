@@ -1,12 +1,22 @@
 package HxCKDMS.HxCEnchants.Handlers;
 
 import HxCKDMS.HxCEnchants.Configurations.Configurations;
+import HxCKDMS.HxCEnchants.api.AABBUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import hxckdms.hxccore.libraries.GlobalVariables;
+import hxckdms.hxccore.utilities.TeleportHelper;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -14,8 +24,11 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import static HxCKDMS.HxCEnchants.Configurations.Configurations.enchantments;
+import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
+import static net.minecraft.enchantment.Enchantment.enchantmentsList;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
@@ -25,21 +38,6 @@ public class EventHandlers {
     private EnchantHandlers handler = new EnchantHandlers();
     private int tickTimer = Configurations.updateTime;
 
-    @SubscribeEvent
-    @SuppressWarnings("unchecked")
-    public void livingHurtEvent(LivingHurtEvent event) {
-        if (event.entityLiving instanceof EntityPlayerMP) {
-            handler.playerHurtEvent((EntityPlayerMP)event.entityLiving, event.source, event.ammount, event);
-        }
-        if (event.source.getSourceOfDamage() instanceof EntityPlayerMP && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem() != null && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem().hasTagCompound() && ((EntityPlayerMP) event.source.getSourceOfDamage()).getHeldItem().isItemEnchanted()) {
-            EntityPlayerMP player = (EntityPlayerMP)event.source.getSourceOfDamage();
-            ItemStack item = player.getHeldItem();
-            LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
-            LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(item);
-            enchs.forEach((x, y) -> enchants.put(Enchantment.enchantmentsList[x], y));
-            handler.handleAttackEvent(player, event.entityLiving, item, event.ammount, event, enchants);
-        }
-    }
 
     @SubscribeEvent
     public void onHarvestBlocks(BlockEvent.HarvestDropsEvent event) {
