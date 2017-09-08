@@ -58,6 +58,7 @@ enchantment.flamingArrow=Flaming
 enchantment.chargedAura=Electro-static Aura
 enchantment.nightvision=Nightvision
 enchantment.bloodRazor=Blood Razor
+enchantment.saturation=Saturating
 
 death.attack.Piercing=%1$s was impaled.
 death.attack.Piercing.player=%1$s was impaled by %2$s.

@@ -18,7 +18,7 @@ public class Configurations {
     @Config.comment(value = "Enchant Level / this (Level/2 default)")
     public static float EarthEaterDepthModifier = 2.0f, EarthEaterHeightModifier = 1.75f, EarthEaterWidthModifier = 1.5f;
     public static short StartingID = 400;
-    public static boolean usecustomenum = true, blacklistEnchantsFromEnchantingPlus = false, EnableKeybinds = true, EnableCoordinatesInGUIs = false, overChargeDecays;
+    public static boolean usecustomenum = true, blacklistEnchantsFromEnchantingPlus = false, EnableKeybinds = true, EnableCoordinatesInGUIs, overChargeDecays;
 
     public static List<String> VoidedItems = Arrays.asList(new String[]{"minecraft:cobblestone", "minecraft:dirt", "minecraft:gravel"});
 
@@ -48,7 +48,7 @@ public class Configurations {
         enchantments.put("JumpBoost", new DummyEnchant("JumpBoost", true, StartingID + enchantments.size(),  (byte) 4, (byte) 10, (byte) 10, (byte) 3));
         enchantments.put("Regen", new DummyEnchant("Regen", true, StartingID + enchantments.size(),  (byte) 4, (byte) 1, (byte) 15, (byte) 1));
 //        enchantments.put("Shroud", new DummyEnchant("Shroud", true, StartingID + enchantments.size(),  (byte) 1, (byte) 2, (byte) 45, (byte) 1));
-//        enchantments.put("Stealth", new DummyEnchant("Stealth", true, StartingID + enchantments.size(),  (byte) 2, (byte) 6, (byte) 40, (byte) 2));
+        enchantments.put("Stealth", new DummyEnchant("Stealth", true, StartingID + enchantments.size(),  (byte) 2, (byte) 6, (byte) 40, (byte) 2));
         enchantments.put("Swiftness", new DummyEnchant("Swiftness", true, StartingID + enchantments.size(),  (byte) 4, (byte) 10, (byte) 20, (byte) 3));
         enchantments.put("Vitality", new DummyEnchant("Vitality", true, StartingID + enchantments.size(),  (byte) 4, (byte) 4, (byte) 30, (byte) 1));
         enchantments.put("WitherProtection", new DummyEnchant("WitherProtection", true, StartingID + enchantments.size(),  (byte) 4, (byte) 8, (byte) 40, (byte) 5));
@@ -80,12 +80,15 @@ public class Configurations {
         enchantments.put("Examine", new DummyEnchant("Examine", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 55,  (byte) 11));
         enchantments.put("FlamingArrow", new DummyEnchant("FlamingArrow", true, StartingID + enchantments.size(),  (byte) 3, (byte) 7, (byte) 20, (byte) 10));
         enchantments.put("BloodRazor", new DummyEnchant("BloodRazor", true, StartingID + enchantments.size(),  (byte) 5, (byte) 2, (byte) 30, (byte) 6));
+        enchantments.put("Saturation", new DummyEnchant("Saturation", true, StartingID + enchantments.size(),  (byte) 5, (byte) 2, (byte) 30, (byte) 6));
 
         enchantments.get("AuraDeadly").setIncompats(Arrays.asList((short) enchantments.get("GaiaAura").id, (short) enchantments.get("HealingAura").id));
         enchantments.get("AuraFiery").setIncompats(Arrays.asList((short) enchantments.get("GaiaAura").id, (short) enchantments.get("HealingAura").id, (short) enchantments.get("IcyAura").id));
         enchantments.get("Regen").setIncompats(Arrays.asList((short) enchantments.get("BattleHealing").id));
         enchantments.get("ArrowZeus").setIncompats(Arrays.asList((short) enchantments.get("LightningArrow").id));
         enchantments.get("BattleHealing").setIncompats(Arrays.asList((short) enchantments.get("Regen").id));
+        enchantments.get("Gluttony").setIncompats(Arrays.asList((short) enchantments.get("Saturation").id));
+        enchantments.get("Saturation").setIncompats(Arrays.asList((short) enchantments.get("Gluttony").id));
 //        enchantments.get("Examine").setIncompats(Arrays.asList((short) enchantments.get("SoulTear").id));
 //        enchantments.get("SoulTear").setIncompats(Arrays.asList((short) enchantments.get("Examine").id));
         enchantments.get("FlameTouch").setIncompats(Arrays.asList((short) enchantments.get("VoidTouch").id, (short) Enchantment.silkTouch.effectId));
@@ -127,7 +130,7 @@ public class Configurations {
         public void setIncompats(List<Short> incompatEnchs) {
             this.incompatable_enchants = incompatEnchs;
         }
-        
+
         public void init() {
             String newName = name.substring(0,1).toLowerCase() + name.substring(1);
             if (enabled)

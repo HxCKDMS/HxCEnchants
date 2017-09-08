@@ -41,9 +41,8 @@ import net.minecraft.util.*;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -53,11 +52,12 @@ import static HxCKDMS.HxCEnchants.Configurations.Configurations.*;
 import static HxCKDMS.HxCEnchants.lib.Reference.HealthUUID;
 import static HxCKDMS.HxCEnchants.lib.Reference.SpeedUUID;
 import static net.minecraft.enchantment.Enchantment.enchantmentsList;
+import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
 import static net.minecraft.enchantment.EnchantmentHelper.getEnchantments;
 
 @SuppressWarnings("all")
 public class EnchantEventHandlers {
-    private int repairTimer = 60, regenTimer = 60, vitTimer = 600, flightCheckDelay = updateTime;
+    private int repairTimer = 60, regenTimer = 60, vitTimer = 600, flightCheckDelay = updateTime, sateTimer = 60;
 
     @SubscribeEvent
     public void playerMineBlockEvent(BlockEvent.HarvestDropsEvent event) {
@@ -105,9 +105,12 @@ public class EnchantEventHandlers {
     @SubscribeEvent
     @SuppressWarnings("all")
     public void playerTickEvent(LivingEvent.LivingUpdateEvent event) {
-        vitTimer--;
-        auraDelayTimer--;
         flightCheckDelay--;
+        auraDelayTimer--;
+        repairTimer--;
+        regenTimer--;
+        sateTimer--;
+        vitTimer--;
 
         if (event.entityLiving != null && event.entityLiving instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
@@ -173,6 +176,20 @@ public class EnchantEventHandlers {
                 flightCheckDelay = updateTime;
             }
 
+            if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted() && player.motionY < -0.8 && !player.isSneaking()) {
+                int tmp = 0, tmp2 = 0;
+                if (isEnabled("FeatherFall"))
+                    tmp = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("FeatherFall").id, player.inventory.armorItemInSlot(0));
+                if (isEnabled("MeteorFall"))
+                    tmp2 = EnchantmentHelper.getEnchantmentLevel((int) enchantments.get("MeteorFall").id, player.inventory.armorItemInSlot(0));
+
+                if (tmp > 0)
+                    player.addVelocity(0, 0.01f * (float) tmp, 0);
+
+                if (tmp2 > 0)
+                    player.addVelocity(0, 0.02f * (float) -tmp2, 0);;
+            }
+
             if (auraDelayTimer <= 0) {
                 auraDelayTimer = AuraUpdateDelay * 100;
 
@@ -206,6 +223,191 @@ public class EnchantEventHandlers {
                     ents.removeIf(ent -> ent == player);
                     if (sharedEnchants != null && !sharedEnchants.isEmpty() && !ents.isEmpty())
                         handleAuraEvent(player, ents, sharedEnchants);
+                }
+            }
+
+
+            if (isEnabled("Repair") && repairTimer <= 0) {
+                RepairItems(player);
+                repairTimer = Configurations.repairTimer;
+            }
+
+            if (isEnabled("Saturation") && sateTimer <= 0 && player.getFoodStats().getSaturationLevel() < 10) {
+                player.getFoodStats().addStats(EnchantmentHelper.getEnchantmentLevel(enchantments.get("Saturation").id, ArmourHelm), EnchantmentHelper.getEnchantmentLevel(enchantments.get("Saturation").id, ArmourHelm));
+                sateTimer = Configurations.regenTimer * 2;
+            }
+
+            if (isEnabled("Regen") && regenTimer <= 0) {
+                short H = 0, C = 0, L = 0, B = 0, rid = (short) enchantments.get("Regen").id;
+                byte Regen = 0;
+
+                if (ArmourHelm != null)
+                    H = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(3));
+                if (ArmourChest != null)
+                    C = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(2));
+                if (ArmourLegs != null)
+                    L = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(1));
+                if (ArmourBoots != null)
+                    B = (short) EnchantmentHelper.getEnchantmentLevel((int)rid, player.inventory.armorItemInSlot(0));
+
+                if (H > 0) Regen += 1;
+                if (B > 0) Regen += 1;
+                if (C > 0) Regen += 1;
+                if (L > 0) Regen += 1;
+
+                if (player.getHealth() < player.getMaxHealth() && Regen > 0) {
+                    float hp = player.getMaxHealth() - player.getHealth();
+                    regenTimer = Configurations.regenTimer;
+                    player.heal(Regen);
+                }
+            }
+            player.sendPlayerAbilities();
+
+        }
+    }
+
+    @SubscribeEvent
+    public void breakBlockEvent(BlockEvent.BreakEvent event) {
+        EntityPlayer player = event.getPlayer();
+        if (player.getHeldItem() != null && player.getHeldItem().hasTagCompound() && player.getHeldItem().isItemEnchanted()) {
+            ItemStack item = player.getHeldItem(); int worldeater = enchantments.get("EarthEater").id;
+            Block block = event.block;
+            LinkedHashMap<Integer, Integer> enchs = (LinkedHashMap<Integer, Integer>) getEnchantments(item);
+            if (enchs.keySet().contains(worldeater)) {
+                int l = enchs.get(worldeater), width, depth, height;
+
+                height = Math.round(l / Configurations.EarthEaterHeightModifier);
+                width = Math.round(l / Configurations.EarthEaterWidthModifier);
+                depth = Math.round(l / Configurations.EarthEaterDepthModifier);
+
+                float rot = player.getRotationYawHead();
+                if (player.rotationPitch < 45 && player.rotationPitch > -45) {
+                    if ((rot > 45 && rot < 135) || (rot > -45 && rot < -135)) {
+//                        System.out.println("West");
+                        for (int x = event.x - (depth); x <= event.x; x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
+                                }
+                            }
+                        }
+                    } else if ((rot > 225 && rot < 315) || (rot > -225 && rot < -315)) {
+//                        System.out.println("East");
+                        for (int x = event.x; x <= event.x + (depth); x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z - (width/2); z <= event.z + (width/2); z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
+                                }
+                            }
+                        }
+                    } else if ((rot < 225 && rot > 135) || (rot > -225 && rot < -135)) {
+//                        System.out.println("North");
+                        for (int x = event.x- (width/2); x <= event.x + (width/2); x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z - (depth); z <= event.z; z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+//                        System.out.println("South");
+                        for (int x = event.x- (width/2); x <= event.x + (width/2); x++) {
+                            for (int y = event.y - 1; y <= event.y + (height-1); y++) {
+                                for (int z = event.z; z <= event.z + (depth); z++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x ,y ,z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    int xMod = ((rot > 45 && rot < 135) || (rot > -45 && rot < -135) ? (height/2) : (width/2));
+                    int zMod = ((rot > 45 && rot < 135) || (rot > -45 && rot < -135) ? (width/2) : (height/2));
+                    for (int x = event.x - xMod; x <= event.x + xMod; x++) {
+                        for (int z = event.z - zMod; z <= event.z + zMod; z++) {
+                            if (player.rotationPitch < -45) {
+                                for (int y = event.y; y <= event.y + (depth); y++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
+                                }
+                            } else {
+                                for (int y = event.y - (depth); y <= event.y; y++) {
+                                    if (player.worldObj.getBlock(x, y, z).getMaterial() == block.getMaterial() &&
+                                            player.canHarvestBlock(player.worldObj.getBlock(x, y, z)) &&
+                                            player.worldObj.getBlock(x, y, z).getBlockHardness(player.worldObj, x, y, z) > 0) {
+                                        player.worldObj.getBlock(x, y, z).harvestBlock(event.world, player, x, y, z, player.worldObj.getBlockMetadata(x, y, z));
+                                        player.worldObj.setBlockToAir(x, y, z);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void PlayerEvent(PlayerEvent.BreakSpeed event) {
+        if (Configurations.enchantments.get("SpeedMine").enabled && event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().isItemEnchanted() && getEnchantmentLevel(enchantments.get("SpeedMine").id, event.entityPlayer.getHeldItem()) > 0)
+            event.newSpeed = (event.originalSpeed + event.originalSpeed*(getEnchantmentLevel(enchantments.get("SpeedMine").id, event.entityPlayer.getHeldItem()) / 10));
+    }
+
+
+    @SubscribeEvent
+    public void livingJumpEvent(LivingEvent.LivingJumpEvent event) {
+        if(event.entityLiving instanceof EntityPlayer && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1) != null && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).hasTagCompound() && ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1).isItemEnchanted()) {
+            ItemStack legs = ((EntityPlayer) event.entityLiving).inventory.armorItemInSlot(1);
+            int JumpBoostLevel = getEnchantmentLevel(enchantments.get("JumpBoost").id, legs);
+            if (JumpBoostLevel > 0) {
+                EntityPlayer player = (EntityPlayer) event.entityLiving;
+                double JumpBuff = player.motionY + 0.1 * JumpBoostLevel;
+                player.motionY += JumpBuff;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void livingFallEvent(LivingFallEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer)event.entityLiving;
+            if (player.inventory.armorItemInSlot(0) != null && player.inventory.armorItemInSlot(0).hasTagCompound() && player.inventory.armorItemInSlot(0).isItemEnchanted()) {
+                ItemStack boots = player.inventory.armorItemInSlot(0);
+                int featherFall = 0, meteorFall = 0;
+                if (enchantments.get("FeatherFall").enabled)
+                    featherFall = getEnchantmentLevel(enchantments.get("FeatherFall").id, boots);
+                if (enchantments.get("MeteorFall").enabled)
+                    meteorFall = getEnchantmentLevel(enchantments.get("MeteorFall").id, boots);
+
+                if (featherFall < 4 && featherFall > 0)event.distance /= featherFall;
+                else if (featherFall > 4) event.distance = 0;
+
+                if (meteorFall > 0 && event.distance > 10) {
+                    player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, event.distance / 5 * meteorFall, false);
+                    event.distance = 0;
                 }
             }
         }
@@ -391,6 +593,17 @@ public class EnchantEventHandlers {
         }
     }
 
+	@SubscribeEvent
+	public void onLivingSetAttackTarget(LivingSetAttackTargetEvent event) {
+		if (!event.entityLiving.worldObj.isRemote && event.target != null && event.target instanceof EntityPlayer) {
+            ItemStack Boots = ((EntityPlayer) event.target).inventory.armorItemInSlot(0);
+            if (EnchantmentHelper.getEnchantmentLevel(enchantments.get("Stealth").id, Boots) > 0) {
+                ((EntityLiving) event.entityLiving).setAttackTarget(null);
+                ((EntityLiving) event.entityLiving).setRevengeTarget(null);
+            }
+		}	
+	}
+	
     public void handleAuraEvent(EntityPlayerMP player, List<Entity> ents, LinkedHashMap<Enchantment, Integer> sharedEnchants) {
         World world = player.getEntityWorld();
         for (Entity entity : ents) {
