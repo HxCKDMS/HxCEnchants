@@ -80,7 +80,7 @@ public class Configurations {
         enchantments.put("Examine", new DummyEnchant("Examine", true, StartingID + enchantments.size(), (byte) 10, (byte) 1, (byte) 55,  (byte) 11));
         enchantments.put("FlamingArrow", new DummyEnchant("FlamingArrow", true, StartingID + enchantments.size(),  (byte) 3, (byte) 7, (byte) 20, (byte) 10));
         enchantments.put("BloodRazor", new DummyEnchant("BloodRazor", true, StartingID + enchantments.size(),  (byte) 5, (byte) 2, (byte) 30, (byte) 6));
-        enchantments.put("Saturation", new DummyEnchant("Saturation", true, StartingID + enchantments.size(),  (byte) 5, (byte) 2, (byte) 30, (byte) 6));
+        enchantments.put("Saturation", new DummyEnchant("Saturation", true, StartingID + enchantments.size(),  (byte) 5, (byte) 2, (byte) 30, (byte) 5));
 
         enchantments.get("AuraDeadly").setIncompats(Arrays.asList((short) enchantments.get("GaiaAura").id, (short) enchantments.get("HealingAura").id));
         enchantments.get("AuraFiery").setIncompats(Arrays.asList((short) enchantments.get("GaiaAura").id, (short) enchantments.get("HealingAura").id, (short) enchantments.get("IcyAura").id));
