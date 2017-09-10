@@ -54,6 +54,7 @@ public class HxCEnchants {
         SpecialHandlers.registerSpecialClass(Configurations.DummyEnchant.class);
         hxCConfig.initConfiguration();
         (new Configurations()).init();
+        hxCConfig.initConfiguration();
 
         if (EnableKeybinds) {
             proxy.preInit(event);

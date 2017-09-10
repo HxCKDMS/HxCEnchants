@@ -13,7 +13,7 @@ import static net.minecraft.enchantment.EnumEnchantmentType.*;
 public class Reference {
     public static final String MOD_ID = "HxCEnchants";
     public static final String MOD_NAME = "HxC Enchants";
-    public static final String VERSION = "3.1.0";
+    public static final String VERSION = "3.1.1";
     public static final String CHANNEL_NAME = MOD_ID;
     public static final String DEPENDENCIES = "required-after:hxccore@[2.0.6,)";
     public static final String CLIENT_PROXY_CLASS = "HxCKDMS.HxCEnchants.Proxy.ClientProxy";
